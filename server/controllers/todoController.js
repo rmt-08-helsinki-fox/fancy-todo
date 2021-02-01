@@ -121,18 +121,22 @@ class TodoController {
     Todo.destroy({
       where: {
         id: id
-      },
-      returning: true
+      }
     })
     .then(dataTodo => {
-      // if (!dataTodoUpdate) throw { msg: 'error not found'}
-      res.status(200).json({
-        'messages': 'todo succes to delete'
-      })
+      if (dataTodo == 0) {
+        throw { msg: 'error not found'}
+      } else {
+        res.status(200).json({
+          'messages': 'todo succes to delete'
+        })
+      }
     })
     .catch(err => {
-      // const error = err.msg || { msg: 'error not found'}
-      // res.status(404).json(error)
+      const error = err.msg || { msg: 'error not found'}
+      if (error) {
+        res.status(404).json(error)
+      }
       res.status(500).json(err)
     })
   }
