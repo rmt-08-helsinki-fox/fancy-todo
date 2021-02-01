@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING
   }, {
     hooks: {
-      beforeCreate: (user, options) => {
+      beforeCreate(user, options) {
         user.password = hash(user.password)
       }
     },

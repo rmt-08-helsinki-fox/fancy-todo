@@ -6,6 +6,6 @@ const todoRouter = require('./todo')
 
 router.use('/todos', todoRouter)
 
-router.use('/register', userRouter)
+router.use('/users', userRouter)
 
 module.exports = router
