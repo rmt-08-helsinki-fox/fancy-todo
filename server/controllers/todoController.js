@@ -39,7 +39,11 @@ class TodoController {
                 id
             }
         }).then(function(todo) {
-            res.status(200).json(todo)
+            if (todo.length === 0) {
+                res.status(404).json({Message: "Data Not Found"})
+            } else {
+                res.status(200).json(todo)
+            }
         }).catch(function(err) {
             res.status(404).json(err)
         })
