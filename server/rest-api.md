@@ -91,7 +91,6 @@ Success response (201)
 Error responses:
 
 - 400
-- 404
 - 500
 
 <b><u>PUT /todos/:id</u></b>
@@ -105,7 +104,7 @@ Untuk meng-update data, berdasarkan <b>id</b> yang anda tuliskan di parameter /t
 
 Output berupa sebuah object, berdasarkan data yang baru saja anda update. Semua input harus diisi, dan <u>due_date</u> tidak boleh diisi tanggal yang sudah lewat hari ini. 
 
-Success response(200)
+Success response (200)
 
 ```json
 {
@@ -157,7 +156,7 @@ Error responses:
 
 Untuk menghapus data, berdasarkan <b>id</b> yang anda tuliskan dalam parameter /todos. Output berupa sebuah object, yang datanya adalah data yang baru saja anda hapus.
 
-Success response(200)
+Success response (200)
 
 ```json
 {
@@ -219,7 +218,7 @@ Ada beberapa validasi di inputan di routes kami. Jika input anda tidak memenuhi 
 
 - 404 (Not found)
 
-Pada bagian tertentu di route kami, anda diminta untuk menuliskan paramter <b>id</b>. Jika id yang anda tuliskan tidak terdaftar dalam database kami, maka anda akan menerima error 404.
+Pada bagian tertentu di route kami, anda diminta untuk menuliskan parameter <b>id</b>. Jika <b>id</b> yang anda tuliskan tidak terdaftar dalam database kami, maka anda akan menerima error 404.
 
 ```json
 {
