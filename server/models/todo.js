@@ -4,11 +4,6 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // define association here
     }
@@ -20,16 +15,17 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       type: DataTypes.DATE,
       validate: {
-        isBefore: new Date()
+        isBefore(due_date) {
+          let dateNow = new Date().toISOString().slice(0, 10);
+          if(due_date.getTime() < new Date(dateNow).getTime()) {
+            throw new Error("set to yesterday is not allowed");
+          }
+        }
       }
   }}, {
-    hooks: {
-      beforeValidate: (todo, option) => {
-        console.log(todo.due_date, todo.due_date.getTime() >= new Date().getTime())
-      }
-    },
     sequelize,
     modelName: 'Todo',
   });
   return Todo;
 };
+
