@@ -7,7 +7,7 @@
 ## 6. [Delete Todos by Id](#deleteTodos) 
 <br>
 
-### <a id="createTodos"></a>1.1 POST /todos
+## <a id="createTodos"></a>POST /todos
 ### *Create a todo object into database*
 ### Responses:
 
@@ -38,7 +38,9 @@
     }
 }
 ```
-### <a id="showTodos"></a>1.2 GET /todos 
+<br>
+
+## <a id="showTodos"></a>GET /todos 
 ### *Show all todos from database*
 ### Responses:
 
@@ -69,7 +71,9 @@
     }
 }
 ```
-### <a id="showTodosById"></a>1.3 GET /todos/:id 
+<br>
+
+## <a id="showTodosById"></a>GET /todos/:id 
 ### *Show a todo object with the corresponding id from the database*
 ### Parameters:
     Todo Id <integer>
@@ -92,7 +96,9 @@
     }
 }
 ```
-### <a id="putTodosById"></a>1.4 PUT /todos/:id
+<br>
+
+## <a id="putTodosById"></a>PUT /todos/:id
 ### *Edit a todo object from the database*
 ### Parameters:
     Todo Id <integer>
@@ -133,7 +139,9 @@
     }
 }
 ```
-### <a id="patchTodosById"></a>1.5 PATCH /todos/:id
+<br>
+
+## <a id="patchTodosById"></a>PATCH /todos/:id
 ### *Edit a property of a todo object from the database*
 ### Parameters:
     Todo Id <integer>
@@ -174,7 +182,9 @@
     }
 }
 ```
-###  <a id="deleteTodos"></a>1.6 DELETE /todos/:id 
+<br>
+
+##  <a id="deleteTodos"></a>DELETE /todos/:id 
 
 ### *Delete a todo object from a database*
 ### Parameters:
