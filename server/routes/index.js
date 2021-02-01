@@ -1,7 +1,13 @@
-const express = require('express')
-const router = express.Router()
-const TodoController = require('../controllers/TodoController')
+const router = require('express').Router()
+const todoRouter = require('./todo')
+const userRouter = require('./user')
+const HomeController = require('../controllers/HomeController')
 
-router.get('/', TodoController.test)
+router.get('/', HomeController.showAllTodosPublic)
+
+router.use('/todos', todoRouter)
+
+router.use('/users', userRouter)
+
 
 module.exports = router
