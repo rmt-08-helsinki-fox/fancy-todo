@@ -69,8 +69,6 @@ class TodoController {
         res.status(200).json(dataTodoUpdate[1][0])
       })
       .catch(err => {
-        const error = err.msg || { msg: 'error not found'}
-        res.status(404).json(error)
         const messages = {}
         if (err.errors.length > 0) {
           err.errors.forEach(element => {
@@ -88,11 +86,11 @@ class TodoController {
   // PATCH TODOS BY ID - UPDATE SELECTED ROWS
   static updateTodosSelectedRows(req, res) {
     const id = +req.params.id
+    if (req.body.status === undefined) {
+      req.body.status = null
+    }
     const objTodos = {
-      title: req.body.title,
-      description: req.body.description,
-      status: req.body.status,
-      due_date: req.body.due_date
+      status: req.body.status
     }
     Todo.update(objTodos, {
         where: {
@@ -104,8 +102,6 @@ class TodoController {
       res.status(200).json(dataTodoUpdate[1][0])
     })
     .catch(err => {
-      const error = err.msg || { msg: 'error not found'}
-      res.status(404).json(error)
       const messages = {}
       if (err.errors.length > 0) {
         err.errors.forEach(element => {
