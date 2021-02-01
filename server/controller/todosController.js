@@ -115,7 +115,7 @@ class Controller {
       }
     }).then(success => {
       if (!success) throw success
-      res.status(200).json(success)
+      res.status(200).json({msg:'todo success to delete'})
     }).catch(err => {
       if (err === 0) {
         res.status(404).json({ msg: 'Data not found' })
