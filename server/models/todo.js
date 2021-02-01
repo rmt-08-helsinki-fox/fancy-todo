@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
     status: DataTypes.BOOLEAN,
-    due_data: DataTypes.DATE
+    due_date: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'ToDo',

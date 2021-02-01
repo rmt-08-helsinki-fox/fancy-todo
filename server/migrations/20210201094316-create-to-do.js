@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    queryInterface.createTable('ToDos', {
+    return queryInterface.createTable('ToDos', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -17,7 +17,7 @@ module.exports = {
       status: {
         type: Sequelize.BOOLEAN
       },
-      due_data: {
+      due_date: {
         type: Sequelize.DATE
       },
       createdAt: {
@@ -31,6 +31,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    queryInterface.dropTable('ToDos');
+    return queryInterface.dropTable('ToDos');
   }
 };
