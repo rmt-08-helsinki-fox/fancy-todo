@@ -57,7 +57,7 @@ class TodoController {
         }
       })
       .catch(err => {
-        if (err.errors[0].type == 'Validation error') {
+        if (err.name == 'SequelizeValidationError') {
           res.status(400).json({error : "Validation error"})
         } else {
           res.status(500).json(err)
@@ -68,20 +68,33 @@ class TodoController {
 
   static patchTodo(req, res) {
     const id = req.params.id
-    Todo.update({status:true})
+    const { status } = req.body
+    Todo.update({ status }, {where:{id}, returning:true})
       .then(todo => {
-        res.status(200).json(todo)
+        if (todo[0] == 0) {
+          res.status(404).json({error: "not found"})
+        } else {
+          res.status(200).json(todo)
+        }
       })
       .catch(err => {
-        res.status(500).json(err)
+        if (err.name == "SequelizeValidationError") {
+          res.status(400).json({error: "Validation Error"})
+        } else {
+          res.status(500).json(err)
+        }
       })
   }
   
   static deleteTodo(req, res) {
-    const id = +req.params.id
-    Todo.destroy({where:id})
+    const id = req.params.id
+    Todo.destroy({where:{id}})
       .then(todo => {
-        res.status(200).json({message: "todo success to delete"})
+        if (todo == 0) {
+          res.status(404).json({error: "not found"})
+        } else {
+          res.status(200).json({message: "todo success to delete"})
+        }
       })
       .catch(err => {
         res.status(500).json(err)
