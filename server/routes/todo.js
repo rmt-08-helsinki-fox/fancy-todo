@@ -13,4 +13,6 @@ router.put('/:todoId', TodoController.update)
 
 router.patch('/:todoId', TodoController.updateStatus)
 
+router.delete('/:todoId', TodoController.delete)
+
 module.exports = router
