@@ -2,7 +2,7 @@
 // @ts-ignore
 const { User } = require("../models")
 const { hashPass, comparePass } = require("../helpers/bcrypt")
-const { generateToken } = require("../helpers/jwt")
+const { generateToken, decoded } = require("../helpers/jwt")
 
 class UserController {
     // ? 1. Post /register => 201, 400

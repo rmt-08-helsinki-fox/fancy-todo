@@ -24,15 +24,19 @@ function errorHandler(err, req, res, next) {
     // ? Error Custom
     switch (err.status) {
         case 400:
+            // * Bad Request
             res.status(400).json(err)
             return
         case 401:
+            // * Unauthorized
             res.status(401).json(err)
             return
         case 403:
+            // * Forbidden
             res.status(403).json(err)
             return
         case 404:
+            // * Not Found
             res.status(404).json({ msg: `Error not found` })
             return
     }
