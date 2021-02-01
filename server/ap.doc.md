@@ -11,12 +11,260 @@
 
 #### Create Todos
 > POST /todos
+_Request Header_
+```json
+  {
+    "access_token" : "application/json"
+  }
+```
+_Request Params_
+```json
+  No needed
+```
+_Request Body_
+```json
+  {
+    "title" : "coding",
+    "description" : "don't forget your drink",
+    "status": "false",
+    "due_date": "2021-02-02"
+  }
+```
+_Response (201)_
+```json
+  {
+    "title" : "coding",
+    "description" : "don't forget your drink",
+    "status": "false",
+    "due_date": "2021-02-02"
+  }
+```
+_Response (400)_
+```json
+  {
+    "message": "Please input date with a day or next day"
+  }
+```
+_Response (500)_
+```json
+  {
+    "message": "Error in internal server"
+  }
+```
+---
 
 #### Read Todos
 > GET /todos
+_Request Header_
+```json
+  {
+    "access_token" : "application/json"
+  }
+```
+_Request Params_
+```json
+  No needed
+```
+_Request Body_
+```json
+  No needed
+```
+_Response (200)_
+```json
+  {
+    "id": 1,
+    "title" : "coding",
+    "description" : "don't forget your drink",
+    "status": "false",
+    "due_date": "2021-02-02",
+    "createdAt": <Automatically insert by default>,
+    "uodatedAt": <Automatically insert by default>
+  }
+```
+_Response (500)_
+```json
+  {
+    "message": "Error in internal server"
+  }
+```
+---
+
+#### Read Todos By Id
+> GET /todos/:id
+_Request Header_
+```json
+  {
+    "access_token" : "application/json"
+  }
+```
+_Request Params_
+```json
+  {
+    "id": 1
+  }
+```
+_Request Body_
+```json
+  no needed
+```
+_Response (200)_
+```json
+  {
+    "id": 1,
+    "title" : "coding",
+    "description" : "don't forget your drink",
+    "status": "false",
+    "due_date": "2021-02-02",
+    "createdAt": <Automatically insert by default>,
+    "uodatedAt": <Automatically insert by default>
+  }
+```
+_Response (404)_
+```json
+  {
+    "message": "Todos is undefined"
+  }
+```
+_Response (500)_
+```json
+  {
+    "message": "Error in internal server"
+  }
+```
+---
 
 #### Update Todos
-> PUT /todos
+> PUT /todos/:id
+_Request Header_
+```json
+  {
+    "access_token" : "application/json"
+  }
+```
+_Request Params_
+```json
+  {
+    "id": 1
+  }
+```
+_Request Body_
+```json
+  {
+    "id": 1,
+    "title" : "coding lagi",
+    "description" : "don't forget your drink and keyboard",
+    "status": "true",
+    "due_date": "2021-02-02"
+  }
+```
+_Response (200)_
+```json
+  {
+    "id": 1,
+    "title" : "coding lagi",
+    "description" : "don't forget your drink and keyboard",
+    "status": "true",
+    "due_date": "2021-02-02",
+    "createdAt": <Automatically insert by default>,
+    "uodatedAt": <Automatically insert by default>
+  }
+```
+_Response (404)_
+```json
+  {
+    "message": "Todos is undefined"
+  }
+```
+_Response (500)_
+```json
+  {
+    "message": "Error in internal server"
+  }
+```
+---
+
+#### Update status Todos
+> PATCH /todos/:id
+_Request Header_
+```json
+  {
+    "access_token" : "application/json"
+  }
+```
+_Request Params_
+```json
+  {
+    "id": 1
+  }
+```
+_Request Body_
+```json
+before: "true"
+
+  {
+    "status": "false"
+  }
+```
+_Response (200)_
+```json
+  {
+    "id": 1,
+    "title" : "coding lagi",
+    "description" : "don't forget your drink and keyboard",
+    "status": "false",
+    "due_date": "2021-02-02",
+    "createdAt": <Automatically insert by default>,
+    "uodatedAt": <Automatically insert by default>
+  }
+```
+_Response (404)_
+```json
+  {
+    "message": "Todos is undefined"
+  }
+```
+_Response (500)_
+```json
+  {
+    "message": "Error in internal server"
+  }
+```
+---
 
 #### Delete Todos
-> DELETE /todos
+> DELETE /todos/:id
+_Request Header_
+```json
+  {
+    "access_token" : "application/json"
+  }
+```
+_Request Params_
+```json
+  {
+    "id": 1
+  }
+```
+_Request Body_
+```json
+  no needed
+```
+_Response (200)_
+```json
+  {
+    "message": "Todo was deleted"
+  }
+```
+_Response (404)_
+```json
+  {
+    "message": "Todos is undefined"
+  }
+```
+_Response (500)_
+```json
+  {
+    "message": "Error in internal server"
+  }
+```
+---
