@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         dateNow(value) {
           let now = new Date().toLocaleDateString('fr-CA')
           if(value.toLocaleDateString('fr-CA') < now){
-            throw new Error('Input Tanggal Tidak boleh lewat dari hari ini')
+            throw new Error()
           }
         }
       }

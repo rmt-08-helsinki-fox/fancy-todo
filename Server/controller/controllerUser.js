@@ -19,7 +19,7 @@ class ControllerUser {
     })
     .catch(err => {
       if(err.errors[0].path === 'due_date'){
-        res.status(400).json(err.errors)
+        res.status(400).json({Message: 'Input Tanggal Tidak boleh lewat dari hari ini'})
       }else{
         res.status(500).json(err)
         }
@@ -55,7 +55,7 @@ class ControllerUser {
     })
     .catch(err => {
       if(err.errors[0].path === 'due_date'){
-        res.status(400).json(err.errors)
+        res.status(400).json({Message: 'Input Tanggal Tidak boleh lewat dari hari ini'})
       }else{
         res.status(500).json(err)
       }
