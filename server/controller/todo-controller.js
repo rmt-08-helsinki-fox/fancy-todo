@@ -28,7 +28,7 @@ class Todo2 {
             err.errors.forEach(element => {
               errors.push(element.message)
             });
-            res.status(400).json(errors)
+            res.status(400).json({message:errors})
           } else {
             res.status(500).json(err)
           }
@@ -69,7 +69,7 @@ class Todo2 {
             err.errors.forEach(element => {
               errors.push(element.message)
             });
-            res.status(400).json(errors)
+            res.status(400).json({message:errors})
             } else {
               res.status(500).json(err)
             }
@@ -91,11 +91,12 @@ class Todo2 {
         })
         .catch (err => {
           if (err.errors){
+            // console.log(err);
             let errors = []
             err.errors.forEach(element => {
               errors.push(element.message)
             });
-            res.status(400).json(errors)
+            res.status(400).json({message:errors})
           } else {
             res.status(500).json(err)
           }

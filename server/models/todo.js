@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isIn: {
           args:[['true', 'false']],
-          msg: "status should be either 'true' or 'false'"}
+          msg: "status should not be empty and should be either 'true' or 'false'"}
 
       }
     },
