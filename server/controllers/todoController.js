@@ -10,15 +10,15 @@ class TodoController {
       due_date: new Date(due_date)
     })
       .then(todo => {
-        res.status(201).json(todo)
+        res.status(201).json(todo);
       })
       .catch(err => {
         console.log(err);
-        const errorArr = err.errors.map(err => err.message);
         if (err.errors) {
-          res.status(400).json({ error: errorArr });
+          const errorValidations = err.errors.map(err => err.message);
+          res.status(400).json({ errors: errorValidations });
         } else {
-          res.status(500).json({ error: 'Internal Server Error' });
+          res.status(500).json({ errors: 'Internal Server Error' });
         }
       })
   }
@@ -29,7 +29,7 @@ class TodoController {
         res.status(200).json(todos);
       })
       .catch(err => {
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ errors: 'Internal Server Error' });
       })
   }
 
@@ -39,7 +39,7 @@ class TodoController {
       where: { id: id }
     })
       .then(todo => {
-        if (!todo) throw { msg: 'Error Not Found', status: 404 };
+        if (!todo) throw { msg: 'Task Not Found', status: 404 };
         res.status(200).json(todo);
       })
       .catch(err => {
@@ -66,15 +66,15 @@ class TodoController {
       .then(todo => {
         const updatedTodo = todo[1][0];
 
-        if (!updatedTodo) throw ({ msg: 'Error Not Found', status: 404 })
+        if (!updatedTodo) throw ({ msg: 'Task Not Found', status: 404 })
         
-        res.status(200).json(updatedTodo)
+        res.status(200).json(updatedTodo);
       })
       .catch(err => {
-        console.log(err)
-        const errorArr = err.errors.map(err => err.message);
+        console.log(err);
         if (err.errors) {
-          res.status(400).json({ error: errorArr});
+          const errorValidations = err.errors.map(err => err.message);
+          res.status(400).json({ errors: errorValidations});
         } else {
           const error = err.msg || 'Internal Server Error';
           const status = err.status || 500;
@@ -96,14 +96,14 @@ class TodoController {
       .then(todo => {
         const updatedTodo = todo[1][0];
 
-        if (!updatedTodo) throw ({ msg: 'Error Not Found', status: 404 });
+        if (!updatedTodo) throw ({ msg: 'Task Not Found', status: 404 });
         
         res.status(200).json(updatedTodo)
       })
       .catch(err => {
-        const errorArr = err.errors.map(err => err.message);
         if (err.errors) {
-          res.status(400).json({ error: errorArr});
+          const errorValidations = err.errors.map(err => err.message);
+          res.status(400).json({ errors: errorValidations});
         } else {
           const error = err.msg || 'Internal Server Error';
           const status = err.status || 500;
@@ -114,13 +114,18 @@ class TodoController {
 
   static deleteTodo(req, res) {
     const id = +req.params.id;
-    
-    Todo.destroy({
-      where: { id }
-    })
+    let deletedTodo;
+
+    Todo.findByPk(id)
+      .then(todo => {
+        deletedTodo = todo;
+        return Todo.destroy({
+          where: { id }
+        })
+      })
       .then(lenTodo => {
-        if (lenTodo == 0) throw { msg: 'Error Not Found', status: 404 };
-        res.status(200).json({ msg: 'Todo success to delete'});
+        if (lenTodo == 0) throw { msg: 'Task Not Found', status: 404 };
+        res.status(200).json({ delete_todo: deletedTodo, message: 'Todo success to delete'});
       })
       .catch(err => {
         console.log(err);
