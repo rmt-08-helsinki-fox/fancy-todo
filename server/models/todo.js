@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         dueDate(instance){
           let today = new Date()
 
-          if(instance.due_date < today){
+          if(this.due_date < today){
             throw new Error("Due Date harus hari ini atau lebih")
           }
         }

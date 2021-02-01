@@ -1,4 +1,4 @@
-const { Todo } = require("../models")
+const { Todo } = require("../models/")
 
 class TodoControll {
   static add(req, res){
@@ -54,7 +54,7 @@ class TodoControll {
       returning: true
     })
     .then(data => {
-      res.status(200).json(data)
+      res.status(200).json(data[1][0])
     })
     .catch(err => {
       res.status(500).json(err)
@@ -73,7 +73,7 @@ class TodoControll {
       returning: true
     })
     .then(data => {
-      res.status(200).json(data)
+      res.status(200).json(data[1][0])
     })
     .catch(err => {
       res.status(500).json(err)
@@ -88,8 +88,7 @@ class TodoControll {
       returning: true
     })
     .then(data => {
-      console.log(data);
-      res.status(200).json(data)
+      res.status(200).json({message: "todo has been deleted"})
     })
     .catch(err => {
       res.status(500).json(err)
