@@ -2,7 +2,7 @@
 
 This is api documentation for Rest API Fancy Todo.
 
-Sample call will use jQuery AJAX
+Sample call will use fetch() vanilla js
 
 ## Authentication
 
