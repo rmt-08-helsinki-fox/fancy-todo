@@ -11,7 +11,6 @@ class Todo2 {
         })
     }
     static postTodo(req,res) {
-      // console.log(req.body);
       const { title, description, status, due_date } = req.body
       const newTodo = {
         title,
@@ -19,17 +18,18 @@ class Todo2 {
         status,
         due_date
       }
-      // console.log(newTodo);
       Todo.create(newTodo)
         .then(newTodo1 => {
-          // console.log(newTodo1);
           res.status(201).json(newTodo1)
         })
         .catch(err => {
           if (err.errors){
-            res.status(400).json(err.errors[0])
+            let errors = []
+            err.errors.forEach(element => {
+              errors.push(element.message)
+            });
+            res.status(400).json(errors)
           } else {
-            // console.log(err);
             res.status(500).json(err)
           }
         })
@@ -65,7 +65,11 @@ class Todo2 {
           })
           .catch (err => {
             if (err.errors){
-              res.status(400).json(err.errors[0])
+              let errors = []
+            err.errors.forEach(element => {
+              errors.push(element.message)
+            });
+            res.status(400).json(errors)
             } else {
               res.status(500).json(err)
             }
@@ -87,7 +91,11 @@ class Todo2 {
         })
         .catch (err => {
           if (err.errors){
-            res.status(400).json(err.errors[0])
+            let errors = []
+            err.errors.forEach(element => {
+              errors.push(element.message)
+            });
+            res.status(400).json(errors)
           } else {
             res.status(500).json(err)
           }
@@ -99,7 +107,6 @@ class Todo2 {
         where:{id:id},
         returning: true})
           .then(deletestatus => {
-            // console.log(dele);
             if (deletestatus === 1){
               res.status(200).json({message:'todo success to delete'})
             } else if (deletestatus === 0) {

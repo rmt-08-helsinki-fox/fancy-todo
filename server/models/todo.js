@@ -30,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.BOOLEAN,
       validate: {
-        notEmpty: {msg: "status should not be empty"},
         isIn: {
           args:[['true', 'false']],
           msg: "status should be either 'true' or 'false'"}
@@ -40,10 +39,9 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       type: DataTypes.DATE,
       validate: {
-        notEmpty: {msg: "date should not be empty"},
         isAfter: {
           args: `${yesterdayGen()}`,
-          msg: "cannot input past date"
+          msg: "date should not be empty and / or past date"
         }
       }
     } 
