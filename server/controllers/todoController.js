@@ -39,10 +39,12 @@ class TodoController {
     static edit(req, res){
         const {title, descriiption, status, due_date} = req.body
 
+        console.log(req.params.id);
         todo.update({title, descriiption, status, due_date}, {where:{id:+req.params.id}})
         .then((data) => {
-            res.status(200).json(data)
+            res.status(200).json({ message:'Successfully update Todos'})
         }).catch((err) => {
+            console.log(err);
             res.status(404).json(err)
         });
     }
@@ -58,6 +60,7 @@ class TodoController {
             return data.save()
         })
         .then((data) => {
+            console.log(data);
             res.status(200).json(data)
         })
         .catch((err) => {
