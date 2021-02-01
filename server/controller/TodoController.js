@@ -1,7 +1,7 @@
 const {TodoList} = require('../models/index.js');
 const { connect } = require('../routes/todo.js');
 
-class Controller {
+class TodoController {
     
     static postTodo (req, res){
         let newTodo = {
@@ -19,7 +19,7 @@ class Controller {
                 res.status(400).json(err.errors[0].message)
             }else{
                 console.log(err)
-                res.status(500).json('Internal Server Error')
+                res.status(500).json({ message : "internal server error "})
             }
         })
     }
@@ -31,7 +31,7 @@ class Controller {
             res.status(200).json(data)
         })
         .catch(err => {
-            res.status(500).json(err)
+            res.status(500).json({ message : "internal server error"})
         })
     }
 
@@ -40,13 +40,13 @@ class Controller {
         TodoList.findByPk(id)
         .then(data => {
             if(data === null){
-                res.status(200).json('data not found')
+                res.status(404).json('data not found')
             }else{
                 res.status(200).json(data)
             }
         })
         .catch(err => {
-            res.status(500).json(err)
+            res.status(500).json({ message : "internal server error"})
         })
     }
 
@@ -120,4 +120,4 @@ class Controller {
 
 }
 
-module.exports = Controller;
+module.exports = TodoController;
