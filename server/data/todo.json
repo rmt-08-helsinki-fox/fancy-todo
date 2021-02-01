@@ -1,0 +1,14 @@
+[
+  {
+      "title": "Challenge 1",
+      "description": "Membuat FancyTodo 1",
+      "status": false,
+      "due_date": "2021-01-05"
+  },
+  {
+      "title": "Challenge 2",
+      "description": "Membuat FancyTodo 2",
+      "status": false,
+      "due_date": "2021-01-06"
+  }
+]
