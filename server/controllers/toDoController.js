@@ -97,9 +97,9 @@ class toDoController {
                 await ToDo.destroy({
                     where: { id: +req.params.id },
                 })
+                // res.status(200).json({ data })
                 res.status(200).json({
                     msg: `ToDo success to delete`,
-                    data,
                 })
             } else {
                 next({ status: 404 })
