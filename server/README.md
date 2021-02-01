@@ -26,7 +26,7 @@ response:{
 }
 ```
 
-##### GET  `/todos/`
+##### GET  ``/todos/``
 
 ```json
 url : '//localhost:3000/todos/',
