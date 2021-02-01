@@ -77,17 +77,15 @@ _Request Params_
 ```
 _Success Response (200)_
 ```
-[
-  {
-    "id": 10,
-    "title": "Challenge 3",
-    "description": "Membuat FancyTodo 3",
-    "status": false,
-    "due_date": "2021-02-07T00:00:00.000Z",
-    "updatedAt": "2021-02-01T16:48:38.866Z",
-    "createdAt": "2021-02-01T16:48:38.866Z"
-  }
-]
+{
+  "id": 10,
+  "title": "Challenge 3",
+  "description": "Membuat FancyTodo 3",
+  "status": false,
+  "due_date": "2021-02-07T00:00:00.000Z",
+  "updatedAt": "2021-02-01T16:48:38.866Z",
+  "createdAt": "2021-02-01T16:48:38.866Z"
+}
 ```
 _Error Response (404)_
 ```

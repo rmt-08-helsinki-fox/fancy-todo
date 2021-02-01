@@ -93,7 +93,9 @@ class TodoController {
   }
 
   static editStatusTodo(req, res) {
-    Todo.update(req.body.status, {
+    Todo.update({
+      status: req.body.status
+    }, {
       where: {
         id : +req.params.id
       }
