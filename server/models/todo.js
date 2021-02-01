@@ -20,9 +20,16 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       type: DataTypes.DATE,
       validate: {
-        isAfter: {
-          args: [`${new Date()}`],
-          msg: 'Format Tanggal Salah'
+        // isAfter: {
+        //   args: [`${new Date()}`],
+        //   msg: 'Format Tanggal Salah'
+        // }
+        isAfter(date){
+          let currentDate = new Date().toISOString().substr(0, 10)
+          let parsedDate = date.toISOString().substr(0, 10)
+          if(parsedDate < currentDate){
+            throw new Error('Invalid Date') 
+          }
         }
       }
     },
