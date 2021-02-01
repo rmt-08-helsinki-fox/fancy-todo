@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     status: DataTypes.BOOLEAN,
     due_date: DataTypes.DATE,
-    is_private: DataTypes.BOOLEAN
+    is_private: DataTypes.BOOLEAN,
+    user_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Todo',
