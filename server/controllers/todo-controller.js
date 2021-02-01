@@ -4,11 +4,11 @@ class ControllerTodo {
 
   static show_todos(req, res) {
     Todo.findAll()
-    .then((todos) => {
+    .then((tods) => {
       res.status(200).json(todos)
     })
     .catch(err => {
-      res.status(500).json( { error: err.message, msg: 'Internal ServerError' } )
+      res.status(500).json( { message: 'Internal ServerError' } )
     })
 
   }
@@ -18,7 +18,6 @@ class ControllerTodo {
     
     let obj = { title, description, status, due_date }
     
-    console.log(obj)
     Todo.create(obj)
     .then((todo) => {
       res.status(201).json(todo)
@@ -28,7 +27,7 @@ class ControllerTodo {
         res.status(400).json({ message: err.message })
       }
       else {
-        res.status(500).json({ msg: 'Internal Server Error' })
+        res.status(500).json({ message: 'Internal Server Error' })
       }
     })
   }
@@ -70,13 +69,15 @@ class ControllerTodo {
     })
     .catch(err => {
       if(Array.isArray(err.errors)) {
-        res.status(400).json(err.message)
+        res.status(400).json({ message: err.message })
       }
-      else if(err === 'error not found') {
+      else if(err.message === 'error not found') {
+        console.log('a')
         res.status(404).json({ message: err.message })
       }
       else {
-        res.status(500).json('Internal Server Error')
+        console.log('b')
+        res.status(500).json({ message: 'Internal Server Error'})
       }
     })
     
