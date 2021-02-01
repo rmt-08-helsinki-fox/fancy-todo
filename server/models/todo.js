@@ -32,17 +32,32 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    status: DataTypes.STRING,
-    due_date: {
-      type: DataTypes.DATE,
+    status: {
+      type: DataTypes.STRING,
       validate: {
         notEmpty: {
           args: true,
-          msg: "Due date tidak boleh kosong"
-        },
+          msg: "Status tidak boleh kosong"
+        }
+      }
+    },
+    due_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
         isDate: {
           args: true,
           msg: "Format tanggal salah"
+        },
+        notNull: {
+          args: true,
+          msg: "Tanggal tidak boleh kosong"
+        },
+        isAfterDate(value) {
+          let today = new Date()
+          if (value < today) {
+            throw new Error("Tanggal sudah lewat")
+          }
         }
       }
     }
