@@ -19,8 +19,17 @@ class UserController {
         })
       })
       .catch(err => {
-        const error = err.errors[0].message || `Internal server error`
-        res.status(400).json(error)
+        // const error = err.errors[0].message || `Internal server error`
+        const messages = {}
+        if (err.errors.length > 0) {
+          err.errors.forEach(element => {
+              if (messages.message == undefined) {
+                  messages.message = []
+              }
+              messages.message.push(element.message)
+          })
+          res.status(400).json(messages)
+        }
       })
   }
   // User Login

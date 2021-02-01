@@ -9,7 +9,7 @@ class TodoController {
         status: req.body.status,
         due_date: req.body.due_date
     }
-    Todo.create(objTodos)
+    Todo.create(objTods)
       .then(dataTodo => {
           res.status(201).json(dataTodo)
       })
@@ -66,7 +66,11 @@ class TodoController {
       returning: true
     })
       .then(dataTodoUpdate => {
-        res.status(200).json(dataTodoUpdate[1][0])
+        if (dataTodo == 0) {
+          throw { msg: 'error not found'}
+        } else {
+          res.status(200).json(dataTodoUpdate[1][0])
+        }
       })
       .catch(err => {
         const messages = {}
