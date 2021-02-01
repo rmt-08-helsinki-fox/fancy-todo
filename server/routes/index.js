@@ -1,11 +1,13 @@
 const express = require("express")
 const router = express.Router()
-const todosRoutes = require("./todoRoutes")
+const todosRouter = require("./todoRouter")
+const userRouter = require("./userRouter")
 
 router.get("/" ,(req, res) => {
     res.send("haloo")
 })
 
-router.use(todosRoutes)
+router.use("/todos", todosRouter)
+router.use("/users", userRouter)
 
 module.exports = router
