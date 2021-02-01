@@ -13,8 +13,9 @@ function errorHandler(err, req, res, next) {
     if (err instanceof Error) {
         switch (true) {
             case err instanceof ValidationError:
+                let msg = err.errors.map((d) => d.message)
                 //@ts-ignore
-                res.status(400).json({ msg: err.errors[0].message })
+                res.status(400).json({ msg: msg })
                 return
         }
         res.status(500).json({ msg: err.message })
@@ -32,12 +33,12 @@ function errorHandler(err, req, res, next) {
             res.status(403).json(err)
             return
         case 404:
-            res.status(404).json(err)
+            res.status(404).json({ msg: `Error not found` })
             return
     }
     // ? Catch All Error
     res.status(500).json({
-        msg: "Internal Server Error",
+        msg: err.msg || "Internal Server Error",
         cause: err.message || err,
     })
 }

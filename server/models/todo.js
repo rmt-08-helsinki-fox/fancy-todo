@@ -10,6 +10,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            ToDo.belongsTo(models.User, {
+                foreignKey: "UserId",
+            })
         }
     }
     ToDo.init(
@@ -55,7 +58,6 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 validate: {
                     dueDateAfterCreatedAt(value) {
-                        console.log(value)
                         if (value <= new Date()) {
                             throw new Error("Due date must not be in the past")
                         }

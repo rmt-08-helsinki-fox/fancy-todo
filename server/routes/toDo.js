@@ -5,7 +5,6 @@ const router = express.Router()
 const Controller = require("../controllers/toDoController")
 
 // ? 1. Create ToDo
-// router.get("/", Controller.form)
 router.post("/", Controller.create)
 
 // ? 2. Read ToDo

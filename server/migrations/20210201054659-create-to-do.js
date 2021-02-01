@@ -1,6 +1,11 @@
 "use strict"
 //@ts-check
 module.exports = {
+    /**
+     *
+     * @param {import("sequelize").QueryInterface} queryInterface
+     * @param {import("sequelize").Sequelize} Sequelize
+     */
     up: async (queryInterface, Sequelize) => {
         await queryInterface.createTable("ToDos", {
             id: {
@@ -32,6 +37,11 @@ module.exports = {
             },
         })
     },
+    /**
+     *
+     * @param {import("sequelize").QueryInterface} queryInterface
+     * @param {import("sequelize").Sequelize} Sequelize
+     */
     down: async (queryInterface, Sequelize) => {
         await queryInterface.dropTable("ToDos")
     },

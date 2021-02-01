@@ -1,7 +1,7 @@
 //@ts-check
 const bcrypt = require("bcryptjs")
 
-function hasPass(password) {
+function hashPass(password) {
     const salt = bcrypt.genSaltSync(10)
     return bcrypt.hashSync(password, salt)
 }
@@ -11,6 +11,6 @@ function comparePass(password, hashedPassword) {
 }
 
 module.exports = {
-    hasPass,
+    hashPass,
     comparePass,
 }

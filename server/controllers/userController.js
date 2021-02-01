@@ -1,57 +1,58 @@
 //@ts-check
 // @ts-ignore
 const { User } = require("../models")
-const { hasPass, comparePass } = require("../helpers/bcrypt")
+const { hashPass, comparePass } = require("../helpers/bcrypt")
 const { generateToken } = require("../helpers/jwt")
 
 class UserController {
-    static register(req, res) {
-        const { email, password } = req.body
-        const datum = {
-            email: req.body.email,
-            password: req.body.password,
-        }
-        User.create(datum)
-            .then((user) => {
+    // ? 1. Post /register => 201, 400
+    static async register(req, res, next) {
+        try {
+            const { email, password } = req.body
+            const user = await User.create({ email, password })
+            if (user) {
                 res.status(201).json({
                     msg: `Register success`,
                     id: user.id,
                     email: user.email,
-                    password: user.password,
                 })
-            })
-            .catch((err) => {
-                const error = err.console.error[0].message || `Internal server error`
-                res.status(500).json({ error })
-            })
+            } else {
+                next({ status: 400 })
+            }
+        } catch (err) {
+            next(err)
+        }
     }
-    static async login(req, res) {
+    // ? 2. Post /login => 200, 400
+    static async login(req, res, next) {
         try {
             const { email, password } = req.body
-            const user = await User.finOne({
-                where: {
-                    email,
-                },
+            const user = await User.findOne({
+                where: { email },
             })
             if (!user) {
-                throw { msg: `Invalid email or password` }
-            }
-            const comparedPassword = comparePass(password, hasPass(user.password))
-            if (!comparedPassword) {
-                throw {
-                    msg: `Invalid email or password`,
+                next({
                     status: 400,
-                }
+                    msg: `Invalid email or password`,
+                })
+            }
+            const comparedPassword = comparePass(password, hashPass(user.password))
+            if (!comparedPassword) {
+                next({
+                    status: 400,
+                    msg: `Invalid email or password`,
+                })
             }
             const accessToken = generateToken({
                 id: user.id,
                 email: user.email,
             })
-            res.status(200).json({ accessToken })
+            res.status(200).json({
+                accessToken,
+                msg: "Access Token required",
+            })
         } catch (err) {
-            const error = err.msg || `Internal server error`
-            const status = err.status || 500
-            res.status(status).json({ error })
+            next(err)
         }
     }
 }

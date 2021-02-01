@@ -1,6 +1,6 @@
 "use strict"
 const { Model } = require("sequelize")
-const { hasPass, comparePass } = require("../helpers/bcrypt")
+const { hashPass, comparePass } = require("../helpers/bcrypt")
 
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            User.hasMany(models.ToDo)
         }
     }
     User.init(
@@ -19,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
+                    isEmail: {
+                        arg: true,
+                        msg: `Invalid email format`,
+                    },
                     notEmpty: {
                         msg: `Username must not be empty`,
                     },
@@ -45,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
             modelName: "User",
             hooks: {
                 beforeCreate: (user, opt) => {
-                    user.password = hassPass(user.password)
+                    user.password = hashPass(user.password)
                 },
             },
         }
