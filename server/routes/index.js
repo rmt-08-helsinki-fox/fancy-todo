@@ -5,7 +5,7 @@ const todo = require('./todo')
 const { authenticate } = require('../middleware/auth')
 const errHandler = require('../middleware/errorHandler')
 
-router.use('/', user)
+router.use('/users', user)
 router.use(authenticate)
 router.use('/todos', todo)
 router.use(errHandler)
