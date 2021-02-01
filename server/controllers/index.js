@@ -1,13 +1,12 @@
-const { todos } = require('../models');
-
 class Controller {
   static main (req, res) {
+    const data = {
+      title: 'test',
+      status: 'success'
+    };
 
+    res.status(200).json({ data });
   };
-
-  static create (req, res) {
-    todos.create(req.body)
-  }
 };
 
 module.exports = Controller;
