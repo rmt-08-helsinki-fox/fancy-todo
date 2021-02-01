@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const todos = require('./todo-routes')
+const users = require('./user-routes')
 
 
 
@@ -8,6 +9,7 @@ router.get('/', (req, res) => {
 })
 
 router.use('/todos', todos)
+router.use('/users', users)
 
 
 
