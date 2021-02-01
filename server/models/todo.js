@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isAfterToday(value) {
           const today = new Date()
-          if(new Date(value) > today) {
+          if(new Date(value) < today) {
             throw new Error('Due date must at the future date')
           }
         }
