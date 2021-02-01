@@ -12,5 +12,5 @@ app.use(routes);
 
 
 app.listen(port, () => {
-    console.log('this is listening to ', port);
+  console.log('this is listening to ', port);
 })

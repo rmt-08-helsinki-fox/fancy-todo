@@ -19,12 +19,12 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.BOOLEAN,
     due_date: {
       type: DataTypes.DATE,
-      // validate: {
-      //   isAfter: {
-      //     args: new Date().getTime(),
-      //     msg: 'Tidak boleh memasukkan tanggal yg sudah lewat'
-      //   }
-      // }
+      validate: { 
+        isAfter: {
+          args: new Date().toString(),
+          msg: 'Tidak boleh memasukkan tanggal yg sudah lewat'
+        }
+      }
     }
   }, {
     sequelize,
