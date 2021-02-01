@@ -8,13 +8,22 @@ class TodoController {
             .create(newTodo)
             .then(todo => {
                 const msg = {
+                    message: 'Success',
                     data: todo,
                     response: true
                 }
                 res.status(201).json(msg);
             })
             .catch(err => {
-                res.status(500).json(err);
+                if (err.name === 'SequelizeValidationError') {
+                    const msg = {
+                        message: err.errors[0].message,
+                        response: false
+                    }
+                    res.status(400).json(msg);
+                } else {
+                    res.status(500).json(err);
+                };
             });
     }
 }
