@@ -4,7 +4,6 @@ class Controller {
   static async addToDoList(req, res) {
 
     const { title, description, status, due_date } = req.body;
-
     try {
 
       const todo = await Todo.create({
@@ -21,7 +20,6 @@ class Controller {
       }
 
     } catch (err) {
-
       if (err.name === 'SequelizeValidationError') {
         res.status(400).json(err.errors[0]);
       } else {
