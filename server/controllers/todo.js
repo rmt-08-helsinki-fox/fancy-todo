@@ -43,11 +43,14 @@ class TodoController {
         if (todo) {
           res.status(200).json(todo)
         } else {
-          res.status(404).json({ error: 'error not found' })
+          throw { error: 'Todo not found', status: 404}
         }
       })
       .catch((err) => {
-        res.status(500).json(err)
+        const errMsg = err.error || 'Internal server error';
+        const status = err.status || 500;
+
+        res.status(status).json({ error: errMsg});
       })
   }
 
@@ -66,7 +69,7 @@ class TodoController {
         if (todo[0] > 0) {
           res.status(200).json(todo[1][0])
         } else {
-          res.status(404).json({ error: 'error not found' })
+          throw { error: 'Todo not found', status: 404 };
         }
       })
       .catch((err) => {
@@ -76,7 +79,10 @@ class TodoController {
 
           res.status(400).json(error);
         } else {
-          res.status(500).json(err)
+          const errorMessage = err.error || 'Internal server error';
+          const status = err.status || 500;
+
+          res.status(status).json({ error: errorMessage });
         }
       })
   }
@@ -98,11 +104,14 @@ class TodoController {
         if (todo[0] > 0) {
           res.status(200).json(todo[1][0])
         } else {
-          res.status(404).json({ error: 'error not found' })
+          throw { error: 'Todo not found', status: 404 }
         }
       })
       .catch((err) => {
-        res.status(500).json(err)
+        const errorMessage = err.error || 'Internal server error';
+        const status = err.status || 500;
+
+        res.status(status).json({ error: errorMessage });
       })
   }
 
@@ -115,15 +124,17 @@ class TodoController {
       }
     })
       .then((todo) => {
-        console.log(todo);
         if (todo) {
           res.status(200).json({ message: 'todo success to delete' })
         } else {
-          res.status(404).json({ error: 'error not found' })
+          throw { error: 'Todo not found', status: 404 }
         }
       })
       .catch((err) => {
-        res.status(500).json(err)
+        const errorMessage = err.error || 'Internal server error';
+        const status = err.status || 500;
+
+        res.status(status).json({ error: errorMessage });
       })
   }
 }

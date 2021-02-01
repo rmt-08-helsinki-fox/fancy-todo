@@ -46,14 +46,17 @@ class UserController {
 
           res.status(200).json({ accessToken })
         } else {
-          res.status(400).json({ error: 'Your email or password is incorrect' })
+          throw { error: 'Your email or password is incorrect', status: 400 }
         }
       } else {
-        res.status(400).json({ error: 'Your email or password is incorrect' })
+        throw { error: 'Your email or password is incorrect', status: 400 }
       }
     })
     .catch((err) => {
-      res.status(500).json(err)
+      const errMsg = err.error || 'Internal server error';
+      const status = err.status || 500;
+
+      res.status(status).json({ error: errMsg});
     })
   }
 }

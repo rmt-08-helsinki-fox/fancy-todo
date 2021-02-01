@@ -132,7 +132,7 @@
 
   * **Code:** 404 NOT FOUND <br />
     **Content:** <br /> 
-    `{ errors : "error not found" }`
+    `{ errors : "Todo not found" }`
 
   OR
 
@@ -189,7 +189,7 @@
 
   * **Code:** 404 NOT FOUND <br />
     **Content:** <br /> 
-    `{ errors : "error not found" }`
+    `{ errors : "Todo not found" }`
 
   OR
 
@@ -249,7 +249,7 @@
 
   * **Code:** 404 NOT FOUND <br />
     **Content:** <br /> 
-    `{ errors : "error not found" }`
+    `{ errors : "Todo not found" }`
 
   OR
 
@@ -301,7 +301,7 @@
 
   * **Code:** 404 NOT FOUND <br />
     **Content:** <br /> 
-    `{ errors : "error not found" }`
+    `{ errors : "Todo not found" }`
 
   OR
 
