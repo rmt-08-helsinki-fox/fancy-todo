@@ -23,8 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         dateConv(value) {
           let now = dateParsing()
-          if (value < now) {
-            throw new Error('Input Tanggal harus seblum hari ini')
+          // console.log(value, 'value');
+          // console.log(now, 'now');
+          if (value > now) {
+            throw new Error('Input Tanggal tidak boleh melewati hari ini')
           }
         }
       }

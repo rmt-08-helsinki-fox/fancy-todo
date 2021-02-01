@@ -4,9 +4,9 @@ function dateParsing() {
     let month = date.getMonth()
     let Nmonth
     if (month === 0) {
-        Nmonth = month + 1
+        Nmonth = month 
     } else {
-        Nmonth = month
+        Nmonth = month + 1
     }
     let day = date.getDate()
     let m
