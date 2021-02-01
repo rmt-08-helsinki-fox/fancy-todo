@@ -73,9 +73,10 @@ class TodoController {
 
   static updateStatus(req, res) {
     const { status } = req.body
+    console.log(status);
     const id = +req.params.id
     Todo.update(
-      { status: status || '' },
+      { status: status },
       { 
         where: { id: id },
         returning: true
