@@ -5,6 +5,10 @@ function enkrip(password) {
     return bcrypt.hashSync(password, salt);
 }
 
+function comparePass(password, hashPass) {
+    return bcrypt.compareSync(password, hashPass);
+}
+
 module.exports = {
-    enkrip
+    enkrip, comparePass
 }
