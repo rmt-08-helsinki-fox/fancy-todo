@@ -10,11 +10,11 @@
 
   `GET`
 
-*  **URL Params**
+*  **Request Params**
 
     None
 
-* **Data Params**
+* **Request Body**
 
   None
 
@@ -43,13 +43,13 @@
 
   `GET`
 
-*  **URL Params**
+*  **Request Params**
 
    **Required:**
  
    `id=[integer]`
 
-* **Data Params**
+* **Request Body**
 
   None
 
@@ -83,11 +83,11 @@
 
   `POST`
   
-*  **URL Params**
+*  **Request Params**
 
-    ` none `
+    None
 
-* **Data Params**
+* **Request Body**
 
     **Required:**
  
@@ -126,13 +126,13 @@
 
   `PUT`
   
-*  **URL Params**
+*  **Request Params**
 
    **Required:**
  
    `id=[integer]`
 
-* **Data Params**
+* **Request Body**
 
     **Required:**
  
@@ -176,13 +176,13 @@
 
   `PATCH`
   
-*  **URL Params**
+*  **Request Params**
 
    **Required:**
  
    `id=[integer]`
 
-* **Data Params**
+* **Request Body**
 
   **Required:**
 
@@ -218,13 +218,13 @@
 
   `DELETE`
   
-*  **URL Params**
+*  **Request Params**
 
    **Required:**
  
    `id=[integer]`
 
-* **Data Params**
+* **Request Body**
 
   None
 
