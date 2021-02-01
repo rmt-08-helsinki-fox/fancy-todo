@@ -15,7 +15,10 @@ class TodoController {
       })
       .catch((err) => {
         if (err.name === 'SequelizeValidationError' && err.errors.length > 0) {
-          res.status(400).json(err.errors)
+          let errMsg = err.errors.map(err => err.message);
+          let error = { errors: errMsg }
+
+          res.status(400).json(error);
         } else {
           res.status(500).json(err)
         }
@@ -68,7 +71,10 @@ class TodoController {
       })
       .catch((err) => {
         if (err.name === 'SequelizeValidationError' && err.errors.length > 0) {
-          res.status(400).json(err.errors)
+          let errMsg = err.errors.map(err => err.message);
+          let error = { errors: errMsg }
+
+          res.status(400).json(error);
         } else {
           res.status(500).json(err)
         }

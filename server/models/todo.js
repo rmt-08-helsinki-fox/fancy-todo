@@ -10,11 +10,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Todo.belongsTo(models.User)
     }
   };
   Todo.init({
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Title is required'
+        },
+        notNull: {
+          msg: 'Title is required'
+        }
+      }
+    },
     description: DataTypes.TEXT,
     status: DataTypes.BOOLEAN,
     due_date: {
@@ -22,10 +33,11 @@ module.exports = (sequelize, DataTypes) => {
       validate: { 
         isAfter: {
           args: new Date().toString(),
-          msg: 'Tidak boleh memasukkan tanggal yg sudah lewat'
+          msg: `Can't enter a date that has already passed`
         }
       }
-    }
+    },
+    UserId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Todo',
