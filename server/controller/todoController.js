@@ -114,6 +114,75 @@ class TodoController {
             };
         }
     }
+    static async updateStatus(req, res) {
+        try {
+            const id = req.params.id;
+            const { status } = req.body;
+
+            const opt = {
+                where: {
+                    id
+                },
+                returning: true
+            }
+            const findTodo = await Todo.findByPk(id);
+            if (!findTodo) throw '404';
+
+            const todo = await Todo.update({ status }, opt);
+            const msg = {
+                message: 'Success',
+                data: todo[1][0],
+                response: true
+            }
+            res.status(200).json(msg);
+        } catch (err) {
+            if (err.name === 'SequelizeValidationError') {
+                const validate = err.errors[0].message;
+                const msg = {
+                    message: validate,
+                    response: false
+                }
+                res.status(400).json(msg);
+            } else if (err === '404') {
+                const msg = {
+                    message: 'Data not found',
+                    response: false
+                }
+                res.status(404).json(msg)
+            } else {
+                res.status(500).json(err);
+            };
+        }
+    }
+    static async destroy(req, res) {
+        try {
+            const id = req.params.id;
+            const opt = {
+                where: {
+                    id
+                }
+            }
+            const findTodo = await Todo.findByPk(id);
+            if (!findTodo) throw '404';
+            const todoDelete = await Todo.destroy(opt);
+            const msg = {
+                message: 'Success',
+                data: findTodo,
+                response: true
+            }
+            res.status(200).json(msg);
+        } catch (err) {
+            if (err === '404') {
+                const msg = {
+                    message: 'Data not found',
+                    response: false
+                }
+                res.status(404).json(msg);
+            } else {
+                res.status(500).json(err);
+            }
+        }
+    }
 }
 
 module.exports = TodoController;
