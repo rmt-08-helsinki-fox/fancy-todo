@@ -127,7 +127,7 @@ class Controller {
 
       if (err.name === 'SequelizeValidationError') {
         res.status(400).json(err.errors[0]);
-      } else if (err.err) {
+      } else if (err.error) {
         res.status(404).json(err);
       } else {
         res.status(500).json(err);
