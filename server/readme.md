@@ -115,7 +115,7 @@ _Response (404 - Not Found)_
 
 ### PUT /todos/:id
 
-> To Get spesific Todos in database
+> To update all data in todos
 
 _Request Header_
 
@@ -184,7 +184,7 @@ _Response (500 - Internal Server Error)_
 
 ### PATCH /todos:id
 
-> To Get All Todos in database
+> To update spesific data todos
 
 _Request Header_
 
@@ -250,7 +250,7 @@ _Response (500 - Internal Server Error)_
 
 ### DELETE /todos:id
 
-> To Get All Todos in database
+> To Delete todos
 
 _Request Header_
 
