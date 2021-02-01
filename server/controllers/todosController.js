@@ -37,7 +37,6 @@ class Controller {
             if (findTodo) {
                 res.status(200).json(findTodo)
             } else {
-
                 throw {
                     error: {
                         code: 404,
@@ -48,7 +47,7 @@ class Controller {
 
         } catch (err) {
 
-            res.status(404).json(error) //not found
+            res.status(404).json(err) //not found
         }
     }
 
