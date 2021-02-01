@@ -103,6 +103,7 @@ class toDoController {
                 })
             } else {
                 next({ status: 404 })
+                return
             }
         } catch (err) {
             next(err)
