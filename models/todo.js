@@ -32,6 +32,14 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Todo',
+    hooks: {
+      beforeUpdate(instance, option){
+        let today = new Date()
+        if (instance.due_date <= today.getTime()){
+          throw new Error ({msg: "Date must be more then today"})
+        }
+      }
+    }
   });
   return Todo;
 };
