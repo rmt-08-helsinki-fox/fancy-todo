@@ -8,6 +8,9 @@
 - `PUT /todos/:id`
 - `PATCH /todos/:id`
 - `DELETE /todos/:id`
+
+- `POST /login`
+- `POST /register`
 ----
 
 #### Create Todos
@@ -260,6 +263,74 @@ _Response (404)_
 ```json
   {
     "message": "Todos is undefined"
+  }
+```
+_Response (500)_
+```json
+  {
+    "message": "Error in internal server"
+  }
+```
+---
+
+#### Register User
+> POST /register
+_Request Header_
+```json
+  no needed
+```
+_Request Params_
+```json
+  No needed
+```
+_Request Body_
+```json
+  {
+    "email" : "user@user.com",
+    "password": "123456"
+  }
+```
+_Response (201)_
+```json
+  {
+    "id" : 1,
+    "email" : "user@user.com"
+  }
+```
+_Response (500)_
+```json
+  {
+    "message": "Error in internal server"
+  }
+```
+---
+#### Login User
+> POST /login
+_Request Header_
+```json
+  no needed
+```
+_Request Params_
+```json
+  No needed
+```
+_Request Body_
+```json
+  {
+    "email" : "user@user.com",
+    "password": "123456"
+  }
+```
+_Response (200)_
+```json
+  {
+    "access_token" : "<access_token code>"
+  }
+```
+_Response (400)_
+```json
+  {
+    "msg" : "Email or Password is undefined"
   }
 ```
 _Response (500)_

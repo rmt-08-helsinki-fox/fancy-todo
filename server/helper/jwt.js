@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken')
-const api_key = process.env.JWT_TOKEN
+// const api_key = process.env.JWT_TOKEN
 
-async function generateToken (input) {
-  return jwt.sign(input, api_key);
+function generateToken (input) {
+  return jwt.sign(input, 'api_key');
+}
+function verify (inputToken) {
+  return jwt.verify(inputToken, 'api_key')
 }
 
-module.exports = { generateToken }
+module.exports = { generateToken, verify }
