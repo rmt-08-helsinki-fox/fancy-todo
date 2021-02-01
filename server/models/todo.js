@@ -13,18 +13,33 @@ module.exports = (sequelize, DataTypes) => {
   }
   Todo.init(
     {
-      title: DataTypes.STRING,
-      description: DataTypes.STRING,
+      title: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: "Title cannot be empty",
+          },
+        },
+      },
+      description: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: "Description cannot be empty",
+          },
+        },
+      },
       status: DataTypes.BOOLEAN,
       due_date: {
         type: DataTypes.DATE,
         validate: {
-          dateValidataion() {
-            let date = new Date(this.due_date).toLocaleDateString();
-            const now = new Date().toLocaleDateString();
-            if (date < now) {
-              throw new Error("Tidak boleh mengisi tanggal yang sudah lewat");
-            }
+          isAfter: {
+            args: `${new Date().getFullYear()}-${
+              new Date().getMonth() + 1
+            }-${new Date().getDate()}`,
+            msg: "Due date at least tomorrow",
           },
         },
       },
