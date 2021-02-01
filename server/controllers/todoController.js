@@ -101,11 +101,14 @@ class TodoController {
   static deleteTodo(req, res) {
     const id = +req.params.id;
     Todo.destroy({ where: { id } })
-      .then(() => {
+      .then((todo) => {
+        if (!todo) throw { msg: "data not found", status: 404 };
         res.status(200).json("todo success to delete");
       })
       .catch((err) => {
-        console.log(err);
+        const error = err.msg;
+        const status = err.status || 500;
+        res.status(status).json(error || err);
       });
   }
 }
