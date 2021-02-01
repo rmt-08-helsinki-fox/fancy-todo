@@ -3,7 +3,6 @@ const { Todo } = require('../models');
 class TodoController {
   static addTodo(req, res) {
     const { title, description, status, due_date } = req.body;
-    console.log(req.body);
     Todo.create({
       title,
       description,
@@ -14,8 +13,10 @@ class TodoController {
         res.status(201).json(todo)
       })
       .catch(err => {
-        if (err.errors[0].message) {
-          res.status(400).json({ error: err.errors[0].message});
+        console.log(err);
+        const errorArr = err.errors.map(err => err.message);
+        if (err.errors) {
+          res.status(400).json({ error: errorArr });
         } else {
           res.status(500).json({ error: 'Internal Server Error' });
         }
@@ -38,7 +39,7 @@ class TodoController {
       where: { id: id }
     })
       .then(todo => {
-        if (!todo) throw { msg: 'Error Not Found', status: 404 }
+        if (!todo) throw { msg: 'Error Not Found', status: 404 };
         res.status(200).json(todo);
       })
       .catch(err => {
@@ -71,8 +72,9 @@ class TodoController {
       })
       .catch(err => {
         console.log(err)
+        const errorArr = err.errors.map(err => err.message);
         if (err.errors) {
-          res.status(400).json({ error: err.errors[0].message});
+          res.status(400).json({ error: errorArr});
         } else {
           const error = err.msg || 'Internal Server Error';
           const status = err.status || 500;
@@ -99,8 +101,9 @@ class TodoController {
         res.status(200).json(updatedTodo)
       })
       .catch(err => {
+        const errorArr = err.errors.map(err => err.message);
         if (err.errors) {
-          res.status(400).json({ error: err.errors[0].message});
+          res.status(400).json({ error: errorArr});
         } else {
           const error = err.msg || 'Internal Server Error';
           const status = err.status || 500;

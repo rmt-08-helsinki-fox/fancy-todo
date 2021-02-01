@@ -14,13 +14,24 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Todo.init({
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: `Validation error. Task title must not be empty`
+        }
+      }
+    },
     description: DataTypes.STRING,
     status: DataTypes.BOOLEAN,
     due_date: {
       type: DataTypes.DATE,
       validate: {
-        isAfter: new Date().toLocaleDateString()
+        isAfter: {
+          args: new Date().toLocaleDateString(),
+          msg: `Validation error. Invalid due date input`
+        }
       }
     }
   }, {
