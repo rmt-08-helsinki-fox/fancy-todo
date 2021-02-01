@@ -29,10 +29,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATEONLY,
       validate: {
         isTomorrow(value) {
-          const date = new Date(date)
+          const date = new Date(value)
           const now = new Date()
-
-          if(data< now) {
+          if(date < now) {
             throw new Error("it's not tomorrow")
           }
         }

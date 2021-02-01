@@ -15,10 +15,10 @@ module.exports = {
         type: Sequelize.TEXT
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.BOOLEAN
       },
       due_date: {
-        type: Sequelize.STRING
+        type: Sequelize.DATEONLY
       },
       createdAt: {
         allowNull: false,
