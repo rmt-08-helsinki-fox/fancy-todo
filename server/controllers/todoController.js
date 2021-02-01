@@ -2,7 +2,6 @@ const { Todo } = require('../models')
 
 class TodoController {
     static createTodo(req,res) {
-        console.log(req.body)
         let {title, description, status, due_date} = req.body
         let dataTodo = {title, description, status, due_date}
         
@@ -11,6 +10,9 @@ class TodoController {
                 res.status(201).json(data)
             })
             .catch(err=> {
+                if(err.name ==="SequelizeValidationError"){
+                    res.status(404).json(err.errors[0].message)
+                }
                 res.status(500).json(err)
             })
     }
@@ -32,6 +34,9 @@ class TodoController {
             }
         })
             .then(data => {
+                if(data === null) {
+                    res.status(404).json({message:"Invalid Data"})
+                }
                 res.status(200).json(data)
             })
             .catch(err=> {
@@ -49,7 +54,9 @@ class TodoController {
             returning:true
         })
             .then(data => {
-                console.log(data)
+                if(data[0] === 0){
+                    res.status(404).json({message: "Invalid Data"})
+                }
                 res.status(200).json(data[1][0])
             })
             .catch(err => {
@@ -68,9 +75,16 @@ class TodoController {
             returning: true
         })
             .then(data => {
+                console.log(data)
+                if(data[0] === 0){
+                    res.status(404).json({message:"Invalid Data"})
+                }
                 res.status(200).json(data[1][0])
             })
             .catch(err => {
+                if(err.name === "SequelizeValidationError") {
+                    res.status(400).json(err.errors[0].message)
+                }
                 res.status(500).json(err)
             })
     }
@@ -83,7 +97,11 @@ class TodoController {
             returning: true
         })
             .then(data => {
-                res.status(200).json(data[1][0])
+
+                if(data === 0) {
+                    res.status(404).json({message: "Invalid Data"})
+                }
+                res.status(200).json({message : "todo success to delete"})
             })
             .catch(err => {
                 res.status(500).json(err)
