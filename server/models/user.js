@@ -45,8 +45,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Password cannot be empty"
         }
       }
-    },
-    role: DataTypes.STRING
+    }
   }, {
     sequelize,
     modelName: 'User',

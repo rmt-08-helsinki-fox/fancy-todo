@@ -27,11 +27,11 @@ class TodoController{
         hasil = data
         return axios({
           method: 'get',
-          url: 'https://ghibliapi.herokuapp.com/films'
+          url: `https://www.cheapshark.com/api/1.0/games?title=batman&limit=10`
         })
       })
-      .then(anime => {
-        res.status(200).json({hasil, listAnime: anime.data})
+      .then(game => {
+        res.status(200).json({hasil, game: game.data})
       })
       .catch(err => {
         next(err)
