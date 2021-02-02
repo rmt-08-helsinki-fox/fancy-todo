@@ -7,6 +7,7 @@ const user = require('./user')
 router.use(user)
 router.use(authenticate)
 router.use('/todos', todos)
+router.get('/news')
 
 router.use(errorHandler)
 
