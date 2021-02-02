@@ -8,7 +8,7 @@ class ThirdPartyAPI {
       url: `http://api.openweathermap.org/data/2.5/weather?q=Jakarta&appid=${OPEN_WEATHER_API_KEY}`
     })
       .then(response => {
-        res.status(200).json(response.data.weather)
+        res.status(200).json(response.data)
       })
       .catch(err => {
         next(err);
