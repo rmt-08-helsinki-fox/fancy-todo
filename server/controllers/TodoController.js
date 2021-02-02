@@ -1,7 +1,6 @@
-const e = require('express')
 const { Todo } = require('../models/index')
 
-class Controller{
+class TodoController{
 
     static showTodo(req,res){
         Todo.findAll()
@@ -14,12 +13,14 @@ class Controller{
     }
 
     static postTodo(req, res){
+        const UserId = req.decoded.id
         const {title, description, status, due_date} = req.body
         let newTodo = {
             title, 
             description, 
             status, 
-            due_date
+            due_date,
+            UserId
         }
         Todo.create(newTodo)
         .then((result)=>{
@@ -122,4 +123,4 @@ class Controller{
 
 }
 
-module.exports = Controller
+module.exports = TodoController
