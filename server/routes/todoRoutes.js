@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const TodoController = require('../controller/todoController');
 
+const mid = require('../helper/middleware');
+
+router.use(mid);
 router.get('/todos', TodoController.showAllTodos);
 router.get('/todos/:id', TodoController.showTodo);
 router.post('/todos', TodoController.addTodo);

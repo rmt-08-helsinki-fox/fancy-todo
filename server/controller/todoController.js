@@ -3,7 +3,7 @@ const { Todo } = require('../models');
 class TodoController {
     static addTodo(req, res) {
         const { title, description, status, due_date } = req.body;
-        const newTodo = { title, description, status, due_date };
+        const newTodo = { title, description, status, due_date, user_id: req.decoded.id };
         Todo
             .create(newTodo)
             .then(todo => {
@@ -30,6 +30,9 @@ class TodoController {
     static async showAllTodos(req, res) {
         try {
             const opt = {
+                where: {
+                    user_id: req.decoded.id
+                },
                 order: [['due_date', 'ASC']]
             }
             const todos = await Todo.findAll(opt);
@@ -50,7 +53,13 @@ class TodoController {
     static async showTodo(req, res) {
         try {
             const id = req.params.id;
-            const todo = await Todo.findByPk(id);
+            const opt = {
+                where: {
+                    id,
+                    user_id: req.decoded.id
+                }
+            }
+            const todo = await Todo.findOne(opt);
             if (!todo) {
                 throw 'Data not found';
             }
@@ -79,11 +88,12 @@ class TodoController {
             const dataUpdate = { title, description, status, due_date };
             const opt = {
                 where: {
-                    id
+                    id,
+                    user_id: req.decoded.id
                 },
                 returning: true
             }
-            const findTodo = await Todo.findByPk(id);
+            const findTodo = await Todo.findOne(opt);
             if (!findTodo) {
                 throw '404';
             }
@@ -121,11 +131,12 @@ class TodoController {
 
             const opt = {
                 where: {
-                    id
+                    id,
+                    user_id: req.decoded.id
                 },
                 returning: true
             }
-            const findTodo = await Todo.findByPk(id);
+            const findTodo = await Todo.findOne(opt);
             if (!findTodo) throw '404';
 
             const todo = await Todo.update({ status }, opt);
@@ -159,10 +170,11 @@ class TodoController {
             const id = req.params.id;
             const opt = {
                 where: {
-                    id
+                    id,
+                    user_id: req.decoded.id
                 }
             }
-            const findTodo = await Todo.findByPk(id);
+            const findTodo = await Todo.findOne(opt);
             if (!findTodo) throw '404';
             const todoDelete = await Todo.destroy(opt);
             const msg = {
