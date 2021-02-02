@@ -10,6 +10,9 @@ app.use(express.urlencoded({extended:false}))
 
 app.use(router)
 
+app.use(function(err, req, res, next) {
+    console.log(err);
+})
 app.listen(PORT, function() {
     console.log(`App running on port: ${PORT}`);
 })

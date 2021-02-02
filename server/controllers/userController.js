@@ -2,6 +2,7 @@ const { User } = require('../models')
 const { checkPass } = require('../helpers/bcrypt')
 const { generateToken } =require('../helpers/jsonwebtoken')
 // const { checkToken } =require('../middleware/authentication')
+const axios = require('axios');
 
 class UserController {
     // login
@@ -22,6 +23,7 @@ class UserController {
 
     static login(req, res) {
         const {email, password} = req.body
+        let result
         User.findOne({
             where: {
                 email
@@ -38,8 +40,11 @@ class UserController {
                 id: user.id,
                 email: user.email
             })
-            res.status(200).json({acess_token})
+            // res.status(200).json({acess_token})
             // console.log('masuk');
+            return axios.get('https://api.adviceslip.com/advice')
+        }).then(function(response) {
+            res.status(200).json(response.data.slip.advice)
         }).catch(function(err) {
             const error = err.msg || 'Internal Server Error'
             res.status(500).json({ error })
