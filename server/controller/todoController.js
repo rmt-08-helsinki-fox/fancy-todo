@@ -1,10 +1,10 @@
 const { Todo } = require('../models/index');
 
 class todoController {
-  static async addToDoList(req, res) {
+  static async addToDoList(req, res, next) {
 
     const { title, description, status, due_date } = req.body;
-    const { id } = req.decoded;
+
     try {
 
       const todo = await Todo.create({
@@ -21,33 +21,33 @@ class todoController {
 
     } catch (err) {
 
-      if (err.name === 'SequelizeValidationError') res.status(400).json({ error: err.errors[0].message });
-
-      res.status(500).json(err);
+      next(err);
 
     }
   }
 
-  static async getToDoList(req, res) {
+  static async getToDoList(req, res, next) {
 
     try {
 
       let lists = await Todo.findAll({ order: [['id', 'ASC']] });
 
-      if (lists.length === 0) throw { error: 'No item is found!' };
+      if (lists.length === 0) throw {
+        name: 'CustomError',
+        error: 'No item is found!',
+        status: 404
+      };
 
       res.status(200).json(lists);
 
     } catch (err) {
 
-      if (err.error) res.status(404).json(err);
-
-      res.status(500).json(err);
+      next(err);
 
     }
   }
 
-  static async getToDoListIdParam(req, res) {
+  static async getToDoListIdParam(req, res, next) {
 
     let id = +req.params.id;
 
@@ -57,18 +57,16 @@ class todoController {
 
       if (list) res.status(200).json(list);
 
-      throw { error: 'ID not found!' };
+      throw { name: 'CustomError', error: 'ID not found!', status: 404 };
 
     } catch (err) {
 
-      if (err.error) res.status(404).json(err);
-
-      res.status(500).json(err);
+      next(err);
 
     }
   }
 
-  static async updateToDoList(req, res) {
+  static async updateToDoList(req, res, next) {
 
     let id = +req.params.id;
     let { title, description, status, due_date } = req.body;
@@ -87,24 +85,24 @@ class todoController {
         returning: true
       });
 
-      if (list[0] !== 0) res.status(200).json(list[1][0]);
-
-      throw { error: "ID not found!" };
+      if (list[0] !== 0) {
+        res.status(200).json(list[1][0]);
+      } else {
+        throw {
+          name: 'CustomError',
+          error: "ID not found!",
+          status: 404
+        };
+      }
 
     } catch (err) {
 
-      if (err.name === 'SequelizeValidationError') {
-        res.status(400).json({ error: err.errors[0].message });
-      } else if (err.error) {
-        res.status(404).json(err)
-      } else {
-        res.status(500).json(err);
-      }
+      next(err);
 
     }
   }
 
-  static async updateStatusToDoList(req, res) {
+  static async updateStatusToDoList(req, res, next) {
 
     let id = +req.params.id;
     let { status } = req.body;
@@ -115,22 +113,20 @@ class todoController {
 
       if (list[0] !== 0) res.status(200).json(list[1][0]);
 
-      throw { error: "ID not found!" };
+      throw {
+        name: "CustomError",
+        error: "ID not found!",
+        status: 404
+      };
 
     } catch (err) {
 
-      if (err.name === 'SequelizeValidationError') {
-        res.status(400).json({ error: err.errors[0].message });
-      } else if (err.error) {
-        res.status(404).json(err);
-      } else {
-        res.status(500).json(err);
-      }
+      next(err);
 
     }
   }
 
-  static async deleteToDoList(req, res) {
+  static async deleteToDoList(req, res, next) {
 
     let id = +req.params.id;
 
@@ -148,19 +144,25 @@ class todoController {
 
         if (deletedList) res.status(200).json({ listDeleted: listFound, message: 'todo success to delete' });
 
-        throw { error: 'ID not found!' }
+        throw {
+          name: 'CustomError',
+          error: 'ID not found!',
+          status: 404
+        }
 
       } else {
 
-        throw { error: 'ID not found!' }
+        throw {
+          name: 'CustomError',
+          error: 'ID not found!',
+          status: 404
+        }
 
       }
 
     } catch (err) {
 
-      if (err.error) res.status(404).json(err);
-
-      res.status(500).json(err);
+      next(err);
 
     }
   }

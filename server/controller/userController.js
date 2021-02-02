@@ -32,20 +32,22 @@ class userController {
   }
 
   static async login(req, res) {
+
+    const { email, password } = req.body;
+
     try {
 
-      const { email, password } = req.body;
       const user = await User.findOne({
         where: {
           email
         }
       })
 
-      if (!user) throw { msg: 'Invalid email or password' };
+      if (!user) throw { error: 'Invalid email or password' };
 
       const comparedPassword = comparePass(password, user.password);
 
-      if (!comparedPassword) throw { msg: 'Invalid email or password' };
+      if (!comparedPassword) throw { error: 'Invalid email or password' };
 
       const access_token = generateToken({
         id: user.id,
@@ -57,8 +59,12 @@ class userController {
       })
 
     } catch (err) {
-      const error = err.msg || 'Internal server error';
-      res.status(500).json({ error });
+
+      if (email === '' || password === '') res.status(400).json({ error: 'Email dan password harus diisi!' });
+
+      if (err.error) res.status(404).json({ error: err.error })
+
+      res.status(500).json({ err });
     }
   }
 }

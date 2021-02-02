@@ -3,11 +3,63 @@
 
 ## URL
 
+/user
+
 /todos
 
 ---
 
 ## METHODS
+
+<b><u>POST /user/register</u></b>
+
+Untuk mendaftarkan diri anda sebagai pengguna todo app kami. Semua input harus diisi, dan <u>e-mail</u> bersifat unique, yang berarti tidak bisa ada 2 e-mail yang sama yang akan terdaftar di database kami. Endpoint ini menerima 2 request body, yaitu:
+
+- email
+- password
+
+Output berupa sebuah object.
+
+Success response (201)
+
+```json
+{
+    "msg": "Register success",
+    "id": 32,
+    "email": "shark@gmail.com"
+}
+```
+
+Error responses:
+
+- 400
+- 500
+
+<b><u>POST /user/login</u></b>
+
+Setelah anda berhasil register, anda dapat login dengan e-mail dan password yang anda daftar di endpoint /user/register. Semua input harus diisi. Endpoint ini menerima 2 request body, yaitu:
+
+- email
+- password
+
+Output berupa sebuah object yang berisi access_token.
+
+Success response (200)
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzIsImVtYWlsIjoic2hhcmtAZ21haWwuY29tIiwiaWF0IjoxNjEyMjYwNTE2fQ.8tCkcnrnHe05ETPwkCx_58KosHlgqnIYgN7cNwnVNUc"
+}
+```
+
+Error responses:
+
+- 400
+- 404
+- 500
+
+---
+
 <b><u>GET /todos</u></b>
 
 Untuk melihat semua item yang terdapat dalam todo list app. Output berupa array of objects.
