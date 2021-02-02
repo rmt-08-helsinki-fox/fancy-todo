@@ -45,9 +45,10 @@ class C_Todos {
         if (data) res.status(200).json([data, { 
           msg: `Success find todo with id: ${req.params.id}` 
         }]);
-        else res.status(404).json({ msg: `Data with id: ${id} not found` })
+        else res.status(404).json({ msg: `Data with id: ${req.params.id} not found` })
       })
       .catch(err => {
+        console.log(err);
         res.status(500).json({ msg: "Internal Server Error" });
       })
   };
