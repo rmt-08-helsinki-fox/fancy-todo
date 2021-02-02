@@ -39,15 +39,14 @@ class TodoController {
 
     Todo.findOne({
       where: {
-        id,
-        UserId: +req.decoded.id
+        id
       }
     })
       .then((todo) => {
         if (todo) {
           res.status(200).json(todo)
         } else {
-          throw { error: 'Todo not found', status: 404}
+          throw { error: 'Todo Not Found', status: 404}
         }
       })
       .catch((err) => {
@@ -62,8 +61,7 @@ class TodoController {
 
     Todo.update(input, {
       where: {
-        id,
-        UserId: +req.decoded.id
+        id
       },
       returning: true
     })
@@ -71,7 +69,7 @@ class TodoController {
         if (todo[0] > 0) {
           res.status(200).json(todo[1][0])
         } else {
-          throw { error: 'Todo not found', status: 404 };
+          throw { error: 'Todo Not Found', status: 404 };
         }
       })
       .catch((err) => {
@@ -84,12 +82,10 @@ class TodoController {
     const status = req.body.status;
     const input = { status }
 
-    console.log(id);
 
     Todo.update(input, {
       where: {
-        id,
-        UserId: req.decoded.id
+        id
       },
       returning: true
     })
@@ -97,7 +93,7 @@ class TodoController {
         if (todo[0] > 0) {
           res.status(200).json(todo[1][0])
         } else {
-          throw { error: 'Todo not found', status: 404 }
+          throw { error: 'Todo Not Found', status: 404 }
         }
       })
       .catch((err) => {
@@ -110,15 +106,14 @@ class TodoController {
 
     Todo.destroy({
       where: {
-        id,
-        UserId: req.decoded.id
+        id
       }
     })
       .then((todo) => {
         if (todo) {
           res.status(200).json({ message: 'todo success to delete' })
         } else {
-          throw { error: 'Todo not found', status: 404 }
+          throw { error: 'Todo Not Found', status: 404 }
         }
       })
       .catch((err) => {

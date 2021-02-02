@@ -6,15 +6,14 @@ const authorize = require('../middlewares/authorize');
 const router = express.Router();
 
 router.use(authenticate);
-router.use(authorize);
 
 router.post('/', TodoController.create);
 router.get('/', TodoController.list);
 
-router.get('/:id', TodoController.todoById);
-router.put('/:id', TodoController.updatePut);
-router.patch('/:id', TodoController.updatePatch);
-router.delete('/:id', TodoController.delete);
+router.get('/:id', authorize, TodoController.todoById);
+router.put('/:id', authorize, TodoController.updatePut);
+router.patch('/:id', authorize, TodoController.updatePatch);
+router.delete('/:id', authorize, TodoController.delete);
 
 
 module.exports = router
