@@ -1,29 +1,27 @@
 const { Todo } = require("../models")
 
 class Controller {
-  static addTodo(req, res) {
+  static addTodo(req, res, next) {
+    const UserId = req.decoded.id
     let { title, description, status, due_date } = req.body
     Todo.create({
       title,
       description,
       status,
-      due_date
+      due_date,
+      UserId
     }).then(todo => {
       res.status(201).json(todo)
     }).catch(err => {
-      if (err.name === "SequelizeValidationError") {
-        res.status(400).json(err)
-      } else {
-        res.status(500)
-      }
+      next(err)
     })
   }
-  static viewTodo(req,res) {
+  static viewTodo(req,res, next) {
     Todo.findAll()
       .then(todos => {
         res.status(200).json(todos)
       }).catch(err => {
-        res.status(500)
+        next(err)
       })
   }
   static updateTodo(req, res) {
@@ -37,20 +35,14 @@ class Controller {
     }).then(todo => {  
 
       if (todo[0] === 0) {
-        throw ({ message: "Error not found" })
+        throw ({ name: "customError", message: "Error not found" })
       }
       res.status(200).json(todo[1][0])
     }).catch(err => {
-      if (err.name === "SequelizeValidationError") {
-        res.status(400).json(err)
-      } else if (err.message === "Error not found") {
-        res.status(404).json(err)
-      } {
-        res.status(500)
-      }
+      next(err)
     })
   }
-  static updateStatus(req, res) {
+  static updateStatus(req, res, next) {
     let id = +req.params.id
     let status = req.body.status
     Todo.update({status}, {
@@ -60,20 +52,14 @@ class Controller {
       returning: true
     }).then(todo => {
       if (todo[0] === 0) {
-        throw ({ message: "Error not found" })
+        throw ({ name: "customError", message: "Error not found" })
       }
       res.status(200).json(todo[1][0])
     }).catch(err => {
-      if (err.name === "SequelizeValidationError") {
-        res.status(400).json(err)
-      } else if (err.message === "Error not found") {
-        res.status(404).json(err)
-      } {
-        res.status(500)
-      }
+      next(err)
     })
   }
-  static deleteTodo(req, res) {
+  static deleteTodo(req, res, next) {
     let id = +req.params.id
     Todo.destroy({
       where: {
@@ -81,15 +67,11 @@ class Controller {
       },
     }).then(todo => {
       if (todo === 0) {
-        throw ({message: "Error not found"})
+        throw ({name: "customError", message: "Error not found"})
       }
       res.status(200).json({message: "Todo Succes to delete"})
     }).catch(err => {
-      if (err.message === "Error not found") {
-        res.status(404).json(err)
-      } else {
-        res.status(500)
-      }
+      next(err)
     })
   }
 }
