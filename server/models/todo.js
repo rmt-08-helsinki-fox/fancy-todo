@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User, {foreignKey: 'UserId'})
     }
   };
   Todo.init({
@@ -36,6 +37,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       validate:{
         isAfter: new Date().toISOString().split('T')[0],
+      }
+    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      validate:{
+        notEmpty: true,
       }
     },
   }, {

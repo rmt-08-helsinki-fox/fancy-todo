@@ -5,6 +5,7 @@ class TodoController {
 
   static addTodo(req, res){
     let {title, description, status, due_date} = req.body
+    let { id } = req.user
 
     if(status == 'true'){
       status = true
@@ -18,7 +19,8 @@ class TodoController {
       title,
       description,
       status,
-      due_date
+      due_date,
+      UserId : id
     }
 
     Todo.create(newTodo)
@@ -38,8 +40,13 @@ class TodoController {
   }
 
   static todoGet(req,res){
+    const { id } = req.user
 
-    Todo.findAll()
+    Todo.findAll({
+      where : {
+        UserId : id
+      }
+    })
       .then( todos => {
         res.status(200).json(todos)
       })
@@ -156,6 +163,9 @@ class TodoController {
         }
       })
       .then( todo => {
+
+        console.log(todo)
+
         if(!todo){
           throw { message: "error not found"}
         } else {
