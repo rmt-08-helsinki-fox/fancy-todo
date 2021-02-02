@@ -5,8 +5,9 @@ class WeatherController{
     static getWeather(req,res,next){
         let weather = {
             method: 'GET',
-            url: 'http://api.weatherstack.com/current?access_key=7ad2f0064d52f415536ad4a1795e0fc9&query=Indonesia'
+            url: `http://api.weatherstack.com/current?access_key=${process.env.SECRET_KEY}&query=Depok`
         }
+        process.env.SECRET_KEY
         axios.request(weather)
         .then(data => {
             let aboutWeather = {
