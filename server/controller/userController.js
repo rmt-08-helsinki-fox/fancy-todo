@@ -1,6 +1,6 @@
 const { User } = require('../models/index');
 
-const {generateToken} = require('../helpers/jwt')
+const { generateToken } = require('../helpers/jwt')
 
 
 class UserController{
@@ -8,8 +8,16 @@ class UserController{
 
   }
 
-  static login (req, res) {
-    const { email, password } =req.body;
+  static postRegister (req, res) {
+
+  }
+
+  static getLogin (req, res) {
+
+  }
+
+  static postLogin (req, res) {
+    const { email, password } = req.body;
     User.findOne({
       where: {
         email
