@@ -7,9 +7,7 @@ class TodoController {
         res.status(200).json(todo)
       })
       .catch(err => {
-        res.status(500).json({
-          message: err
-        })
+        next(err)
       })
   }
 
@@ -18,7 +16,8 @@ class TodoController {
       title: req.body.title,
       description: req.body.description,
       status: req.body.status || false,
-      due_date: req.body.due_date
+      due_date: req.body.due_date,
+      userID: req.user.id
     }
 
     Todo.create(input)
@@ -26,9 +25,7 @@ class TodoController {
         res.status(201).json(response)
       })
       .catch(err => {
-        res.status(500).json({
-          message: err
-        })
+        next(err)
       })
   }
 
@@ -40,13 +37,13 @@ class TodoController {
         if (response) {
           res.status(200).json(response)
         } else {
-          res.status(404).json({
-            message: 'Data not found'
+          next({
+            name: 'Data not found'
           })
         }
       })
       .catch(err => {
-        message: err
+        next(err)
       })
   }
 
@@ -68,15 +65,13 @@ class TodoController {
         if (response[0] > 0) {
           res.status(200).json(response[1])
         } else {
-          res.status(404).json({
-            message: 'Data not found'
+          next({
+            name: 'Data not found'
           })
         }
       })
       .catch(err => {
-        res.status(500).json({
-          message: err
-        })
+        next(err)
       })
   }
 
@@ -95,9 +90,7 @@ class TodoController {
         res.status(200).json(response[1])
       })
       .catch(err => {
-        res.status(500).json({
-          message: err
-        })
+        next(err)
       })
   }
 
@@ -113,15 +106,13 @@ class TodoController {
             message: 'Todo deleted successfully'
           })
         } else {
-          res.status(404).json({
-            message: 'Data not found'
+          next({
+            name: 'Data not found'
           })
         }
       })
       .catch(err => {
-        res.status(500).json({
-          message: err
-        })
+        next(err)
       })
   }
 }
