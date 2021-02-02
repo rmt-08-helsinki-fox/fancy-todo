@@ -10,12 +10,12 @@ My Assets App is an application to manage your assets. This app has :
 
 > Create new todos
 
-<!-- _Request Header_
+_Request Header_
 ```
 {
   "access_token": "<your access token>"
 }
-``` -->
+```
 
 _Request Body_
 ```
@@ -30,45 +30,22 @@ _Request Body_
 _Response (201 - Created)_
 ```
 {
-    "id": <given id by system>,
-    "title": "<posted title>",
-    "description": "<posted description>",
-    "status": <posted status>,
-    "due_date": "<posted due_date>",
-    "updatedAt": "2021-02-01T12:37:17.962Z",
-    "createdAt": "2021-02-01T12:37:17.962Z"
+    "id": 12,
+    "title": "diving",
+    "description": "diving in ancol",
+    "status": false,
+    "due_date": "2021-02-01T17:00:00.000Z",
+    "UserId": 8,
+    "updatedAt": "2021-02-02T11:57:10.486Z",
+    "createdAt": "2021-02-02T11:57:10.486Z"
 }
 ```
 
-_Response (404 - Bad Request)_
+_Response (400 - Bad Request)_
 ```
-{
-    "message": "Validation isAfter on due_date failed",
-    "type": "Validation error",
-    "path": "due_date",
-    "value": "2020-03-03T17:00:00.000Z",
-    "origin": "FUNCTION",
-    "instance": {
-        "id": null,
-        "title": "diving",
-        "description": "diving in bali",
-        "status": false,
-        "due_date": "2020-03-03T17:00:00.000Z",
-        "updatedAt": "2021-02-01T12:39:16.159Z",
-        "createdAt": "2021-02-01T12:39:16.159Z"
-    },
-    "validatorKey": "isAfter",
-    "validatorName": "isAfter",
-    "validatorArgs": [
-        "2021-01-31"
-    ],
-    "original": {
-        "validatorName": "isAfter",
-        "validatorArgs": [
-            "2021-01-31"
-        ]
-    }
-}
+[
+    "Validation isAfter on due_date failed"
+]
 ```
 _Response (500 - Internal server error)_
 ```
@@ -82,12 +59,12 @@ _Response (500 - Internal server error)_
 
 > Get all todos
 
-<!-- _Request Header_
+_Request Header_
 ```
 {
   "access_token": "<your access token>"
 }
-``` -->
+```
 
 _Request Body_
 ```
@@ -97,39 +74,25 @@ not needed
 _Response (200)_
 ```
 [
-  {
-    "id": 1,
-    "name": "<asset name>",
-    "description": "<asset description>",
-    "createdAt": "2020-03-20T07:15:12.149Z",
-    "updatedAt": "2020-03-20T07:15:12.149Z",
-  },
-  {
-    "id": 2,
-    "name": "<asset name>",
-    "description": "<asset description>",
-    "createdAt": "2020-03-20T07:15:12.149Z",
-    "updatedAt": "2020-03-20T07:15:12.149Z",
-  }
-]
-[
     {
-        "id": 1,
-        "title": "<asset title>",
-        "description": "<asset description>",
-        "status": <asset status>,
-        "due_date": "<asset due_date>",
-        "createdAt": "2021-02-01T06:35:14.655Z",
-        "updatedAt": "2021-02-01T09:27:45.302Z"
+        "id": 10,
+        "title": "playing batminton",
+        "description": "playing tennis in surabaya",
+        "status": true,
+        "due_date": "2021-02-04T17:00:00.000Z",
+        "UserId": 8,
+        "createdAt": "2021-02-02T11:29:51.364Z",
+        "updatedAt": "2021-02-02T11:30:13.823Z"
     },
     {
-        "id": 2,
-        "title": "<asset title>",
-        "description": "<asset description>",
-        "status": <asset status>,
-        "due_date": "<asset due_date>",
-        "createdAt": "2021-02-01T10:53:33.125Z",
-        "updatedAt": "2021-02-01T10:53:33.125Z"
+        "id": 11,
+        "title": "Playing football",
+        "description": "Playing football in surabaya",
+        "status": false,
+        "due_date": "2021-02-01T17:00:00.000Z",
+        "UserId": 8,
+        "createdAt": "2021-02-02T11:30:38.844Z",
+        "updatedAt": "2021-02-02T11:30:38.844Z"
     }
 ]
 ```
@@ -145,12 +108,14 @@ _Response (500 - Internal server error)_
 
 > Get todos by id
 
-<!-- _Request Header_
+_Request Header_
 ```
 {
   "access_token": "<your access token>"
 }
-``` -->
+```
+_Request Params_
+``` id ```
 
 _Request Body_
 ```
@@ -160,20 +125,20 @@ not needed
 _Response (200)_
 ```
 {
-  "id": 1,
-  "title": "<asset title>",
-  "description": "<asset description>",
-  "status": <asset status>,
-  "due_date": "<asset due_date>",
-  "createdAt": "2021-02-01T06:35:14.655Z",
-  "updatedAt": "2021-02-01T09:27:45.302Z"
+    "id": 10,
+    "title": "playing batminton",
+    "description": "playing tennis in surabaya",
+    "status": true,
+    "due_date": "2021-02-04T17:00:00.000Z",
+    "UserId": 8,
+    "createdAt": "2021-02-02T11:29:51.364Z",
+    "updatedAt": "2021-02-02T11:30:13.823Z"
 }
 ```
-_Response (504 - Not Found)_
+_Response (401 - Unauthorized)_
 ```
 {
-    "name": "id not found",
-    "msg": "error not found"
+    "message": "cannot acces"
 }
 ```
 _Response (500 - Internal server error)_
@@ -189,12 +154,12 @@ _Response (500 - Internal server error)_
 
 > Edit Todo All Field
 
-<!-- _Request Header_
+_Request Header_
 ```
 {
   "access_token": "<your access token>"
 }
-``` -->
+```
 
 _Request Params_
 ``` id ```
@@ -215,59 +180,30 @@ _Response (201 - Created)_
     1,
     [
         {
-            "id": <given id by system>,
-            "title": "<posted title>",
-            "description": "<posted description>",
-            "status": <posted status>,
-            "due_date": "<posted due_date>",
-            "createdAt": "2021-02-01T10:53:33.125Z",
-            "updatedAt": "2021-02-01T13:22:43.949Z"
+            "id": 10,
+            "title": "playing tennis",
+            "description": "playing tennis in surabaya",
+            "status": false,
+            "due_date": "2021-02-04T17:00:00.000Z",
+            "UserId": 8,
+            "createdAt": "2021-02-02T11:29:51.364Z",
+            "updatedAt": "2021-02-02T12:01:48.207Z"
         }
     ]
 ]
 ```
-
-_Response (404 - Not Found)_
+_Response (401 - Unauthorized)_
 ```
 {
-    "name": "id not found",
-    "msg": "error not found"
+    "message": "cannot acces"
 }
 ```
 
 _Response (400 - Bad request)_
 ```
-{
-    "name": "SequelizeValidationError",
-    "errors": [
-        {
-            "message": "Validation isAfter on due_date failed",
-            "type": "Validation error",
-            "path": "due_date",
-            "value": "2020-01-14T17:00:00.000Z",
-            "origin": "FUNCTION",
-            "instance": {
-                "id": null,
-                "title": "touring",
-                "description": "touring to malang",
-                "status": false,
-                "due_date": "2020-01-14T17:00:00.000Z",
-                "updatedAt": "2021-02-01T13:27:52.815Z"
-            },
-            "validatorKey": "isAfter",
-            "validatorName": "isAfter",
-            "validatorArgs": [
-                "2021-01-31"
-            ],
-            "original": {
-                "validatorName": "isAfter",
-                "validatorArgs": [
-                    "2021-01-31"
-                ]
-            }
-        }
-    ]
-}
+[
+    "Validation isAfter on due_date failed"
+]
 ```
 _Response (500 - Internal server error)_
 ```
@@ -279,19 +215,22 @@ _Response (500 - Internal server error)_
 ---
 ### PATCH /todos/:id
 
-> Edit Todo per Field
+> Update Status By Id
 
-<!-- _Request Header_
+_Request Header_
 ```
 {
   "access_token": "<your access token>"
 }
-``` -->
+```
+
+_Request Params_
+``` id ```
 
 _Request Body_
 ```
 {
-  "<field who wants you edite>": '<value>'
+  "<status>": '<status to get insert into>'
 }
 ```
 
@@ -301,60 +240,25 @@ _Response (201 - Created)_
     1,
     [
         {
-            "id": <given id by system>,
-            "title": "<posted title>",
-            "description": "<posted description>",
-            "status": <posted status>,
-            "due_date": "<posted due_date>",
-            "createdAt": "2021-02-01T10:53:33.125Z",
-            "updatedAt": "2021-02-01T13:22:43.949Z"
+            "id": 10,
+            "title": "playing tennis",
+            "description": "playing tennis in surabaya",
+            "status": true,
+            "due_date": "2021-02-04T17:00:00.000Z",
+            "UserId": 8,
+            "createdAt": "2021-02-02T11:29:51.364Z",
+            "updatedAt": "2021-02-02T12:05:02.636Z"
         }
     ]
 ]
 ```
-
-_Response (404 - Not Found)_
+_Response (401 - Unauthorized)_
 ```
 {
-    "name": "id not found",
-    "msg": "error not found"
+    "message": "cannot acces"
 }
 ```
 
-_Response (400 - Bad request)_
-```
-{
-    "name": "SequelizeValidationError",
-    "errors": [
-        {
-            "message": "Validation isAfter on due_date failed",
-            "type": "Validation error",
-            "path": "due_date",
-            "value": "2020-01-14T17:00:00.000Z",
-            "origin": "FUNCTION",
-            "instance": {
-                "id": null,
-                "title": "touring",
-                "description": "touring to malang",
-                "status": false,
-                "due_date": "2020-01-14T17:00:00.000Z",
-                "updatedAt": "2021-02-01T13:27:52.815Z"
-            },
-            "validatorKey": "isAfter",
-            "validatorName": "isAfter",
-            "validatorArgs": [
-                "2021-01-31"
-            ],
-            "original": {
-                "validatorName": "isAfter",
-                "validatorArgs": [
-                    "2021-01-31"
-                ]
-            }
-        }
-    ]
-}
-```
 _Response (500 - Internal server error)_
 ```
 {
@@ -367,12 +271,12 @@ _Response (500 - Internal server error)_
 
 > Delete Todo By ID
 
-<!-- _Request Header_
+_Request Header_
 ```
 {
   "access_token": "<your access token>"
 }
-``` -->
+```
 
 _Request Params_
 ``` id ```
@@ -386,51 +290,120 @@ not needed
 _Response (200 - Ok)_
 ```
 {
-    "name": "id not found",
-    "msg": "error not found"
+    "msg": "delete succes"
+}
+```
+
+_Response (401 - Unauthorized)_
+```
+{
+    "message": "cannot acces"
 }
 ```
 
 _Response (404 - Not Found)_
 ```
 {
-    "name": "id not found",
-    "msg": "error not found"
+    "message": "error not found"
 }
 ```
 
-_Response (400 - Bad request)_
+_Response (500 - Internal server error)_
 ```
 {
-    "name": "SequelizeValidationError",
-    "errors": [
-        {
-            "message": "Validation isAfter on due_date failed",
-            "type": "Validation error",
-            "path": "due_date",
-            "value": "2020-01-14T17:00:00.000Z",
-            "origin": "FUNCTION",
-            "instance": {
-                "id": null,
-                "title": "touring",
-                "description": "touring to malang",
-                "status": false,
-                "due_date": "2020-01-14T17:00:00.000Z",
-                "updatedAt": "2021-02-01T13:27:52.815Z"
-            },
-            "validatorKey": "isAfter",
-            "validatorName": "isAfter",
-            "validatorArgs": [
-                "2021-01-31"
-            ],
-            "original": {
-                "validatorName": "isAfter",
-                "validatorArgs": [
-                    "2021-01-31"
-                ]
-            }
-        }
-    ]
+  "message": "Internal server error"
+}
+```
+
+&nbsp;
+
+### POST /register
+
+> Create new User
+
+<!-- _Request Header_
+```
+{
+  "access_token": "<your access token>"
+}
+``` -->
+
+_Request Body_
+```
+{
+  "email": "<email to get insert into>",
+  "password": "<description to get insert into>",
+  "location": "<location to get insert into>"
+}
+```
+
+_Response (201 - Created)_
+```
+{
+    "user": {
+        "id": 17,
+        "email": "amira@mail.com",
+        "password": "$2a$05$e3tvToFMqRtBNq8zozSHV.Fiwsd293CMVko3yjgs072ep9pB9/c9K",
+        "location": "Bandung",
+        "updatedAt": "2021-02-02T09:32:50.700Z",
+        "createdAt": "2021-02-02T09:32:50.700Z"
+    },
+    "wheater": {
+        "country_code": "ID",
+        "lon": 111.7844,
+        "timezone": "Asia/Jakarta",
+        "lat": -8.1676,
+        "alerts": [],
+        "city_name": "Bandung",
+        "state_code": "08"
+    }
+}
+```
+
+_Response (400 - Bad Request)_
+```
+[
+    "email must be unique"
+]
+```
+_Response (500 - Internal server error)_
+```
+{
+  "message": "Internal server error"
+}
+```
+
+&nbsp;
+### POST /login
+
+> Login
+
+<!-- _Request Header_
+```
+{
+  "access_token": "<your access token>"
+}
+``` -->
+
+_Request Body_
+```
+{
+  "email": "<email to get insert into>",
+  "password": "<description to get insert into>"
+}
+```
+
+_Response (200 - Ok)_
+```
+{
+"getToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJpcndhbkBtYWlsLmNvbSIsImlhdCI6MTYxMjI2NTMwNn0.a3a5JYeHLU76PjmmQWK06B9kq3JE5S5MzpIjnSwkMqU"
+}
+```
+
+_Response (400 - Bad Request)_
+```
+{
+    "message": "invalid email or password"
 }
 ```
 _Response (500 - Internal server error)_
@@ -439,3 +412,5 @@ _Response (500 - Internal server error)_
   "message": "Internal server error"
 }
 ```
+
+&nbsp;

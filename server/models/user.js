@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Todo)
     }
   };
   User.init({
@@ -25,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       unique: true
     },
-    password: DataTypes.STRING
+    password: DataTypes.STRING,
+    location: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',

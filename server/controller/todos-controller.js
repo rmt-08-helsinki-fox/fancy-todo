@@ -1,39 +1,45 @@
-const { Todo } = require('../models')
+const { Todo, User } = require('../models')
 
 class TodosController {
-  static createTodo(req, res) {
+  static createTodo(req, res, next) {
+    console.log(req.decode)
+    let { id } = req.decode
     let {title, description, status, due_date} = req.body
       Todo.create({
         title,
         description,
         status,
-        due_date
+        due_date,
+        UserId: id
       }) 
         .then(todo => {
             res.status(201).json(todo)
       }) 
         .catch(err => {
-          if(err.name === 'SequelizeValidationError') {
-            res.status(400).json(err.errors[0])
-          } else {
-            res.status(500).json(err)
-          }
+          next(err)
         })
   }
 
     // ======= read todo ============
-  static readTodo(req, res) {
-    Todo.findAll()
-      .then(todos => {
-        res.status(200).json(todos)
+  static readTodo(req, res, next) {
+    console.log(req.decode)
+    let { id } = req.decode
+    User.findAll({
+      where: {
+        id
+      },
+      include: [Todo]
+    }) 
+      .then(dataUser => {
+        res.status(200).json(dataUser[0].Todos)
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
     // ========== read todo by id ===========
-  static readTodoById(req, res) {
+  static readTodoById(req, res, next) {
     let id = +req.params.id
     Todo.findOne({
       where:{
@@ -45,20 +51,20 @@ class TodosController {
         res.status(200).json(todo)
       })
       .catch(err => {
-        console.log(err)
-        if(err.name === 'id not found') {
-          res.status(404).json(err)
-        } else {
-          res.status(500).json(err)
-        }
+        next(err)
       })
   }
 
     // ========== edit todo all fields ==========
-  static editTodoAllFields(req, res) {
+  static editTodoAllFields(req, res, next) {
     let id = +req.params.id
-    let dataInput = req.body
-    console.log(dataInput)
+    let dataInput = {
+      title: req.body.title,
+      description: req.body.description,
+      status: req.body.status,
+      due_date: req.body.due_date,
+      UserId: req.body.UserId
+    }
     Todo.update(dataInput, {
       where:{
         id
@@ -68,20 +74,16 @@ class TodosController {
       if(todo[0] === 0) throw {name: 'id not found', msg: 'error not found'}
       res.status(201).json(todo)
     }) .catch(err => {
-      if(err.name === 'id not found') {
-        res.status(404).json(err)
-      } else if(err.name === 'SequelizeValidationError') {
-        res.status(400).json(err)
-      } else {
-        res.status(500).json(err)
-      }
+      next(err)
     })
   }
 
-    // ========= edit todo per fields =========
-  static editTodoPerFields(req, res) {
+    // ========= update Status =========
+  static updateStatusById(req, res, next) {
     let id = +req.params.id
-    let dataInput = req.body
+    let dataInput = {
+      status: req.body.status
+    }
     Todo.update(dataInput, {
       where:{
         id
@@ -91,19 +93,13 @@ class TodosController {
       if(todo[0] === 0) throw {name: 'id not found', msg: 'error not found'}
       res.status(200).json(todo)
     }) .catch(err => {
-      if(err.name === 'id not found') {
-        res.status(404).json(err)
-      } else if(err.name === 'SequelizeValidationError') {
-        res.status(400).json(err.errors[0])
-      } else {
-        res.status(500).json(err)
-      }
+      next(err)
     })
 
   }
 
     // ============  delete todo ===========
-  static deleteTodo(req, res) {
+  static deleteTodo(req, res, next) {
     let id = +req.params.id
     Todo.destroy({
       where: {
@@ -115,11 +111,7 @@ class TodosController {
         if(todo === 0) throw {name: 'id not found', msg: 'error not found'}
         res.status(200).json({msg: 'delete succes'})
       }) .catch(err => {
-        if(err.name === 'id not found') {
-          res.status(404).json(err)
-        } else {
-          res.status(500).json(err)
-        }
+        next(err)
       })  
   }
 }

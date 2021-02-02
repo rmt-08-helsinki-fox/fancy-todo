@@ -1,30 +1,33 @@
 const { User } = require('../models')
 const { comparePass } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
+const axios = require('axios')
 
 class UserController{
   //============== register ===========
-  static register(req, res) {
-    const {email, password} = req.body
+  static register(req, res, next) {
+    const {email, password, location} = req.body
     User.create({
       email,
-      password
+      password,
+      location
     })
-      .then(User => {
-        res.status(201).json(User)
+      .then(user => {
+        axios.get(`http://api.weatherbit.io/v2.0/alerts?city=${user.location}&country=ID&key=${process.env.API_KEY}`)
+        .then(wheater => {
+          res.status(201).json({
+            user,
+            wheater: wheater.data
+          })
+        })
       })
       .catch(err => {
-        console.log(err)
-        if(err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
-          res.status(400).json(err.errors[0])
-        } else {
-          res.status(500).json(err)
-        }
+        next(err)
       })
   }
 
   // ============= login ===========
-  static login(req, res) {
+  static login(req, res, next) {
     const {email, password} = req.body
     User.findOne({
       where: {
@@ -32,9 +35,9 @@ class UserController{
       }
     })
       .then(user => {
-        if(!user) throw {msg: 'invalid email or password'}
+        if(!user) throw {name:'invalid email or password', msg: 'invalid email or password'}
         const checkPassword = comparePass(password, user.password)
-        if(!checkPassword) throw {msg: 'invalid email or password'}
+        if(!checkPassword) throw {name:'invalid email or password', msg: 'invalid email or password'}
         const getToken = generateToken({
           id: user.id,
           email: user.email
@@ -42,7 +45,7 @@ class UserController{
         res.status(200).json({getToken})
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 }
