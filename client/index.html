@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link rel="stylesheet" href="./style.css">
+  <title>Fancy Todo</title>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <h2>Fancy</h2>
+    <ul>
+      <li>
+        <button class="btn btn-primary" id="toLogin-btn">LOGIN</button>
+      </li>
+      <li>
+        <button class="btn btn-danger" id="toLogout-btn">LOGOUT</button>
+      </li>
+    </ul>
+  </nav>
+  <!-- End of Navbar -->
+
+  <!-- Login Form -->
+    <div class="login row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <form class="form-card card">
+          <h2>LOGIN</h2>
+          <label>EMAIL</label>
+          <input type="email" name="email" id="login-email" placeholder="Enter Email">
+          <label>password</label>
+          <input type="password" name="password" id="login-password" placeholder="Password">
+          <div class="regis-bottom">
+            <span id="regis-text">not registered yet?</span>
+            <button id="toRegis-btn">register</button>
+          </div>
+          <button class="btn btn-primary" id="login-btn">Login</button>
+        </form>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  <!-- End of Login Form -->
+
+  <!-- Register Form -->
+  <div class="regis row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <form class="form-card card">
+        <h2>REGISTER</h2>
+        <label>EMAIL</label>
+        <input type="email" name="email" id="regis-email" placeholder="Enter Email">
+        <label>password</label>
+        <input type="password" name="password" id="regis-password" placeholder="Password">
+        <button class="btn btn-primary" id="regis-btn">Register</button>
+      </form>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+<!-- End of Register Form -->
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

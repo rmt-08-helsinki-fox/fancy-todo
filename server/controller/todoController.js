@@ -29,6 +29,17 @@ class Controller {
       })
   }
 
+  static getOneTodo (req, res, next) {
+    let id = req.params.id
+    Todo.findOne({ where: { id: id }})
+      .then(todo => {
+        res.status(200).json(todo)
+      })
+      .catch(err => {
+        next(err)
+      })
+  }
+
   static updateTodo (req, res, next) {
     let { title, description, due_date } = req.body
     let id = req.params.id

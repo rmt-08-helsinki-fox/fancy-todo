@@ -5,6 +5,7 @@ const { authorize } = require('../middleware/auth')
 
 router.post('/', Controller.createTodo)
 router.get('/', Controller.getAllTodos)
+router.get('/:id', authorize, Controller.getOneTodo)
 router.patch('/:id', authorize, Controller.changeStatusTodo)
 router.put('/:id', authorize, Controller.updateTodo)
 router.delete('/:id', authorize, Controller.deleteTodo)

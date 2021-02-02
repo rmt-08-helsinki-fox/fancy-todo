@@ -20,8 +20,11 @@ function errorHandler (err, req, res, next) {
       console.log(errMsg.split('\n'))
       res.status(400).json(errMsg.split(',\n'))
       break;
+    case 'SequelizeUniqueConstraintError':
+      res.status(400).json({ message: errMsg})
     default:
-      res.status(500).json({ error: 'SequelizeServerError' })
+      res.status(500).json({ error: errMsg })
+      console.log(err.message)
   }
 }
 

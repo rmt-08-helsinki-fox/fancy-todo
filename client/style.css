@@ -1,0 +1,52 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border-bottom: 1px solid black;
+}
+
+ul {
+  margin: 0px;
+}
+
+li {
+  list-style: none;
+  display: inline-block;
+}
+
+h2 {
+  text-align: center;
+}
+
+.form-card {
+  margin-top: 40px;
+  padding: 25px;
+  border: 1px solid grey;
+}
+
+label {
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+#login-email, #regis-email {
+  margin-bottom: 10px;
+}
+
+#regis-password {
+  margin-bottom: 20px;
+}
+
+#toRegis-btn {
+  border: none;
+  background-color: transparent;
+  color: blue;
+}
+
+.regis-bottom {
+  padding: 0px 5px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
