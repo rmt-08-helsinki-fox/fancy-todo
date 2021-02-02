@@ -3,7 +3,7 @@ const {compare} = require('../helpers/bcrypt')
 const {generateToken} = require('../helpers/jwt')
 
 class UserController {
-    static async register(req, res) {
+    static async register(req, res, next) {
         try {
             const {
                 email,
@@ -17,11 +17,13 @@ class UserController {
 
 
         } catch (error) {
-            res.status(400).json(error.errors[0].message)
+            console.log("masuk");
+            
+            next(error)
         }
     }
 
-    static async login(req, res) {
+    static async login(req, res, next) {
         try {
             const {
                 email,
@@ -45,8 +47,7 @@ class UserController {
             
 
         } catch (error) {
-            error = error.msg || 'Internal server error'
-            res.status(500).json({error})
+            next(error)
         }
     }
 }

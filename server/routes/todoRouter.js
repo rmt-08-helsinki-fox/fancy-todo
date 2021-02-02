@@ -4,18 +4,17 @@ const {authentication} = require('../middlewares/authentication')
 const {authorization} =require('../middlewares/authorization')
 
 router.use(authentication)
-router.use(authorization)
 
 router.post('/', TodoController.create)
 
 router.get('/', TodoController.viewAll)
 
-router.get('/:id', TodoController.viewById)
+router.get('/:id', authorization, TodoController.viewById)
 
-router.put('/:id', TodoController.update)
+router.put('/:id', authorization, TodoController.update)
 
-router.patch('/:id', TodoController.updateStatus)
+router.patch('/:id', authorization, TodoController.updateStatus)
 
-router.delete('/:id', TodoController.delete)
+router.delete('/:id', authorization, TodoController.delete)
 
 module.exports = router

@@ -8,7 +8,7 @@ const authentication = (req, res, next) => {
         req.decoded = decoded
         next()
     } catch (error) {
-        res.status(401).json({message: 'Invalid token'})
+        next({name: 'custom', msg: 'Invalid token'})
     }
 }
 
