@@ -6,6 +6,6 @@ module.exports = (err, req, res, next) => {
   } else if (err.name === 'SequelizeValidationError') {
     res.status(400).json({ error: err.errors[0].message });
   } else {
-    res.status(500).json({ error: err });
+    res.status(500).json({ error: err.errors[0].message });
   }
 }

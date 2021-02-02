@@ -91,6 +91,22 @@ Success responses (200)
 Error responses:
 - 500
 
+<b><u>GET /todos/dictionary</u></b>
+
+Pada routing ini, anda bisa mendapatkan definisi dari sebuah kata. Syaratnya, harus 1 kata dan dalam bahasa inggris. Output berupa sebuah object. Contoh: input adalah "lion"
+
+Success response(200)
+
+```json
+{
+    "definition": "a large tawny-coloured cat that lives in prides, found in Africa and north-western India. The male has a flowing shaggy mane and takes little part in hunting, which is done cooperatively by the females."
+}
+```
+
+Error responses:
+- 404
+- 500
+
 <u><b>GET /todos/:id</b></u>
 
 Untuk melihat satu item yang terdapat dalam todo list app, sesuai dengan <b>id</b> yang diberikan. Output berupa sebuah object. Anda harus memberikan parameter <b>id</b> berupa integer.
