@@ -6,13 +6,8 @@ const authenticate = function (req, res, next) {
         const currentUser = jwt.verify(token, process.env.SECRET_KEY)
         req.currentUser = currentUser
         next()
-    } catch {
-        res.status(401).json({
-            error: {
-                code: 401,
-                message: 'invalid token'
-            }
-        })
+    } catch(error) {
+        next(error)
     }
 }
 

@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { hashPassword, comparePassword } = require('../helpers/bcrypt')
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -25,8 +26,22 @@ module.exports = (sequelize, DataTypes) => {
       },
       unique: true
     },
-    password: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+        isLong: function (value){
+          if(value.length < 6){
+            throw 'six characters are required make a password'
+          }
+        }
+      }
+    }
   }, {
+    hooks: {
+      beforeCreate: function (user, option) {
+        user.password = hashPassword(user.password)
+      }
+    },
     sequelize,
     modelName: 'User',
   });

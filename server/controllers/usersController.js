@@ -2,19 +2,20 @@ const { hashPassword, comparePassword } = require('../helpers/bcrypt')
 const { User } = require('../models')
 const { getToken } = require('../helpers/jwt')
 class UserController {
-    static async signUp(req, res) {
+    static async signUp(req, res, next) {
         try {
             const { email, password } = req.body
             const newUser = await User.create({
-                email, password: hashPassword(password)
+                email, 
+                password
             })
             res.status(201).json(newUser)
-        } catch (err) {
-            res.status(400).json(err)
+        } catch (error) {
+            next(error)
         }
     }
 
-    static async signIn(req, res) {
+    static async signIn(req, res, next) {
         try {
             const user = await User.findOne({
                 where: {
@@ -35,6 +36,7 @@ class UserController {
                 } else  {
                     // console.log('NOT MATCH');
                     throw {
+                        name: 'Custom error',
                         error: {
                             code: 400,
                             message: 'invalid email or password'
@@ -45,6 +47,7 @@ class UserController {
 
             } else {
                 throw {
+                    name: 'Custom error',
                     error: {
                         code: 400,
                         message: 'invalid email or password'
@@ -52,8 +55,8 @@ class UserController {
                 }
             }
         } catch (error) {
-
-            res.status(404).json(error)
+            next(error)
+            
         }
     }
 
