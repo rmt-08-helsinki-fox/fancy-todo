@@ -1,13 +1,16 @@
-const {Todo} = require("../models/")
+const {Todo, User} = require("../models/")
 
 class TodoController {
     static create(req , res) {
-        console.log("ini di todocontroller")
-        const {title, description, status, due_date} = req.body
-        const todoData = {title, description, status, due_date}
-        Todo.create(todoData)
-        .then(data =>{
-            console.log(data)
+        let input = {
+            title : req.body.title,
+            description : req.body.description,
+            status : false,
+            due_date : req.body.due_date,
+            UserId : req.decoded.id
+        }
+        Todo.create(input)
+        .then(data => {
             res.status(201).json(data)
         })
         .catch(err => {
@@ -16,7 +19,11 @@ class TodoController {
     }
 
     static readAllTodos(req, res) {
-        Todo.findAll()
+        Todo.findAll({
+            where: {
+                UserId : req.decoded.id
+            }
+        })
         .then(data => {
             res.status(200).json(data)
         })
@@ -35,25 +42,39 @@ class TodoController {
             if (data) {
                 res.status(200).json(data)
             } else {
-                throw res.status(505)
+                res.status(404).json({
+                    msg : "Invalid Id"
+                })
             }
     
         })
         .catch(err => {
-            res.status(404).json(err)
+            console.log(err)
+            res.status(500).json({
+                msg : "Internal Server Error"
+            })
         })
     }
 
-    static putTodoById(req, res) {
+    static updateTodo(req, res) {
         const {title, description, status, due_date} = req.body
         const todoData = {title, description, status, due_date}
         Todo.update(todoData, {
             where: {
                 id : +req.params.id
-            }
+            },
+            returning : true
         })
         .then(data => {
-            res.status(200).json(data)
+            console.log(data)
+            if (data[0] !== 0) {
+                res.status(200).json(data)
+            } else {
+                res.status(404).json({
+                    msg : "Invalid ID"
+                })
+            }
+            
         })
         .catch(err => {
             console.log(err)
@@ -61,7 +82,7 @@ class TodoController {
         })
     }
 
-    static patchTodoById(req, res) {
+    static updateStatusTodo(req, res) {
         const {status} = req.body
         const newStatus = {status}
         Todo.findOne({
@@ -88,11 +109,15 @@ class TodoController {
             if (data > 0) {
                 res.status(200).json(data)
             } else {
-                throw res.status(500)
+                res.status(404).json({
+                    msg: "Invalid Id"
+                })
             }
         })
         .catch(err => {
-            res.status(404).json(err)
+            res.status(500).json({
+                msg : "Internal Server Error"
+            })
         })
     }
 }
