@@ -14,7 +14,10 @@ const errorHandler = (err, req, res, next) => {
   } else if (err.name === 'CustomError') {
     errMsg.push(err.error);
     status = err.status;
-  } 
+  } else {
+    errMsg.push('Internal Server Error')
+  }
+  
   res.status(status).json({ errors: errMsg});
 }
 
