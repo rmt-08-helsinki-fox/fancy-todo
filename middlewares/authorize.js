@@ -8,11 +8,12 @@ const authorize = function authorization(req, res, next) {
         if (todo.UserId === req.decoded.id){
             next()
         } else {
-            res.status(401).json({error: 'Not authorized'})
+            throw {name: 'CustomError', msg: 'Not authorized', status: 401}
         }
     })
     .catch(error => {
-        res.status(500).json({error: 'Internal server error'})
+      next(error)
+
     })
 }
 

@@ -6,7 +6,8 @@ const authenticate = function authentication(req, res, next) {
     req.decoded = decoded
     next()
   } catch (error) {
-    res.status(401).json({ error: 'Invalid Token' })
+    let err = {name: 'CustomError', msg:'Invalid Token', status: 401}
+    next(err)
   }
 }
 

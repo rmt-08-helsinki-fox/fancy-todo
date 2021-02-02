@@ -3,7 +3,7 @@ const {comparePassword} = require('../helpers/bcrypt')
 const {generateToken} = require('../helpers/jwt')
 
 class UserController {
-  static async signUp(req, res) {
+  static async signUp(req, res, next) {
     try {
       const { email, password } = req.body
       let newUser = await User.create({
@@ -15,13 +15,11 @@ class UserController {
         email: newUser.email
       })
     } catch (error) {
-      let status = error.name = 'SequelizeValidationError' ? 400 : 500
-      let err = error.errors[0].message || 'Internal server error'
-      res.status(status).json({error : err})
+      next(error)
     }
   }
 
-  static async signIn(req, res) {
+  static async signIn(req, res, next) {
     try {
       const { email, password } = req.body
       let user = await User.findOne({
@@ -38,15 +36,13 @@ class UserController {
           })
           res.status(200).json({token})
         } else {
-          throw {msg: 'Email or password is wrong', status: 400}
+          throw {name : 'CustomError', msg: 'Email or password is wrong', status: 400}
         }
       } else {
-        throw {msg: 'Email or password is wrong', status: 400}
+        throw {name : 'CustomError', msg: 'Email or password is wrong', status: 400}
       }
     } catch (error) {
-      const status = error.status || 500
-      const err = error.msg || 'Internal server error'
-      res.status(status).json({error : err})
+      next(error)
     }
   }
 }
