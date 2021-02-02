@@ -2,49 +2,42 @@ const { Todo } = require('../models')
 
 class TodoController {
 
-    static addTodo(req, res) {
-        const { title, description, status, due_date } = req.body
+    static addTodo(req, res, next) {
+        const { title, description, status, due_date, } = req.body
         Todo.create({
-            title, description, status, due_date
+            title, description, status, due_date, UserId: req.decoded.id
         }).then(todo => {
             res.status(201).json(todo)
         }).catch(err => {
-            if (err.errors.length > 0) {
-                let message = []
-                err.errors.forEach(el => {
-                    message.push(el.message)
-                })
-                res.status(400).json(message)
-            } else {
-                res.status(500).json({ msg: "Internal Server Error" })
-            }
+            next(err)
         })
     }
 
-    static getList(req, res) {
+    static getList(req, res, next) {
         Todo.findAll()
             .then(todo => {
                 res.status(200).json(todo)
             }).catch(err => {
-                res.status(500).json(err)
+                next(err)
             })
     }
 
-    static getData(req, res) {
+    static getData(req, res, next) {
         let id = +req.params.id
         Todo.findByPk(id)
             .then(todo => {
                 if (todo !== null) {
                     res.status(200).json(todo)
                 } else {
-                    res.status(404).json({ msg: "Data Not Found" })
+                    throw ({name: "dataNothing" ,
+                    msg: "Data Not Found" })
                 }
             }).catch(err => {
-                res.status(500).json(err)
+               next(err)
             })
     }
 
-    static updateData(req, res) {
+    static updateData(req, res, next) {
         let id = +req.params.id
         const { title, description, status, due_date } = req.body
         Todo.update({
@@ -58,22 +51,15 @@ class TodoController {
                 if(todo[0] === 1){
                     res.status(200).json(todo[1])
                 }else{
-                    res.status(404).json({msg : "Data Not Found"})
+                    throw ({name: "dataNothing" ,
+                    msg: "Data Not Found" })
                 }
             }).catch(err => {
-                if (err.errors.length > 0) {
-                    let message = []
-                    err.errors.forEach(el => {
-                        message.push(el.message)
-                    })
-                    res.status(400).json(message)
-                } else {
-                    res.status(500).json({ msg: "Internal Server Error" })
-                }
+                next(err)
             })
     }
 
-    static updateStatus(req, res) {
+    static updateStatus(req, res, next) {
         let id = +req.params.id
         const { status } = req.body
         Todo.update({
@@ -87,22 +73,15 @@ class TodoController {
                 if(todo[0] === 1){
                     res.status(200).json(todo[1])
                 }else{
-                    res.status(404).json({msg : "Data Not Found"})
+                    throw ({name: "dataNothing" ,
+                    msg: "Data Not Found" })
                 }
             }).catch(err => {
-                if (err.errors.length > 0) {
-                    let message = []
-                    err.errors.forEach(el => {
-                        message.push(el.message)
-                    })
-                    res.status(400).json(message)
-                } else {
-                    res.status(500).json({ msg: "Internal Server Error" })
-                }
+                next()
             })
     }
 
-    static deletedData(req, res) {
+    static deletedData(req, res, next) {
         let id = +req.params.id
         Todo.destroy({
             where:
@@ -112,10 +91,11 @@ class TodoController {
                 if(todo === 1){
                     res.status(200).json({msg : "todo success to delete"})
                 }else{
-                    res.status(404).json({msg : "Data Not Found"})
+                    throw ({name: "dataNothing" ,
+                    msg: "Data Not Found" })
                 }
             }).catch(err => {
-                  res.status(500).json({ msg: "Internal Server Error" })
+                  next()
             })
     }
     
