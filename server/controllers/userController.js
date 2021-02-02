@@ -39,7 +39,7 @@ class UserController {
                 email: user.email
             })
             res.status(200).json({acess_token})
-            console.log('masuk');
+            // console.log('masuk');
         }).catch(function(err) {
             const error = err.msg || 'Internal Server Error'
             res.status(500).json({ error })

@@ -2,12 +2,13 @@ const { Todo } = require('../models')
 
 class TodoController {
     static addTodo(req, res) {
-        let { title, description, status, due_date} = req.body
+        let { title, description, status, due_date, user_id} = req.body
         let obj = {
             title,
             description,
             status,
-            due_date
+            due_date,
+            user_id
         }
         Todo.create(obj)
             .then(function(newTodo) {
