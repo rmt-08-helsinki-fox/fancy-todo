@@ -1,4 +1,5 @@
 const { Todo } = require("../models/")
+const axios = require("axios")
 
 class TodoControll {
   static add(req, res, next){
@@ -24,9 +25,15 @@ class TodoControll {
   }
 
   static findAll(req, res, next){
+    let dataTodo
+
     Todo.findAll()
     .then(data => {
-      res.status(200).json(data)
+      dataTodo = data
+      return axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${req.query.location}&APPID=6aa39f91b5429e15d47e5c9a7930e9bc`)
+    })
+    .then(dataCuaca => {
+      res.status(200).json({dataTodo, dataCuaca: dataCuaca.data})
     })
     .catch(err => {
       next(err);
