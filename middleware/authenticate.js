@@ -13,4 +13,4 @@ const authenticate = function(req, res, next) {
   }
 }
 
-model.exports = authenticate;
+module.exports = authenticate;

@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       isUnique: true,
-      allowNull: false,
       validate: {
         isEmail: true
       }
@@ -30,8 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         len: {
-          args: 8,
-          msg: "Password minimal 8 karakter"
+          args: 7,
+          msg: "Password minimal 7 karakter"
         }
       }
     },
