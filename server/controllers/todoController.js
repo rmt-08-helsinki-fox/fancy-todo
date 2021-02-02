@@ -1,5 +1,6 @@
 const { Todo } = require('../models')
 const axios = require('axios')
+const api_key = process.env.Api_Key_Calendarific
 
 class TodoController {
   static createTodos(req, res, next) {
@@ -16,7 +17,7 @@ class TodoController {
       .then(data => {
         dataTodo = data
         let month = data.due_date.split('-')[1]
-        return axios.get(`https://calendarific.com/api/v2/holidays?api_key=182159a3e6e236b47fbb1c378b2dcb4277caa419&country=id&year=2021&month=${month}`)
+        return axios.get(`https://calendarific.com/api/v2/holidays?api_key=${api_key}&country=id&year=2021&month=${month}`)
       })
       .then(response => {
         let data = response.data.response.holidays
