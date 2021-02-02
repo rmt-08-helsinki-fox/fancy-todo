@@ -170,8 +170,8 @@ class todoController {
   }
 
   static async getDictionary(req, res, next) {
-    const app_id = process.env.OXFORD_APP_ID; // insert your APP Id
-    const app_key = process.env.OXFORD_APP_KEY; // insert your APP Key
+    const app_id = process.env.OXFORD_APP_ID;
+    const app_key = process.env.OXFORD_APP_KEY;
     const wordQuery = req.query.word;
     const strictMatch = "false";
 
@@ -186,16 +186,27 @@ class todoController {
       }
     };
 
-    http.get(options, (resp) => {
-      let body = '';
-      resp.on('data', (d) => {
-        body += d;
+    try {
+
+      http.get(options, (resp) => {
+        let body = '';
+        resp.on('data', (d) => {
+          body += d;
+        });
+        resp.on('end', () => {
+          let parsed = JSON.parse(body);
+
+          if (!parsed.results) return res.status(404).json({ error: 'Kata yang anda cari tidak terdaftar!' })
+
+          res.status(200).json({ definition: parsed.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0] });
+
+        });
       });
-      resp.on('end', () => {
-        let parsed = JSON.parse(body);
-        res.status(200).json({ definition: parsed.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0] });
-      });
-    });
+
+    } catch (err) {
+      res.status(500).json({ error: err });
+    }
+
   }
 }
 
