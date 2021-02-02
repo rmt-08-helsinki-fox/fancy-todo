@@ -116,6 +116,8 @@ not needed
 
 Request Param
 ```
+Required :
+
 "id": <todo identifier number>
 ```
 
@@ -147,6 +149,7 @@ Request Header
 
 Request Param
 ```
+Required :
 "id": <todo identifier number>
 ```
 
@@ -208,11 +211,14 @@ Request Header
 
 Request Param
 ```
+Required :
+
 "id": <todo identifier number>
 ```
 
 Request Body
 ```
+
 "status": "<notes for the related todo already done or not>"
 ```
 
@@ -250,6 +256,8 @@ Request Header
 
 Request Param
 ```
+Required :
+
 "id": <todo identifier number>
 ```
 

@@ -2,9 +2,9 @@ const { Todo } = require('../models/')
 
 class ControllerTodo {
 
-  static show_todos(req, res) {
+  static showTodos(req, res) {
     Todo.findAll()
-    .then((tods) => {
+    .then((todos) => {
       res.status(200).json(todos)
     })
     .catch(err => {
@@ -13,7 +13,7 @@ class ControllerTodo {
 
   }
 
-  static post_todos(req, res) {
+  static postTodos(req, res) {
     const { title, description, status, due_date } = req.body
     
     let obj = { title, description, status, due_date }
@@ -32,11 +32,10 @@ class ControllerTodo {
     })
   }
 
-  static show_todo_id(req, res) {
+  static showTodoById(req, res) {
+    let todoId = +req.params.id
 
-    let id = +req.params.id
-
-    Todo.findByPk(id)
+    Todo.findByPk(todoId)
     .then(todo => {
       if(!todo) throw new Error('error not found')
       res.status(200).json(todo)
@@ -46,20 +45,21 @@ class ControllerTodo {
     })
   }
 
-  static put_todo(req, res) {
+  static putTodo(req, res) {
 
-    let id = +req.params.id
+    let todoId = +req.params.id
 
     const { title, description, status, due_date } = req.body
 
     let obj = { title, description, status, due_date }
 
-    Todo.findByPk(id)
+    Todo.findByPk(todoId)
     .then(todo => {
+      // lempar jika todo tidak ditemukan
       if(!todo) throw new Error('error not found')
       return Todo.update(obj, {
         where: {
-          id
+          id: todoId
         },
         returning: true
       })
@@ -68,23 +68,25 @@ class ControllerTodo {
       res.status(200).json(todo)
     })
     .catch(err => {
+      // error validasi
       if(Array.isArray(err.errors)) {
         res.status(400).json({ message: err.message })
       }
+      //error yang diterima dari line 58
       else if(err.message === 'error not found') {
-        console.log('a')
         res.status(404).json({ message: err.message })
       }
       else {
-        console.log('b')
+        //
         res.status(500).json({ message: 'Internal Server Error'})
       }
     })
     
   }
 
-  static patch_todo(req, res) {
+  static patchTodo(req, res) {
     let id = +req.params.id
+    //jangan langsung passing req.body
     let status = req.body
 
     Todo.findByPk(id)
@@ -106,13 +108,13 @@ class ControllerTodo {
     })
   }
 
-  static delete_todo(req, res) {
+  static deleteTodo(req, res) {
     
-    let id= +req.params.id
+    let todoId = +req.params.id
     
     Todo.destroy({
       where: {
-        id
+        id: todoId
       }
     })
     .then(todo => {

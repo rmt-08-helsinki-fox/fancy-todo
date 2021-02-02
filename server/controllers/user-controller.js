@@ -1,6 +1,6 @@
 const { User } = require('../models/')
-const { compare_password } = require('../helpers/bcrypt') 
-const { get_token } = require('../helpers/jwt')
+const { comparePassword } = require('../helpers/bcrypt') 
+const { getToken } = require('../helpers/jwt')
 
 class ControllerUser {
   
@@ -33,8 +33,8 @@ class ControllerUser {
     })
     .then(user => {
       if(!user) throw new Error('invalid email or password')
-      if(!compare_password(password, user.password)) throw new Error('invalid email or password')
-      const access_token = get_token({
+      if(!comparePassword(password, user.password)) throw new Error('invalid email or password')
+      const access_token = getToken({
         id: user.id,
         email: user.email
       })

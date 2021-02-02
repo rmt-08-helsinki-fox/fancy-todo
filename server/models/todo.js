@@ -17,7 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: true
+        notEmpty: {
+          args: true,
+          msg: 'title cannot be empty'
+        }
       }
     },
     description: {
@@ -26,7 +29,10 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: true
+        notEmpty: {
+          args: true,
+          msg: 'status cannot be empty'
+        }
       }
     },
     due_date: {
@@ -34,15 +40,15 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isToday(value) {
           let now = new Date()
-          let now_day = +now.toLocaleString()[2]
-          let now_month = +now.toLocaleString()[0]
-          let now_year = +now.toLocaleString().substring(0, 8).slice(4)
+          let nowDay = +now.toLocaleString()[2]
+          let nowMonth = +now.toLocaleString()[0]
+          let nowYear = +now.toLocaleString().substring(0, 8).slice(4)
 
-          let value_day = +value.toLocaleString()[2]
-          let value_month = +value.toLocaleString()[0]
-          let value_year = +value.toLocaleString().substring(0, 8).slice(4) 
+          let dalueDay = +value.toLocaleString()[2]
+          let valueMonth = +value.toLocaleString()[0]
+          let valueYear = +value.toLocaleString().substring(0, 8).slice(4) 
 
-          if(value_year < now_year || value_month < now_month || value_day < now_day) {
+          if(valueYear < nowYear || valueMonth < nowMonth || dalueDay < nowDay) {
             throw new Error('Cannot input past date')
           }
         }
