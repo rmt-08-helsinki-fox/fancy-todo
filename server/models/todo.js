@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User)
     }
   };
   Todo.init({
@@ -24,7 +25,16 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     description: DataTypes.STRING,
-    status: DataTypes.BOOLEAN,
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      validate :{
+        notEmpty : {
+          args: true,
+          msg: "status must not empty"
+        }
+      }
+    },
     due_date: {
       type: DataTypes.DATEONLY,
       validate: {
@@ -32,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
           const date = new Date(value)
           const now = new Date()
           if(date < now) {
-            throw new Error("it's not tomorrow")
+            throw new Error("Date Must be grather than today")
           }
         }
       }
