@@ -20,16 +20,19 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     email: {
       type: DataTypes.STRING,
-      unique: true,
       validate: {
         isEmail: true,
         notEmpty: {
           msg: 'Email tidak boleh kosong!'
         }
+      },
+      unique: {
+        msg: 'Email address already in use!'
       }
     },
     password: {
       type: DataTypes.STRING,
+      unique: true,
       validate: {
         notEmpty: {
           msg: 'Password harus diisi!'

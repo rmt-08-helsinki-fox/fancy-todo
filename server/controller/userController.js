@@ -23,6 +23,9 @@ class userController {
     } catch (err) {
 
       const error = err.errors[0].message || 'Internal server error';
+
+      if (email === '' || password === '') res.status(400).json({ error });
+
       res.status(500).json({ error });
 
     }

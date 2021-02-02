@@ -48,6 +48,15 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Tidak boleh hari sebelum hari ini'
         }
       }
+    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'id'
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
     }
   }, {
     sequelize,

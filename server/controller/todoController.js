@@ -4,13 +4,15 @@ class todoController {
   static async addToDoList(req, res) {
 
     const { title, description, status, due_date } = req.body;
+    const { id } = req.decoded;
     try {
 
       const todo = await Todo.create({
         title,
         description,
         status,
-        due_date: new Date(due_date)
+        due_date: new Date(due_date),
+        UserId: +id
       }, {
         returning: true
       });
