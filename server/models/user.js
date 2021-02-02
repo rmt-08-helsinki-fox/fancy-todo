@@ -23,9 +23,24 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'invalid email format'
         }
       },
-      unique: true
+      unique: {
+        args: true,
+        msg: 'Please input another email'
+      }
     },
-    password: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Please input password'
+        },
+        min: {
+          args: 5,
+          msg: 'Password should be 5 character or more'
+        }
+      }
+    }
   }, {
     hooks: {
       beforeCreate: function(user, options) {

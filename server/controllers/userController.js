@@ -1,6 +1,8 @@
 const { User } = require('../models')
 const { checkPass } = require('../helpers/bcrypt')
 const { generateToken } =require('../helpers/jsonwebtoken')
+// const { checkToken } =require('../middleware/authentication')
+
 class UserController {
     // login
     // find email
@@ -13,6 +15,7 @@ class UserController {
         .then(function(data) {
             res.status(201).json(data)
         }).catch(function(err) {
+            // console.log(err);
             res.status(400).json(err)
         })
     }
@@ -32,8 +35,8 @@ class UserController {
                 throw {msg: 'Invalid email or password'}
             }
             const acess_token = generateToken({
-                email: user.email,
-                password: user.password
+                id: user.id,
+                email: user.email
             })
             res.status(200).json({acess_token})
             console.log('masuk');
