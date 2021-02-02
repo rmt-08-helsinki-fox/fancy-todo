@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.TodoList)
     }
   };
   User.init({
@@ -23,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
         isEmail : {
           args : true,
           msg : "invalid email format"
+        },
+        notEmpty : {
+          args : true,
+          msg : "email can't be empty"
         }
       },
       unique : {
@@ -30,8 +35,24 @@ module.exports = (sequelize, DataTypes) => {
         msg : "email is already exists"
       }
     },
-    password: DataTypes.STRING,
-    username: DataTypes.STRING
+    password:{
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty :{
+          args : true,
+          msg : "password cant't be empty"
+        }
+      }
+    },
+    username: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty :{
+          args : true,
+          msg : "username cant't be empty"
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',

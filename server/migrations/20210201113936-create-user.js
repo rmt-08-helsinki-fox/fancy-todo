@@ -18,6 +18,9 @@ module.exports = {
       username: {
         type: Sequelize.STRING
       },
+      role: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

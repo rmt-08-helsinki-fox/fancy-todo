@@ -3,7 +3,7 @@ const { comparePassword } = require('../helper/bcrypt.js');
 const { generateToken } = require('../helper/jwt.js');
 
 class UserController {
-    static register (req, res){ 
+    static register (req, res, next){ 
         const { email, username, password } = req.body
         User.create({email, username, password})
         .then(user => {
@@ -14,18 +14,17 @@ class UserController {
           })
         })
         .catch(err => {
-          const error = err.errors[0].message || 'Internal Server Error'
-          res.status(500).json({error : error})
+          next(err)
         })
     }
 
-    static login (req, res) {
+    static login (req, res, next) {
       const { email, username, password } = req.body
       User.findOne({where : {email}})
       .then(user => {
-        if(!user) throw { msg : 'invalid email or password'}
+        if(!user) throw { name : 'login'}
         const comparedPass = comparePassword(password, user.password)
-        if(!comparedPass) throw {msg : 'invalid email or password'}
+        if(!comparedPass) throw {name : 'login'}
         const acces_token = generateToken({
           id : user.id,
           email : user.email
@@ -33,8 +32,9 @@ class UserController {
         res.status(200).json({ acces_token })
       })
       .catch(err => {
-        const error = err.msg || 'Internal server error'
-        res.status(500).json({ error })
+        next(err)
+        // const error = err.msg || 'Internal server error'
+        // res.status(500).json({ error })
       })
     }
 
