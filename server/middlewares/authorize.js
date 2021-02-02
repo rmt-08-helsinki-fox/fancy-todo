@@ -8,7 +8,7 @@ const authorize = function(req, res, next) {
     }
   })
     .then(data =>{
-      console.log(data)
+      if (data == null) throw { name: 'Not Found', statusCode: 404, msg: `error not found` }
       if (data.UserId === +req.decoded.id) {
         next()
       } else {
