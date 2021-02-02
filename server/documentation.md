@@ -18,6 +18,15 @@
 
   None
 
+* **Request Header**
+
+  *required
+  ```js
+  {
+    "token": "uhiuqwheoqSAD203Sdqjwe/';DUWq"
+  }
+  ```
+
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -51,9 +60,7 @@
 * **Sample Call:**
 
   ```javascript
-    router.get('/todos', (req, res) => {
-      TodoController.findTodos(res)
-    })
+    router.get('/', TodoController.findTodos)
   ```
 ----
 
@@ -81,6 +88,15 @@
   "description": "biar sehat jangan lupa bobo siang",
   "status": "wajib",
   "due_date": "2021-02-02",
+  }
+  ```
+
+  * **Request Header**
+
+  *required
+  ```js
+  {
+    "token": "uhiuqwheoqSAD203Sdqjwe/';DUWq"
   }
   ```
 
@@ -113,9 +129,7 @@
 * **Sample Call:**
 
   ```javascript
-    router.post('/todos', (req, res) => {
-      TodoController.createTodos(req.body, res)
-    })
+    router.post('/', TodoController.createTodos)
   ```
 ----
   **Show Todo By Id**
@@ -137,6 +151,15 @@
 * **Data Params**
 
     None
+
+* **Request Header**
+
+  *required
+  ```js
+  {
+    "token": "uhiuqwheoqSAD203Sdqjwe/';DUWq"
+  }
+  ```
 
 * **Success Response:**
 
@@ -167,9 +190,7 @@
 * **Sample Call:**
 
   ```javascript
-    router.get('/todos/:id', (req, res) => {
-      TodoController.findTodosById(req.params.id, res)
-    })
+    router.get('/:id', TodoController.findTodosById)
   ```
 ----
   **Edit Todo**
@@ -198,6 +219,15 @@
       "due_date": "2021-02-01",
     }
     ```
+
+* **Request Header**
+
+  *required
+  ```js
+  {
+    "token": "uhiuqwheoqSAD203Sdqjwe/';DUWq"
+  }
+  ```
 
 * **Success Response:**
 
@@ -233,9 +263,7 @@
 * **Sample Call:**
 
   ```javascript
-    router.put('/todos/:id', (req, res) => {
-      TodoController.editTodos(req.params.id, req.body, res)
-    })
+    router.put('/:id', TodoController.editTodos)
   ```
 ----
  **Edit Status Todo**
@@ -261,6 +289,15 @@
       "status": "urgent"
     }
     ```
+
+* **Request Header**
+
+  *required
+  ```js
+  {
+    "token": "uhiuqwheoqSAD203Sdqjwe/';DUWq"
+  }
+  ```
 
 * **Success Response:**
 
@@ -291,9 +328,7 @@
 * **Sample Call:**
 
   ```javascript
-    router.patch('/todos/:id', (req, res) => {
-      TodoController.editStatusTodos(req.params.id, req.body, res)
-    })
+    router.patch('/:id', TodoController.editStatusTodos)
   ```
 ----
  **Delete Todo**
@@ -315,6 +350,15 @@
 * **Data Params**
 
     None
+
+* **Request Header**
+
+  *required
+  ```js
+  {
+    "token": "uhiuqwheoqSAD203Sdqjwe/';DUWq"
+  }
+  ```
 
 * **Success Response:**
 
@@ -339,8 +383,115 @@
 * **Sample Call:**
 
   ```javascript
-    router.delete('/todos/:id', (req, res) => {
-      TodoController.deleteTodo(req.params.id, res)
-    })
+    router.delete('/:id', TodoController.deleteTodo)
+  ```
+----
+**Register**
+----
+  Returns json data user exclude password.
+
+* **URL**
+
+  /register
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+  ```js
+  {
+    "email": "john@mail.com",
+    "password": "password"
+  }
+  ```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** 
+    ```js
+    {
+    "id": 12,
+    "email": "john@mail.com"
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 <br />
+    **Content:** `{ error : "Internal Server Error" }`
+    OR
+  * **Code:** 400 <br />
+    **Content:** 
+    ```js
+    "error": [
+        "Email is already registered",
+        "Password is required"
+    ]
+    ```
+
+* **Sample Call:**
+
+  ```javascript
+    router.post('/register', UserController.register)
+  ```
+----
+**Login**
+----
+  Returns json token.
+
+* **URL**
+
+  /login
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+  None
+
+* **Data Params**
+  ```js
+  {
+    "email": "john@mail.com",
+    "password": "password"
+  }
+  ```
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```js
+    {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImVtYWlsIjoiam9obkBtYWlsLmNvbSIsImlhdCI6MTYxMjI0MzYzNX0.lKuG7uPPao7Tq9xHO8xRMmVZl7ChS3zcp4i7fftBA4w"
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 <br />
+    **Content:** `{ error : "Internal Server Error" }`
+    OR
+  * **Code:** 400 <br />
+    **Content:** 
+    ```js
+    {
+      "error": "Invalid email or password"
+    }
+    ```
+
+* **Sample Call:**
+
+  ```javascript
+    router.post('/login', UserController.login)
   ```
 ----
