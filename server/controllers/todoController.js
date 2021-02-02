@@ -1,4 +1,5 @@
 const { Todo } = require("../models");
+const axios = require("axios").default;
 
 class TodoController {
   static postTodos(req, res, next) {
@@ -19,12 +20,25 @@ class TodoController {
   }
 
   static getTodos(req, res, next) {
-    Todo.findAll({ where: { UserId: req.data.id } })
-      .then((data) => {
-        res.status(200).json(data);
+    const apiKey = process.env.OpenWeatherAPI;
+    const cityName = req.data.city;
+
+    axios({
+      method: "get",
+      url: `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`,
+    })
+      .then((response) => {
+        let weatherData = response.data;
+        Todo.findAll({ where: { UserId: req.data.id } })
+          .then((data) => {
+            res.status(200).json({ data, weatherData });
+          })
+          .catch((err) => {
+            next(err);
+          });
       })
       .catch((err) => {
-        next(err);
+        res.status(500).json(err);
       });
   }
 
