@@ -22,8 +22,11 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: {
           args: true,
           msg: 'Invalid email format'
-        },
-        unique: true
+        }
+      },
+      unique: {
+        args: true,
+        msg: 'This email already registered'
       }
     },
     password: {
@@ -32,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeCreate: (user, option) => {
-        user.password = hashPassword(user.password);
+        user.password = hashPassword(user.password) ;
       }
     },
     sequelize,
