@@ -4,7 +4,7 @@
 
 * **URL**
 
-  /
+  http://localhost:3000/
 
 * **Method:**
 
@@ -58,7 +58,7 @@
 
 * **URL**
 
-  /todos
+  http://localhost:3000/todos
 
 * **Method:**
 
@@ -112,7 +112,7 @@
 
 * **URL**
 
-  /todos/:id
+  http://localhost:3000/todos/:id
 
 * **Method:**
 
@@ -155,7 +155,7 @@
 
 * **URL**
 
-  /todos/create-new
+  http://localhost:3000/todos
 
 * **Method:**
 
@@ -167,7 +167,7 @@
 
 * **Success Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 201 <br />
     **Content:** 
     ```
     {
@@ -196,7 +196,7 @@
 
 * **URL**
 
-  /todos/:id
+  http://localhost:3000/todos/:id
 
 * **Method:**
 
@@ -232,13 +232,97 @@
 
 
 ---
+**Edit Todo Status**
+----
+  Edit todos status and return data to client.
+
+* **URL**
+
+  http://localhost:3000/todos/:id
+
+* **Method:**
+
+  `PATCH`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```
+    {
+      "id": 10,
+      "title": "Rest API",
+      "description": "doing rest api fancy todo",
+      "status": true,
+      "due_date": "2021-02-05T00:00:00.000Z",
+      "is_private": false,
+      "user_id": 2,
+      "createdAt": "2021-02-02T22:38:05.671Z",
+      "updatedAt": "2021-02-02T22:55:01.348Z"
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 Internal Server Error <br />
+
+
+---
+**Edit Todo is_private**
+----
+  Edit todos is_private and return data to client.
+
+* **URL**
+
+  http://localhost:3000/todos/set-private/:id
+
+* **Method:**
+
+  `PATCH`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```
+    {
+      "id": 10,
+      "title": "Rest API",
+      "description": "doing rest api fancy todo",
+      "status": true,
+      "due_date": "2021-02-05T00:00:00.000Z",
+      "is_private": true,
+      "user_id": 2,
+      "createdAt": "2021-02-02T22:38:05.671Z",
+      "updatedAt": "2021-02-02T22:57:18.840Z"
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 500 Internal Server Error <br />
+
+
+---
 **Delete Todo By Id**
 ----
   Delete todos by id.
 
 * **URL**
 
-  /todos/:id
+  http://localhost:3000/todos/:id
 
 * **Method:**
 
@@ -254,7 +338,11 @@
 
   * **Code:** 200 <br />
     **Content:** 
-    ```1```
+    ```
+    {
+      "msg": "Delete Success"
+    }
+    ```
  
 * **Error Response:**
 
@@ -269,7 +357,7 @@
 
 * **URL**
 
-  /todos/add/:id
+  http://localhost:3000/todos/add/:id
 
 * **Method:**
 
@@ -283,7 +371,7 @@
 
 * **Success Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 201 <br />
     **Content:** 
     ```
     {

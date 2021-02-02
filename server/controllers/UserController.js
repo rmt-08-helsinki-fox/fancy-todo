@@ -1,6 +1,6 @@
 const { User, Todo } = require('../models/index')
 const { comparePass } = require('../helpers/bcrypt')
-const { generateToken } = require('../helpers/jwt')
+const { generateToken } = require('../helpers/genToken')
 
 class UserController {
   static showAllUsers(req, res){
@@ -49,7 +49,6 @@ class UserController {
           id: user.id,
           email: user.email
         })
-
         res.status(200).json({ accessToken })
       })
       .catch(err => {

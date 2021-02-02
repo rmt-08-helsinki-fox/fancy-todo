@@ -3,6 +3,7 @@ const {
   Model
 } = require('sequelize');
 const formatDate = require('../helpers/formatDate')
+const checkDate = require('../helpers/checkDate')
 
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
@@ -22,7 +23,18 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
     status: DataTypes.BOOLEAN,
-    due_date: DataTypes.DATE,
+    due_date: {
+      type: DataTypes.DATE,
+      validate: {
+        checkDueDate(value) {
+          const dateFormat = formatDate(value)
+          const dateValidate = checkDate(dateFormat)
+          if (dateValidate === 'due_date is invalid') {
+            throw new Error(`Due date is invalid`)
+          }
+        }
+      }
+    },
     is_private: DataTypes.BOOLEAN,
     user_id: DataTypes.INTEGER
   }, {
