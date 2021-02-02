@@ -9,6 +9,15 @@
 
 ## <a id="createTodos"></a>POST /todos
 ### *Create a todo object into database*
+### Request Body
+``` 
+{
+    "title": <string>,
+    "description": <string>,
+    "status": <string>,
+    "due_date": <date>
+}    
+```
 ### Responses:
 
 * code 201: Successful operation. Return the added object
@@ -42,6 +51,10 @@
 
 ## <a id="showTodos"></a>GET /todos 
 ### *Show all todos from database*
+### Request Body
+``` 
+Not needed   
+```
 ### Responses:
 
 * code 200: Successful operation. Return array of objects from todos table in the database
@@ -76,7 +89,12 @@
 ## <a id="showTodosById"></a>GET /todos/:id 
 ### *Show a todo object with the corresponding id from the database*
 ### Parameters:
+    Required:
     Todo Id <integer>
+### Request Body
+``` 
+Not needed   
+```
 ### Responses:
 * code 200: Successful operation. Return object of the corresponding id
 ```
@@ -87,7 +105,7 @@
     "due_date": <date>
 }    
 ```
-* code 404: Corresponding id is not found
+* code 404: Corresponding id was not found
 ```
 {
     "error": {
@@ -96,12 +114,32 @@
     }
 }
 ```
+* code 500: Internal server error
+```
+{
+    "error": {
+        "code": 500,
+        "message": "Internal server"
+    }
+}
+```
+
 <br>
 
 ## <a id="putTodosById"></a>PUT /todos/:id
 ### *Edit a todo object from the database*
 ### Parameters:
+    Required:
     Todo Id <integer>
+### Request Body
+``` 
+{
+    "title": <string>,
+    "description": <string>,
+    "status": <string>,
+    "due_date": <date>
+}    
+```
 ### Responses:
 * code 200: Successful operation. Return the updated object
 ```
@@ -121,7 +159,7 @@
     }
 }
 ```
-* code 404: Corresponding id is not found
+* code 404: Corresponding id was not found
 ```
 {
     "error": {
@@ -144,7 +182,32 @@
 ## <a id="patchTodosById"></a>PATCH /todos/:id
 ### *Edit a property of a todo object from the database*
 ### Parameters:
+    Required:
     Todo Id <integer>
+### Request Body
+``` 
+{
+    "title": <string>
+}    
+```
+OR
+``` 
+{
+    "description": <string>
+}    
+```
+OR
+``` 
+{
+    "status": <string>
+}    
+```
+OR
+``` 
+{
+    "date": <date>
+}    
+```
 ### Responses:
 * code 200: Successful operation. Return the updated object.
 ```
@@ -164,7 +227,7 @@
     }
 }
 ```
-* code 404: Corresponding id is not found
+* code 404: Corresponding id was not found
 ```
 {
     "error": {
@@ -188,13 +251,18 @@
 
 ### *Delete a todo object from a database*
 ### Parameters:
+    Required:
     Todo Id <integer>
+### Request Body
+``` 
+Not needed   
+```
 ### Responses:
 * code 200: Successful operation.  
 {
     "message": "a todo was deleted"
 }
-* code 404: Corresponding id is not found
+* code 404: Corresponding id was not found
 ```
 {
     "error": {
