@@ -1,16 +1,19 @@
 const router = require('express').Router()
 const ControllerTodo = require('../controllers/todo-controller')
+const authentication  = require('../middleware/authentication')
+const authorization = require('../middleware/authorization')
 
-router.post('/', ControllerTodo.postTodos)
-router.get('/', ControllerTodo.showTodos)
+router.post('/', authentication, ControllerTodo.postTodos)
+router.get('/', authentication,  ControllerTodo.showTodos)
 
-router.get('/:id', ControllerTodo.showTodoById)
 
-router.put('/:id', ControllerTodo.putTodo)
+router.get('/:id',authentication, authorization, ControllerTodo.showTodoById)
 
-router.patch('/:id', ControllerTodo.patchTodo)
+router.put('/:id', authentication, authorization, ControllerTodo.putTodo)
 
-router.delete('/:id', ControllerTodo.deleteTodo)
+router.patch('/:id', authentication, authorization, ControllerTodo.patchTodo)
+
+router.delete('/:id', authentication, authorization, ControllerTodo.deleteTodo)
 
 
 

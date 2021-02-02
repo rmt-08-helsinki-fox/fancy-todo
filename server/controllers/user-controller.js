@@ -14,10 +14,12 @@ class ControllerUser {
       res.status(201).json(obj)
     })
     .catch(err => {
+      //error unique
       if(err.errors[0].type === 'unique violation') {
         res.status(403).json({ message: 'email already been used by another user' })
       }
       else {
+        // error validation field kosong
         res.status(400).json({ message: err.message })
       }
     })
@@ -34,6 +36,7 @@ class ControllerUser {
     .then(user => {
       if(!user) throw new Error('invalid email or password')
       if(!comparePassword(password, user.password)) throw new Error('invalid email or password')
+      //jika berhasil login
       const access_token = getToken({
         id: user.id,
         email: user.email
