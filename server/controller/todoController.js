@@ -1,6 +1,7 @@
 //@ts-check
 
 const { Todo } = require('../models/index')
+const axios = require("axios").default
 
 class todoController {
     static PostAddTodo (req, res, next) {
@@ -27,9 +28,18 @@ class todoController {
     }
 
     static getTodo (req, res, next) {
+        let todo;
         Todo.findAll({order: [['id', 'ASC']]})
         .then((todos) => {
-            res.status(200).json(todos)
+            todo = todos
+            return axios({
+                method: "get",
+                url: "https://api.quotable.io/random"
+            })
+        })
+        .then(quotes => {
+            //console.log(quotes.data);
+            res.status(200).json([quotes.data, todo])
         })
         .catch(err => {
             next(err)
@@ -38,12 +48,20 @@ class todoController {
     }
 
     static findTodo(req, res, next) {
+        let todo;
         Todo.findByPk(+req.params.id)
-        .then(todo => {
+        .then(todos => {
+            todo = todos
             // if (!todo) {
             //     throw {msg: "404 not found!", status: 404}
             // }
-            res.status(200).json(todo)
+            return axios({
+                method: "get",
+                url: "https://api.quotable.io/random?tags=technology"
+            })
+        })
+        .then(quotes => {
+            res.status(200).json([quotes.data, todo])
         })
         .catch(err=>{
             next(err)
@@ -133,6 +151,7 @@ class todoController {
         })
 
     }
+
 }
 
 module.exports = todoController

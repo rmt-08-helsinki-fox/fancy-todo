@@ -1,9 +1,6 @@
 const { User, Todo } = require('../models/index')
 
 const authorize = (req, res, next) => { 
-  //finone dulu di sini, kalau misalnya emailnya sama, maka nanti baru bisa next
-  //console.log(+req.params.id);
-  //bikin error handling kalau ga ketemu todonya
   Todo.findOne({
     where: {
       id: +req.params.id

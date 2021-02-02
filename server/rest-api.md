@@ -5,22 +5,44 @@
 - /todo (get)
 
 
-untuk mendapatkan semua list dari todo di DB
+hanya user yang ter <i>authenticate</i> yang bisa mendapatkan semua list dari todo di DB dan random quotes
 
 **success response**
 200 status response OK
 ```javascript
 [
     {
-        "id": 1,
-        "title": "mandi",
-        "description": "mandi di toilet",
-        "status": false,
-        "due_date": given,
-        "createdAt": given,
-        "updatedAt": given
-    }
-}
+        "_id": "1fFK-Xgvy5",
+        "tags": [
+            "friendship"
+        ],
+        "content": "There is no friendship, no love, like that of the parent for the child.",
+        "author": "Henry Ward Beecher",
+        "length": 71
+    },
+    [
+        {
+            "id": 1,
+            "title": "makana temen",
+            "description": "makan",
+            "status": false,
+            "due_date": "2021-02-05T00:00:00.000Z",
+            "UserId": 1,
+            "createdAt": "2021-02-01T06:36:14.789Z",
+            "updatedAt": "2021-02-02T11:24:19.432Z"
+        },
+        {
+            "id": 2,
+            "title": "mandi",
+            "description": "di kali",
+            "status": true,
+            "due_date": "2021-02-05T00:00:00.000Z",
+            "UserId": 1,
+            "createdAt": "2021-02-01T06:37:23.500Z",
+            "updatedAt": "2021-02-02T11:25:20.536Z"
+        },
+    ]
+]
 ```
 **error responses**
 <br>
@@ -36,7 +58,8 @@ untuk mendapatkan semua list dari todo di DB
 
 - /todo (post)
 
-create todo baru
+
+hanya user yang ter <i>authenticate</i> yang bisa create todo baru
 
 semua field required dan date tidak boleh melewati dari hari ini
 
@@ -57,7 +80,7 @@ input:
   id: given
   title: "makan"
   description: "makan nasi uduk"
-  due_date: 02-02-2021
+  due_date: 2021-01--31
   createdAt: given
   updatedAt: given
 ```
@@ -74,6 +97,8 @@ internal server error, 500 status code
 
 - /todo/:id (get)
 
+hanya user yang ter <i>authenticate</i> dan ter <i>authorize</i> yang bisa mencari todo milik mereka sendiri
+
 required:
 ```javascript
 id=[integer]
@@ -81,7 +106,17 @@ id=[integer]
 **success response**
 200 status code OK
 ```javascript
-{
+[
+    {
+ "_id": "1fFK-Xgvy5",
+        "tags": [
+            "friendship"
+        ],
+        "content": "There is no friendship, no love, like that of the parent for the child.",
+        "author": "Henry Ward Beecher",
+        "length": 71
+    },
+    {
     "id": 2,
     "title": "mandi",
     "description": "pake sabun",
@@ -89,12 +124,15 @@ id=[integer]
     "due_date": "2021-02-02T00:00:00.000Z",
     "createdAt": "2021-02-01T06:37:23.500Z",
     "updatedAt": "2021-02-01T11:05:31.912Z"
-}
+    }
+]
+
+
 ```
 
 - /todo/:id (put)
 
-update semua field ke database
+hanya user yang ter <i>authenticate</i> dan ter <i>authorize</i> yang bisa update semua field ke database
 
 required:
 ```javascirpt
@@ -141,7 +179,7 @@ validation error, 404 status code
 
 - /todos/:id (patch)
 
-ubah status dari true menjadi false dan sebaliknya
+hanya user yang ter <i>authenticate</i> dan ter <i>authorize</i> yang bisa mengubah status todo milik merkeka sendiri, dari true menjadi false dan sebaliknya
 
 required:
 ```javascirpt
@@ -184,6 +222,8 @@ internal server error, 500 status code
 <br>
 
 - /todos/:id (delete)
+
+hanya user yang ter <i>authenticate</i> dan ter <i>authorize</i> yang bisa men delete todo milik mereka sendiri
 
 required:
 ```javascript
@@ -261,6 +301,8 @@ password=[string]
 **success response**
 
 200 status code ok
+
+user yang login akan memiliki token yang unik
 
 ```javascript
 {

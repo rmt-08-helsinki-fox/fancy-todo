@@ -7,7 +7,6 @@ const authenticate = (req, res, next) => {
 
     req.decoded = decoded
 
-    //console.log(req.decoded );
     next()
   } catch (error) {
     res.status(401).json({
