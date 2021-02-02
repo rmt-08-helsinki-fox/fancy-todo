@@ -76,6 +76,11 @@ _Response (401 - Unauthorized)_
 
 &nbsp;
 
+_Request Params_
+```
+id todo from Todos table
+```
+
 _Request Header_
 ```
 {
@@ -193,6 +198,11 @@ _Response (401 - Unauthorized)_
 
 &nbsp;
 
+_Request Params_
+```
+id todo from Todos table
+```
+
 _Request Header_
 ```
 {
@@ -263,6 +273,11 @@ _Response (401 - Unauthorized)_
 
 &nbsp;
 
+_Request Params_
+```
+id todo from Todos table
+```
+
 _Request Header_
 ```
 {
@@ -326,6 +341,11 @@ _Response (401 - Unauthorized)_
 > Delete todo by id
 
 &nbsp;
+
+_Request Params_
+```
+id todo from Todos table
+```
 
 _Request Header_
 ```
