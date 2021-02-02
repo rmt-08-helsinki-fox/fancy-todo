@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User)
     }
   };
   Todo.init({
@@ -52,6 +53,15 @@ module.exports = (sequelize, DataTypes) => {
           if(value < new Date()) {
             throw Error ('Due Date Must Greater Than Today')
           }
+        }
+      }
+    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "UserId is Required"
         }
       }
     }

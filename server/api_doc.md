@@ -226,9 +226,10 @@ _Response (500 - Internal Server Error)_
 > Login a User
 
 _Request Header_
-```
+```json
 {
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  "access_token": "<access_token>"
 }
 ```
 

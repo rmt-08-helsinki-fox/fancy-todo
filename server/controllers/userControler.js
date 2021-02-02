@@ -3,7 +3,7 @@ const { comparePass } = require('../helpers/bcrypt')
 const { generateJwt } = require('../helpers/jwt')
 
 class Controller {
-  static async register(req, res) {
+  static async register(req, res, next) {
     try {
       let {email, password} = req.body
       let user = await User.create({email, password})
@@ -13,12 +13,12 @@ class Controller {
       }
       res.status(201).json(out)
     } catch (err) {
-      let error = err.message || "internal server error"
-      res.status(500).json(error)
+      if (!err.name) next(err)
+      next({status: 400, errors: err.errors})
     }
   }
 
-  static async login(req, res) {
+  static async login(req, res, next) {
     try {
       let {email, password} = req.body
       let user = await User.findOne({
@@ -26,7 +26,7 @@ class Controller {
           email
         }
       })
-      if (!user || !comparePass(password,user.password)) throw ({ message: 'invalid email / password'})
+      if (!user || !comparePass(password,user.password)) throw ({ status: 401, msg: 'invalid email / password'})
       let payload = {
         id : user.id,
         email : user.email
@@ -34,8 +34,8 @@ class Controller {
       let jwt = generateJwt(payload)
       res.status(200).json({ access_token: jwt})
     } catch (err) {
-      let error = err.message || "internal server error"
-      res.status(500).json(error)
+      if (!err.msg) next(err)
+      next(err)
     }
   }
 }

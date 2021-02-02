@@ -1,128 +1,102 @@
 const { Todo } = require('../models')
+const { todoOutputMaker } = require('../helpers')
 
 class Controller {
-  static async postTodo(req, res) {
+  static async postTodo(req, res, next) {
     try {
-      let param = {
+      let todoParams = {
         title: req.body.title,
         description: req.body.description,
         status: req.body.status,
-        due_date: req.body.due_date
+        due_date: req.body.due_date,
+        UserId: req.userData.userId
       }
-      const todo = await Todo.create(param)
-      let out = {
-        id: todo.id,
-        title: todo.title,
-        description: todo.description,
-        status: todo.status,
-        due_date: todo.due_date
-      }
-      res.status(201).json(out)
+      const todo = await Todo.create(todoParams)
+      let todoOutput = todoOutputMaker(todo)
+      res.status(201).json(todoOutput)
     }
     catch(err) {
-      let error = err.message || "internal server error"
-      res.status(500).json(error)
+      console.log(err, '---');
+      if (!err.name) next(err)
+      next({status: 400, errors: err.errors})
     }
   }
 
-  static async getTodo(req, res) {
+  static async getTodo(req, res, next) {
     try {
       let todos = await Todo.findAll()
-      todos = todos.map((param) => {
-        return {
-          id: param.id,
-          title: param.title,
-          description: param.description,
-          status: param.status,
-          due_date: param.due_date
-        }
+      todos = todos.map((todo) => {
+        return todoOutputMaker(todo)
       })
-
       res.status(200).json(todos)
     }
     catch(err) {
-      let error = err.message || "internal server error"
-      res.status(500).json(error)
+      if (!err.name) next(err)
+      next({status: 400, errors: err.errors})
     }
   }
   
-  static async getTodoById(req, res) {
+  static async getTodoById(req, res, next) {
     try {
       let { id } = req.params
       let todo = await Todo.findByPk(id)
-      let out = {
-        id: todo.id,
-        title: todo.title,
-        description: todo.description,
-        status: todo.status,
-        due_date: todo.due_date
-      }
-      res.status(200).json(out)
+      let todoOutput = todoOutputMaker(todo)
+      res.status(200).json(todoOutput)
     } catch (err) {
-      let error = err.message || "internal server error"
-      res.status(500).json(error)
+      if (!err.name) next(err)
+      next({status: 400, errors: err.errors})
     }
   }
   
-  static async putTodo(req, res) {
+  static async putTodo(req, res, next) {
     try {
       let { id } = req.params
-      let param = {
+      let todoParams = {
         title: req.body.title,
         description: req.body.description,
         status: req.body.status,
         due_date: req.body.due_date
       }
-      let todo = await Todo.update(param, {
-      where: { id },
-      returning: true
-    })
-      let out = {
-        id: todo[1][0].id,
-        title: todo[1][0].title,
-        description: todo[1][0].description,
-        status: todo[1][0].status,
-        due_date: todo[1][0].due_date
-      }
-      res.status(200).json(out)
+      let todo = await Todo.update(todoParams, {
+        where: { id },
+        returning: true
+      })
+      let todoOutput = todoOutputMaker(todo[1][0])
+      res.status(200).json(todoOutput)
     } catch (err) {
-      let error = err.message || "internal server error"
-      res.status(500).json(error)
+      if (!err.name) next(err)
+      next({status: 400, errors: err.errors})
     }
   }
 
-  static async patchTodo(req, res) {
+  static async patchTodo(req, res, next) {
     try {
       let { id } = req.params
       let { status } = req.body
       let todo = await Todo.update({ status }, {
-      where: { id },
-      returning: true
-    })
-      let out = {
-        id: todo[1][0].id,
-        title: todo[1][0].title,
-        description: todo[1][0].description,
-        status: todo[1][0].status,
-        due_date: todo[1][0].due_date
-      }
-      res.status(200).json(out)
-    } catch (err) {
-      let error = err.message || "internal server error"
-      res.status(500).json(error)
+        where: { id },
+        returning: true
+      })
+      let todoOutput = todoOutputMaker(todo[1][0])
+      res.status(200).json(todoOutput)
+    } 
+    catch (err) {
+      if (!err.name) next(err)
+      next({status: 400, errors: err.errors})
     }
   }
 
-  static async deleteTodo(req, res) {
+  static async deleteTodo(req, res, next) {
     try {
       let { id } = req.params
       let todo = await Todo.destroy({
         where: { id }
       })
       res.status(200).json({ message: "todo success to delete" })
-    } catch (err) {
-      let error = err.message || "internal server error"
-      res.status(500).json(error)
+    } 
+    catch (err) {
+      if (!err.name) next(err)
+      next({status: 400, errors: err.errors})
     }
   }
 }
