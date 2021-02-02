@@ -1,9 +1,11 @@
 const { Todo } = require('../models')
+const axios = require('axios')
 
 class TodoController {
-  static createTodos(req, res) {
+  static createTodos(req, res, next) {
     const { title, description, status, due_date } = req.body
     const userId = req.token.id
+    let dataTodo;
     Todo.create({
       title,
       description,
@@ -12,31 +14,36 @@ class TodoController {
       userId
     })
       .then(data => {
-        res.status(201).json(data)
+        dataTodo = data
+        let month = data.due_date.split('-')[1]
+        return axios.get(`https://calendarific.com/api/v2/holidays?api_key=182159a3e6e236b47fbb1c378b2dcb4277caa419&country=id&year=2021&month=${month}`)
+      })
+      .then(response => {
+        let data = response.data.response.holidays
+        let holidays = []
+        data.forEach(element => {
+          holidays.push({
+            name: element.name,
+            date: element.date.iso,
+            type: element.type
+          })
+        });
+        res.status(201).json({ dataTodo, holidays })
       })
       .catch(err => {
-        let error = 'Internal Server Error';
-        let status = 500;
-        if (err.name === 'SequelizeValidationError') {
-          error = []
-          err.errors.forEach(element => {
-            error.push(element.message)
-          });
-          status = 400
-        }
-        res.status(status).json({ error })
+        next(err)
       })
   }
-  static findTodos(req, res) {
+  static findTodos(req, res, next) {
     Todo.findAll()
       .then(data => {
         res.status(200).json(data)
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
-  static findTodosById(req, res) {
+  static findTodosById(req, res, next) {
     let id = req.params.id
     Todo.findOne({
       where: {
@@ -48,12 +55,10 @@ class TodoController {
         res.status(200).json(data)
       })
       .catch(err => {
-        const error = err.error || 'Internal Server Error'
-        const status = err.status || 500
-        res.status(status).json({ error })
+        next(err)
       })
   }
-  static editTodos(req, res) {
+  static editTodos(req, res, next) {
     const id = req.params.id
     const { title, description, status, due_date } = req.body
     Todo.update({ title, description, status, due_date }, {
@@ -67,22 +72,10 @@ class TodoController {
         res.status(200).json(data[1])
       })
       .catch(err => {
-        let error
-        let status
-        if (err.name === 'SequelizeValidationError') {
-          error = []
-          err.errors.forEach(element => {
-            error.push(element.message)
-          });
-          status = 400
-        } else {
-          error = err.error || 'Internal Server Error'
-          status = err.status || 500
-        }
-        res.status(status).json({ error })
+        next(err)
       })
   }
-  static editStatusTodos(req, res) {
+  static editStatusTodos(req, res, next) {
     const id = req.params.id
     const { status } = req.body
     Todo.update({ status }, {
@@ -96,22 +89,10 @@ class TodoController {
         res.status(200).json(data[1])
       })
       .catch(err => {
-        let error
-        let status
-        if (err.name === 'SequelizeValidationError') {
-          error = []
-          err.errors.forEach(element => {
-            error.push(element.message)
-          });
-          status = 400
-        } else {
-          error = err.error || 'Internal Server Error'
-          status = err.status || 500
-        }
-        res.status(status).json({ error })
+        next(err)
       })
   }
-  static deleteTodo(req, res) {
+  static deleteTodo(req, res, next) {
     const id = req.params.id
     Todo.destroy({
       where: {
@@ -123,9 +104,7 @@ class TodoController {
         res.status(200).json({ message: 'todo success to delete' })
       })
       .catch(err => {
-        const error = err.error || 'Internal Server Error'
-        const status = err.status || 500
-        res.status(status).json({ error })
+        next(err)
       })
   }
 }

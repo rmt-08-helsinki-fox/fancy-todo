@@ -3,7 +3,7 @@ const { checkPass } = require('../helpers/bcrypt')
 const generateJwt = require('../helpers/jwt')
 
 class UserController {
-  static register(req, res) {
+  static register(req, res, next) {
     const { email, password } = req.body
     User.create({ email, password })
       .then(data => {
@@ -13,19 +13,10 @@ class UserController {
         })
       })
       .catch(err => {
-        let error = 'Internal Server Error';
-        let status = 500;
-        if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
-          error = []
-          err.errors.forEach(element => {
-            error.push(element.message)
-          });
-          status = 400
-        }
-        res.status(status).json({ error })
+        next(err)
       })
   }
-  static login(req, res) {
+  static login(req, res, next) {
     const { email, password } = req.body
     User.findOne({
       where: {
@@ -43,9 +34,7 @@ class UserController {
         res.status(200).json({ token })
       })
       .catch(err => {
-        const error = err.error || 'Internal server error'
-        const status = err.status || 500
-        res.status(status).json({ error })
+        next(err)
       })
   }
 }

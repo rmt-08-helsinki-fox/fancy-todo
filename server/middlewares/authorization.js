@@ -15,7 +15,7 @@ const authorization = (req, res, next) => {
       else res.status(400).json({ error: 'Invalid Token' })
     })
     .catch(err => {
-      res.status(500).json(err)
+      next(err)
     })
 }
 
