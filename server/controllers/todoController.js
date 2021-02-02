@@ -90,8 +90,6 @@ class TodoController {
       returning: true
     })
     .then( todo => {
-      
-      console.log(todo);
 
       if(todo[1].length < 1){
         throw { message: "error not found"}
