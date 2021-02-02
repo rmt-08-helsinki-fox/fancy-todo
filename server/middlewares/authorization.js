@@ -12,7 +12,7 @@ const authorization = (req, res, next) => {
     .then(data => {
       if (!data) next()
       else if (data.userId === idUser) next()
-      else res.status(400).json({ error: 'Invalid Token' })
+      else throw { error: 'Invalid Token', status: 401 }
     })
     .catch(err => {
       next(err)

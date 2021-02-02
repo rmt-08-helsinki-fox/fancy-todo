@@ -8,6 +8,10 @@ const errHandler = (err, req, res, next) => {
     });
     status = 400
   }
+  if (err.name === 'JsonWebTokenError') {
+    error = 'Invalid Token'
+    status = 401
+  }
   res.status(status).json({ error })
 }
 

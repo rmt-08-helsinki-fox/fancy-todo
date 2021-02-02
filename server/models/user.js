@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           msg: 'Password is required'
+        },
+        minLength(value) {
+          if (value.length < 6) throw new Error('Password length must be more than 5')
         }
       }
     }

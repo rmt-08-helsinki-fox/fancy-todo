@@ -36,7 +36,12 @@ class TodoController {
       })
   }
   static findTodos(req, res, next) {
-    Todo.findAll()
+    const userId = req.token.id
+    Todo.findAll({
+      where: {
+        userId: userId
+      }
+    })
       .then(data => {
         res.status(200).json(data)
       })
