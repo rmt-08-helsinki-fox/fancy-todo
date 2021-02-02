@@ -34,10 +34,6 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       validate: {
-        // len: {
-        //   args: 6,
-        //   msg: 'Password must be at least 6 characters in length'
-        // }
         requirementPass(value) {
           const regex = /^((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$/
           if (!value.match(regex)) throw new Error(`Password must contain at least one number, one lowercase alphabet, one uppercase alphabet, and contain a length of at least 6 characters`)

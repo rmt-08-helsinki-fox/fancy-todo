@@ -1,56 +1,49 @@
 const { Todo } = require('../models');
+const axios = require('axios');
+const convertDate = require('../helpers/convertDate')
 
 class TodoController {
-  static addTodo(req, res) {
+  static addTodo(req, res, next) {
     const { title, description, status, due_date } = req.body;
     Todo.create({
       title,
       description,
       status,
-      due_date: new Date(due_date)
+      due_date: new Date(due_date),
+      userId: req.decoded.id
     })
       .then(todo => {
         res.status(201).json(todo);
       })
       .catch(err => {
-        console.log(err);
-        if (err.errors) {
-          const errorValidations = err.errors.map(err => err.message);
-          res.status(400).json({ errors: errorValidations });
-        } else {
-          res.status(500).json({ errors: 'Internal Server Error' });
-        }
+        next(err);
       })
   }
 
-  static getTodos(req, res) {
+  static getTodos(req, res, next) {
     Todo.findAll()
       .then(todos => {
         res.status(200).json(todos);
       })
       .catch(err => {
-        res.status(500).json({ errors: 'Internal Server Error' });
+        next(err);
       })
   }
 
-  static getTodoById(req, res) {
+  static getTodoById(req, res, next) {
     const id = +req.params.id;
     Todo.findOne({
       where: { id: id }
     })
       .then(todo => {
-        if (!todo) throw { msg: 'Task Not Found', status: 404 };
         res.status(200).json(todo);
       })
       .catch(err => {
-        console.log(err);
-        const error = err.msg || 'Internal Server Error';
-        const status = err.status || 500;
-        res.status(status).json({ error });
+        next(err);
       })
   }
 
-  static updateAllField(req, res) {
+  static updateAllField(req, res, next) {
     const id = +req.params.id;
     const { title, description, status, due_date } = req.body;
 
@@ -65,25 +58,15 @@ class TodoController {
     })
       .then(todo => {
         const updatedTodo = todo[1][0];
-
-        if (!updatedTodo) throw ({ msg: 'Task Not Found', status: 404 })
         
         res.status(200).json(updatedTodo);
       })
       .catch(err => {
-        console.log(err);
-        if (err.errors) {
-          const errorValidations = err.errors.map(err => err.message);
-          res.status(400).json({ errors: errorValidations});
-        } else {
-          const error = err.msg || 'Internal Server Error';
-          const status = err.status || 500;
-          res.status(status).json({ error });
-        }
+        next(err);
       })
   }
 
-  static updateOneField(req, res) {
+  static updateStatusTask(req, res, next) {
     const id = +req.params.id;
     const { status } = req.body;
 
@@ -95,24 +78,15 @@ class TodoController {
     })
       .then(todo => {
         const updatedTodo = todo[1][0];
-
-        if (!updatedTodo) throw ({ msg: 'Task Not Found', status: 404 });
         
-        res.status(200).json(updatedTodo)
+        res.status(200).json(updatedTodo);
       })
       .catch(err => {
-        if (err.errors) {
-          const errorValidations = err.errors.map(err => err.message);
-          res.status(400).json({ errors: errorValidations});
-        } else {
-          const error = err.msg || 'Internal Server Error';
-          const status = err.status || 500;
-          res.status(status).json({ error });
-        }
+        next(err);
       })
   }
 
-  static deleteTodo(req, res) {
+  static deleteTodo(req, res, next) {
     const id = +req.params.id;
     let deletedTodo;
 
@@ -124,14 +98,48 @@ class TodoController {
         })
       })
       .then(lenTodo => {
-        if (lenTodo == 0) throw { msg: 'Task Not Found', status: 404 };
         res.status(200).json({ delete_todo: deletedTodo, message: 'Todo success to delete'});
       })
       .catch(err => {
-        console.log(err);
-        const error = err.msg || 'Internal Server Error';
-        const status = err.status || 500;
-        res.status(status).json({ error });
+        next(err);
+      })
+  }
+
+  static getForecastWeather(req, res, next) {
+    const id = +req.params.id;
+    const city = req.query.city;
+
+    if (!city) throw { name: 'CustomError', msg: 'You must enter the city name', status: 400 }
+
+    let dueDateTodo;
+
+    Todo.findByPk(id)
+      .then(todo => {
+        dueDateTodo = convertDate(todo.due_date);
+        return axios({
+          method: 'GET',
+          url: `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${process.env.Weather_APIkey}`
+        })
+      })
+      .then(result => {
+        let arrData = result.data.data;
+        let foundData;
+
+        arrData.forEach(data => {
+          if (data.valid_date === dueDateTodo) {
+            foundData = data;
+          }
+        })
+
+        if (foundData) {
+          res.status(200).json(foundData);
+        } else {
+          throw { name: 'CustomError', msg: 'Sorry, weather prediction is not available yet', status: 400 }
+        }
+
+      })
+      .catch(err => {
+        next(err);
       })
   }
 
