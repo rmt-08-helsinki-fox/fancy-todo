@@ -1,13 +1,13 @@
 const { Todo } = require("../models/")
 
 class TodoControll {
-  static add(req, res){
+  static add(req, res, next){
     let newTodo = {
       title: req.body.title,
       description: req.body.description,
       status: req.body.status,
       due_date: req.body.due_date,
-      UserId: req.datauser.id
+      UserId: req.dataUser.id
     }
 
     if(newTodo.status === ""){
@@ -19,22 +19,21 @@ class TodoControll {
       res.status(201).json(data)
     })
     .catch(err => {
-      let error = err.errors[0].message
-      res.status(400).json({error})
+      next(err)
     })
   }
 
-  static findAll(req, res){
+  static findAll(req, res, next){
     Todo.findAll()
     .then(data => {
       res.status(200).json(data)
     })
     .catch(err => {
-      res.status(500).json(err)
+      next(err);
     })
   }
 
-  static findById(req, res){
+  static findById(req, res, next){
     const id = +req.params.id
 
     Todo.findByPk(id)
@@ -42,11 +41,11 @@ class TodoControll {
       res.status(200).json(data)
     })
     .catch(err => {
-      res.status(404).json(err)
+      next(err)
     })
   }
 
-  static updateAll(req, res){
+  static updateAll(req, res, next){
     let newTodo = {
       title: req.body.title,
       description: req.body.description,
@@ -64,11 +63,11 @@ class TodoControll {
       res.status(200).json(data[1][0])
     })
     .catch(err => {
-      res.status(500).json(err)
+      next(err)
     })
   }
 
-  static updateStatus(req, res){
+  static updateStatus(req, res, next){
     let newTodo = {
       status: req.body.status
     }
@@ -83,11 +82,11 @@ class TodoControll {
       res.status(200).json(data[1][0])
     })
     .catch(err => {
-      res.status(500).json(err)
+      next(err)
     })
   }
 
-  static delete(req, res){
+  static delete(req, res, next){
     Todo.destroy({
       where: {
         id: +req.params.id
@@ -95,11 +94,10 @@ class TodoControll {
       returning: true
     })
     .then(data => {
-      if(data === 0) throw ({msg: "Todo Not Found"})
       res.status(200).json({message: "todo has been deleted"})
     })
     .catch(err => {
-      res.status(500).json(err)
+      next(err)
     })
   }
 }

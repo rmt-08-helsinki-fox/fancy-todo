@@ -3,7 +3,7 @@ const { comparePass } = require("../helpers/bcrypt")
 const { newToken } = require("../helpers/jwt")
 
 class UserControll {
-  static register(req, res){
+  static register(req, res, next){
     let newUser = {
       email: req.body.email,
       password: req.body.password
@@ -14,12 +14,11 @@ class UserControll {
       res.status(201).json(data)
     })
     .catch(err => {
-      const error = err.errors[0].message
-      res.status(500).json({error})
+      next(err)
     })
   }
 
-  static login(req, res){
+  static login(req, res, next){
     const email = req.body.email
     const password = req.body.password
 
@@ -29,20 +28,20 @@ class UserControll {
       }
     })
     .then(data => {
-      if(!data) throw ({msg: "Wrong Email or Password"})
+      if(!data) throw ({name: "custom", msg: "Wrong Email or Password", status: 400})
 
       const pass = comparePass(password, data.password)
-      if(!pass) throw ({msg: "Wrong Email or Password"})
+      if(!pass) throw ({name: "custom", msg: "Wrong Email or Password", status: 400})
 
       let token = newToken({
         id: data.id,
         email: data.email
       })
-      
+
       res.status(200).json({ token })
     })
     .catch(err => {
-      res.status(500).json({ msg: "Wrong Email or Password" })
+      next(err)
     })
   }
 }

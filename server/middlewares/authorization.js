@@ -10,14 +10,16 @@ const authorized = (req, res, next) => {
     }
   })
   .then(data => {
+    if(!data) throw ({name: "custom", msg: "ID Not Found", status: 404})
     if(data.UserId === req.dataUser.id){
       next()
     }else{
-      res.status(401).json({msg: "Unauthorized"})
+      const err = {name: "custom", msg: "Unauthorized", status: 401}
+      next(err)
     }
   })
   .catch(err => {
-    res.status(500).json({msg: "Internal Server Error"})
+    next(err)
   })
 }
 

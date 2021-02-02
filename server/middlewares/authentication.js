@@ -8,7 +8,8 @@ const authentic = (req, res, next) => {
     next()
   }
   catch {
-    res.status(401).json({msg: "Invalid token"})
+    const err = {name: "custom", msg: "Invalid token", status: 401}
+    next(err)
   }
 }
 
