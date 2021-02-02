@@ -1,5 +1,6 @@
 const {User} = require('../models')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
 
 class UserController {
     static register(req, res, next){
@@ -25,6 +26,7 @@ class UserController {
     }
     static login(req, res, next){
         let {email, password} = req.body
+        let id
         User.findOne({
             where:{
                 email: email
@@ -32,6 +34,7 @@ class UserController {
         })
         .then((result)=>{
             if(result){
+                id = result.id
                 return bcrypt.compare(password, result.password)
             }else{
                 next({name: 'LOGIN_GAGAL'})
@@ -39,7 +42,8 @@ class UserController {
         })
         .then((isPasswordMatched)=>{
             if(isPasswordMatched){
-                
+                let token = jwt.sign({ id: id }, process.env.TOKEN_KEY);
+                res.status(200).json(token)
             }else{
                 next({name: 'LOGIN_GAGAL'})
             }

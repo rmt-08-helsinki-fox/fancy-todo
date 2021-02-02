@@ -1,75 +1,53 @@
 const {Todo} = require('../models')
 
 class TodoController{
-    static async addTodo(req, res){
-        // console.log(req.body)
-        // res.send('asdf')
-        
+    static async addTodo(req, res, next){
         try{
-
             let {title, description, due_date} = req.body
+            let UserId = req.userData.id
             let newTodo = {
                 title,
                 description,
-                due_date
+                due_date,
+                UserId
             }
-            let result = await Todo.create(newTodo, {
-                // returning: ['id','title','description','due_date'],
-            })
-            // delete result.createdAt
-            // delete result.updatedAt
+            let result = await Todo.create(newTodo)
             delete result.dataValues.createdAt
             delete result.dataValues.updatedAt
             res.status(201).send(result)
             
         } catch(err){
-            console.log(err)
-            if(err.errors){
-                res.status(400).send(err.errors[0].message)
-            }else{
-                res.status(500)
-            }
-            // if(err.msg){
-            //     res.send(err.msg)
-            // }else{
-            //     res.status(500)
-            // }
+            next(err)
         }
-
-        // Todo.create(newTodo, {
-        //     returning: true
-        // })
-        // .then((result)=>{
-        //     res.send(result)
-        // })
-        // .catch((err)=>{
-        //     res.send(err)
-        // })
         
     }
 
-    static async read(req, res){
+    static async read(req, res, next){
         try{
-            let result = await Todo.findAll()
+            let result = await Todo.findAll({
+                where: {
+                    UserId: req.userData.id
+                }
+            })
             res.status(200).send(result)
         }catch(err){
-            res.status(500).send(err)
+            next(err)
+            // res.status(500).send(err)
         }
     }
-    static async readById(req, res){
-        console.log("asdfasdfadf")
+    static async readById(req, res, next){
         try{
             let result = await Todo.findByPk(req.params.id)
             if(result){
                 res.status(200).send(result)
             }else{
-                res.status(404).json('Error not found')
+                next({name: 'TODO_NOT_FOUND'})
             }
         }catch(err){
-            res.send(err)
+            next(err)
         }
     }
-    static async editWhole(req, res){
+    static async editWhole(req, res, next){
         let {title, description, due_date, status} = req.body
         let updateTodo = {
             title, 
@@ -87,17 +65,13 @@ class TodoController{
             if(result[0]){
                 res.status(200).send(result[1][0])
             }else{
-                res.status(404).json("Error not found")
+                next({name: 'TODO_NOT_FOUND'})
             }
         }catch(err){
-            if(err.errors){
-                res.status(400).send(err.errors[0].message)
-            }else{
-                res.status(500)
-            }
+            next(err)
         }
     }
-    static async edit(req, res){
+    static async edit(req, res, next){
         let {status} = req.body
         let updateTodo = {
             status
@@ -111,18 +85,13 @@ class TodoController{
             if(result[0]){
                 res.status(200).send(result[1][0])
             }else{
-                res.status(404).json("Error not found")
+                next({name: 'TODO_NOT_FOUND'})
             }
         }catch(err){
-            console.log(err)
-            if(err.errors){
-                res.status(400).send(err.errors[0].message)
-            }else{
-                res.status(500)
-            }
+            next(err)
         }
     }
-    static async delete(req, res){
+    static async delete(req, res, next){
         console.log(req.params.id)
         try{
             const result = await Todo.destroy({
@@ -133,11 +102,10 @@ class TodoController{
             if(result){
                 res.send('Delete berhasil')
             }else{
-                res.status(404).send("Error not found")
+                next({name: 'TODO_NOT_FOUND'})
             }
-            // res.send(result)
         }catch(err){
-            res.status(500)
+            next(err)
         }
     }
 }

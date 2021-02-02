@@ -1,15 +1,19 @@
 const express = require('express')
-const {Auth} = require('../Auth')
+const {Authentication} = require('../middlewares/Authentication')
+const {TodoAuthorization} = require('../middlewares/Authorization')
 const {TodoController} = require('../controllers')
 
 const RouterTodo = express.Router()
 
+RouterTodo.use(Authentication)
 RouterTodo.post('/', TodoController.addTodo)
 RouterTodo.get('/', TodoController.read)
-RouterTodo.get('/:id', TodoController.readById)
-RouterTodo.put('/:id', TodoController.editWhole)
-RouterTodo.patch('/:id', TodoController.edit)
-RouterTodo.delete('/:id', TodoController.delete)
+
+// RouterTodo.use(TodoAuthorization)
+RouterTodo.get('/:id', Authentication, TodoAuthorization, TodoController.readById)
+RouterTodo.put('/:id', Authentication, TodoAuthorization, TodoController.editWhole)
+RouterTodo.patch('/:id', Authentication, TodoAuthorization, TodoController.edit)
+RouterTodo.delete('/:id', Authentication, TodoAuthorization, TodoController.delete)
 
 
 module.exports={
