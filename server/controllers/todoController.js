@@ -3,16 +3,16 @@ const { Todo } = require('../models')
 class TodoController {
     static createTodo(req,res) {
         let {title, description, status, due_date} = req.body
-        let dataTodo = {title, description, status, due_date, UserId : +req.headers.id}
+        let dataTodo = {title, description, status, due_date, UserId : +req.data.id}
         Todo.create(dataTodo)
             .then(data => {
                 res.status(201).json(data)
             })
             .catch(err=> {
                 if(err.name ==="SequelizeValidationError"){
-                    res.status(404).json(err.errors[0].message)
+                    res.status(400).json(err.errors[0].message)
                 } else {
-                    res.status(500).json(err)
+                    res.status(500).json({message: "Invalid request"})
                 }
             })
     }
@@ -22,7 +22,7 @@ class TodoController {
                 res.status(200).json(data)
             })
             .catch(err=> {
-                res.status(500).json(err)
+                res.status(500).json({message: "Invalid request"})
             })
     }
     static findOneTodo(req,res) {
@@ -41,12 +41,12 @@ class TodoController {
                 }
             })
             .catch(err=> {
-                res.status(500).json(err)
+                res.status(500).json({message: "Invalid request"})
             })
     }
     static editTodo(req,res) {
         const id = +req.params.id
-        const userId = +req.headers.id
+        const userId = +req.data.id
         const {title, description, status, due_date} = req.body
         const dataTodo = {title, description, status, due_date, UserId: userId}
         Todo.update(dataTodo, {
@@ -63,12 +63,12 @@ class TodoController {
                 }
             })
             .catch(err => {
-                res.status(500).json(err)
+                res.status(500).json({message: "Invalid request"})
             })
     }
     static editStatusTodo(req,res) {
         const id = +req.params.id
-        const userId = +req.headers.id
+        const userId = +req.data.id
         const {status} = req.body
         const dataTodo = {status, UserId : userId}
 
@@ -79,18 +79,20 @@ class TodoController {
             returning: true
         })
             .then(data => {
-                console.log(data)
+                // console.log(data[1][0])
                 if(data[0] === 0){
                     res.status(404).json({message:"Invalid Data"})
                 } else {
-                    res.status(200).json(data[1][0])
+                    let {id, status, createdAt, updatedAt, UserId} = data[1][0]
+                    let dataOutput = {id, status, createdAt, updatedAt, UserId}
+                    res.status(200).json(dataOutput)
                 }
             })
             .catch(err => {
                 if(err.name === "SequelizeValidationError") {
                     res.status(400).json(err.errors[0].message)
                 } else {
-                    res.status(500).json(err)
+                    res.status(500).json({message: "Invalid request"})
                 }
             })
     }
@@ -111,7 +113,7 @@ class TodoController {
                 }
             })
             .catch(err => {
-                res.status(500).json(err)
+                res.status(500).json({message: "Invalid request"})
             })
     }
 
