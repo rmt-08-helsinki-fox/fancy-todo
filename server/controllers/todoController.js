@@ -3,7 +3,7 @@ const {Todo} = require('../models/index')
 
 class TodoController {
 
-  static addTodo(req, res){
+  static addTodo(req, res, next){
     let {title, description, status, due_date} = req.body
     let { id } = req.user
 
@@ -28,18 +28,12 @@ class TodoController {
         res.status(201).json(todo)
       })
       .catch( err => {
-
-        if(err.name == 'SequelizeValidationError'){
-          res.status(400).json({ message: "validation errors"})
-        } else {
-          res.status(500).json(err)
-        }
-
+        next(err)
       })
       
   }
 
-  static todoGet(req,res){
+  static todoGet(req, res, next){
     const { id } = req.user
 
     Todo.findAll({
@@ -51,35 +45,33 @@ class TodoController {
         res.status(200).json(todos)
       })
       .catch( err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
     
-  static showTodoById(req, res){
+  static showTodoById(req, res, next){
     let selectedId = req.params.id
 
     Todo.findByPk(selectedId)
       .then( todo => {
 
       if(!todo){
-        throw { message: "error not found"}
+        throw { 
+          name: "customError", 
+          message: "error not found",
+          stats: 404
+        }
       } else {
         res.status(200).json(todo)
       }
           
       })
       .catch( err => {
-
-        if(err.message == 'error not found'){
-          res.status(404).json(err)
-        } else {
-          res.status(500).json(err)
-        }
-
+        next(err)
       })
   }
 
-  static editTodo(req, res){
+  static editTodo(req, res, next){
     let selectedId = req.params.id
     const {title, description, status, due_date} = req.body
 
@@ -99,27 +91,23 @@ class TodoController {
     .then( todo => {
 
       if(todo[1].length < 1){
-        throw { message: "error not found"}
+        throw { 
+        name: "customError", 
+        message: "error not found",
+        stats: 404 
+      }
       } else {
         res.status(200).json(todo[1][0])
       }
     
     })
     .catch( err => {
-
-      if(err.name == 'SequelizeValidationError'){
-        res.status(400).json({ message: "validation errors"})
-      } else if (err.message == 'error not found'){
-        res.status(404).json(err)
-      } else {
-        res.status(500).json(err)
-      }
-      
+      next(err)
     })
 
   }
 
-  static editTodoStatus(req,res){
+  static editTodoStatus(req, res, next){
     let selectedId = req.params.id
     let {status} = req.body
 
@@ -134,26 +122,22 @@ class TodoController {
     .then( todo => {
 
       if(todo[1].length < 1){
-        throw { message: "error not found"}
+        throw { 
+          name: "customError", 
+          message: "error not found",
+          stats: 404 
+        }
       } else {
         res.status(200).json(todo[1][0])
       }
 
     })
     .catch( err => {
-      
-      if (err.message == 'error not found'){
-        res.status(404).json(err)
-      } else if (err.name == 'SequelizeValidationError'){
-        res.status(400).json({ message: "validation errors"})
-      }   else {
-        res.status(500).json(err)
-      }
-
+      next(err)
     })
   }
 
-  static deleteTodo(req,res){
+  static deleteTodo(req, res, next){
     let selectedId = req.params.id
 
     Todo.destroy(
@@ -167,19 +151,17 @@ class TodoController {
         console.log(todo)
 
         if(!todo){
-          throw { message: "error not found"}
+          throw { 
+            name: "customError", 
+            message: "error not found",
+            stats: 404 
+          }
         } else {
           res.status(200).json({ message: "todo succes to delete"})
         }
       })
       .catch( err => {
-
-        if(err.message == 'error not found'){
-          res.status(404).json(err)
-        } else {
-          res.status(500).json(err)
-        }
-
+        next(err)
       })
   }
 

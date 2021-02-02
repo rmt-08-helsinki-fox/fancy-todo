@@ -7,26 +7,25 @@ const authorize = (req,res,next) => {
       .then( todo => {
 
         if(!todo){
-          throw { message : 'error not found'}
+          throw { 
+            name: "customError", 
+            message: "error not found",
+            status: 404 
+          }
         }
 
         if(req.user.id == todo.UserId ){
             next()
         } else {
-          throw { message : 'Not Authorized'}
+          throw { 
+            name : "customError",
+            message : 'Not Authorized',
+            status: 401
+          }
         }
       })
       .catch( err => {
-
-        console.log(err)
-        if(err.message == 'Not Authorized'){
-          res.status(401).json(err)     
-        } else if(err.message == 'error not found'){
-          res.status(404).json(err)
-        } else {
-          res.status(500).json(err)
-        }
-
+        next(err)
       })
 
     

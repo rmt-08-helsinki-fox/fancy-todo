@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const routes = require('./routes/index.js')
+const errorHandler = require('./middlewares/errorHandler')
 const app = express()
 const PORT = 3000
 
@@ -10,6 +11,9 @@ app.use(express.urlencoded({extended: false}))
 
 // routes
 app.use('/', routes)
+
+// error handler 
+app.use(errorHandler)
   
 app.listen(PORT, () => {
   console.log(`app listening at http://localhost:${PORT}`)

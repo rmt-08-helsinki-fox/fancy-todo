@@ -6,7 +6,7 @@ const authenticate = require('../middlewares/authenticate')
 // route user
 router.use('/users', userRouter)
 
-// middleware auten
+// middleware authenticate
 router.use(authenticate)
 
 // route todo

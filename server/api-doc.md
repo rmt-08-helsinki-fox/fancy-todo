@@ -1,5 +1,7 @@
 # TODOS APP ENDPOINT
 
+# FITUR TODO
+
 ## 1. POST /todos
 ```
 add todo data
@@ -207,6 +209,36 @@ tidak dibutuhkan
 - 404 error not found
 - 500 internal server error
 
+# FITUR USER
+
+## 1. POST /users/register
+
+register new user
+
+### -- Request Header --
+
+belum digunakan
+
+### -- Request Body --
+
+- email
+- password
+
+### -- Response 201 --
+
+```js
+{
+    "message": "Register success",
+    "id": 7,
+    "email": "rizkicandra@ecampuz.com"
+}
+
+```
+
+### -- Error Response --
+
+- 400 uniqe email
+- 500 internal server error
 
 ## ERROR RESPONSE DETAIL
 
