@@ -14,15 +14,18 @@ class TodoController {
       res.status(201).json(data)
     })
     .catch( err => {
-
-      res.status(400).json(err.message)
+      res.status(400).json({ error: err.message })
     })
   }
 
   static showAll(req, res) {
     Todo.findAll()
     .then( data => {
-      res.status(200).json(data)
+      if (data.length !== 0) {
+        res.status(200).json(data)
+      } else {
+        res.status(404).json([])
+      }
     })
     .catch( err => {
       res.status(500).json({error: err.message})
@@ -51,7 +54,7 @@ class TodoController {
       {
         title: title || '',
         description: description || '',
-        status: status || '',
+        status: status || false && '',
         due_date: due_date || ''
       },
       { 
@@ -67,7 +70,8 @@ class TodoController {
       }
     })
     .catch( err => {
-      res.status(400).json({error: err.message})
+      console.log(err);
+      res.status(500).json({error: err.message})
     })
   }
 

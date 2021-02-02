@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       validate: {
         function(instance) {
-          if (instance < new Date()) {
+          if (instance < new Date().toISOString()) {
             throw new Error("tanggal tidak valid")
           }
         }
