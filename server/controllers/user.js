@@ -1,6 +1,7 @@
 const { User } = require('../models');
 const { compare } = require('../helpers/bcrypt');
 const { genToken } = require('../helpers/jwt')
+const sendEmail = require('../helpers/mailgun');
 
 class UserController {
 
@@ -10,11 +11,14 @@ class UserController {
 
     User.create(newUser)
     .then((user) => {
-      res.status(201).json({
-        success: 'Registration success',
-        id: user.id,
-        email: user.email
-      })
+      if (user) {
+        sendEmail(user.email)
+        res.status(201).json({
+          success: 'Registration success',
+          id: user.id,
+          email: user.email
+        })
+      }
     })
     .catch((err) => {
       next(err);

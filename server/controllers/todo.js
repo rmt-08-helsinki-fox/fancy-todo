@@ -1,4 +1,5 @@
 const { Todo } = require('../models');
+const axios = require('axios');
 
 class TodoController {
 
@@ -20,14 +21,27 @@ class TodoController {
 
   static list(req, res, next) {
     const userId = req.decoded.id;
+    let dataTodos = null;
     Todo.findAll({
       where: {
         UserId: userId
       },
       order: [['id', 'asc']]
     })
-      .then((todo) => {
-        res.status(200).json(todo)
+      .then((todos) => {
+        dataTodos = todos;
+        //* untuk ganti kotanya harus tambah field kota di tabel Users 
+        //* payloadnya juga ditambahin kota
+        const secret = process.env.WEATHER_ACCESS_KEY
+
+        return axios.get(`http://api.weatherstack.com/current?access_key=${secret}&query=Yogyakarta`)
+      })
+      .then((response) => {
+        const send = {
+          todos: dataTodos,
+          weather: response.data
+        }
+        res.status(200).json(send)
       })
       .catch((err) => {
         next(err);
