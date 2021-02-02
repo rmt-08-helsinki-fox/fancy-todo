@@ -42,10 +42,10 @@ class UserController {
 
           res.status(200).json({ accessToken })
         } else {
-          throw { error: 'Your email or password is incorrect', status: 400 }
+          throw { name: 'CustomError', error: 'Your email or password is incorrect', status: 400 }
         }
       } else {
-        throw { error: 'Your email or password is incorrect', status: 400 }
+        throw { name: 'CustomError', error: 'Your email or password is incorrect', status: 400 }
       }
     })
     .catch((err) => {

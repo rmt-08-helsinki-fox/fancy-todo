@@ -1,16 +1,21 @@
 const errorHandler = (err, req, res, next) => {
   console.log(err);
+
+  let errMsg = [];
+  let status = 500;
+
   if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError' && err.errors.length > 0) {
-    let errMsg = err.errors.map(err => err.message);
-    let error = {errors: errMsg}
+    err.errors.forEach(err => errMsg.push(err.message));
+    status = 400;
 
-    res.status(400).json(error);
-  } else {
-    let errMsg = err.error || 'Internal server error';
-    let status = err.status || 500;
+  } else if(err.name === 'JsonWebTokenError') {
+    errMsg.push(err.message);
 
-    res.status(status).json({ error: errMsg});
-  }
+  } else if (err.name === 'CustomError') {
+    errMsg.push(err.error);
+    status = err.status;
+  } 
+  res.status(status).json({ errors: errMsg});
 }
 
 module.exports = errorHandler;

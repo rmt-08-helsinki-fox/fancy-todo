@@ -12,10 +12,12 @@ const authenticate = (req, res, next) => {
     
     next();
   } catch (err) {
-    console.log(err);
-    res.status(401).json({
-      error: 'Invalid Token'
-    })
+    console.log('==================');
+    console.log(err, 'eror di file authenticate');
+    // res.status(401).json({
+    //   error: 'Invalid Token'
+    // })
+    next(err)
   }
 }
 

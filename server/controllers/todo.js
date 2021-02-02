@@ -46,7 +46,7 @@ class TodoController {
         if (todo) {
           res.status(200).json(todo)
         } else {
-          throw { error: 'Todo Not Found', status: 404}
+          throw { name: 'CustomError', error: 'Todo Not Found', status: 404}
         }
       })
       .catch((err) => {
@@ -69,7 +69,7 @@ class TodoController {
         if (todo[0] > 0) {
           res.status(200).json(todo[1][0])
         } else {
-          throw { error: 'Todo Not Found', status: 404 };
+          throw { name: 'CustomError', error: 'Todo Not Found', status: 404 };
         }
       })
       .catch((err) => {
@@ -93,7 +93,7 @@ class TodoController {
         if (todo[0] > 0) {
           res.status(200).json(todo[1][0])
         } else {
-          throw { error: 'Todo Not Found', status: 404 }
+          throw { name: 'CustomError', error: 'Todo Not Found', status: 404 }
         }
       })
       .catch((err) => {
@@ -113,7 +113,7 @@ class TodoController {
         if (todo) {
           res.status(200).json({ message: 'todo success to delete' })
         } else {
-          throw { error: 'Todo Not Found', status: 404 }
+          throw { name: 'CustomError', error: 'Todo Not Found', status: 404 }
         }
       })
       .catch((err) => {

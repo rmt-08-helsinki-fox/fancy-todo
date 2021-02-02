@@ -11,11 +11,11 @@ const authorize = (req, res, next) => {
     }
   })
   .then((todo) => {
-    if (!todo) throw { error: 'Todo Not Found', status: 404 }
+    if (!todo) throw { name: 'CustomError', error: 'Todo Not Found', status: 404 }
     if (todo.UserId === userId) {
       next()
     } else {
-      throw { error: 'Not Authorize', status: 401}
+      throw { name: 'CustomError',  error: 'Not Authorize', status: 401}
     }
   })
   .catch((err) => {
