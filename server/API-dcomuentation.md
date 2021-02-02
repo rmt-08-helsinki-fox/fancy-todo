@@ -473,7 +473,7 @@ OR
     "message": "not Authorized"
 }
 ```
-
+---
 * **Method:**
 
     `Delete /todos/:id`
@@ -517,6 +517,116 @@ OR
 ```
 {
     "message": "error, not found"
+}
+```
+OR
+* **Error response**
+
+    * **_response (401 - Unauthorized)_**
+```
+{
+    "message": "invalid token"
+}
+```
+OR
+* **Error response**
+
+    * **_response (403 - forbiden)_**
+```
+{
+    "message": "not Authorized"
+}
+```
+
+---
+* **Method:**
+
+    `Get /todos/weather/today`
+
+> get weather infromation for today
+
+* **URL params:**
+
+    ```
+    None
+    ```
+
+* **data Params:**
+
+    ```
+    location : [string] <name of city/location>
+    ```
+
+*  **success response**
+
+    * **_response (200)_**
+```
+{
+    "coord": {
+        "lon": 107.6186,
+        "lat": -6.9039
+    },
+    "weather": [
+        {
+            "id": 500,
+            "main": "Rain",
+            "description": "light rain",
+            "icon": "10n"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 294.83,
+        "feels_like": 297.38,
+        "temp_min": 294.83,
+        "temp_max": 294.83,
+        "pressure": 1011,
+        "humidity": 86,
+        "sea_level": 1011,
+        "grnd_level": 929
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 1.12,
+        "deg": 276
+    },
+    "rain": {
+        "1h": 0.1304
+    },
+    "clouds": {
+        "all": 100
+    },
+    "dt": 1612274069,
+    "sys": {
+        "country": "ID",
+        "sunrise": 1612219876,
+        "sunset": 1612264504
+    },
+    "timezone": 25200,
+    "id": 1650357,
+    "name": "Bandung",
+    "cod": 200
+}
+```
+
+* **Error response**
+
+
+    * **_response (500 - internal error)_**
+```
+{
+    "message": "internal server error"
+}
+```
+
+OR
+
+* **_response (400 - Bad request)_**
+```
+{
+    "message": [
+        "location cannot be empty"
+    ]
 }
 ```
 OR

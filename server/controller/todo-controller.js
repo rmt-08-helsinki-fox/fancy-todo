@@ -115,7 +115,7 @@ class Todo2 {
     }
 
     static getWeather(req,res, next) {
-      let location = req.query.location
+      let location = req.body.location
       axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${WEATHERKEY}`)
         .then(weather => {
           res.status(200).json(weather.data)
