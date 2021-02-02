@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
         isNextDay: function (value){
           if(value < new Date()){
-            throw new Error
+            throw 'Cannot input past day in due_date parameter'
           }
         }
       }
