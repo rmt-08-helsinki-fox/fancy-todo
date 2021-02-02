@@ -13,5 +13,7 @@ module.exports = (err, req, res, next) => {
   } else if (err.name == `SequelizeUniqueConstraintError`) {
     const error = err.errors.map(element => element.message)
     res.status(400).json({ error })
+  } else if (err.name == 'SequelizeDatabaseError') {
+    res.status(500).json({ error: [`Internal server errors`] })
   }
 }

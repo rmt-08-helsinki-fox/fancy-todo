@@ -20,21 +20,10 @@ class UserController {
       })
       .catch(err => {
         next(err)
-        // const messages = {}
-        // if (err.errors.length > 0) {
-        //   err.errors.forEach(element => {
-        //       if (messages.message == undefined) {
-        //           messages.message = []
-        //       }
-        //       messages.message.push(element.message)
-        //   })
-        //   res.status(400).json(messages)
-        // }
       })
   }
   // User Login
   static login(req, res) {
-    // const { email, password } = req.body
     User.findOne({
       where: {
         email: req.body.email

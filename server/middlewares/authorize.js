@@ -2,22 +2,23 @@
 const { User, Todo } = require('../models')
 
 const authorize = function(req, res, next) {
-  let obj = {}
-  console.log(req.decoded.id)
-  User.findOne({
+  Todo.findOne({
     where: {
-      id: req.params.id,
-      email: req.decoded.email
+      id: +req.params.id
     }
   })
     .then(data =>{
       console.log(data)
-      next()
+      if (data.UserId === +req.decoded.id) {
+        next()
+      } else {
+        res.status(401).json({
+          message: [`Not Authorized`]
+        })
+      }
     })
     .catch(err => {
-      res.status(401).json({
-        message: `Not Auhtorized`
-      })
+      next(err)
     })
 }
 

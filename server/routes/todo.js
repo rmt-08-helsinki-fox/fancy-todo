@@ -14,13 +14,13 @@ router.get('/', TodoController.getTodos) // user authentication
 
 // authorize masih error , put sama patch masih kurang error handler misal datanya tidak di centang atau null
 // GET TODOS BY ID
-router.get('/:id', TodoController.getTodosById) // user authorize findOne(bersadararkan name)
+router.get('/:id', authorize, TodoController.getTodosById) // user authorize findOne(bersadararkan name)
 // PUT TODOS BY ID - UPDATE ALL ROWS
-router.put('/:id', TodoController.updateTodosAll) // user authorize
+router.put('/:id', authorize, TodoController.updateTodosAll) // user authorize
 // PATCH TODOS BY ID - UPDATE SELECTED ROWS
-router.patch('/:id', TodoController.updateTodosSelectedRows) // user authorize
+router.patch('/:id', authorize, TodoController.updateTodosSelectedRows) // user authorize
 // DELETE TODOS BY ID
-router.delete('/:id', TodoController.deleteTodos) // user authorize
+router.delete('/:id', authorize, TodoController.deleteTodos) // user authorize
 
 
 module.exports = router

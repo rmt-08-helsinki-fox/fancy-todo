@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: `Invalid email format`
         },
         notNull: {
-          msg: `Email is required`
+          msg: `Email is required field`
         }
       },
       unique: true
@@ -40,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           args: true,
-          msg: `password is required`
+          msg: `Password is required`
         },
         notNull: {
-          msg: `Password is required`
+          msg: `Password is required field`
         }
       }
     }
