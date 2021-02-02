@@ -26,11 +26,25 @@ module.exports = (sequelize, DataTypes) => {
       },
       unique: {
         args: true,
-        msg: 'This email already registered'
+        msg: 'This email has been used'
       }
     },
     password: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'password cannot be empty'
+        },
+        notNull: { // khusus untuk null
+          msg: "password cannot be empty"
+        },
+        len: {
+          args: [6,30],
+          msg: 'minimum password length is 6 characters'
+        }
+      }
     }
   }, {
     hooks: {

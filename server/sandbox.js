@@ -1,7 +1,11 @@
 console.log(new Date())
 
-// contoh error
+// token test
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0ZXNAZ21haWwuY29tIiwiaWF0IjoxNjEyMjY4NjczfQ.KiE0tHsc0DVO--w4vZSxNd9j8J5hKfEsGIAY1ZvQVyA"
+}
 
+// contoh error
 {
     "name": "SequelizeValidationError",
     "errors": [

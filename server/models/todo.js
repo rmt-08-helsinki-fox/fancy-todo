@@ -21,11 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: {
+        notEmpty: { // null masih dianggap valid
           // args: true,  
           msg: 'title cannot be empty'
         },
-        notNull: {
+        notNull: { // khusus untuk null
           msg: "Title cannot be empty"
         }
       }
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isAfter: {
           args: formatDate(new Date()),
-          msg: 'choose date after today'
+          msg: 'choose date at least today'
         }
       }
     },

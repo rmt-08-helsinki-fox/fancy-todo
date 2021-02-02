@@ -3,52 +3,60 @@ const { Todo }= require('../models/index.js');
 
 class TodoController {
 
-  static postTodos (req, res) {
+  static postTodos (req, res, next) {
     let { title, description, status, due_date } = req.body;
-    Todo.create({title,description,status, due_date, UserId: 1}) //harus diganti nanti
+    let UserId = req.decoded.id;
+    Todo.create({title,description,status, due_date, UserId})
     .then((data)=> {
       res.status(201).json(data);
     })
     .catch((err)=> {
-      console.log(err)
-      if (err.name === 'SequelizeValidationError') {
-        res.status(400).json(err.errors)
-      } else {
-        res.status(500).json({ message: 'internal server error' });
+      next(err);
+    //   console.log(err)
+    //   if (err.name === 'SequelizeValidationError') {
+    //     res.status(400).json(err.errors)
+    //   } else {
+    //     res.status(500).json({ message: 'internal server error' });
+    //   }
+    })
+  }
+
+  static getTodos (req, res, next) {
+    let loggedUserId = +req.decoded.id;
+    Todo.findAll({
+      where: {
+        UserId: loggedUserId
       }
     })
-  }
-
-  static getTodos (req, res) {
-    Todo.findAll()
     .then(data => {
-      res.status(200).json(data);
+        res.status(200).json(data);
     })
     .catch(err => {
-      console.log(err)
-      const message = err || 'Internal server error';
-        res.status(500).json({ message })
+      next(err)
     })
   }
 
-  static getTodoById (req, res) {
+  static getTodoById (req, res, next) {
     let todoId = +req.params.id;
 
     Todo.findByPk(todoId)
     .then(data => {
       if (!data) {
-        throw { msg: 'error not found' }
+        throw {
+          name: "customError",
+          msg: "Error not found",
+          status: 404
+        };
       } else {
         res.status(200).json(data);
       }
     })
     .catch(err => {
-      console.log(err);
-      res.status(404).json(err);
+      next(err);
     })
   }
 
-  static putTodoById (req, res) {
+  static putTodoById (req, res, next) {
     let todoId = +req.params.id;
     let { title, description, status, due_date } = req.body;
 
@@ -58,25 +66,22 @@ class TodoController {
     })
     .then(data => {
       if (!data[0]) {
-        throw { msg: 'error not found' } 
+        throw {
+          name: "customError",
+          msg: "Error not found",
+          status: 404
+        };
       } else {
         console.log(data);
         res.status(200).json(data[1][0]);
       }
     })
     .catch(err => {
-      console.log(err);
-      if(err.name === 'SequelizeValidationError') {
-        res.status(400).json(err.errors)
-      } else if (err.msg) {
-        res.status(404).json(err);
-      } else {
-        res.status(500).json({message: 'internal server error'});
-      }
+      next(err)
     })
   }
 
-  static patchTodoById (req, res) {
+  static patchTodoById (req, res, next) {
     let todoId = +req.params.id;
     let status = req.body.status;
     Todo.update({status},{
@@ -85,24 +90,21 @@ class TodoController {
     })
     .then(data => {
       if (!data[0]) {
-        throw { msg: 'error not found' } 
+        throw {
+          name: "customError",
+          msg: "Error not found",
+          status: 404
+        }; 
       } else {
       res.status(200).json(data[1][0]);
       }
     })
-    .catch(err=> {
-      console.log(err);
-      if(err.name === 'SequelizeValidationError') {
-        res.status(400).json(err.errors)
-      } else if (err.msg){
-        res.status(404).json(err);
-      } else {
-        res.status(500).json({error: 'internal server error'});
-      }
+    .catch(err => {
+      next(err)
     })
   }
 
-  static delTodoById (req, res) {
+  static delTodoById (req, res, next) {
     let todoId = +req.params.id;
     Todo.destroy({
       where: { id: todoId }
@@ -110,17 +112,17 @@ class TodoController {
     .then((data) => {
       console.log(data);
       if (!data){ // if id not found data value is 0
-        throw { msg: 'error not found' } 
+        throw {
+          name: "customError",
+          msg: "Error not found",
+          status: 404
+        };
       } else {
         res.status(200).json({message: 'todo success to delete'})
       }
     })
     .catch(err => {
-      if (err.msg) {
-        res.status(404).json(err);
-      } else {
-        res.status(500).json({error: 'internal server error'});
-      }
+      next(err)
     })
   }
 }
