@@ -15,8 +15,7 @@ class userController {
         res.status(201).json({
           msg: 'Register success',
           id: user.id,
-          email: user.email,
-          password: user.password
+          email: user.email
         })
       }
 
