@@ -1,5 +1,5 @@
-# My Assets App Server
-My Assets App is an application to manage your assets. This app has : 
+# Fancy Todo App Server
+Fancy Todo App is an application to manage your Todo. This app has : 
 * RESTful endpoint for asset's CRUD operation
 * JSON formatted response
 
@@ -9,6 +9,8 @@ My Assets App is an application to manage your assets. This app has :
 ### GET /todos
 
 > Get all todos
+
+&nbsp;
 
 _Request Header_
 ```
@@ -22,7 +24,7 @@ _Request Body_
 not needed
 ```
 
-_Response (200)_
+_Response (200 - OK)_
 ```
 {
     "message": "Success",
@@ -49,11 +51,30 @@ _Response (200)_
     "response": true
 }
 ```
+_Response (404 - Not Found)_
+```
+{
+    "message": "Data not found",
+    "response": false
+}
+```
+
+_Response (401 - Unauthorized)_
+```
+{
+    "message": "Invalid token",
+    "response": false
+}
+```
+
+&nbsp;
 
 ---
 ### GET /todos/:id
 
 > Get todo by id
+
+&nbsp;
 
 _Request Header_
 ```
@@ -91,10 +112,24 @@ _Response (404 - Not Found)_
     "response": false
 }
 ```
+
+_Response (401 - Unauthorized)_
+```
+{
+    "message": "Invalid token",
+    "response": false
+}
+```
+
+&nbsp;
+
+
 ---
 ### POST /todos
 
 > Create new todo
+
+&nbsp;
 
 _Request Header_
 ```
@@ -142,9 +177,21 @@ _Response (400 - Bad Request)_
 }
 ```
 
+_Response (401 - Unauthorized)_
+```
+{
+    "message": "Invalid token",
+    "response": false
+}
+```
+
+&nbsp;
+
 ### PUT /todos/:id
 
 > Update todo by id
+
+&nbsp;
 
 _Request Header_
 ```
@@ -200,9 +247,21 @@ _Response (404 - Not Found)_
 }
 ```
 
+_Response (401 - Unauthorized)_
+```
+{
+    "message": "Invalid token",
+    "response": false
+}
+```
+
+&nbsp;
+
 ### PATCH /todos/:id
 
 > Update status by id
+
+&nbsp;
 
 _Request Header_
 ```
@@ -252,9 +311,21 @@ _Response (404 - Not Found)_
 }
 ```
 
+_Response (401 - Unauthorized)_
+```
+{
+    "message": "Invalid token",
+    "response": false
+}
+```
+
+&nbsp;
+
 ### DELETE /todos/:id
 
 > Delete todo by id
+
+&nbsp;
 
 _Request Header_
 ```
@@ -291,6 +362,14 @@ _Response (404 - Not Found)_
 ```
 {
     "message": "Data not found",
+    "response": false
+}
+```
+
+_Response (401 - Unauthorized)_
+```
+{
+    "message": "Invalid token",
     "response": false
 }
 ```

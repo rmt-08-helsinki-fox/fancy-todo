@@ -7,7 +7,11 @@ const mid = (req, res, next) => {
         req.decoded = verify;
         next();
     } else {
-        res.status(400).json('Invalid token');
+        const msg = {
+            message: 'Invalid token',
+            response: false
+        }
+        res.status(401).json(msg);
     }
 }
 

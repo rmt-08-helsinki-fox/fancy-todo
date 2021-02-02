@@ -36,6 +36,7 @@ class TodoController {
                 order: [['due_date', 'ASC']]
             }
             const todos = await Todo.findAll(opt);
+            if (todos.length === 0) throw 404;
             const msg = {
                 message: 'Success',
                 data: todos,
@@ -43,11 +44,15 @@ class TodoController {
             }
             res.status(200).json(msg);
         } catch (err) {
-            const msg = {
-                message: err,
-                response: false
-            }
-            res.status(500).json(msg);
+            if (err === 404) {
+                const msg = {
+                    message: 'Data not found',
+                    response: false
+                }
+                res.status(500).json(msg);
+            } else {
+                res.status(500).json(err)
+            };
         }
     }
     static async showTodo(req, res) {
