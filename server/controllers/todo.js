@@ -1,9 +1,8 @@
-const { Todo } = require('../models')
-
+const { Todo } = require('../models');
 
 class TodoController {
 
-  static create(req, res) {
+  static create(req, res, next) {
     const userId = req.decoded.id
     const { title, description, status, due_date } = req.body;
     const newTodo = { title, description, status, due_date, UserId: userId };
@@ -15,28 +14,27 @@ class TodoController {
         }
       })
       .catch((err) => {
-        if (err.name === 'SequelizeValidationError' && err.errors.length > 0) {
-          let errMsg = err.errors.map(err => err.message);
-          let error = { errors: errMsg }
-
-          res.status(400).json(error);
-        } else {
-          res.status(500).json(err)
-        }
+        next(err);
       })
   }
 
-  static list(req, res) {
-    Todo.findAll()
+  static list(req, res, next) {
+    const userId = req.decoded.id;
+    Todo.findAll({
+      where: {
+        UserId: userId
+      },
+      order: [['id', 'asc']]
+    })
       .then((todo) => {
         res.status(200).json(todo)
       })
       .catch((err) => {
-        res.status(500).json(err)
+        next(err);
       })
   }
 
-  static todoById(req, res) {
+  static todoById(req, res, next) {
     const id = +req.params.id
 
     Todo.findOne({
@@ -53,14 +51,11 @@ class TodoController {
         }
       })
       .catch((err) => {
-        const errMsg = err.error || 'Internal server error';
-        const status = err.status || 500;
-
-        res.status(status).json({ error: errMsg});
+        next(err);
       })
   }
 
-  static updatePut(req, res) {
+  static updatePut(req, res, next) {
     const id = +req.params.id;
     const { title, description, status, due_date } = req.body;
     const input = { title, description, status, due_date }
@@ -80,21 +75,11 @@ class TodoController {
         }
       })
       .catch((err) => {
-        if (err.name === 'SequelizeValidationError' && err.errors.length > 0) {
-          let errMsg = err.errors.map(err => err.message);
-          let error = { errors: errMsg }
-
-          res.status(400).json(error);
-        } else {
-          const errorMessage = err.error || 'Internal server error';
-          const status = err.status || 500;
-
-          res.status(status).json({ error: errorMessage });
-        }
+        next(err);
       })
   }
 
-  static updatePatch(req, res) {
+  static updatePatch(req, res, next) {
     const id = +req.params.id;
     const status = req.body.status;
     const input = { status }
@@ -116,14 +101,11 @@ class TodoController {
         }
       })
       .catch((err) => {
-        const errorMessage = err.error || 'Internal server error';
-        const status = err.status || 500;
-
-        res.status(status).json({ error: errorMessage });
+        next(err);
       })
   }
 
-  static delete(req, res) {
+  static delete(req, res, next) {
     const id = +req.params.id
 
     Todo.destroy({
@@ -140,10 +122,7 @@ class TodoController {
         }
       })
       .catch((err) => {
-        const errorMessage = err.error || 'Internal server error';
-        const status = err.status || 500;
-
-        res.status(status).json({ error: errorMessage });
+        next(err);
       })
   }
 }

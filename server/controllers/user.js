@@ -4,7 +4,7 @@ const { genToken } = require('../helpers/jwt')
 
 class UserController {
 
-  static register(req, res) {
+  static register(req, res, next) {
     const { email, password } = req.body;
     const newUser = { email, password };
 
@@ -17,18 +17,11 @@ class UserController {
       })
     })
     .catch((err) => {
-      if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError' && err.errors.length > 0) {
-        let errMsg = err.errors.map(err => err.message);
-        let error = {errors: errMsg}
-
-        res.status(400).json(error);
-      } else {
-        res.status(500).json(err);
-      }
+      next(err);
     })
   }
 
-  static login(req, res) {
+  static login(req, res, next) {
     const { email, password } = req.body;
 
     User.findOne({
@@ -56,10 +49,7 @@ class UserController {
       }
     })
     .catch((err) => {
-      const errMsg = err.error || 'Internal server error';
-      const status = err.status || 500;
-
-      res.status(status).json({ error: errMsg});
+      next(err);
     })
   }
 }

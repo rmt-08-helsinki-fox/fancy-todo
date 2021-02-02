@@ -6,11 +6,10 @@ const authorize = require('../middlewares/authorize');
 const router = express.Router();
 
 router.use(authenticate);
-
-router.post('/', authorize, TodoController.create);
-router.get('/', TodoController.list);
-
 router.use(authorize);
+
+router.post('/', TodoController.create);
+router.get('/', TodoController.list);
 
 router.get('/:id', TodoController.todoById);
 router.put('/:id', TodoController.updatePut);
