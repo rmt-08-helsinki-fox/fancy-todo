@@ -1,7 +1,6 @@
-## FANCY_TODOS ##
-----
+# FANCY_TODOS #
 
-### ENDPOINTS:
+## ENDPOINTS:
 - `POST /todos`
 - `GET /todos`
 - `GET /todos/:id`
@@ -13,8 +12,9 @@
 - `POST /register`
 ----
 
-#### Create Todos
+### Create Todos
 > POST /todos
+
 _Request Header_
 ```json
   {
@@ -40,7 +40,8 @@ _Response (201)_
     "title" : "coding",
     "description" : "don't forget your drink",
     "status": "false",
-    "due_date": "2021-02-02"
+    "due_date": "2021-02-02",
+    "UserId": 1
   }
 ```
 _Response (400)_
@@ -57,8 +58,9 @@ _Response (500)_
 ```
 ---
 
-#### Read Todos
+### Read Todos
 > GET /todos
+
 _Request Header_
 ```json
   {
@@ -75,15 +77,28 @@ _Request Body_
 ```
 _Response (200)_
 ```json
+[
   {
     "id": 1,
     "title" : "coding",
     "description" : "don't forget your drink",
     "status": "false",
     "due_date": "2021-02-02",
+    "UserId": 1,
+    "createdAt": <Automatically insert by default>,
+    "uodatedAt": <Automatically insert by default>
+  },
+  {
+    "id": 2,
+    "title" : "coding",
+    "description" : "don't forget your drink",
+    "status": "false",
+    "due_date": "2021-02-02",
+    "UserId": 1,
     "createdAt": <Automatically insert by default>,
     "uodatedAt": <Automatically insert by default>
   }
+]
 ```
 _Response (500)_
 ```json
@@ -93,8 +108,9 @@ _Response (500)_
 ```
 ---
 
-#### Read Todos By Id
+### Read Todos By Id
 > GET /todos/:id
+
 _Request Header_
 ```json
   {
@@ -137,8 +153,9 @@ _Response (500)_
 ```
 ---
 
-#### Update Todos
+### Update Todos
 > PUT /todos/:id
+
 _Request Header_
 ```json
   {
@@ -187,8 +204,9 @@ _Response (500)_
 ```
 ---
 
-#### Update status Todos
+### Update status Todos
 > PATCH /todos/:id
+
 _Request Header_
 ```json
   {
@@ -235,8 +253,9 @@ _Response (500)_
 ```
 ---
 
-#### Delete Todos
+### Delete Todos
 > DELETE /todos/:id
+
 _Request Header_
 ```json
   {
@@ -273,8 +292,9 @@ _Response (500)_
 ```
 ---
 
-#### Register User
+### Register User
 > POST /register
+
 _Request Header_
 ```json
   no needed
@@ -304,8 +324,10 @@ _Response (500)_
   }
 ```
 ---
-#### Login User
+
+### Login User
 > POST /login
+
 _Request Header_
 ```json
   no needed
@@ -339,4 +361,3 @@ _Response (500)_
     "message": "Error in internal server"
   }
 ```
----

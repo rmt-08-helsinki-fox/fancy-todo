@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Todo)
     }
   };
   User.init({
@@ -24,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           msg: 'Email is required'
         }
+      },
+      unique: {
+        msg: 'Email is already register'
       }
     },
     password: {

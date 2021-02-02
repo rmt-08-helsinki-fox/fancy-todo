@@ -2,12 +2,13 @@ const { Todo } = require('../models')
 
 class todoController {
   static async readAll (req, res) {
-    // res.send('masuk controller')
     try {
-      const read = await Todo.findAll()
-      // console.log('masuk')
+      const UserId = req.user.id
+      // const read = await Todo.findAll()
+      const read = await Todo.findAll({ where: { UserId } })
       res.status(200).json(read)
     } catch (err) {
+      console.log(err)
       res.status(500).json(err)
     }
   }
@@ -28,18 +29,21 @@ class todoController {
   }
   static async createTodo (req, res) {
     const { title, description, status, due_date } = req.body
+    const UserId = req.user.id
     // console.log(req.body)
     try {
       const create = await Todo.create({
         title,
         description,
         status,
-        due_date
+        due_date,
+        UserId
       })
+      // console.log(create)
       res.status(201).json(create)
     } catch (err) {
-      res.status(500).json(err)
       console.log(err)
+      res.status(500).json(err)
     }
   }
   static async putTodo (req, res) {

@@ -2,7 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const todos = require('../routes/todos');
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -12,12 +11,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User)
     }
   };
   Todo.init({
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Title is required'
+        },
+      } 
+    },
     description: DataTypes.STRING,
-    status: DataTypes.BOOLEAN,
+    status: {
+      type: DataTypes.BOOLEAN,
+      validate: {
+        notEmpty: {
+          msg: 'Description is required'
+        }
+      }
+    },
     due_date: {
       type: DataTypes.DATE,
       validate: {
@@ -27,7 +41,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Due date must greater then today'
         }
       }
-    }
+    },
+    UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Todo'
