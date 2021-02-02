@@ -12,12 +12,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      User.hasMany(models.Todo)
     }
   };
   User.init({
     email: {
       type: DataTypes.STRING,
+      notEmpty: {
+        args: true,
+        msg: 'You must fill the email form'
+      },
       unique: {
         args: true,
         msg: 'Email already registered'
@@ -27,7 +31,13 @@ module.exports = (sequelize, DataTypes) => {
         msg: 'Must be email format'
       }
     },
-    password: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      len: {
+        args: 5,
+        msg: 'Minimum password length is 5 characters'
+      }
+    }
   }, {
     hooks: {
       beforeCreate: (instance => {
