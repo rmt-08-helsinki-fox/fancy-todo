@@ -22,7 +22,11 @@ class UserController {
       })
       .catch(err => {
         console.log(err);
-        res.status(400).json(err)
+        if (err.errors[0].message === 'Invalid email format') {
+          res.status(400).json(err.errors[0].message)
+        } else {
+          res.status(500).json(err)
+        }
       })
   }
   static signIn(req,res){

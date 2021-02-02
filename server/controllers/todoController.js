@@ -1,14 +1,15 @@
 const { Todo } = require('../models');
 
 class TodoController{
-	static createTodo(req,res){
-		const { title,description,status,due_date } = req.body
+	static createTodo(req,res,next){
+		const { title,description,status,due_date,UserId } = req.body
 		Todo
 			.create({
 				title,
 				description,
 				status,
-				due_date
+				due_date,
+				UserId
 			},{
 				returning: true
 			})
@@ -16,26 +17,22 @@ class TodoController{
 				res.status(201).json(todo)
 			})
 			.catch(err => {
-				console.log(err);
-				if (err.message === 'invalid date') res.status(400).json(err)
-				else {
-					res.status(500).json(err)
-				}
+				next(err)
 			})
 	}
-	static getAllTodo(req,res){
+	static getAllTodo(req,res,next){
 		Todo
 			.findAll()
 			.then(todos => {
 				res.status(200).json(todos)
 			})
 			.catch(err => {
-				console.log(err);
-				res.status(500).json(err)
+				next(err)
 			})
 	}
-	static getAllTodoById(req,res){
+	static getTodoById(req,res,next){
 		const id = +req.params.id
+		// console.log(id);
 		Todo
 			.findOne({
 				where: {
@@ -47,11 +44,11 @@ class TodoController{
 				res.status(200).json(todo)
 			})
 			.catch(err => {
-				console.log(err);
-				res.status(404).json(err)
+				// console.log('masuk sini >>>>>>>>>>>>>>>');
+				next(err)
 			})
 	}
-	static updateTodo(req,res){
+	static updateTodo(req,res,next){
 		const { title,description,status,due_date } = req.body
 		const id = +req.params.id
 		Todo
@@ -68,20 +65,14 @@ class TodoController{
 			})
 			.then(todo => {
 				if (!todo[0]) throw { msg: `there is no todo with id: ${id}` }
-				console.log(todo);
-				res.status(200).json(todo)
+				console.log(todo[1]);
+				res.status(200).json(todo[1])
 			})
 			.catch(err => {
-				console.log(err);
-				if (err.message === 'invalid date') res.status(400).json(err)
-				else if (err.msg){
-					res.status(404).json(err)
-				} else {
-					res.status(500).json(err)
-				}
+				next(err)
 			})
 	}
-	static updateStatusTodo(req,res){
+	static updateStatusTodo(req,res,next){
 		const { status } = req.body
 		const id = +req.params.id
 		Todo
@@ -97,11 +88,7 @@ class TodoController{
 				res.status(200).json(todo)
 			})
 			.catch(err => {
-				console.log(err);
-				if(err.msg) res.status(404).json(err)
-				else{
-					res.status(500).json(err)
-				}
+				next(err)
 			})
 	}
 	static destroyTodo(req,res){
@@ -118,11 +105,7 @@ class TodoController{
 				res.status(200).json({ msg })
 			})
 			.catch(err => {
-				console.log(err);
-				if (err.msg) res.status(404).json(err)
-				else {
-					res.status(500).json(err)
-				}
+				next(err)
 			})
 	}
 }
