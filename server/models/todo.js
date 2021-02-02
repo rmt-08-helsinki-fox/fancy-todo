@@ -35,18 +35,19 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.BOOLEAN,
       validate: {
-        notEmpty: {
-          args: true,
-          msg: 'status is required field'
+        isBoolean (value){
+          if(typeof value !== "boolean"){
+            throw new Error('Status must filled by true/false')
+          }
         }
       }
     },
     due_date: {
       type: DataTypes.DATE,
       validate: {
-        notEmpty: {
-          args: true,
-          msg: 'date is required field'
+        isAfter: {
+          args: String(new Date()),
+          msg: 'Cannot enter a date that has passed'
         }
       }
     }
