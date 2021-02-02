@@ -13,14 +13,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Todo,{foreignKey:"UserId"})
     }
   };
   User.init({
     email: {
       type: DataTypes.STRING,
+      validate:{
+        isEmail:{
+          args : true,
+          msg: "Invalid Email Format",
+        }
+      },
       unique:true
     },
-    password: DataTypes.STRING
+    password: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      validate:{
+        notEmpty:true
+      }
+    }
   }, {
     hooks:{
       beforeCreate: (user,opt)=>{

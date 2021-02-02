@@ -1,46 +1,6 @@
 const {Todo, User} = require("../models/index")
-const {compare} = require("../helpers/bcrypt")
-const {token} = require("../helpers/generateToken")
 
-class Controller{
-
-    static postRegister(req,res){
-        const { email, password } = req.body
-        // console.log(req.body);
-        User.create({email, password})
-        .then((user)=>{
-            res.status(201).json({
-                msg:"Register Success",
-                id: user.id,
-                email: user.email
-            })
-        })
-        .catch((err)=>{
-            res.status(400).json(err)
-        })
-    }
-
-    static postLogin(req,res){
-        const { email, password } = req.body
-        User.findOne({where:{email}})
-        .then((user)=>{
-            if (!user) throw { msg: "invalid pass or email"}
-            const match = compare(password, user.password)
-            if (match) {
-                const accessToken = token({
-                    email,
-                    password
-                })
-                console.log(accessToken);
-                res.status(200).json({accessToken})
-            } else {
-                throw { msg: "invalid pass or email"}
-            }
-        })
-        .catch((err)=>{
-            res.status(400).json(err.msg)
-        })
-    }
+class TodoController{
 
     static showTodo(req,res){
         Todo.findAll()
@@ -54,11 +14,13 @@ class Controller{
 
     static postTodo(req, res){
         const {title, description, status, due_date} = req.body
+        const {id} = req.decoded
         let newTodo = {
-            title, 
-            description, 
-            status, 
-            due_date
+            title,
+            description,
+            status,
+            due_date,
+            UserId: id
         }
         Todo.create(newTodo)
         .then((result)=>{
@@ -95,14 +57,17 @@ class Controller{
     }
 
     static putTodo(req,res){
-        const {id} = req.params 
+        const {id} = req.params
+        const UserId = req.decoded.id
         const {title, description, status, due_date} = req.body
         let editTodo = {
             title, 
             description, 
             status, 
-            due_date
-        } 
+            due_date,
+            UserId
+        }
+        console.log(editTodo);
         Todo.update(editTodo,{
             where:{
                 id : +id
@@ -119,6 +84,7 @@ class Controller{
                 }
             }
         })
+
         .catch((err)=>{
             if (err.name === "SequelizeValidationError") {
                 let errors = err.errors.map(error=>error.message)
@@ -195,4 +161,4 @@ class Controller{
     }
 }
 
-module.exports = Controller
+module.exports = TodoController
