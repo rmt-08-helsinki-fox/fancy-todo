@@ -14,7 +14,7 @@ const authorized = (req, res, next) => {
     if(data.UserId === req.dataUser.id){
       next()
     }else{
-      const err = {name: "custom", msg: "Unauthorized", status: 403}
+      const err = {name: "custom", msg: "Unauthorized", status: 401}
       next(err)
     }
   })

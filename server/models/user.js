@@ -20,10 +20,14 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         isEmail: {
           args: true,
           msg: "Invalid Email"
+        },
+        notNull: {
+          msg: "Email cannot be NULL"
         }
       },
       unique: {
@@ -33,10 +37,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         len: {
           args: 8,
           msg: "Password must at least 8 characters"
+        },
+        notNull: {
+          msg: "Password cannot be NULL"
         }
       }
     }
