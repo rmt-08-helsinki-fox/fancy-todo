@@ -36,7 +36,7 @@ class UserController {
                     // console.log('NOT MATCH');
                     throw {
                         error: {
-                            code: 404,
+                            code: 400,
                             message: 'invalid email or password'
                         }
 
@@ -46,7 +46,7 @@ class UserController {
             } else {
                 throw {
                     error: {
-                        code: 404,
+                        code: 400,
                         message: 'invalid email or password'
                     }
                 }

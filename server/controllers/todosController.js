@@ -6,11 +6,12 @@ class Controller {
         try {
             const { title, description, status, due_date } = req.body
             const newTodo = await Todo.create({
-                title, description, status, due_date
+                title, description, status, due_date, UserId: req.currentUser.id
             })
 
             res.status(201).json(newTodo)
         } catch (error) {
+            // console.log(error);
             let errorTypes = error.errors.map(e => {
                 return e.type
             })
@@ -28,6 +29,7 @@ class Controller {
 
     static async getTodos(req, res) {
         try {
+            // console.log(req.currentUser, '...,.,.,.,.,.,.<><><><><><><><');
             const todos = await Todo.findAll()
             res.status(200).json(todos)
         } catch (error) {
@@ -93,45 +95,38 @@ class Controller {
                 } else {
                     res.status(500).json({ error: { code: 500, message: 'internal server error' } })
                 }
-            } else if(error.error.code){
+            } else if (error.error.code) {
                 res.status(404).json(error)
             } else {
                 res.status(500).json({ error: { code: 500, message: 'internal server error' } })
             }
-        } 
+        }
     }
 
     static async patchTodo(req, res) {
         try {
             const todoId = +req.params.id
             let updatedTodo = {}
-            const key = Object.keys(req.body)[0]
+            const key = "status"
+            const { status } = req.body
+            
 
-            if(Object.keys(Todo.tableAttributes).includes(key)){
+            updatedTodo = await Todo.update({ status }, { where: { id: todoId }, returning: true })
 
-                updatedTodo = await Todo.update({ [key]: req.body[key] }, { where: { id: todoId }, returning: true })
-    
-                if (updatedTodo[0]) {
-                    res.status(200).json(updatedTodo[1])
-                } else {
-                    throw {
-                        error: {
-                            code: 404,
-                            message: 'id was not found'
-                        }
-                    }
-                }
+            if (updatedTodo[0]) {
+                res.status(200).json(updatedTodo[1])
             } else {
                 throw {
                     error: {
-                        code: 400,
-                        message: 'unknown key input'
+                        code: 404,
+                        message: 'id was not found'
                     }
                 }
             }
 
+
         } catch (error) {
-            
+
             if (error.errors) {
                 if (errors.length > 0) {
                     res.status(400).json({ error: { code: 400, message: 'invalid input' } })
