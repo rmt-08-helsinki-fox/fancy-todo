@@ -41,25 +41,25 @@ class UserController {
           res.status(401).json({
             message: 'Invalid email or password'
           })
-        }
-
-        const match = checkPassword(input.password, user.password)
-
-        if (match) {
-          const payload = {
-            id: user.id,
-            email: user.email
-          }
-
-          const access_token = generateToken(payload)
-
-          res.status(200).json({
-            access_token
-          })
         } else {
-          res.status(401).json({
-            message: 'Invalid email or password'
-          })
+          const match = checkPassword(input.password, user.password)
+  
+          if (match) {
+            const payload = {
+              id: user.id,
+              email: user.email
+            }
+  
+            const access_token = generateToken(payload)
+  
+            res.status(200).json({
+              access_token
+            })
+          } else {
+            res.status(401).json({
+              message: 'Invalid email or password'
+            })
+          }
         }
       })
       .catch(err => {
