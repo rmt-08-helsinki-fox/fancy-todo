@@ -2,13 +2,91 @@
 ---
 Fancy todo is an application to help make todo list.
 
-* **URL:**
+---
+* **Method:** 
 
-    `/todos`
+  `Post /user/register`
 
-* **method:** 
+> Making a new user register
 
-  `get`
+* **data Params:**
+
+    None
+
+* **data Params:**
+
+    ```
+    {
+    email:string,unique,email format "<email of user to register>"
+    password: string "<password of user>"
+    }
+    ```
+
+*  **success response**
+
+    * **_response (201)_**
+```
+{
+    "msg": "register succsess",
+    "id": 8,
+    "email": "surya@mail.com"
+}
+```
+* **Error response**
+
+    * **_response (400 - bad request)_**
+```
+{
+    "message": [
+        "email must be unique"
+    ]
+}
+```
+
+---
+* **Method:** 
+
+  `Post /user/login`
+
+> Making user logged in
+
+* **data Params:**
+
+    None
+
+* **data Params:**
+
+    ```
+    {
+    email:string,unique,email format "<email of user to register>"
+    password: string "<password of user>"
+    }
+    ```
+
+*  **success response**
+
+    * **_response (201)_**
+```
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJzdXJ5b0BtYWlsLmNvbSIsImlhdCI6MTYxMjI3MDg1OH0.2JiCNVS32BhRytg3K2DVmiQ2vjZZeGcaEeRWDjZYV_E"
+}
+```
+* **Error response**
+
+    * **_response (400 - bad request)_**
+```
+{
+    "message": [
+        "invalid email or password"
+    ]
+}
+```
+---
+
+* **Method:** 
+
+  `get /todos`
+
 > Get all todo-list in server
 
 * **data Params:**
@@ -49,14 +127,29 @@ Fancy todo is an application to help make todo list.
     "message": "internal server error"
 }
 ```
+OR
+* **Error response**
 
-* **URL:**
+    * **_response (401 - Unauthorized)_**
+```
+{
+    "message": "invalid token"
+}
+```
+OR
+* **Error response**
 
-    `/todos`
+    * **_response (403 - forbiden)_**
+```
+{
+    "message": "not Authorized"
+}
+```
+---
 
-* **method:** 
+* **Method:** 
 
-  `post`
+  `post /todos`
 > Add a new data into todo-list
 
 * **data Params:**
@@ -80,6 +173,7 @@ Fancy todo is an application to help make todo list.
         "title": "memasak nasi",
         "description": "memasak nasi untuk makan siang",
         "status": false,
+        "UserId": 1
         "due_date": "2021-02-03T00:00:00.000Z",
         "createdAt": "2021-02-01T12:24:20.270Z",
         "updatedAt": "2021-02-01T12:24:20.270Z"
@@ -110,20 +204,36 @@ OR
 }
 ```
 
-* **URL:**
+OR
+* **Error response**
 
-    `/todos/:id`
+    * **_response (401 - Unauthorized)_**
+```
+{
+    "message": "invalid token"
+}
+```
+OR
+* **Error response**
+
+    * **_response (403 - forbiden)_**
+```
+{
+    "message": "not Authorized"
+}
+```
+---
+* **Method**
+
+    `Get /todos/:id`
+
+> Get todo-list with spesific id
 
 * **URL Params:**
 
     ```
     id = [integer]
     ```
-
-* **method:** 
-
-  `Get`
-> Get todo-list with spesific id
 
 * **data Params:**
 
@@ -139,6 +249,7 @@ OR
         "title": "memasak nasi",
         "description": "memasak nasi untuk makan siang",
         "status": false,
+        "UserId": 1
         "due_date": "2021-02-03T00:00:00.000Z",
         "createdAt": "2021-02-01T12:24:20.270Z",
         "updatedAt": "2021-02-01T12:24:20.270Z"
@@ -164,20 +275,36 @@ OR
 }
 ```
 
-* **URL:**
+OR
+* **Error response**
 
-    `/todos/:id`
+    * **_response (401 - Unauthorized)_**
+```
+{
+    "message": "invalid token"
+}
+```
+OR
+* **Error response**
 
+    * **_response (403 - forbiden)_**
+```
+{
+    "message": "not Authorized"
+}
+```
+---
+* **Method:**
+
+    `Put /todos/:id`
+
+> Edit a spesific row of todo-list which match with url params id
 * **URL Params:**
 
     ```
     id = [integer]
     ```
 
-* **method:** 
-
-  `Put`
-> Edit a spesific row of todo-list which match with url params id
 
 * **data Params:**
 
@@ -200,6 +327,7 @@ OR
         "title": "memasak nasi",
         "description": "memasak nasi untuk makan siang",
         "status": false,
+        "UserId": 1
         "due_date": "2021-02-03T00:00:00.000Z",
         "createdAt": "2021-02-01T12:24:20.270Z",
         "updatedAt": "2021-02-01T12:24:20.270Z"
@@ -239,9 +367,31 @@ OR
 }
 ```
 
-* **URL:**
+OR
+* **Error response**
 
-    `/todos/:id`
+    * **_response (401 - Unauthorized)_**
+```
+{
+    "message": "invalid token"
+}
+```
+OR
+* **Error response**
+
+    * **_response (403 - forbiden)_**
+```
+{
+    "message": "not Authorized"
+}
+```
+---
+
+* **Method:**
+
+    `Patch /todos/:id`
+
+> Edit column status of todo-list which match with url params id
 
 * **URL Params:**
 
@@ -249,10 +399,6 @@ OR
     id = [integer]
     ```
 
-* **method:** 
-
-  `patch`
-> Edit column status of todo-list which match with url params id
 
 * **data Params:**
 
@@ -272,6 +418,7 @@ OR
         "title": "memasak nasi",
         "description": "memasak nasi untuk makan siang",
         "status": true,
+        "UserId": 1
         "due_date": "2021-02-03T00:00:00.000Z",
         "createdAt": "2021-02-01T12:24:20.270Z",
         "updatedAt": "2021-02-01T12:24:20.270Z"
@@ -308,20 +455,36 @@ OR
 }
 ```
 
-* **URL:**
+OR
+* **Error response**
 
-    `/todos/:id`
+    * **_response (401 - Unauthorized)_**
+```
+{
+    "message": "invalid token"
+}
+```
+OR
+* **Error response**
+
+    * **_response (403 - forbiden)_**
+```
+{
+    "message": "not Authorized"
+}
+```
+
+* **Method:**
+
+    `Delete /todos/:id`
+
+> Delete a spesific row of todo-list which match with url params id
 
 * **URL Params:**
 
     ```
     id = [integer]
     ```
-
-* **method:** 
-
-  `Delete`
-> Delete a spesific row of todo-list which match with url params id
 
 * **data Params:**
 
@@ -354,6 +517,24 @@ OR
 ```
 {
     "message": "error, not found"
+}
+```
+OR
+* **Error response**
+
+    * **_response (401 - Unauthorized)_**
+```
+{
+    "message": "invalid token"
+}
+```
+OR
+* **Error response**
+
+    * **_response (403 - forbiden)_**
+```
+{
+    "message": "not Authorized"
 }
 ```
 
