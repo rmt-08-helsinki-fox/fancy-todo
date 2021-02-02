@@ -16,22 +16,7 @@ class todoController {
       res.status(400).json(err)
     })
   }
-  // static addTodo(req, res) {
-  //   let {title, description, status, due_date} = req.body
-  //   let newtask = {title, description, status, due_date}
 
-  //   TODO.create(newtask, {returning: true})
-  //   console.log(newtask, "THIS IS THE TASK")
-  //   .then(todo => {
-  //     console.log('<<<<< INI DI THEN')
-  //     res.status(201).json(todo)
-  //   })
-  //   .catch(err => {
-  //     res.status(500).json({
-  //       msg: "Internal Server Error"
-  //     })
-  //   })
-  // }
   static getTodo(req, res) {
     TODO.findAll()
     .then(todo => {
@@ -81,7 +66,7 @@ class todoController {
     })
   }
   static updateStatus(req, res) {
-    TODO.update({status: req.bosy.status}, {
+    TODO.update({status: req.body.status}, {
       where: {
         id: +req.params.id
       }
@@ -102,12 +87,12 @@ class todoController {
     })
   }
   static deleteTodo(req, res) {
-    TODO.destroy({where:{id: +req.params.id}})
+    TODO.destroy({where:{id: +req.params.id}, returning: true})
     .then(todo => {
       if(!todo) {
         res.status(404).json({msg: "Error not found"})
       } else {
-        res,status(200).json({msg: "Todo Success to Delete"})
+        res.status(200).json({msg: "Todo Success to Delete"})
       }
     })
     .catch(err =>{

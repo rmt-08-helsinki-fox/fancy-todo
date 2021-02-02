@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      TODO.belongsTo(models.User, {foreignKey: 'userId'})
     }
   };
   TODO.init({
@@ -33,7 +34,19 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    status: DataTypes.STRING,
+    status: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          masg: "Status tidak boleh kosong"
+        },
+        isIn: {
+          args: [["Not Started", "In Progress", "Completed"]],
+          msg: `Input harus antara "Not Started", "In Progress", atau "Completed"`
+        }
+      }
+    },
     due_date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
@@ -47,6 +60,9 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Tanggal tidak boleh kosong"
         }
       }
+    },
+    userId: {
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
