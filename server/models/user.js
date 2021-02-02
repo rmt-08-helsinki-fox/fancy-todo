@@ -25,10 +25,6 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           msg: 'Email tidak boleh kosong!'
         }
-      },
-      unique: {
-        args: true,
-        msg: 'Email address already in use!'
       }
     },
     password: {

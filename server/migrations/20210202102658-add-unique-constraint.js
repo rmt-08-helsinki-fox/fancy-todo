@@ -8,10 +8,12 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.addIndex('Users', ['email'], {
-      indexName: 'email',
-      indicesType: 'UNIQUE'
-    })
+    await queryInterface.addConstraint('Users', {
+      fields: ['email'],
+      type: 'unique',
+      name: 'unique_constraint_email'
+    });
+
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -21,6 +23,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.removeIndex('Users', ['email']);
+    await queryInterface.removeConstraint('Users', ['email']);
   }
 };
