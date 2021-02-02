@@ -8,9 +8,10 @@ const authorize = require("../middlewares/authorize")
 router.use(authenticate)
 router.get('/', ToDoController.getToDos)
 router.post('/', ToDoController.addToDos)
+router.get('/weather', ToDoController.todayWeather)
 
 //authorize
-// router.use(authorize)
+router.use('/:id', authorize)
 router.get('/:id', ToDoController.getId)
 router.put('/:id', ToDoController.updateToDos)
 router.patch('/:id', ToDoController.patchToDos)

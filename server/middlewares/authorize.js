@@ -8,7 +8,7 @@ const authorize = function (req, res, next) {
         }
     })
         .then(user => {
-            if (req.decoded.id === user.id) {
+            if (req.decoded.id === user.user_id) {
                 next()
             } else {
                 res.status(401).json({ message: "Unauthorized user" })

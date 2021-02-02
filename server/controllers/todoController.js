@@ -1,4 +1,6 @@
 const { ToDo } = require('../models/index.js')
+const axios = require("axios")
+const WEATHER_KEY = process.env.WEATHER_KEY
 
 class ToDoController {
   static getToDos(req, res) {
@@ -18,9 +20,11 @@ class ToDoController {
     //tes dulu
     // console.log(req.body);
     // res.send('tes add')
+    const id = req.decoded.id
     const { title, description, status, due_date } = req.body
     ToDo.create({
-      title, description, status, due_date
+      title, description, status, due_date,
+      user_id: id
     })
       .then(data => {
         res.status(201).json(data)
@@ -105,6 +109,29 @@ class ToDoController {
         res.status(500).json(err)
       })
   }
+
+  // static todayWeather(req, res) {
+  //   axios.get(`api.openweathermap.org/data/2.5/weather?q=Jakarta&appid=7e1f5650eb1b7be903f2dd611b07d462&units=metric`)
+  //     .then(response => {
+  //       res.json(response.data)
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       res.status(500).json(err.name)
+  //     })
+  // }
+
+  static todayWeather(req, res) {
+    axios.get(`http://api.weatherstack.com/current?access_key=${WEATHER_KEY}&query=Jakarta&units=m`)
+      .then(response => {
+        res.json(response.data)
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err.name)
+      })
+  }
+
 }
 
 module.exports = ToDoController
