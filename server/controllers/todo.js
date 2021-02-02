@@ -8,7 +8,8 @@ class TodoController {
       title: title,
       description: description,
       status: false,
-      due_date: new Date(due_date)
+      due_date: new Date(due_date),
+      userId: req.user.id
     }, { returning: true })
     .then( data => {
       res.status(201).json(data)
@@ -28,6 +29,7 @@ class TodoController {
       }
     })
     .catch( err => {
+      console.log(err);
       res.status(500).json({error: err.message})
     })
   }
