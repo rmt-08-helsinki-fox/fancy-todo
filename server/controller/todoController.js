@@ -2,19 +2,23 @@ const { Todo } = require('../models');
 const axios = require('axios');
 
 class TodoController {
-    static async addTodo(req, res) {
+    static async addTodo(req, res, next) {
         try {
             const { title, description, status, due_date } = req.body;
             const newTodo = { title, description, status, due_date, user_id: req.decoded.id };
             const insertTodo = await Todo.create(newTodo);
+
+            // Shot api quotes
             const getQuotes = await axios({
                 method: 'get',
                 url: 'https://andruxnet-random-famous-quotes.p.rapidapi.com?cat=famous',
                 headers: {
-                    'x-rapidapi-key': '811c1c1887msh36a1db77eb2086bp1ee5b0jsn15179d1f82ae',
-                    'x-rapidapi-host': 'andruxnet-random-famous-quotes.p.rapidapi.com'
+                    'x-rapidapi-key': process.env.RAPIDAPI_KEY,
+                    'x-rapidapi-host': process.env.RAPIDAPI_HOST
                 },
             });
+
+
             const quotes = `${getQuotes.data[0].quote} --${getQuotes.data[0].author}`;
             const data = {
                 todo: insertTodo,
@@ -27,19 +31,10 @@ class TodoController {
             }
             res.status(201).json(msg);
         } catch (err) {
-            if (err.name === 'SequelizeValidationError') {
-                const validates = err.errors.map(e => e.message);
-                const msg = {
-                    message: validates,
-                    response: false
-                }
-                res.status(400).json(msg);
-            } else {
-                res.status(500).json(err);
-            };
+            next(err);
         }
     }
-    static async showAllTodos(req, res) {
+    static async showAllTodos(req, res, next) {
         try {
             const opt = {
                 where: {
@@ -56,18 +51,10 @@ class TodoController {
             }
             res.status(200).json(msg);
         } catch (err) {
-            if (err === 404) {
-                const msg = {
-                    message: 'Data not found',
-                    response: false
-                }
-                res.status(500).json(msg);
-            } else {
-                res.status(500).json(err)
-            };
+            next(err);
         }
     }
-    static async showTodo(req, res) {
+    static async showTodo(req, res, next) {
         try {
             const id = req.params.id;
             const opt = {
@@ -78,7 +65,7 @@ class TodoController {
             }
             const todo = await Todo.findOne(opt);
             if (!todo) {
-                throw 'Data not found';
+                throw 404;
             }
             const msg = {
                 message: 'Success',
@@ -87,18 +74,10 @@ class TodoController {
             }
             res.status(200).json(msg);
         } catch (err) {
-            const msg = {
-                message: err,
-                response: false
-            }
-            if (err === 'Data not found') {
-                res.status(404).json(msg);
-            } else {
-                res.status(500).json(msg)
-            };
+            next(err);
         }
     }
-    static async updateTodo(req, res) {
+    static async updateTodo(req, res, next) {
         try {
             const id = req.params.id;
             const { title, description, status, due_date } = req.body;
@@ -112,7 +91,7 @@ class TodoController {
             }
             const findTodo = await Todo.findOne(opt);
             if (!findTodo) {
-                throw '404';
+                throw 404;
             }
 
             const todo = await Todo.update(dataUpdate, opt);
@@ -123,25 +102,10 @@ class TodoController {
             }
             res.status(200).json(msg);
         } catch (err) {
-            if (err.name === 'SequelizeValidationError') {
-                const validates = err.errors.map(e => e.message);
-                const msg = {
-                    message: validates,
-                    response: false
-                }
-                res.status(400).json(msg);
-            } else if (err === '404') {
-                const msg = {
-                    message: 'Data not found',
-                    response: false
-                }
-                res.status(404).json(msg)
-            } else {
-                res.status(500).json(err);
-            };
+            next(err);
         }
     }
-    static async updateStatus(req, res) {
+    static async updateStatus(req, res, next) {
         try {
             const id = req.params.id;
             const { status } = req.body;
@@ -154,7 +118,7 @@ class TodoController {
                 returning: true
             }
             const findTodo = await Todo.findOne(opt);
-            if (!findTodo) throw '404';
+            if (!findTodo) throw 404;
 
             const todo = await Todo.update({ status }, opt);
             const msg = {
@@ -164,25 +128,10 @@ class TodoController {
             }
             res.status(200).json(msg);
         } catch (err) {
-            if (err.name === 'SequelizeValidationError') {
-                const validate = err.errors[0].message;
-                const msg = {
-                    message: validate,
-                    response: false
-                }
-                res.status(400).json(msg);
-            } else if (err === '404') {
-                const msg = {
-                    message: 'Data not found',
-                    response: false
-                }
-                res.status(404).json(msg)
-            } else {
-                res.status(500).json(err);
-            };
+            next(err);
         }
     }
-    static async destroy(req, res) {
+    static async destroy(req, res, next) {
         try {
             const id = req.params.id;
             const opt = {
@@ -192,7 +141,7 @@ class TodoController {
                 }
             }
             const findTodo = await Todo.findOne(opt);
-            if (!findTodo) throw '404';
+            if (!findTodo) throw 404;
             const todoDelete = await Todo.destroy(opt);
             const msg = {
                 message: 'Success',
@@ -201,15 +150,7 @@ class TodoController {
             }
             res.status(200).json(msg);
         } catch (err) {
-            if (err === '404') {
-                const msg = {
-                    message: 'Data not found',
-                    response: false
-                }
-                res.status(404).json(msg);
-            } else {
-                res.status(500).json(err);
-            }
+            next(err);
         }
     }
 }
