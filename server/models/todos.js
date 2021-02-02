@@ -41,11 +41,9 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       type: DataTypes.DATE,
       validate: {
-        notEmpty: {
-          msg: `Due date cannot be empty`
-        },
-        isAfter (date) {
-          if (date < new Date()) throw new Error (`Due date must be after ${new Date()}`)
+        validation (date) {
+          if (!date) throw new Error (`Due date cannot be empty`);
+          else if (date < new Date()) throw new Error (`Due date must be after ${new Date()}`);
         }
       }
     }
