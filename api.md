@@ -11,7 +11,9 @@ This fancy - todo is an application to manage your task. This fancy - app has:
 
 _Request Header_
 ```
-not needed
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bmlxdWVAbWFpbC5jb20iLCJpYXQiOjE2MTIyNTk3MTd9.G7ONNL8lFw7_wXoI-ThrDs3sfPalzS68EMY"
+}
 ```
 
 _Request Body_
@@ -40,42 +42,14 @@ _Response (201 - Created)_
 _Response (400 - Bad Request)_
 ```
 {
-    "name": "SequelizeValidationError",
-    "errors": [
-        {
-            "message": "Date must be more then today",
-            "type": "Validation error",
-            "path": "due_date",
-            "value": "2021-01-01",
-            "origin": "FUNCTION",
-            "instance": {
-                "id": null,
-                "title": "new challenge",
-                "description": "ganti",
-                "status": "completed",
-                "due_date": "2021-01-01",
-                "updatedAt": "2021-02-01T16:02:50.217Z"
-            },
-            "validatorKey": "isAfter",
-            "validatorName": "isAfter",
-            "validatorArgs": [
-                "2021-02-01"
-            ],
-            "original": {
-                "validatorName": "isAfter",
-                "validatorArgs": [
-                    "2021-02-01"
-                ]
-            }
-        }
-    ]
+    "error": "Date must be more then today"
 }
 ```
 
 _Response (500 - Internal Server Error)_
 ```
 {
-    msg : "Internal server error"    
+    "error" : "Internal server error"    
 }
 ```
 
@@ -85,7 +59,9 @@ _Response (500 - Internal Server Error)_
 
 _Request Header_
 ```
-not needed
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bmlxdWVAbWFpbC5jb20iLCJpYXQiOjE2MTIyNTk3MTd9.G7ONNL8lFw7_wXoI-ThrDs3sfPalzS68EMY"
+}
 ```
 
 _Request Body_
@@ -125,7 +101,7 @@ _Response (200 - OK)_
 _Response (500 - Internal Server Error)_
 ```
 {
-    msg : "Internal server error"    
+    "error" : "Internal server error"    
 }
 ```
 
@@ -135,7 +111,9 @@ _Response (500 - Internal Server Error)_
 
 _Request Header_
 ```
-not needed
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bmlxdWVAbWFpbC5jb20iLCJpYXQiOjE2MTIyNTk3MTd9.G7ONNL8lFw7_wXoI-ThrDs3sfPalzS68EMY"
+}
 ```
 
 _Request Body_
@@ -159,24 +137,26 @@ _Response (200 - OK)_
 _Response (400 - Not Found)_
 ```
 {
-    "msg": "Todo is not Found"
+    "error": "Todo is not Found"
 }
 ```
 
 _Response (500 - Internal Server Error)_
 ```
 {
-    msg : "Internal server error"    
+    "error" : "Internal server error"    
 }
 ```
 
 
-### PUT/:id
+### PUT/todos/:id
 > Update task by id
 
 _Request Header_
 ```
-not needed
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bmlxdWVAbWFpbC5jb20iLCJpYXQiOjE2MTIyNTk3MTd9.G7ONNL8lFw7_wXoI-ThrDs3sfPalzS68EMY"
+}
 ```
 
 _Request Body_
@@ -205,59 +185,33 @@ _Response (200 - OK)_
 _Response (400 - Bad Request)_
 ```
 {
-    "name": "SequelizeValidationError",
-    "errors": [
-        {
-            "message": "Date must be more then today",
-            "type": "Validation error",
-            "path": "due_date",
-            "value": "2021-01-01",
-            "origin": "FUNCTION",
-            "instance": {
-                "id": null,
-                "title": "new challenge",
-                "description": "ganti",
-                "status": "completed",
-                "due_date": "2021-01-01",
-                "updatedAt": "2021-02-01T16:02:50.217Z"
-            },
-            "validatorKey": "isAfter",
-            "validatorName": "isAfter",
-            "validatorArgs": [
-                "2021-02-01"
-            ],
-            "original": {
-                "validatorName": "isAfter",
-                "validatorArgs": [
-                    "2021-02-01"
-                ]
-            }
-        }
-    ]
+    "error": "Date must be more then today"
 }
 ```
 
 _Response (404 - Not Found)_
 ```
 {
-    "msg": "Todo not found"
+    "error": "Todo not found"
 }
 ```
 
 _Response (500 - Internal Server Error)_
 ```
 {
-    msg : "Internal server error"    
+    "error" : "Internal server error"    
 }
 ```
 
 
-### PATCH/:id
+### PATCH/todos/:id
 > Update status of task by id
 
 _Request Header_
 ```
-not needed
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bmlxdWVAbWFpbC5jb20iLCJpYXQiOjE2MTIyNTk3MTd9.G7ONNL8lFw7_wXoI-ThrDs3sfPalzS68EMY"
+}
 ```
 
 _Request Body_
@@ -283,24 +237,26 @@ _Response (200 - OK)_
 _Response (404 - Not Found)_
 ```
 {
-    "msg": "Todo not found"
+    "error": "Todo not found"
 }
 ```
 
 _Response (500 - Internal Server Error)_
 ```
 {
-    msg : "Internal server error"    
+    "error" : "Internal server error"    
 }
 ```
 
 
-### DELETE/:id
+### DELETE/todos/:id
 > Delete task by id
 
 _Request Header_
 ```
-not needed
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bmlxdWVAbWFpbC5jb20iLCJpYXQiOjE2MTIyNTk3MTd9.G7ONNL8lFw7_wXoI-ThrDs3sfPalzS68EMY"
+}
 ```
 
 _Request Body_
@@ -324,17 +280,93 @@ _Response (200 - OK)_
 _Response (404 - Not Found)_
 ```
 {
-    "msg": "Todo not found"
+    "error": "Todo not found"
 }
 ```
 
 _Response (500 - Internal Server Error)_
 ```
 {
-    msg : "Internal server error"    
+    "error" : "Internal server error"    
 }
 ```
 
+
+### POST/users/signup
+> Create new user
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+    "email" : "example@mail.com"
+    "password" : "password"
+}
+```
+
+_Response (201 - Created)_
+```
+{
+    "id": 3,
+    "email": "example@mail.com"
+}
+```
+
+_Response (400 - Bad Request)_
+```
+{
+    "error": "Invalid email format"
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+{
+    "error" : "Internal server error"    
+}
+```
+
+
+### POST/users/signin
+> Sign in to user created
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+    "email" : "example@mail.com"
+    "password" : "password"
+}
+```
+
+_Response (200 - OK)_
+```
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWiJ1bmlxdWVAbWFpbC5jb20iLCJpYXQiOjE2MTIyNjExOTB9.eRnxVX8kpJU55Ha_eU2ere-PVPJCLh2WXJvJMZabszU"
+}
+```
+
+_Response (400 - Bad Request)_
+```
+{
+    "error": "Email or password is wrong"
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+{
+    "error" : "Internal server error"    
+}
+```
 
 postman :
 https://www.getpostman.com/collections/688d28cbd5c620ab3527

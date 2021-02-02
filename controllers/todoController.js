@@ -13,9 +13,9 @@ class TodoController {
       res.status(201).json(newTodo)
     } catch (error) {
       if (error.name === 'SequelizeValidationError'){
-        res.status(400).json(error)
+        res.status(400).json({error : error.errors[0].message})
       } else {
-        res.status(500).json({msg : "Internal server error"})
+        res.status(500).json({error : "Internal server error"})
       }
     }
   }
@@ -26,7 +26,7 @@ class TodoController {
       let todos = await Todo.findAll()
       res.status(200).json(todos)
     } catch (error) {
-      res.status(500).json({msg : "Internal server error"})
+      res.status(500).json({error : "Internal server error"})
     }
   }
 
@@ -37,14 +37,16 @@ class TodoController {
       if (todo) {
         res.status(200).json(todo)
       } else {
-        res.status(404).json({msg : "Todo is not Found"})
+        throw ({msg : "Todo is not Found", status : 400})
       }
     } catch (error) {
-      res.status(500).json({msg : "Internal server error"})
+      const status = error.status || 500
+      const err = error.msg || "Internal server error"
+      res.status(status).json({error : err})
     }
   }
 
-  static async putTodo(req, res) {
+  static async updateTodo(req, res) {
     try {
       const id = +req.params.id
       const {title, description, status, due_date} = req.body
@@ -70,17 +72,15 @@ class TodoController {
       })
 
       if (todo[0] === 0){
-        res.status(404).json({msg: 'Todo is not found'})
+        throw ({msg : "Todo is not Found", status : 400})
       } else {
         res.status(200).json(todo[1][0])
       }
 
     } catch (error) {
-      if (error.name === 'SequelizeValidationError'){
-         res.status(400).json(error)
-      } else {
-        res.status(500).json({msg : "Internal server error"})
-      }
+      const status = error.status || 500
+      const err = error.msg || "Internal server error"
+      res.status(status).json({error : err})
     }
   }
 
@@ -96,16 +96,14 @@ class TodoController {
       })
 
       if (todo[0] === 0){
-        res.status(404).json({msg: 'Todo is not found'})
+        throw ({msg : "Todo is not Found", status : 404})
       } else {
         res.status(200).json(todo[1][0])
       }
     } catch (error) {
-      if (error.name === 'ValidationErrorItem'){
-        res.status(400).json({error})
-     } else {
-       res.status(500).json({msg : "Internal server error"})
-     }
+      const status = error.status || 500
+      const err = error.msg || "Internal server error"
+      res.status(status).json({error : err})
     }
   }
 
@@ -121,10 +119,12 @@ class TodoController {
         })
         res.status(200).json(todo)
       } else {
-        res.status(404).json({msg: "Todo is not found"})
+        throw ({msg : "Todo is not Found", status : 404})
       }
     } catch (error) {
-      res.status(500).json({msg : "Internal server error"})
+      const status = error.status || 500
+      const err = error.msg || "Internal server error"
+      res.status(status).json({error : err})
     }
   }
 }

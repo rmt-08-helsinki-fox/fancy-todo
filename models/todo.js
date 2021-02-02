@@ -2,7 +2,7 @@
 const {
   Model, NOW
 } = require('sequelize');
-const formatDate = require('../helper/formatDate')
+const formatDate = require('../helpers/formatDate')
 
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User, {foreignKey: 'UserId', targetKey: 'id'})
     }
   };
   Todo.init({
@@ -28,7 +29,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Date must be more then today"
         }
       }
-    }
+    },
+    UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Todo',
