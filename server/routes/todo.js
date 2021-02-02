@@ -7,10 +7,12 @@ route.use(authentication)
 route.post('/', TodosController.createTodos)
 route.get('/', TodosController.getTodos)
 
+route.get('/weather', TodosController.weather)
 route.use('/:id', authorization)
 route.get('/:id', TodosController.getTodosById)
 route.put('/:id', TodosController.updateTodos)
 route.patch('/:id', TodosController.updateStatusTodos)
 route.delete('/:id', TodosController.deleteTodos)
+
 
 module.exports = route

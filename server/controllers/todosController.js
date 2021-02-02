@@ -1,4 +1,6 @@
 const { Todo } = require('../models/')
+const axios = require('axios')
+
 class TodosController {
   
   static createTodos(req, res, next) {
@@ -104,7 +106,21 @@ class TodosController {
     .catch((err) => {
       next(err)
     })
-    
+  }
+
+  static weather(req, res, next) {
+    const city = req.query.city || 'Malang'
+    const lang = req.query.lang || 'id'
+    axios({
+      method: 'GET',
+      url: `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&lang=${lang}&key=${process.env.Weather_APIkey}`
+    })
+    .then((response) => {
+      res.status(200).json(response.data)
+    })
+    .catch((err) => {
+      res.status(500).json(err)
+    })
   }
 }
 
