@@ -6,14 +6,21 @@ class TodoControll {
       title: req.body.title,
       description: req.body.description,
       status: req.body.status,
-      due_date: req.body.due_date
+      due_date: req.body.due_date,
+      UserId: req.datauser.id
     }
+
+    if(newTodo.status === ""){
+      newTodo.status = "Not Done Yet"
+    }
+
     Todo.create(newTodo)
     .then(data => {
       res.status(201).json(data)
     })
     .catch(err => {
-      res.status(400).json(err)
+      let error = err.errors[0].message
+      res.status(400).json({error})
     })
   }
 
@@ -88,6 +95,7 @@ class TodoControll {
       returning: true
     })
     .then(data => {
+      if(data === 0) throw ({msg: "Todo Not Found"})
       res.status(200).json({message: "todo has been deleted"})
     })
     .catch(err => {
