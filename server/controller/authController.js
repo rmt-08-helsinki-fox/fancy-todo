@@ -3,7 +3,7 @@ const { checkPassword } = require('../helper/hashing');
 const { generateToken } = require('../helper/jwt');
 
 class AuthController {
-    static async registration(req, res) {
+    static async registration(req, res, next) {
         try {
             const { email, password } = req.body;
             const newUser = { email, password }
@@ -21,19 +21,10 @@ class AuthController {
             }
             res.status(201).json(msg);
         } catch (err) {
-            if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
-                const validates = err.errors.map(e => e.message);
-                const msg = {
-                    message: validates,
-                    response: false
-                }
-                res.status(400).json(msg);
-            } else {
-                res.status(500).json(err);
-            };
+            next(err);
         }
     }
-    static async login(req, res) {
+    static async login(req, res, next) {
         try {
             const { email, password } = req.body;
             const opt = {
@@ -58,15 +49,7 @@ class AuthController {
             }
             res.status(200).json(msg);
         } catch (err) {
-            if (err === 'Invalid email or password') {
-                const msg = {
-                    message: err,
-                    response: false
-                }
-                res.status(401).json(msg);
-            } else {
-                res.status(500).json(err);
-            }
+            next(err);
         }
     }
 }
