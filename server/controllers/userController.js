@@ -49,7 +49,7 @@ class UserController {
             })
             res.status(200).json({
                 accessToken,
-                msg: "Access Token required",
+                msg: "Access Token granted",
             })
         } catch (err) {
             next(err)

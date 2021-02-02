@@ -13,8 +13,8 @@ function errorHandler(err, req, res, next) {
     if (err instanceof Error) {
         switch (true) {
             case err instanceof ValidationError:
+                // @ts-ignore
                 let msg = err.errors.map((d) => d.message)
-                //@ts-ignore
                 res.status(400).json({ msg: msg })
                 return
         }

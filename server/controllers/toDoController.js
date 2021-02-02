@@ -1,6 +1,6 @@
 //@ts-check
 // @ts-ignore
-const { ToDo } = require("../models")
+const { ToDo, User } = require("../models")
 const { errorHandler } = require("../middlewares/errorHandler")
 
 class toDoController {
@@ -8,7 +8,8 @@ class toDoController {
     static async create(req, res, next) {
         try {
             const { title, description, status, due_date } = req.body
-            const data = await ToDo.create({ title, description, status, due_date })
+            const UserId = +req.decoded.id
+            const data = await ToDo.create({ title, description, status, due_date, UserId })
             if (data) {
                 res.status(201).json(data)
                 return
@@ -21,7 +22,9 @@ class toDoController {
     // ? 2. Read ToDo => 200, 500
     static async read(req, res, next) {
         try {
-            const data = await ToDo.findAll()
+            const data = await ToDo.findAll({
+                where: { UserId: +req.decoded.id },
+            })
             if (data.length) {
                 res.status(200).json(data)
                 // ! v Usually data becomes object on works, best practice
@@ -39,7 +42,9 @@ class toDoController {
     // ? 3. Get ToDo by id => 200, 404
     static async findById(req, res, next) {
         try {
-            const data = await ToDo.findByPk(+req.params.id)
+            const data = await ToDo.findByPk(+req.params.id, {
+                where: { UserId: +req.decoded.id },
+            })
             if (data) {
                 res.status(200).json(data)
                 return
@@ -56,7 +61,10 @@ class toDoController {
             const [count, data] = await ToDo.update(
                 { title, description, status, due_date },
                 {
-                    where: { id: +req.params.id },
+                    where: {
+                        id: +req.params.id,
+                        UserId: +req.decoded.id,
+                    },
                     returning: true,
                 }
             )
@@ -76,7 +84,10 @@ class toDoController {
             const [count, data] = await ToDo.update(
                 { status },
                 {
-                    where: { id: +req.params.id },
+                    where: {
+                        id: +req.params.id,
+                        UserId: +req.decoded.id,
+                    },
                     returning: true,
                 }
             )
@@ -95,7 +106,10 @@ class toDoController {
             const data = await ToDo.findByPk(+req.params.id)
             if (data) {
                 await ToDo.destroy({
-                    where: { id: +req.params.id },
+                    where: {
+                        id: +req.params.id,
+                        UserId: +req.decoded.id,
+                    },
                 })
                 // res.status(200).json({ data })
                 res.status(200).json({
