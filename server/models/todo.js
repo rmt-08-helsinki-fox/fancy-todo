@@ -27,16 +27,9 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     status: DataTypes.STRING,
     dueDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       validate: {
-        isDate: {
-          args: true,
-          msg: "Date format is invalid"
-        },
-        isAfter: {
-          args: new Date(),
-          msg: "Due date invalid"
-        }
+        isAfter: new Date().toLocaleDateString()
       }
     },
     UserId: DataTypes.INTEGER
@@ -45,9 +38,8 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate: (instance, opt) => {
         if (!instance.status) {
-          instance.status === 'open'
+          instance.status = 'open'
         }
-        console.log(instance)
       }
     },
     modelName: 'Todo',
