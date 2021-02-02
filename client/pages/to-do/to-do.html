@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="./pages/to-do/to-do.css" />
+<script src="./pages/to-do/to-do.js"></script>
+
+<main>
+    <div class="container">
+        <h1>Welcome User! To Your Personal To Do</h1>
+        <button id="add-to-do-button" class="btn btn-outline-success">Add To Do</button>
+        <!-- LISTING TO DO -->
+        <h2 class="mt-4">Here is Your To Do List:</h2>
+        <div class="row mb-3">
+            <div class="col-md-9 themed-grid-col">
+                <div class="pb-3"><h5>#1 To Do Title</h5></div>
+                <div class="row">
+                    <div class="col-md-9 themed-grid-col ellipsis-description">Description</div>
+                    <div class="col-md-3 themed-grid-col">Date</div>
+                </div>
+            </div>
+            <div class="col-md-3 themed-grid-col text-center">
+                <h5>Options</h5>
+                <div class="mt-1">
+                    <label> <input type="checkbox" value="status" /> Status </label>
+                </div>
+                <div class="mt-1">
+                    <button id="edit-to-do-button" class="btn btn-outline-success">Edit</button>
+                    <button id="delete-to-do-button" class="btn btn-outline-success">Delete</button>
+                </div>
+            </div>
+        </div>
+        <!--  -->
+    </div>
+</main>
