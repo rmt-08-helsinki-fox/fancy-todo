@@ -26,7 +26,7 @@ function errorHandler (err, req, res, next)  {
       } else if (err.name == "not authorized") {
         let errors = []
         errors.push(err.message)
-        res.status(403).json({message:errors})
+        res.status(401).json({message:errors})
       } 
       else {
         res.status(500).json(err)

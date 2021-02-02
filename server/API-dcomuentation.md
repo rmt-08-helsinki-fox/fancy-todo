@@ -139,7 +139,7 @@ OR
 OR
 * **Error response**
 
-    * **_response (403 - forbiden)_**
+    * **_response (401 - Unauthorized)_**
 ```
 {
     "message": "not Authorized"
@@ -216,7 +216,7 @@ OR
 OR
 * **Error response**
 
-    * **_response (403 - forbiden)_**
+    * **_response (401 - Unauthorized)_**
 ```
 {
     "message": "not Authorized"
@@ -287,7 +287,7 @@ OR
 OR
 * **Error response**
 
-    * **_response (403 - forbiden)_**
+    * **_response (401 - Unauthorized)_**
 ```
 {
     "message": "not Authorized"
@@ -379,7 +379,7 @@ OR
 OR
 * **Error response**
 
-    * **_response (403 - forbiden)_**
+    * **_response (401 - Unauthorized)_**
 ```
 {
     "message": "not Authorized"
@@ -467,7 +467,7 @@ OR
 OR
 * **Error response**
 
-    * **_response (403 - forbiden)_**
+    * **_response (401 - Unauthorized)_**
 ```
 {
     "message": "not Authorized"
@@ -531,7 +531,7 @@ OR
 OR
 * **Error response**
 
-    * **_response (403 - forbiden)_**
+    * **_response (401 - Unauthorized)_**
 ```
 {
     "message": "not Authorized"
@@ -641,7 +641,7 @@ OR
 OR
 * **Error response**
 
-    * **_response (403 - forbiden)_**
+    * **_response (401 - Unauthorized)_**
 ```
 {
     "message": "not Authorized"
