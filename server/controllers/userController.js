@@ -3,7 +3,7 @@ const { comparePass } = require("../helpers/bcrypt")
 const { generateToken } = require("../helpers/jwt")
 
 module.exports = class UserController {
-  static register(req, res) {
+  static register(req, res, next) {
     const { email, password } = req.body
 
     User.create({ email, password }, { returning: true })
@@ -11,21 +11,29 @@ module.exports = class UserController {
         res.status(201).json({ id: newUser.id, email: newUser.email })
       })
       .catch(err => {
-        res.status(400).json(err)
+        next(err)
       })
   }
 
-  static login(req, res) {
+  static login(req, res, next) {
     const { email, password } = req.body
 
     User.findOne({ where: { email } })
       .then(user => {
         if (!user) {
-          throw { msg: "Invalid Email or password" }
+          throw {
+            name: "customError",
+            msg: "Invalid Email or password",
+            status: 400
+          }
         }
         const comparedPass = comparePass(password, user.password)
         if (!comparedPass) {
-          throw { msg: "Invalid Email or password" }
+          throw {
+            name: "customError",
+            msg: "Invalid Email or password",
+            status: 400
+          }
         }
         const accessToken = generateToken({
           id: user.id,
@@ -34,7 +42,7 @@ module.exports = class UserController {
         res.status(200).json({ accessToken })
       })
       .catch(err => {
-        res.status(400).json(err)
+        next(err)
       })
   }
 }
