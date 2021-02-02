@@ -4,8 +4,11 @@
 > Create new todo
 
 * **Request Header :**
-``` 
-NONE
+```json
+{
+    "access_token": "<your access token>"
+}
+
 ```
 
 * **Request Body :**
@@ -68,8 +71,10 @@ NONE
 > Show all todos
 
 * **Request Header :**
-```
-NONE
+```json
+{
+    "access_token": "<your access token>"
+}
 ```
 
 * **Request Body :**
@@ -118,7 +123,7 @@ NONE
 ## 3. GET /todos/:id
 
 * **Request Header :**
-```
+```json
 NONE
 ```
 

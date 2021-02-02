@@ -3,10 +3,12 @@ const { Todo } = require('../models')
 class TodoController{
     static createTodo(req, res) {
         const { title, description, due_date } = req.body
+        const UserId = req.decode.id
         let newTodo = {
             title,
             description,
-            due_date 
+            due_date,
+            UserId
         }
 
         Todo.create(newTodo)
@@ -23,7 +25,12 @@ class TodoController{
     }
 
     static getAll(req ,res) {
-        Todo.findAll()
+      const UserId = req.decode.id
+        Todo.findAll({
+          where: {
+            UserId
+          }
+        })
         .then(todo => {
             res.status(200).json(todo)
         })
@@ -37,6 +44,7 @@ class TodoController{
 
         Todo.findByPk(id)
         .then(todo => {
+          console.log(todo)
           !todo ? res.status(404).json({error: 'not found'}) : res.status(200).json(todo)
         })
         .catch(err => {
@@ -76,8 +84,7 @@ class TodoController{
 		static updateStatus(req ,res) {
 			const id = +req.params.id
       let newStat = req.body
-      console.log(newStat)
-
+      
       Todo.update(newStat, {
         where: {
           id
