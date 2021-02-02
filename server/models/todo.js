@@ -10,11 +10,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User);
     }
   }
   Todo.init(
     {
-      title: DataTypes.STRING,
+      title: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: "Title must be filled",
+          },
+        },
+      },
       description: DataTypes.STRING,
       status: DataTypes.STRING,
       due_date: {
@@ -26,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      UserId: DataTypes.INTEGER,
     },
     {
       sequelize,

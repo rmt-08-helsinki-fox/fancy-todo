@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Todo);
     }
   }
   User.init(
@@ -17,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       email: {
         type: DataTypes.STRING,
         validate: {
+          notEmpty: {
+            args: true,
+            msg: "Email must be filled",
+          },
           isEmail: {
             args: true,
             msg: "Invalid format of email",
@@ -27,8 +32,20 @@ module.exports = (sequelize, DataTypes) => {
       password: {
         type: DataTypes.STRING,
         validate: {
-          min: 8,
+          min: {
+            args: 8,
+            msg: "Password must be more than 8",
+          },
           max: 18,
+        },
+      },
+      location: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: "Location must be filled",
+          },
         },
       },
     },

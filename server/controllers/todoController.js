@@ -1,45 +1,51 @@
 const { Todo } = require("../models");
+const { Op } = require("sequelize");
 class TodoController {
-  static showAllTodo(req, res) {
+  static showAllTodos(req, res, next) {
     Todo.findAll()
       .then((todo) => {
+        if (todo.length <= 0)
+          throw {
+            message: "internal server error",
+            status: 500,
+            name: "server",
+          };
         res.status(200).json(todo);
       })
       .catch((err) => {
-        res.status(500).json(err);
+        next(err);
       });
   }
-  static createTodo(req, res) {
-    const { title, description, status, due_date } = req.body;
-    Todo.create({ title, description, status, due_date })
+  static createTodo(req, res, next) {
+    const { title, description, status, due_date, UserId } = req.body;
+    Todo.create({ title, description, status, due_date, UserId })
       .then((todo) => {
         res.status(201).json(todo);
       })
       .catch((err) => {
-        const error = err.errors[0].message;
-        if (err.errors[0].type === "Validation error") {
-          res.status(400).json(error);
-        } else {
-          res.status(500).json(error);
-        }
+        next(err);
       });
   }
-  static showTodoById(req, res) {
-    const id = +req.params.id;
-    Todo.findByPk(id)
+  static showTodoById(req, res, next) {
+    const todoId = +req.params.id;
+    const userId = +req.decoded.id;
+    Todo.findOne({
+      where: {
+        [Op.and]: [{ id: todoId }, { UserId: userId }],
+      },
+    })
       .then((todo) => {
         if (!todo) {
-          throw { msg: "data not found" };
+          throw { message: "data not found", status: 404, name: "custom" };
         }
         res.status(200).json(todo);
       })
       .catch((err) => {
-        const error = err.msg;
-        res.status(404).json(error);
+        next(err);
       });
   }
-  static updateTodoById(req, res) {
-    const id = +req.params.id;
+  static updateTodoById(req, res, next) {
+    const todoId = +req.params.id;
     const { title, description, status, due_date } = req.body;
     Todo.update(
       {
@@ -49,66 +55,46 @@ class TodoController {
         due_date,
       },
       {
-        where: { id },
+        where: { id: todoId },
         returning: true,
       }
     )
       .then((todo) => {
         if (!todo[0]) {
-          throw { msg: "data not found", status: 404 };
+          throw { message: "Not update a todo", status: 404, name: "custom" };
         }
         res.status(200).json(todo[1][0]);
       })
       .catch((err) => {
-        if (!err.errors) {
-          const msg = err.msg;
-          const status = err.status || 500;
-          if (msg) {
-            res.status(status).json(msg);
-          } else {
-            res.status(staus).json(err);
-          }
-        } else {
-          const error = err.errors[0].message;
-          res.status(400).json(error);
-        }
+        next(err);
       });
   }
-  static updateStatusTodo(req, res) {
-    const id = +req.params.id;
-    Todo.update({ status: "finished" }, { where: { id }, returning: true })
+  static updateStatusTodo(req, res, next) {
+    const todoId = +req.params.id;
+    Todo.update(
+      { status: "finished" },
+      { where: { id: todoId }, returning: true }
+    )
       .then((todo) => {
         if (!todo[0]) {
-          throw { msg: "data not found", status: 404 };
+          throw { message: "Not update a todo", status: 404, name: "custom" };
         }
         res.status(200).json(todo[1][0]);
       })
       .catch((err) => {
-        if (!err.errors) {
-          const msg = err.msg;
-          const status = err.status || 500;
-          if (msg) {
-            res.status(status).json(msg);
-          } else {
-            res.status(staus).json(err);
-          }
-        } else {
-          const error = err.errors[0].message;
-          res.status(400).json(error);
-        }
+        next(err);
       });
   }
-  static deleteTodo(req, res) {
-    const id = +req.params.id;
-    Todo.destroy({ where: { id } })
+  static deleteTodo(req, res, next) {
+    const todoId = +req.params.id;
+    Todo.destroy({ where: { id: todoId } })
       .then((todo) => {
-        if (!todo) throw { msg: "data not found", status: 404 };
+        if (!todo)
+          throw { message: "data not found", status: 404, name: "custom" };
         res.status(200).json("todo success to delete");
       })
       .catch((err) => {
-        const error = err.msg;
-        const status = err.status || 500;
-        res.status(status).json(error || err);
+        next(err);
       });
   }
 }
