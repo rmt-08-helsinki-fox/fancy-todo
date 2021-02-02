@@ -1,44 +1,50 @@
 const Todo = require('../models/index').Todo
 
 class TodoController{
-  static postNewTodo (req, res){
+  static postNewTodo (req, res, next){
     //POST
     let {title, description, due_date} = req.body
-    Todo.create({title, description, due_date})
+    let user_id = req.user.id
+    Todo.create({title, description, due_date, user_id})
     .then(todo => {
-      console.log(todo)
       res.status(201).json(todo)
     }) 
     .catch(err => {
       if(err.name == 'SequelizeValidationError'){
-        res.status(400).json(err.message)
+        next(err)
       } else {
-        res.status(500).json({msg : 'Internal Server Error'})
+        next(err)
       }
     })
   }
-  static getAllTodos (req, res){
+  static getAllTodos (req, res, next){
     //GET
     Todo.findAll({order: [['id', 'ASC']]})
     .then(todos => {
       res.status(200).json(todos)
     })
     .catch(err => {
-      console.log(err)
-      res.status(500).json({msg : 'Internal Server Error'})
+      next(err)
     })
   }
-  static getTodo (req, res){
+  static getTodo (req, res, next){
     Todo.findOne({
       where: {id : req.params.id}
     })
     .then(todo => {
       if(!todo){
-        res.status(404).json({msg: 'Data Not Found'})
+        console.log('tes')
+        return res.status(404).json({msg: 'Data Not Found'})
+        throw({
+          name: 'DataNotFound',
+          status: 404,
+          msg: 'Data Not Found'
+        })
       }
       res.status(200).json(todo)
     })
     .catch(err => {
+      console.log(err)
       res.status(500).json({msg: 'Internal Server Error'})
     })
   }
@@ -46,8 +52,8 @@ class TodoController{
     //PUT
     let {title, description, status, due_date} = req.body
     Todo.update(
-      {title, description, status, due_date},
-      {where: {id : req.params.id},
+      {title, description, status, due_date}, {
+      where: {id : req.params.id},
       returning: true
     })
     .then(todo => {

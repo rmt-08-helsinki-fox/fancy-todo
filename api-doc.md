@@ -48,7 +48,7 @@ _Response (201 - Created)_
 _Response (400 - Bad Request)_
 ```
 {
-  "message": "Format Tanggal Salah"
+  "message": "Invalid Date"
 }
 ```
 

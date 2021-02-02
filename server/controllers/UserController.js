@@ -14,9 +14,9 @@ class UserController{
     .catch(err => {
       console.log(err.name)
       if(err.name == "SequelizeValidationError"){
-        res.status(400).json(err.message)
+        return res.status(400).json(err.message)
       } else if(err.name == "SequelizeUniqueConstraintError"){
-        res.status(400).json({msg: 'Email already exists'})
+        return res.status(400).json({msg: 'Email already exists'})
       }
       res.status(500).json({msg : 'internal server error'})
     })
