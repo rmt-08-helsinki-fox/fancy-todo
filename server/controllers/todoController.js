@@ -1,6 +1,6 @@
 const { Todo } = require("../models")
 
-module.exports = class todoController {
+module.exports = class TodoController {
   static addTodo(req, res) {
     const { title, description, status, due_date } = req.body
     Todo.create({ title, description, status, due_date })
