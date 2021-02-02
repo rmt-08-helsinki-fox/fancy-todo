@@ -41,7 +41,10 @@ class UserController {
         const comparedPass = compare(password, user.password)
 
         if(comparedPass) {
-          const payload = { email, password }
+          const payload = { 
+            id: user.id,
+            email: user.email
+          }
           const accessToken = genToken(payload)
 
           res.status(200).json({ accessToken })

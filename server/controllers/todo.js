@@ -4,8 +4,9 @@ const { Todo } = require('../models')
 class TodoController {
 
   static create(req, res) {
+    const userId = req.decoded.id
     const { title, description, status, due_date } = req.body;
-    const newTodo = { title, description, status, due_date };
+    const newTodo = { title, description, status, due_date, UserId: userId };
 
     Todo.create(newTodo)
       .then((todo) => {
@@ -38,7 +39,12 @@ class TodoController {
   static todoById(req, res) {
     const id = +req.params.id
 
-    Todo.findByPk(id)
+    Todo.findOne({
+      where: {
+        id,
+        UserId: +req.decoded.id
+      }
+    })
       .then((todo) => {
         if (todo) {
           res.status(200).json(todo)
@@ -61,7 +67,8 @@ class TodoController {
 
     Todo.update(input, {
       where: {
-        id
+        id,
+        UserId: +req.decoded.id
       },
       returning: true
     })
@@ -96,7 +103,8 @@ class TodoController {
 
     Todo.update(input, {
       where: {
-        id
+        id,
+        UserId: req.decoded.id
       },
       returning: true
     })
@@ -120,7 +128,8 @@ class TodoController {
 
     Todo.destroy({
       where: {
-        id
+        id,
+        UserId: req.decoded.id
       }
     })
       .then((todo) => {
