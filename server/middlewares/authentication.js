@@ -9,7 +9,7 @@ const authentication = (req, res, next) => {
 
     next()
   } catch (err) {
-    res.status(401).json({ msg: "Invalid Token" })
+    next(err)
   }
 }
 
