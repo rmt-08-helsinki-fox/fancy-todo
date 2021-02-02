@@ -41,16 +41,22 @@ module.exports = (sequelize, DataTypes) => {
     },
     due_date: {
       type:DataTypes.DATEONLY,
-      validate:{
+      validate: {
         isAfter:{
-          args:new Date().toDateString(),
-          msg:'tanggal hanya bisa sekarang '
+          args: new Date().toISOString(),
+          msg: "Input must be after today's date"
         }
       }
     }
   }, {
     sequelize,
     modelName: 'todo',
+    hooks:{
+      beforeCreate: todo => {
+        todo.status = false
+        todo.due_date = todo.due_date || new Date()
+      }
+    }
   });
   return todo;
 };

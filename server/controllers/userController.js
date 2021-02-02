@@ -3,13 +3,13 @@ const {comparePassword} = require('../helpers/bcrypt');
 const {generateToken} = require('../helpers/jwt')
 
 class UserController{
-    static register(req, res){
+    static register(req, res, next){
         User.create(req.body)
         .then((data) => {
             res.status(201).json(data)
         }).catch((err) => {
-            if(err.name === 'SequelizeDatabaseError') res.status(500).json(err)
-            else res.status(400).json({error:err.errors[0].message})
+            console.log(err.errors);
+            next(err)
         });
     }
 

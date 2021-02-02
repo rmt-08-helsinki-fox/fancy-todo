@@ -3,12 +3,63 @@ Access the API via `http://localhost:3000/`
 
 
 
+# POST `/users/register
 
+**url** : '//localhost:3000/users/register'
+```json
+body: {
+    "email": "<your-email",
+    "password": "your-password"
+}
+```
+## Succes Response
+```json
+response :{
+    "id": <id>,
+    "email": "<your-email>",
+    "password": "<your-password>",
+    "updatedAt": "2021-02-02T15:23:15.901Z",
+    "createdAt": "2021-02-02T15:23:15.901Z"
+}
+```
 
-##### POST  `/todos/`
+## Error Response
+```json
+response :{
+    "error": "Email already exist"
+}
+```
+
+# POST /users/login
+
+**url** : '//localhost:3000/users/login'
+```json
+body: {
+    "email": "<your-email",
+    "password": "your-password"
+}
+```
+
+## Succes Response
+```json
+response :{
+    "acces_token": "<your-accses-token>"
+}
+```
+
+## Error Response
+```json
+response :{
+    "error": "invalid email or password"
+}
+```
+
+# POST  `/todos/`
+
+**url** : '//localhost:3000/todos/'
+**headers** :{token}
 
 ```json
-url : '//localhost:3000/todos/',
 body : {
     title : "Title",
     description :  "Description",
@@ -26,10 +77,12 @@ response:{
 }
 ```
 
-##### GET  ``/todos/``
+# GET  ``/todos/``
+
+**url** : '//localhost:3000/todos/',
+**headers** :{token}
 
 ```json
-url : '//localhost:3000/todos/',
 response : [
      {
         "id": 5,
@@ -45,10 +98,11 @@ response : [
 
 
 
-##### GET `/todos/{id}`
+# GET `/todos/{id}`
 
+**url** : '//localhost:3000/todos/5',
+**headers** :{token}
 ```json
-url : '//localhost:3000/todos/5',
 response : {
     "id": 5,
     "title": "title",
@@ -60,7 +114,7 @@ response : {
 }
 ```
 
-##### PUT  `/todos/{id}`
+# PUT  `/todos/{id}`
 
 ```json
 response : {
@@ -68,7 +122,7 @@ response : {
 }
 ```
 
-##### PATCH `/todos/{id}`
+# PATCH `/todos/{id}`
 
 ```json
 body : {
@@ -84,3 +138,40 @@ response:{
     "updatedAt": "2021-02-01T15:29:41.874Z"
 }
 ```
+
+# Error Response
+------
+
+- ##### 400
+
+  ```
+  {
+  	err:'Invalid Token'
+  }
+  ```
+
+- ##### 403
+
+  ```
+  {
+  	err:'cannot accses this todo'
+  }
+  ```
+
+- ##### 404
+
+  ```
+  {
+  	err : "not found"
+  }
+  ```
+
+  
+
+- ##### 500
+
+  ```
+  {
+  	err : 'Internal Sever Error'
+  }
+  ```

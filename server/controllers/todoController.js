@@ -2,7 +2,7 @@ const {todo, User} = require('../models/')
 
 
 class TodoController {
-    static add(req, res){
+    static add(req, res, next){
         const {title, description, status, due_date} = req.body
         const data = {
             title,
@@ -16,12 +16,12 @@ class TodoController {
             res.status(201).json(data)
         })
         .catch((err) => {
-            if(err.name === 'SequelizeDatabaseError') res.status(500).json(err)
-            else res.status(400).json({error:err.errors[0].message})
+            console.log(err);
+            next(err)
         })
     }
     
-    static showList(req, res){
+    static getTodos(req, res, next){
         User.findOne({
             where:{
                 id:req.decode.id
@@ -29,36 +29,36 @@ class TodoController {
             include: todo
         })
         .then((data) => {
-
             res.status(200).json(data.todos)
         }).catch((err) => {
-            res.status(500).json(err)
+            next(err)
         });
     }
 
-    static showById(req, res){
+    static getTodoById(req, res, next){
         todo.findOne({
             where:{
                 id:+req.params.id
             }
         })
         .then((data) => {
-            if(!data) throw {msg: 'data not found'}
+            console.log(data);
+            if(!data) throw {name:'customError' ,code: 404 ,msg:'data not found'}
             res.status(200).json(data)
         }).catch((err) => {
-            if(err.msg) res.status(404).json({message: err.msg})
-            else res.status(500).json({message: 'Internal server error'})
+            console.log(err);
+            next(err)
         });
     }
 
-    static edit(req, res){
+    static edit(req, res, next){
         const {title, descriiption, status, due_date} = req.body
 
         console.log(req.params.id);
 
         todo.findOne({where:{id:+req.params.id}})
         .then((data) => {
-            if(!data) throw {msg:'data not found'}
+            if(!data) throw {name:'customError' ,code: 404 ,msg:'data not found'}
             console.log(data);
             return todo.update({title, descriiption, status, due_date}, {where:{id:+req.params.id}})
             
@@ -67,15 +67,11 @@ class TodoController {
             console.log(data);
             res.status(200).json({ message:'Successfully update Todos'})
         }).catch((err) => {
-            if (err.msg){
-                res.status(404).json({error: err.msg})
-            }else{
-                res.status(400).json({error: err.errors[0].message})
-            }            
+            next(err)           
         });
     }
 
-    static editRow(req, res){
+    static editStatus(req, res, next){
         todo.findOne({
             where:{
                 id:+req.params.id
@@ -90,17 +86,17 @@ class TodoController {
             res.status(200).json(data)
         })
         .catch((err) => {
-            res.status(400).json(err)
+            next(err)
         })
         
     }
 
-    static delete(req, res){
+    static delete(req, res, next){
         todo.destroy({where:{id:+req.params.id}})
         .then((data) => {
             res.status(200).json(data)
         }).catch((err) => {
-            res.status(500).json(err)
+            next(err)
         });
     }
 }

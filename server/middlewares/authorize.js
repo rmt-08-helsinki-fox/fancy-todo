@@ -7,13 +7,14 @@ const authorize = (req, res, next) =>{
         }
     })
     .then((todo) => {
+        if(!todo) throw  {name:'customError' ,code: 404 ,msg:'data not found'}
         if(req.decode.id != todo.UserId){
-            throw {msg:'cannot accses this todo'}
+            throw {name:'customError' ,code: 401,msg:'cannot accses this todo'}
         }else{
             next()
         }
     }).catch((err) => {
-        res.status(400).json({err:err.msg})
+        next(err)
     });
 }
 
