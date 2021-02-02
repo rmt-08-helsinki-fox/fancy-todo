@@ -158,13 +158,17 @@ _Response (201 - Created)_
 {
     "message": "Success",
     "data": {
-        "id": 14,
-        "title": "doing rest api",
-        "description": "ngerjain server todo app",
-        "status": false,
-        "due_date": "2021-02-01",
-        "updatedAt": "2021-02-01T12:12:50.197Z",
-        "createdAt": "2021-02-01T12:12:50.197Z"
+        "todo": {
+            "id": 27,
+            "title": "auth",
+            "description": "ngerjain auth",
+            "status": false,
+            "due_date": "2021-02-03",
+            "user_id": 7,
+            "updatedAt": "2021-02-02T09:28:23.013Z",
+            "createdAt": "2021-02-02T09:28:23.013Z"
+        },
+        "quotes": "Try to learn something about everything and everything about something. --Thomas Henry Huxley"
     },
     "response": true
 }

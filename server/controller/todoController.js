@@ -1,31 +1,43 @@
 const { Todo } = require('../models');
+const axios = require('axios');
 
 class TodoController {
-    static addTodo(req, res) {
-        const { title, description, status, due_date } = req.body;
-        const newTodo = { title, description, status, due_date, user_id: req.decoded.id };
-        Todo
-            .create(newTodo)
-            .then(todo => {
-                const msg = {
-                    message: 'Success',
-                    data: todo,
-                    response: true
-                }
-                res.status(201).json(msg);
-            })
-            .catch(err => {
-                if (err.name === 'SequelizeValidationError') {
-                    const validates = err.errors.map(e => e.message);
-                    const msg = {
-                        message: validates,
-                        response: false
-                    }
-                    res.status(400).json(msg);
-                } else {
-                    res.status(500).json(err);
-                };
+    static async addTodo(req, res) {
+        try {
+            const { title, description, status, due_date } = req.body;
+            const newTodo = { title, description, status, due_date, user_id: req.decoded.id };
+            const insertTodo = await Todo.create(newTodo);
+            const getQuotes = await axios({
+                method: 'get',
+                url: 'https://andruxnet-random-famous-quotes.p.rapidapi.com?cat=famous',
+                headers: {
+                    'x-rapidapi-key': '811c1c1887msh36a1db77eb2086bp1ee5b0jsn15179d1f82ae',
+                    'x-rapidapi-host': 'andruxnet-random-famous-quotes.p.rapidapi.com'
+                },
             });
+            const quotes = `${getQuotes.data[0].quote} --${getQuotes.data[0].author}`;
+            const data = {
+                todo: insertTodo,
+                quotes
+            }
+            const msg = {
+                message: 'Success',
+                data,
+                response: true
+            }
+            res.status(201).json(msg);
+        } catch (err) {
+            if (err.name === 'SequelizeValidationError') {
+                const validates = err.errors.map(e => e.message);
+                const msg = {
+                    message: validates,
+                    response: false
+                }
+                res.status(400).json(msg);
+            } else {
+                res.status(500).json(err);
+            };
+        }
     }
     static async showAllTodos(req, res) {
         try {
