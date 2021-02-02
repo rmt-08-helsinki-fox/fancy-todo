@@ -1,13 +1,14 @@
 const { Todo } = require("../models");
 
-class Controller {
+class TodoController {
   static postTodos(req, res) {
-    const { title, description, status, due_date } = req.body;
+    const { title, description, status, due_date, UserId } = req.body;
     Todo.create({
       title,
       description,
       status,
       due_date,
+      UserId: +UserId,
     })
       .then((data) => {
         res.status(201).json(data);
@@ -22,7 +23,7 @@ class Controller {
   }
 
   static getTodos(req, res) {
-    Todo.findAll()
+    Todo.findAll({ where: { UserId: req.data.id } })
       .then((data) => {
         res.status(200).json(data);
       })
@@ -108,4 +109,4 @@ class Controller {
   }
 }
 
-module.exports = Controller;
+module.exports = TodoController;

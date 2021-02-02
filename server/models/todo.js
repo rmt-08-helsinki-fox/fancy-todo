@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User);
     }
   }
   Todo.init(
@@ -36,13 +37,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         validate: {
           isAfter: {
-            args: `${new Date().getFullYear()}-${
-              new Date().getMonth() + 1
-            }-${new Date().getDate()}`,
+            args: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
+              new Date().getDate() - 1
+            }`,
             msg: "Due date at least tomorrow",
           },
         },
       },
+      UserId: DataTypes.INTEGER,
     },
     {
       sequelize,
