@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+
+const {getyesterday} = require('../helper/getYesterday')
+
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -40,7 +43,8 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.DATEONLY,
       validate:{
         isAfter:{
-          args: new Date().toISOString(),
+          
+          args: `${getyesterday()}`,
           msg: "Input must be after today's date"
         },
         isDate:{
@@ -49,7 +53,8 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     
-    }
+    },
+    UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Todo',

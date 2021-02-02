@@ -4,7 +4,7 @@ const {
 } = require('sequelize');
 
 const {hasspass} = require('../helper/bcrypt');
-const { options } = require('../routes');
+
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -53,13 +53,28 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Password must be more than 6 characters"
         }
       }
+    },
+
+    location: {
+      type:DataTypes.STRING,
+      validate:{
+        notEmpty:{
+          args:true,
+          msg:"location must be filled , u dont have a name dumbass!??"
+        },
+        isAlpha:{
+          args:true,
+          msg:"name must alphabetic character character"
+        }
+      }
     }
+
   }, {
     sequelize,
     modelName: 'User',
     hooks: {
-      beforeCreate:(user,options) =>{
-        user.password = hasspass(user.password)
+      beforeCreate:(instance,options) =>{
+        instance.password = hasspass(instance.password)
       }
     }
   });

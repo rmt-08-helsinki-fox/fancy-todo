@@ -1,9 +1,11 @@
 const bcrypt = require('bcryptjs');
 
 
-function hasspass(password){
+function hasspass(plainPassword){
     const salt = bcrypt.genSaltSync(10);
-    return bcrypt.hashSync(password, salt);
+    const hash = bcrypt.hashSync(plainPassword, salt)
+
+    return hash
 }
 
 function compare(password,hassedpassword){

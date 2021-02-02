@@ -1,63 +1,66 @@
-const {User} = require('../models')
-const{compare} = require('../helper/bcrypt')
-const {generateToken} = require('../helper/jwt')
+const { User } = require("../models");
+const { compare } = require("../helper/bcrypt");
+const { generateToken } = require("../helper/jwt");
+const axios = require('axios')
+const API_KEY = process.env.API_KEY
 
 
+class UserController {
+  static postRegister(req, res, next) {
+    const { email, password,location } = req.body;
 
-class UserController{
+    User.create({ email, password,location })
 
-    static postRegister(req,res){
-         const {email, password} = req.body
-
-         User.create({email, password})
-
-         .then(user=>{
-             res.status(201).json({
-               msg: "register success",
-               id:user.id,
-               email:user.email,
-               passsword:user.password
-
-             })
-         })
-         .catch(err=>{
-               const error = err.errors[0].message || "Internal Server Error"
-               res.status(500).json(err)
-         })
-    }
-
-
-    static postLogin(req,res){
-        const {email, password} = req.body
-
-        User.findOne({where: {email}})
-
-        .then(data=>{
-            if(data && compare(password, data.password)) {
-                let payload = {
-                    id: data.id,
-                    email: data.email
-                }
-                const access_token = generateToken(payload)
-                res.status(200).json({
-                    access_token
-                })
-            } else {
-                
-                 res.status(401).json({message: "Invalid email/password"})
-            }
+   
+    .then(user => {
+      console.log(user.location)
+      axios.get(`http://api.weatherbit.io/v2.0/alerts?city=${user.location}&country=ID&key=${API_KEY}`)
+      .then(wheater => {
+        res.status(201).json({
+          msg: "registrasi berhasil",
+          user,
+          DetailLocation: wheater.data
         })
+      })
+     })
+  
 
-        .catch(err=>{
+    .catch((err) => {
+      next(err);
+    });
+  
+  }
 
-            //console.log('err di line 47')
-          const error = err.msg || "internal server error"
+  static postLogin(req, res, next) {
+    const { email, password } = req.body;
 
-          res.status(500).json({error})
-        })
-    }
+    User.findOne({ where: { email } })
 
+      .then((data) => {
+        // console.log(data)
+        if (data && compare(password, data.password)) {
+          // console.log('ok')
+          let payload = {
+            id: data.id,
+            email: data.email,
+          };
+          const access_token = generateToken(payload);
+          // console.log(access_token)
+          res.status(200).json({
+            access_token,
+          });
+        } else {
+          next({ name: "invalid" });
+        }
+      })
+
+      .catch((err) => {
+        next(err);
+        //console.log(err)
+        //const error = err.msg || "internal server error"
+        //res.status(500).json({error})
+      });
+  }
 }
 
-
-module.exports = UserController
+module.exports = UserController;
