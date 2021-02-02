@@ -27,7 +27,7 @@
 * **Error Response:**
 
   * **Code:** 500 INTERNAL SERVER ERROR<br />
-    **Content:** `{ error : "Todo doesn't exist" }`
+    **Content:** `{message: 'Internal Server Error'}`
 
 ***
 
@@ -67,7 +67,7 @@
   OR
 
   * **Code:** 500 INTERNAL SERVER ERROR<br />
-    **Content:** `{ error : "Todo doesn't exist" }`
+    **Content:** `{message: 'Internal Server Error'}`
 
 ***
 
@@ -105,12 +105,12 @@
 * **Error Response:**
 
   * **Code:** 400 BAD REQUEST <br />
-    **Content:** `{ Message : 'Input Tanggal Tidak boleh lewat dari hari ini' }`
+    **Content:** `{ Message : 'Input Tanggal Tidak boleh hari yang sudah lewat dari hari ini' }`
 
   OR
 
   * **Code:** 500 INTERNAL SERVER ERROR<br />
-    **Content:** `{ error : "Todo doesn't exist" }`
+    **Content:** `{message: 'Internal Server Error'}`
 
 ***
 
@@ -155,12 +155,12 @@
   OR
 
   * **Code:** 500 INTERNAL SERVER ERROR<br />
-    **Content:** `{ error : "Todo doesn't exist" }`
+    **Content:** `{message: 'Internal Server Error'}`
 
   OR
     
   * **Code:** 400 BAD REQUEST <br />
-    **Content:** `{ Message : 'Input Tanggal Tidak boleh lewat dari hari ini' }`
+    **Content:** `{ Message : 'Input Tanggal Tidak boleh hari yang sudah lewat dari hari ini' }`
 
 ***
 
@@ -202,7 +202,7 @@
   OR
 
   * **Code:** 500 INTERNAL SERVER ERROR<br />
-    **Content:** `{ error : "Todo doesn't exist" }`
+    **Content:** `{message: 'Internal Server Error'}`
 
 ***
 
@@ -241,4 +241,4 @@
   OR
 
     * **Code:** 500 INTERNAL SERVER ERROR<br />
-    **Content:** `{ error : "Todo doesn't exist" }`
+    **Content:** `{message: 'Internal Server Error'}`
