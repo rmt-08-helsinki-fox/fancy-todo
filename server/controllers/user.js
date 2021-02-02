@@ -17,7 +17,7 @@ class UserController {
       })
     })
     .catch((err) => {
-      if (err.name === 'SequelizeValidationError' && err.errors.length > 0) {
+      if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError' && err.errors.length > 0) {
         let errMsg = err.errors.map(err => err.message);
         let error = {errors: errMsg}
 
