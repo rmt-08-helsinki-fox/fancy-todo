@@ -1,4 +1,5 @@
 const {Todo, User} = require("../models/")
+const axios = require("axios").default
 
 class TodoController {
     static create(req , res) {
@@ -49,7 +50,6 @@ class TodoController {
     
         })
         .catch(err => {
-            console.log(err)
             res.status(500).json({
                 msg : "Internal Server Error"
             })
@@ -66,7 +66,6 @@ class TodoController {
             returning : true
         })
         .then(data => {
-            console.log(data)
             if (data[0] !== 0) {
                 res.status(200).json(data)
             } else {
@@ -77,22 +76,32 @@ class TodoController {
             
         })
         .catch(err => {
-            console.log(err)
             res.status(500).json(err)
         })
     }
 
     static updateStatusTodo(req, res) {
-        const {status} = req.body
-        const newStatus = {status}
-        Todo.findOne({
+        let input = {
+            title,
+            description ,
+            status : true,
+            due_date,
+            UserId
+        }
+        Todo.update(input, {
             where: {
                 id : +req.params.id
             }
         })
         .then(data => {
-            data.status = newStatus
-            res.status(200).json(data)
+            if (data[0] !== 0) {
+                res.status(200).json(data)
+            } else {
+                res.status(404).json({
+                    msg : "Invalid ID"
+                })
+            }
+            
         })
         .catch(err => {
             res.status(500).json(err)
@@ -118,6 +127,17 @@ class TodoController {
             res.status(500).json({
                 msg : "Internal Server Error"
             })
+        })
+    }
+
+    static getWeather(req, res, next) {
+        axios.get("api.openweathermap.org/data/2.5/weather?q=tangerang&appid=538ef4d63afd919c0b6c68dc287a89d3")
+        .then(response => {
+            console.log(response)
+            res.status(200).json(response)
+        })
+        .catch(err => {
+            res.status(500).json(err)
         })
     }
 }
