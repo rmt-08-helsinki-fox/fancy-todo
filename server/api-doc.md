@@ -8,8 +8,8 @@
     POST /todos
 
 * **REQUEST** <br>
-    Body : 
-    `{ title, description, status, due_date }`
+    Body : `{ title, description, status, due_date }` <br>
+    Headers: `{ token }`
 
 * **RESPONSE** <br>
     `201` : `{ title, description, status, due_date }` <br>
@@ -35,8 +35,8 @@
 * **ROUTE** <br>
     GET /todos/:id
 
-* **REQUEST** <br>
-    none
+* **REQUEST**  <br>
+  Headers: `{ token }`
 
 * **RESPONSE** <br>
     `200` : `{ title, description, status, due_date }` <br>
@@ -49,8 +49,8 @@
     PUT /todos/:id
 
 * **REQUEST** <br>
-    Body : 
-    `{ title, description, status, due_date }`
+    Body : `{ title, description, status, due_date }` <br>
+    Headers: `{ token }`
 
 * **RESPONSE** <br>
     `200` : `{ title, description, status, due_date }` <br>
@@ -66,8 +66,8 @@
     PATCH /todos/:id
 
 * **REQUEST** <br>
-    Body : 
-    `{ status }`
+    Body : `{ status }` <br>
+    Headers: `{ token }`
 
 * **RESPONSE** <br>
     `200` : `{ title, description, status, due_date }` <br>
@@ -82,10 +82,37 @@
 * **ROUTE** <br>
     DELETE /todos/:id
 
-* **REQUEST** <br>
-    none
+* **REQUEST**  <br>
+    Headers: `{ token }`
 
 * **RESPONSE** <br>
     `200` : `{ todo: { title, description, status, due_date }, message: "todo success to delete" }` <br>
     `404` : `{ errors: "not found" }` <br>
     `500` : `{ errors: "internal server errors" }`
+
+
+
+<h2>register</h2>
+
+* **ROUTE** <br>
+    POST /register
+
+* **REQUEST** <br>
+    body: `{ email, password }`
+
+* **RESPONSE** <br>
+    `201` : `{ id, email }` <br>
+    `400` : `{ errors }`
+
+
+<h2>login</h2>
+
+* **ROUTE** <br>
+    POST /login
+
+* **REQUEST** <br>
+    body: `{ email, password }`
+
+* **RESPONSE** <br>
+    `200` : `{ accessToken }` <br>
+    `400` : `{ errors }`
