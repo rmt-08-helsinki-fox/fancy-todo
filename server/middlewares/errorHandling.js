@@ -1,5 +1,6 @@
 const errorHandler = (err, req, res, next) => {
   console.log(err, (`>>>>>>>>>> ini dari ErrorHandler`));
+
   let statusCode = 500
   let message = 'Internal Server Error'
   switch (err.name) {
@@ -15,8 +16,12 @@ const errorHandler = (err, req, res, next) => {
       statusCode = 404
       message = err.message
       break;
+    case 'Forbidden':
+      statusCode = 403
+      message = err.message
+      break;
     case 'SequelizeValidationError':
-      let error = err.errors.map(el => {return el.message})
+      let error = err.errors.map(el => { return el.message })
       statusCode = 400
       message = error
       break;

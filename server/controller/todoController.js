@@ -1,4 +1,4 @@
-const { todo } = require('../models/index')
+const { Todo } = require('../models/index')
 
 class TodoController {
   static createTodo (req, res, next) {
@@ -6,16 +6,19 @@ class TodoController {
       title: req.body.title,
       description: req.body.description,
       status: req.body.status,
-      due_date: req.body.due_date
+      due_date: req.body.due_date,
+      UserId: req.user.id
     }
 
-    todo.create(newTodo)
+    Todo.create(newTodo)
       .then(dataTodo => {
         newTodo = {
+          id: dataTodo.id,
           title: dataTodo.title,
           description: dataTodo.description,
           status: dataTodo.status,
           due_date: dataTodo.due_date,
+          UserId: dataTodo.UserId
         } 
         res.status(201).json(newTodo)
       })
@@ -25,7 +28,7 @@ class TodoController {
   }
 
   static getAllTodo (req, res, next) {
-    todo.findAll()
+    Todo.findAll()
       .then(dataTodo => {
         res.status(200).json(dataTodo)
       })
@@ -37,7 +40,7 @@ class TodoController {
   static findOneTodo (req, res, next) {
     let id = +req.params.id
 
-    todo.findByPk(id)
+    Todo.findByPk(id)
       .then(dataTodo => {
         res.status(200).json(dataTodo)
       })
@@ -56,7 +59,7 @@ class TodoController {
       due_date: req.body.due_date
     }
 
-    todo.update(updateTodo, {
+    Todo.update(updateTodo, {
       where: { id },
       returning: true
     })
@@ -64,7 +67,7 @@ class TodoController {
         if(dataTodo[0] === 1){
           res.status(200).json(dataTodo[1][0])
         } else {
-          next({name: 'NotFoundError', message: '404 Not Found'})
+          throw ({name: 'NotFoundError', message: '404 Not Found'})
         }
       })
       .catch(err => {
@@ -79,7 +82,7 @@ class TodoController {
       status: req.body.status
     }
 
-    todo.update(updateStatus, {
+    Todo.update(updateStatus, {
       where: { id },
       returning: true
     })
@@ -87,7 +90,7 @@ class TodoController {
         if(dataTodo[0] === 1){
           res.status(200).json(dataTodo[1][0])
         } else {
-          next({name: 'NotFoundError', message: '404 Not Found'})
+          throw({name: 'NotFoundError', message: '404 Not Found'})
         }
       })
       .catch(err => {
@@ -98,7 +101,7 @@ class TodoController {
   static deleteTodo (req, res, next) {
     let id = +req.params.id
     
-    todo.destroy({where : {
+    Todo.destroy({where : {
       id
       }
     })
@@ -106,7 +109,7 @@ class TodoController {
         if(dataTodo === 1){
           res.status(200).json({message: 'todo success to delete'})
         } else {
-          next({name: 'NotFoundError', message: '404 Not Found'})
+          throw({name: 'NotFoundError', message: '404 Not Found'})
         }
       })
       .catch(err => {

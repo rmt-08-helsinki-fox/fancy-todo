@@ -1,4 +1,4 @@
-const { user } = require('../models/index')
+const { User } = require('../models/index')
 const { comparePassword } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
 
@@ -9,9 +9,14 @@ class UserController {
       email: req.body.email,
       password: req.body.password
     }
-    user.create(newUser)
+    User.create(newUser)
       .then(dataUser => {
-        res.status(201).json(dataUser)
+        newUser = { 
+          id: dataUser.id,
+          fullname: dataUser.fullName,
+          email: dataUser.email
+        }
+        res.status(201).json(newUser)
       })
       .catch( err => {
         next(err)
@@ -23,7 +28,7 @@ class UserController {
       email: req.body.email,
       password: req.body.password
     }
-    user.findOne({where: {
+    User.findOne({where: {
       email: dataLogin.email
       }
     })
@@ -38,17 +43,16 @@ class UserController {
             let access_token = generateToken(payload)
             res.status(200).json({access_token})
           }else {
-            next({name: 'JsonWebTokenError', message: 'Invalid Email or Password'})
+            throw({name: 'JsonWebTokenError', message: 'Invalid Email or Password'})
           }
         } else {
-          next({name: 'NotFoundError', message: 'Invalid Email or Password'})
+          throw({name: 'NotFoundError', message: 'Invalid Email or Password'})
         }
       })
       .catch( err => {
         next(err)
       })
   }
-
 }
 
 module.exports = UserController

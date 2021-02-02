@@ -1,12 +1,13 @@
 const app = require('express').Router()
 const TodoController = require('../controller/todoController')
+const { authorization } = require('../middlewares/auth')
 
 app.post('/', TodoController.createTodo)
 app.get('/', TodoController.getAllTodo)
-app.get('/:id', TodoController.findOneTodo)
-app.put('/:id', TodoController.updateTodo)
-app.patch('/:id', TodoController.updateStatusTodo)
-app.delete('/:id', TodoController.deleteTodo)
+app.get('/:id', authorization, TodoController.findOneTodo)
+app.put('/:id', authorization, TodoController.updateTodo)
+app.patch('/:id', authorization, TodoController.updateStatusTodo)
+app.delete('/:id', authorization, TodoController.deleteTodo)
 
 
 
