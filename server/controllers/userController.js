@@ -4,13 +4,14 @@ const { generateToken } = require('../helpers/jwt')
 
 class UserController {
   static register(req, res) {
-    const { email, password } = req.body
-    const data = { email, password }
-    User.create(data)
-    .then(data => {
+    const { role, email, password } = req.body
+    const dataUser = { role, email, password }
+    User.create(dataUser)
+    .then(user => {
       res.status(200).json({
-        msg: 'Register success',
-        email: data.email
+        message: 'Register success',
+        email: user.email,
+        role: user.role
       })
     })
     .catch(err => {
@@ -20,11 +21,12 @@ class UserController {
   }
 
   static login(req, res) {
-    // res.send('masuuk login')
-    const { email, password } = req.body
-    const data = { email, password }
+    const { role, email, password } = req.body
+    const dataUser = { role, email, password }
     User.findOne({
-      where: { email }
+      where: {
+        email: dataUser.email
+      }
     })
     .then(user => {
       if (!user) {
@@ -35,7 +37,8 @@ class UserController {
         throw { msg: 'Invalid email or password' }
       }
       const accessToken = generateToken({
-        email: user.email
+        email: user.email,
+        role: user.role
       })
       res.status(200).json({ accessToken })
     })

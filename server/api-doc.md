@@ -19,7 +19,7 @@ Fancy Todo is an application to manage your todos. This app has:
     }
   ```
 * Success Response 
-  * 201 - Created
+  * Code: 201 - Created
   ```javascript
     {
       "id": "<given id by system>",
@@ -236,8 +236,58 @@ Fancy Todo is an application to manage your todos. This app has:
 ## Users
 -----
 ### _POST /users/register_
-> create user
+> create new user
 
+* Request Body
+  ```javascript
+    { 
+      "role": "<role to get insert into>", 
+      "email": "<email to get insert into>",
+      "password": "<password to get insert into>"
+    }
+  ```
+* Success Response 
+  * Code: 201 - Created
+  ```javascript
+    {
+      "id": "<given id by system>",
+      "role": "<posted role>",
+      "email": "<posted email>",
+      "password": "<posted password>"
+      "updatedAt": "2021-02-01T14:38:20.158Z",
+      "createdAt": "2021-02-01T14:38:20.158Z"
+    }
+  ```
+* Error Response
+  * Code: 400 - Bad Request
+  ```javascript
+    {
+      "message": "Invalid requests"
+    }
+  ```
 
 ### _POST /users/login_
 > login user
+
+* Request Body
+  ```javascript
+    { 
+      "email": "<email to get insert into>",
+      "password": "<password to get insert into>"
+    }
+  ```
+* Success Response 
+  * Code: 202 - Success
+  ```javascript
+    {
+      "accessToken": "<given accessToken by sistem>"
+    }
+  ```
+* Error Response
+  * Code: 400 - Bad Request
+  ```javascript
+    {
+      "message": "Invalid requests"
+    }
+  ```
+  
