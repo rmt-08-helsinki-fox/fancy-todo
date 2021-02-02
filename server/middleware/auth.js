@@ -6,7 +6,7 @@ async function authenticate (req, res, next) {
     const access_token = req.headers.access_token
     const email = verify(access_token).email
     const find = await User.findOne({ where: { email }})
-    
+    console.log('dari authenticate')
     if (!access_token || !find) {
       res.status(400).json({
         msg: 'Need login!'
@@ -16,24 +16,26 @@ async function authenticate (req, res, next) {
       next()
     }
   } catch (err) {
-    console.log(err)
-    res.status(500).json(err)
+    next(err)
   }
 }
 async function authorized (req, res, next) {
   const UserId = +req.user.id
   const id = +req.params.id
+  console.log('dari authorized')
   try {
     const find = await Todo.findOne({ where: { id }})
+    console.log(find, '========find')
+    console.log(UserId, '========== User id')
     if (find.UserId !== UserId) {
-      res.status(403).json({
-        msg: 'This account is not an authorized'
+      next({
+        name: 'authorized'
       })
     } else {
       next()
     }
   } catch (err) {
-    res.status(500).json(err)
+    next(err)
   }
 }
 module.exports = { authenticate, authorized }

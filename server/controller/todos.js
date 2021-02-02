@@ -4,11 +4,15 @@ class todoController {
   static async readAll (req, res) {
     try {
       const UserId = req.user.id
-      // const read = await Todo.findAll()
       const read = await Todo.findAll({ where: { UserId } })
-      res.status(200).json(read)
+      if (read.length == 0){
+        res.status(200).json({
+          msg: 'Please add your todo'
+        })
+      } else {
+        res.status(200).json(read)
+      }
     } catch (err) {
-      console.log(err)
       res.status(500).json(err)
     }
   }
