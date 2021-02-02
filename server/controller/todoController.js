@@ -89,15 +89,12 @@ class TodoController {
                 },
                 returning: true
             }
-            const findTodo = await Todo.findOne(opt);
-            if (!findTodo) {
-                throw 404;
-            }
 
             const todo = await Todo.update(dataUpdate, opt);
+            if (todo[1].length === 0) throw 404;
             const msg = {
                 message: 'Success',
-                data: todo[1][0],
+                data: todo,
                 response: true
             }
             res.status(200).json(msg);
@@ -117,10 +114,9 @@ class TodoController {
                 },
                 returning: true
             }
-            const findTodo = await Todo.findOne(opt);
-            if (!findTodo) throw 404;
 
             const todo = await Todo.update({ status }, opt);
+            if (todo[1].length === 0) throw 404;
             const msg = {
                 message: 'Success',
                 data: todo[1][0],
@@ -140,12 +136,11 @@ class TodoController {
                     user_id: req.decoded.id
                 }
             }
-            const findTodo = await Todo.findOne(opt);
-            if (!findTodo) throw 404;
-            const todoDelete = await Todo.destroy(opt);
+            const todo = await Todo.destroy(opt);
+            if (todo === 0) throw 404;
             const msg = {
                 message: 'Success',
-                data: findTodo,
+                data: todo,
                 response: true
             }
             res.status(200).json(msg);
