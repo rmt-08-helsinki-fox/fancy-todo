@@ -10,10 +10,10 @@ Access the API via `http://localhost:3000/`
 ```json
 url : '//localhost:3000/todos/',
 body : {
-    title : 'Title',
-    description : ' Description',
-    status:'false',
-    due_date : '2021-1-1'
+    title : "Title",
+    description :  "Description",
+    status:false,
+    due_date : 2021-1-1
 }
 response:{
     "id": 5,
@@ -72,7 +72,7 @@ response : {
 
 ```json
 body : {
-    status:'true'
+    status:true
 }
 response:{
     "id": 5,

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      todo.belongsTo(models.User,{foreignKey:'UserId'} )
     }
   };
   todo.init({
@@ -22,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    descriiption: {
+    description: {
       type:DataTypes.STRING,
       validate:{
         notEmpty:{
@@ -42,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.DATEONLY,
       validate:{
         isAfter:{
-          args:`${new Date().getFullYear() }-${new Date().getMonth()}-${new Date().getDate()}`,
+          args:new Date().toDateString(),
           msg:'tanggal hanya bisa sekarang '
         }
       }
