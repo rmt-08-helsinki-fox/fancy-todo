@@ -1,8 +1,14 @@
 const e = require('express')
-const { Todo } = require('../models')
+const { Todo, User } = require('../models')
 
 class Controller {
   static todosList(req, res) {
+    // {
+    //   where: {
+    //     UserId: req.decoded.id
+    //   },
+    //   include: [User]
+    // }
     Todo.findAll()
       .then(data => {
         res.status(200).json({
@@ -17,6 +23,7 @@ class Controller {
   static addTodos(req, res) {
     const { title, description, status, due_date } = req.body
     const data = { title, description, status, due_date }
+    // data.UserId = req.params.id
     Todo.create(data)
       .then(success => {
         res.status(201).json(success)
@@ -115,7 +122,7 @@ class Controller {
       }
     }).then(success => {
       if (!success) throw success
-      res.status(200).json({msg:'todo success to delete'})
+      res.status(200).json({ msg: 'todo success to delete' })
     }).catch(err => {
       if (err === 0) {
         res.status(404).json({ msg: 'Data not found' })

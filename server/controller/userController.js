@@ -7,8 +7,8 @@ const { generateToken } = require('../helper/jwt')
 
 class Controller {
   static signUp(req, res) {
-    const { username, email, password } = req.body
-    const data = { username, email, password }
+    const { username, email, password, role } = req.body
+    const data = { username, email, password, role }
     User.create(data)
       .then(success => {
         res.status(200).json({ success })
@@ -29,9 +29,11 @@ class Controller {
       const hasil = comparePass(dataUser.password, data.password)
       if (hasil === false) throw hasil
       const access_token = generateToken({
+        id: data.id,
         username: data.username,
         email: data.email,
-        password: data.password
+        password: data.password,
+        role: data.role
       })
       res.status(200).json(access_token)
     }).catch(err => {
