@@ -1,92 +1,82 @@
 const { Todo } = require("../models");
+const Anime = require("../helpers/anime")
 
 module.exports = class TodoController {
 
-  static async getTodos(req, res) {
+  static async getTodos(req, res, next) {
     try {
       const todos = await Todo.findAll()
       res.status(200).json(todos)
     } catch (err) {
-      res.status(500).json({ errors: "internal server error" })
+      next(err)
     }
   }
 
-  static async addTodo(req, res) {
+  //ini abaikan
+  // static async getTodos(req, res, next) {
+  //   try {
+  //     let anime = await Anime.getAnime();
+  //     await console.log(anime)
+  //     res.status(200).json(anime)
+  //   } catch (err) {
+  //     next(err)
+  //   }
+  // }
+
+  static async addTodo(req, res, next) {
     try {
       let { title, description, status, due_date } = req.body;
-      const createTodo = await Todo.create({ title, description, status, due_date }, { returning: true })
+      let userId = req.payload.id;
+      const createTodo = await Todo.create({ title, description, status, due_date, userId }, { returning: true })
       res.status(201).json(createTodo)
     } catch (err) {
-      if(err.errors[0].validatorKey === "isBefore") {
-        res.status(400).json(err)
-      } else {
-        res.status(500).json(err)
-      }
+      next(err)
     }
   }
 
-  static async getTodo(req, res) {
+  static async getTodo(req, res, next) {
     try {
       let id = Number(req.params.id);
-      const todo = await Todo.findByPk(id)
+      const todo = await Todo.findOne({ where: { id } })
+      if(!todo) { throw { name: "Not Found", message: "todo not found", status: 404 } }
       res.status(200).json(todo)
     } catch (err) {
-      res.status(404).json({ errors: "not found" })
+      next(err)
     }
   }
 
-  static async putTodo(req, res) {
+  static async putTodo(req, res, next) {
     try {
-      let { title, description, status, due_date } = req.body;
+      let newTodo = req.body;
       let id = Number(req.params.id);
-      const updatedTodo = await Todo.update({ title, description, status, due_date }, { where: { id }, returning: true })
-      if(!updatedTodo[0]) { throw new Error("not found") }
+      const updatedTodo = await Todo.update(newTodo, { where: { id }, returning: true })
+      if(!updatedTodo[0]) { throw { name: "Not Found", message: "todo not found", status: 404 } }
       res.status(200).json(updatedTodo[1][0])
     } catch (err) {
-      if(err.message === "not found") {
-        res.status(404).json({ errors: err.message })
-      } else if(err.errors[0].validatorKey === "isBefore") {
-        res.status(400).json(err)
-      } else {
-        res.status(500).json(err)
-      }
+      next(err)
     }
   }
 
-  static async patchTodo(req, res) {
+  static async patchTodo(req, res, next) {
     try {
       let { status } = req.body;
       let id = Number(req.params.id);
       const patchedTodo = await Todo.update({ status }, { where: { id }, returning: true })
-      if(!patchedTodo[0]) { throw new Error("not found") }
-      res.status(200).json(patchedTodo)
+      if(!patchedTodo[0]) { throw { name: "Not Found", message: "todo not found", status: 404 } }
+      res.status(200).json(patchedTodo[1][0])
     } catch (err) {
-      if(err.message === "not found") {
-        res.status(404).json({ errors: err.message })
-      } else if(err.errors[0].validatorKey === "isBefore") {
-        res.status(400).json(err)
-      } else {
-        res.status(500).json(err)
-      }
+      next(err)
     }
   }
 
-  static async deleteTodo(req, res) {
+  static async deleteTodo(req, res, next) {
     try {
       let id = Number(req.params.id);
-      const deletedTodo = await Todo.findByPk(id);
-      if(deletedTodo) {
-        await Todo.destroy({ where: { id }, returning: true })
-        res.status(200).json({ data: deletedTodo, message: "todo success to delete" })
-      } else {
-        throw new Error("not found")
-      }
+      const deletedTodo = await Todo.destroy({ where: { id } })
+      if(!deletedTodo) { throw { name: "Not Found", message: "todo not found", status: 404 } }
+      res.status(200).json({ message: "todo success to delete" })
     } catch (err) {
-      if(err.message === "not found") {
-        res.status(404).json({ errors: err.message })
-      } else {
-        res.status(500).json(err)
-      }
+      next(err)
     }
   }
 }
