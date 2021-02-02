@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { options } = require('../routes');
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -39,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Todo',
+    hooks: {
+      beforeCreate: (todo, options) => {
+        todo.status = false;
+      }
+    }
   });
   return Todo;
 };

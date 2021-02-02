@@ -58,11 +58,12 @@ Dependencies :
   ```
   {
     "errors": [
-      "Email must be unique"
+      "Email already registered"
     ]
   }
   ```
-
+  
+  _Response(400 - Bad Request)_
   ```
   {
     "errors": [
@@ -141,7 +142,6 @@ input format :
 |-------------|-----------------------------------|
 | title       | req.body.title                    |
 | description | req.body.description              |
-| status      | req.body.status                   |
 | due_date    | req.body.due_date                 |
 | userId      | req.decoded.id                    |
 
@@ -152,7 +152,6 @@ input format :
     ```
     title=string
     description=string
-    status=boolean
     due_date=string format YYYY-MM-DD
     ```
 
@@ -168,7 +167,6 @@ input format :
   {
     "title": "<input title todo>",
     "description": "<input description todo>",
-    "status": <false/true>
     "due_date": "YYYY-MM-DD" 
   }
   ```
@@ -181,11 +179,11 @@ input format :
     "id": <given id by system>,
     "title": "<title todo",
     "description": "<description todo>",
-    "status": <status todo>,
     "due_date": "<due date todo>",
+    "userId": <user id who create todo>
     "updatedAt": "2021-02-01T14:04:28.924Z",
     "createdAt": "2021-02-01T14:04:28.924Z",
-    "userId": <user id who create todo>
+    "status": false
   }
   ```
 
@@ -357,7 +355,7 @@ input format :
   }
   ```
 
-  _Response(403 - Forbidden)_
+  _Response(401 - Unauthorized)_
   ```
   {
     "errors": "You are not authorized to access"
@@ -380,7 +378,7 @@ input format :
 
 ---
 
-### Update Task All Field
+### Update Task
 
 - **URL** : `/todos/:id`
 - **Method** : `PUT`
@@ -389,7 +387,6 @@ input format :
     ```
     title=string
     description=string
-    status=boolean
     due_date=string format YYYY-MM-DD
     ```
 
@@ -405,7 +402,6 @@ input format :
   {
     "title": "<updated-title>",
     "description": "<updated-description>",
-    "status": <updated-status>,
     "due_date": "<updated-due-date>"
   }
   ```
@@ -418,7 +414,7 @@ input format :
     "id": 1,
     "title": "<updated-title>",
     "description": "<updated-description>",
-    "status": <updated-status>,
+    "status": false,
     "due_date": "<updated-due-date>",
     "userId": <user id who create todo 1>,
     "createdAt": "2021-02-01T14:04:28.924Z",
@@ -435,7 +431,7 @@ input format :
   }
   ```
 
-  _Response(403 - Forbidden)_
+  _Response(401 - Unauthorized)_
   ```
   {
     "errors": "You are not authorized to access"
@@ -517,20 +513,10 @@ input format :
   }
   ```
 
-  _Response(403 - Forbidden)_
+  _Response(401 - Unauthorized)_
   ```
   {
     "errors": "You are not authorized to access"
-  }
-  ```
-
-  _Response(400 - Bad Request)_
-  ```
-  {
-    "errors": [
-      "Task title should not be empty",
-      "Invalid due date input"
-    ]
   }
   ```
 
@@ -584,7 +570,7 @@ input format :
       "createdAt": "2021-02-01T14:09:00.788Z",
       "updatedAt": "2021-02-01T14:09:00.788Z"
     },
-    "message": "Todo success to delete"
+    "message": "Successfully delete todo"
   }
   ```
 
@@ -597,7 +583,7 @@ input format :
   }
   ```
 
-  _Response(403 - Forbidden)_
+  _Response(401 - Unauthorized)_
   ```
   {
     "errors": "You are not authorized to access"
@@ -696,7 +682,7 @@ input format :
   }
   ```
 
-  _Response(403 - Forbidden)_
+  _Response(401 - Unauthorized)_
   ```
   {
     "errors": "You are not authorized to access"
@@ -710,9 +696,17 @@ input format :
   }
   ```
 
+  _Response(400 - Bad Request)_
   ```
   {
     "errors": "You must enter the city name"
+  }
+  ```
+
+    _Response(400 - Bad Request)_
+  ```
+  {
+    "errors": "Sorry, weather prediction is not available yet"
   }
   ```
 

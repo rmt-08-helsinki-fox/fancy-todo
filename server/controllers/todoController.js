@@ -1,14 +1,13 @@
 const { Todo } = require('../models');
 const axios = require('axios');
-const convertDate = require('../helpers/convertDate')
+const convertDate = require('../helpers/convertDate');
 
 class TodoController {
   static addTodo(req, res, next) {
-    const { title, description, status, due_date } = req.body;
+    const { title, description, due_date } = req.body;
     Todo.create({
       title,
       description,
-      status,
       due_date: new Date(due_date),
       userId: req.decoded.id
     })
@@ -43,14 +42,13 @@ class TodoController {
       })
   }
 
-  static updateAllField(req, res, next) {
+  static updateTodo(req, res, next) {
     const id = +req.params.id;
-    const { title, description, status, due_date } = req.body;
+    const { title, description, due_date } = req.body;
 
     Todo.update({
       title,
       description,
-      status,
       due_date: new Date(due_date)
     }, {
       where: { id },
@@ -66,7 +64,7 @@ class TodoController {
       })
   }
 
-  static updateStatusTask(req, res, next) {
+  static updateStatus(req, res, next) {
     const id = +req.params.id;
     const { status } = req.body;
 
@@ -98,7 +96,7 @@ class TodoController {
         })
       })
       .then(lenTodo => {
-        res.status(200).json({ delete_todo: deletedTodo, message: 'Todo success to delete'});
+        res.status(200).json({ delete_todo: deletedTodo, message: 'Successfully delete todo' });
       })
       .catch(err => {
         next(err);
@@ -106,11 +104,11 @@ class TodoController {
   }
 
   static getForecastWeather(req, res, next) {
-    const id = +req.params.id;
     const city = req.query.city;
-
-    if (!city) throw { name: 'CustomError', msg: 'You must enter the city name', status: 400 }
-
+    
+    if (!city) throw { name: 'CustomError', msg: 'You must enter the city name', status: 400 };
+    
+    const id = +req.params.id;
     let dueDateTodo;
 
     Todo.findByPk(id)
@@ -134,7 +132,7 @@ class TodoController {
         if (foundData) {
           res.status(200).json(foundData);
         } else {
-          throw { name: 'CustomError', msg: 'Sorry, weather prediction is not available yet', status: 400 }
+          throw { name: 'CustomError', msg: 'Sorry, weather prediction is not available yet', status: 400 };
         }
 
       })
@@ -142,7 +140,7 @@ class TodoController {
         next(err);
       })
   }
-
+  
 }
 
 module.exports = TodoController;

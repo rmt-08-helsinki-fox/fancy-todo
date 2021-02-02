@@ -1,6 +1,6 @@
 const { Todo } = require('../models/');
 
-const authorize = (req, res, next) => {
+const authorization = (req, res, next) => {
   const id = +req.params.id;
 
   Todo.findOne({
@@ -12,7 +12,7 @@ const authorize = (req, res, next) => {
       if (todo.userId === req.decoded.id) {
         next();
       } else {
-        throw { name: "CustomError", msg: 'You are not authorized to access', status: 403 };
+        throw { name: "CustomError", msg: 'You are not authorized to access', status: 401 };
       }
     })
     .catch(err => {
@@ -20,4 +20,4 @@ const authorize = (req, res, next) => {
     })
 }
 
-module.exports = authorize;
+module.exports = authorization;
