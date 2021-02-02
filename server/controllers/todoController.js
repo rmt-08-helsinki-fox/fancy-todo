@@ -1,57 +1,52 @@
 const { Todo } = require('../models')
+const axios = require('axios');
 
 class TodoController {
   // POST TODOS
-  static addTodos(req, res) {
+  static addTodos(req, res, next) {
     let objTodos = {
         title: req.body.title,
         description: req.body.description,
         status: req.body.status,
-        due_date: req.body.due_date
+        due_date: req.body.due_date,
+        UserId: req.decoded.id
     }
-    Todo.create(objTods)
+    Todo.create(objTodos)
       .then(dataTodo => {
           res.status(201).json(dataTodo)
       })
       .catch(err => {
-        const messages = {}
-        if (err.errors.length > 0) {
-          err.errors.forEach(element => {
-              if (messages.message == undefined) {
-                  messages.message = []
-              }
-              messages.message.push(element.message)
-          })
-          res.status(400).json(messages)
-        } else {
-              res.status(500).json(err)
-        }
+        next(err)
       })
   }
   // GET TODOS
-  static getTodos(req, res) {
-    Todo.findAll()
+  static getTodos(req, res, next) {
+    Todo.findAll({
+      where: {
+        UserId: req.decoded.id
+      }
+    })
       .then(dataTodos => {
-          res.status(200).json(dataTodos)
+        res.status(200).json(dataTodos)
       })
       .catch(err => {
-          res.status(500).json(err)
+        next(err)
       })
   }
   // GET TODOS BY ID
-  static getTodosById(req, res) {
+  static getTodosById(req, res, next) {
     let id = +req.params.id
     Todo.findByPk(id)
       .then(dataTodo => {
-          if (!dataTodo) throw { msg: 'error not found'}
-          res.status(200).json(dataTodo)
+        if (!dataTodo) throw { msg: 'error not found'}
+        res.status(200).json(dataTodo)
       })
       .catch(err => {
-          res.status(404).json(err)
+        next(err)
       })
   }
   // PUT TODOS BY ID - UPDATE ALL ROWS
-  static updateTodosAll(req, res) {
+  static updateTodosAll(req, res, next) {
     const id = +req.params.id
     const objTodos = {
       title: req.body.title,
@@ -61,38 +56,20 @@ class TodoController {
     }
     Todo.update(objTodos, {
       where: {
-          id: id
+          id
       },
       returning: true
     })
       .then(dataTodoUpdate => {
-        if (dataTodo == 0) {
-          throw { msg: 'error not found'}
-        } else {
-          res.status(200).json(dataTodoUpdate[1][0])
-        }
+        res.status(200).json(dataTodoUpdate[1][0])
       })
       .catch(err => {
-        const messages = {}
-        if (err.errors.length > 0) {
-          err.errors.forEach(element => {
-              if (messages.message == undefined) {
-                  messages.message = []
-              }
-              messages.message.push(element.message)
-          })
-          res.status(400).json(messages)
-        } else {
-          res.status(500).json(err)
-        }
+        next(err)
       }) 
   }
   // PATCH TODOS BY ID - UPDATE SELECTED ROWS
-  static updateTodosSelectedRows(req, res) {
+  static updateTodosSelectedRows(req, res, next) {
     const id = +req.params.id
-    if (req.body.status === undefined) {
-      req.body.status = null
-    }
     const objTodos = {
       status: req.body.status
     }
@@ -106,21 +83,10 @@ class TodoController {
       res.status(200).json(dataTodoUpdate[1][0])
     })
     .catch(err => {
-      const messages = {}
-      if (err.errors.length > 0) {
-        err.errors.forEach(element => {
-            if (messages.message == undefined) {
-                messages.message = []
-            }
-            messages.message.push(element.message)
-        })
-        res.status(400).json(messages)
-      } else {
-        res.status(500).json(err)
-      }
+      next(err)
     })
   }
-  static deleteTodos(req, res) {
+  static deleteTodos(req, res, next) {
     let id = +req.params.id
     Todo.destroy({
       where: {
@@ -137,12 +103,22 @@ class TodoController {
       }
     })
     .catch(err => {
-      const error = err.msg || { msg: 'error not found'}
-      if (error) {
-        res.status(404).json(error)
-      }
-      res.status(500).json(err)
+      next(err)
     })
+  }
+  // read book from open library
+  static searchBook(req, res) {
+    // const id_value = req.query.id_value
+    axios({
+      method: "get",
+      url: `http://openlibrary.org/api/volumes/brief/isbn/0596156715.json`
+    })
+      .then(response => {
+        res.json(response.data.records['/books/OL24194264M'].data.title)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
   }
 }
 
