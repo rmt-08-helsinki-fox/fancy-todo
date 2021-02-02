@@ -37,7 +37,7 @@ async function authorization(req, res, next){
     }
 
   } catch (err) {
-    console.log(err)
+    console.log(err, 'ini error dalem authorization')
     next(err)
   }
 }
