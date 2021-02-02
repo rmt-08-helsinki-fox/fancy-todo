@@ -1,5 +1,5 @@
 const { decoded } = require('../helpers/jwt')
-const { User } = require('../models')
+const { User, Todo } = require('../models')
 
 
 function authenticate(req, res, next) {
@@ -12,16 +12,14 @@ function authenticate(req, res, next) {
             }
         })
         .then(data => {
-            if(data) {
-                req.user = {
-                    id: data.id,
-                    email:data.email
-                }
-                next()
-            } else {
-                next(req.status(401).json({msg: `User not authorized`}))
+            if(!data) res.status(401).json({msg: `User not authorized`})
+            else {
+              req.user = {
+                id: data.id,
+                email: data.email
+              }
+              next()
             }
-            
         })
         .catch(err => next(err))
         // console.log(req.user);
@@ -31,7 +29,20 @@ function authenticate(req, res, next) {
 }
 
 function authorized(req, res, next) {
-    
+    const idTodo = +req.params.id
+    const idUser = req.user.id
+    Todo.findByPk(idTodo)
+    .then(data => {
+      // console.log(data);
+      if(data) {
+        if(data.UserId == idUser) {
+          next()
+        } else {
+          next(res.status(401).json({msg: `User not authorized`}))
+        }
+      } else next(res.status(400).json({msg: `Data not found`}))
+    })
+    .catch(err => next(err))
 }
 
 module.exports = {
