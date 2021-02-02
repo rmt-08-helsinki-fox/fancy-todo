@@ -3,7 +3,7 @@ const { comparePass } = require('../helpers/bcrypt.js');
 const { tokenize } = require('../helpers/jwt.js');
 
 class Controller {
-    static postRegister(req, res) {
+    static postRegister(req, res, next) {
         let { email, password } = req.body;
 
         User.create({email, password})
@@ -11,17 +11,9 @@ class Controller {
             id: user.id,
             email: user.email
         }))
-        .catch(err => {
-            if(err.name === "SequelizeValidationError"){
-                res.status(400).json(err);
-            } else if(err.name === "SequelizeUniqueConstraintError"){
-                res.status(400).json(err);
-            } else {
-                res.status(500).json({msg: "Internal server error"});
-            }
-        });
+        .catch(err => next(err));
     }
-    static postLogin(req, res) {
+    static postLogin(req, res, next) {
         let { email, password } = req.body;
 
         User.findOne({
@@ -30,21 +22,15 @@ class Controller {
             }
         })
         .then(user => {
-            if(!user) throw ({msg: "Email atau Password salah", status: 400});
-            if(!comparePass(password, user.password)) throw ({msg: "Email atau Password salah", status: 400});
+            if(!user) throw ({name: "customErr",msg: "Email atau Password salah", status: 400});
+            if(!comparePass(password, user.password)) throw ({name: "customErr",msg: "Email atau Password salah", status: 400});
             let token = tokenize({
                 id: user.id,
                 email: user.email
-            })
-            res.status(200).json({ token })
+            });
+            res.status(200).json({ token });
         })
-        .catch(err => {
-            if(err.status === 400) {
-                res.status(err.status).json({msg: err.msg});
-            } else {
-                res.status(500).json({msg: "Internal server error"});
-            } 
-        })
+        .catch(err => next(err));
     }
 }
 

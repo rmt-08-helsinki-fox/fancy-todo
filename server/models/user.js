@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isLongEnough(value){
           if(value.length < 6) {
-            throw new Error('Password harus lebih panjang dari 5 karakter')
+            throw new Error('Password minimal 6 karakter')
           } 
         }
       }
