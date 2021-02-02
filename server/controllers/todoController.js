@@ -1,12 +1,13 @@
 const { Todo } = require('../models/index.js')
 
 class Controller {
-  static postTodo(req, res) {
+  static postTodo(req, res, next) {
     let inputData = {
       title: req.body.title,
       description: req.body.description,
       status: req.body.status,
-      due_date: req.body.due_date
+      due_date: req.body.due_date,
+      UserId: req.decoded.id
     }
 
     Todo
@@ -15,26 +16,26 @@ class Controller {
         res.status(201).json(data)
       })
       .catch((err) => {
-        if (err.message) {
-          res.status(400).json(err.message)
-        } else {
-          res.status(500).json(err)
-        }
+        next(err)
       })
   }
 
-  static getTodo(req, res) {
+  static getTodo(req, res, next) {
     Todo
-      .findAll()
+      .findAll({
+        where: {
+          UserId: req.decoded.id
+        }
+      })
       .then((data) => {
         res.status(200).json(data)
       })
       .catch((err) => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static getTodoById(req, res) {
+  static getTodoById(req, res, next) {
     let checkParams = req.params.id
     Todo
       .findOne({
@@ -43,18 +44,14 @@ class Controller {
         }
       })
       .then((data) => {
-        if (!data) {
-          res.status(404).json('Error not found')
-        } else {
-          res.status(200).json(data)
-        }
+        res.status(200).json(data)
       })
       .catch((err) => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static putTodoUpdate(req, res) {
+  static putTodoUpdate(req, res, next) {
     let checkParams = req.params.id
     let inputData = {
       title: req.body.title,
@@ -70,22 +67,14 @@ class Controller {
         returning: true
       })
       .then((data) => {
-        if (data[1].length === 0) {
-          res.status(404).json('Error not found')
-        } else {
-          res.status(200).json(data[1][0])
-        }
+        res.status(200).json(data[1][0])
       })
       .catch((err) => {
-        if (err.message) {
-          res.status(400).json(err.message)
-        } else {
-          res.status(500).json(err)
-        }
+        next(err)
       })
   }
 
-  static patchTodoUpdate(req, res) {
+  static patchTodoUpdate(req, res, next) {
     let checkParams = req.params.id
     let inputData = {
       status: req.body.status
@@ -98,22 +87,14 @@ class Controller {
         returning: true
       })
       .then((data) => {
-        if (data[1].length === 0) {
-          res.status(404).json('Error not found')
-        } else {
-          res.status(200).json(data[1][0])
-        }
+        res.status(200).json(data[1][0])
       })
       .catch((err) => {
-        if (err.message) {
-          res.status(400).json(err.message)
-        } else {
-          res.status(500).json(err)
-        }
+        next(err)
       })
   }
 
-  static deleteTodo(req, res) {
+  static deleteTodo(req, res, next) {
     let checkParams = req.params.id
     Todo
       .destroy({
@@ -122,14 +103,10 @@ class Controller {
         }
       })
       .then((data) => {
-        if (data[1].length === 0) {
-          res.status(404).json('Error not found')
-        } else {
-          res.status(200).json('todo success to delete')
-        }
+        res.status(200).json('todo success to delete')
       })
       .catch((err) => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 }

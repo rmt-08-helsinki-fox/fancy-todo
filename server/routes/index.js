@@ -4,6 +4,6 @@ const todo = require('./todoRouter.js')
 const user = require('./userRouter')
 
 router.use('/todos', todo)
-router.use('/', user)
+router.use('/users', user)
 
 module.exports = router
