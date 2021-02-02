@@ -1,5 +1,5 @@
-const e = require('express');
 const { Todo }= require('../models/index.js');
+const axios = require("axios");
 
 class TodoController {
 
@@ -124,6 +124,17 @@ class TodoController {
     .catch(err => {
       next(err)
     })
+  }
+
+  static getWeather(req,res, next) {
+    let location = req.body.location
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${process.env.WEATHERKEY}`)
+      .then(weather => {
+        res.status(200).json(weather.data)
+      })
+      .catch(err => {
+        next(err)
+      })
   }
 }
 

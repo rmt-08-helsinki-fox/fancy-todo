@@ -10,5 +10,6 @@ router.get("/:id",authorize, TodoController.getTodoById);
 router.put("/:id", authorize, TodoController.putTodoById);
 router.patch("/:id", authorize, TodoController.patchTodoById);
 router.delete("/:id", authorize, TodoController.delTodoById);
+router.get("/weather", TodoController.getWeather);
 
 module.exports = router;
