@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User)
     }
   };
   Todo.init({
@@ -19,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           args: true,
-          msg: "title perlu di isi"
+          msg: "title cannot be empty"
         }
       }
     },
@@ -28,12 +29,13 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           args: true,
-          msg: "description perlu di isi"
+          msg: "description cannot be empty"
         }
       }
     },
     status: DataTypes.BOOLEAN,
-    due_date: DataTypes.DATE
+    due_date: DataTypes.DATE,
+    UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Todo',
