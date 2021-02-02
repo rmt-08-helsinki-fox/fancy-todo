@@ -1,38 +1,34 @@
 const { Todo } = require("../models");
 
 class TodoController {
-  static postTodos(req, res) {
-    const { title, description, status, due_date, UserId } = req.body;
+  static postTodos(req, res, next) {
+    const { title, description, status, due_date } = req.body;
     Todo.create({
       title,
       description,
       status,
       due_date,
-      UserId: +UserId,
+      UserId: req.data.id,
     })
       .then((data) => {
         res.status(201).json(data);
       })
       .catch((err) => {
-        if (err.errors) {
-          res.status(400).json(err.errors[0].message);
-        } else {
-          res.status(500).json("Kesalahan server 500");
-        }
+        next(err);
       });
   }
 
-  static getTodos(req, res) {
+  static getTodos(req, res, next) {
     Todo.findAll({ where: { UserId: req.data.id } })
       .then((data) => {
         res.status(200).json(data);
       })
       .catch((err) => {
-        res.status(404).json({ msg: "Data not found" });
+        next(err);
       });
   }
 
-  static putTodos(req, res) {
+  static putTodos(req, res, next) {
     const id = +req.params.id;
     const { title, description, status, due_date } = req.body;
 
@@ -46,17 +42,17 @@ class TodoController {
       { where: { id: id }, returning: true }
     )
       .then((data) => {
-        if (data[0] === 0) {
-          res.status(404).json({ msg: "Id not found" });
-        } else {
-          res.status(200).json(data);
-        }
+        res.status(200).json(data);
       })
       .catch((err) => {
         if (err.errors) {
-          res.status(400).json(err.errors[0].message);
+          next(err);
         } else {
-          res.status(500).json({ msg: "Kesalahan server 500" });
+          next({
+            name: "customError",
+            status: 500,
+            message: "Kesalahan server 500",
+          });
         }
       });
   }
@@ -73,17 +69,17 @@ class TodoController {
       { where: { id: id }, returning: true }
     )
       .then((data) => {
-        if (data[0] === 0) {
-          res.status(404).json({ msg: "Id not found" });
-        } else {
-          res.status(200).json(data);
-        }
+        res.status(200).json(data);
       })
       .catch((err) => {
         if (err.errors) {
-          res.status(400).json(err.errors[0].message);
+          next(err);
         } else {
-          res.status(500).json({ msg: "Kesalahan server 500" });
+          next({
+            name: "customError",
+            status: 500,
+            message: "Kesalahan server 500",
+          });
         }
       });
   }
@@ -93,18 +89,14 @@ class TodoController {
 
     Todo.destroy({ where: { id: id }, returning: true })
       .then((data) => {
-        console.log(data);
-        if (data[0] === 0) {
-          res.status(404).json({ msg: "Id not found" });
-        } else {
-          res
-            .status(200)
-            .json({ data: data, messsage: "todo succes to delete" });
-        }
+        res.status(200).json({ data: data, messsage: "todo succes to delete" });
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).json({ msg: "Kesalahan server 500" });
+        next({
+          name: "customError",
+          status: 500,
+          message: "Kesalahan server 500",
+        });
       });
   }
 }

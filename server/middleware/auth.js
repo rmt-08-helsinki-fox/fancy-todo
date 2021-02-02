@@ -7,8 +7,8 @@ const authenticate = (req, res, next) => {
     req.data = decoded;
     next();
   } catch (err) {
-    res.status(401).json({ message: "Invalid Token" });
+    next(err);
   }
 };
 
-module.exports = { authenticate };
+module.exports = authenticate;

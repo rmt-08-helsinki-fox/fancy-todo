@@ -1,15 +1,14 @@
-const { Router } = require("express");
 const express = require("express");
 const router = express.Router();
 const TodoController = require("../controllers/todoController");
-const { authenticate } = require("../middleware/auth");
-const { authorization } = require("../middleware/authorization");
+const authenticate = require("../middleware/auth");
+const authorization = require("../middleware/authorization");
 
 router.use(authenticate);
 
-router.post("/todos", authorization, TodoController.postTodos);
-
 router.get("/todos", TodoController.getTodos);
+
+router.post("/todos", TodoController.postTodos);
 
 router.put("/todos/:id", authorization, TodoController.putTodos);
 
