@@ -1,11 +1,12 @@
 const {Todo} = require('../models')
 
-class Controller{
+class ControllerTodo{
     static createTodo(req, res){
         const {title, description, status, due_date} = req.body
-        // console.log(req.body)
+        console.log(req.body)
         Todo.create({
-            title, description, status, due_date
+            title, description, status, due_date,
+            UserId: req.decoded.id
         })
         .then(data=>{
             console.log(data)
@@ -30,7 +31,7 @@ class Controller{
         Todo.findByPk(req.params.id)
         .then(todo=>{
             res.status(200).json(todo)
-            console.log(todo)
+            // console.log(todo)
         })
         .catch(err=>{
             res.status(500).json(err)
@@ -96,4 +97,4 @@ class Controller{
     }
 }
 
-module.exports = Controller
+module.exports = ControllerTodo
