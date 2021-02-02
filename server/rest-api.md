@@ -188,31 +188,7 @@ Ada beberapa validasi di inputan di routes kami. Jika input anda tidak memenuhi 
 
 ```json
 {
-    "message": "Tidak boleh hari sebelum hari ini",
-    "type": "Validation error",
-    "path": "due_date",
-    "value": "2020-02-02",
-    "origin": "FUNCTION",
-    "instance": {
-        "id": null,
-        "title": "Berlari",
-        "description": "5 kilometer",
-        "status": "asasd",
-        "due_date": "2020-02-02",
-        "updatedAt": "2021-02-01T11:56:57.104Z",
-        "createdAt": "2021-02-01T11:56:57.104Z"
-    },
-    "validatorKey": "isAfter",
-    "validatorName": "isAfter",
-    "validatorArgs": [
-        "Mon Feb 01 2021"
-    ],
-    "original": {
-        "validatorName": "isAfter",
-        "validatorArgs": [
-            "Mon Feb 01 2021"
-        ]
-    }
+    "error": "Description tidak boleh kosong!"
 }
 ```
 

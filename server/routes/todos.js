@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Controller = require('../controller/controller');
+const todoController = require('../controller/todoController');
 
-router.get('/', Controller.getToDoList);
-router.get('/:id', Controller.getToDoListIdParam);
-router.post('/', Controller.addToDoList);
-router.put('/:id', Controller.updateToDoList);
-router.patch('/:id', Controller.updateStatusToDoList);
-router.delete('/:id', Controller.deleteToDoList);
+router.get('/', todoController.getToDoList);
+router.get('/:id', todoController.getToDoListIdParam);
+router.post('/', todoController.addToDoList);
+router.put('/:id', todoController.updateToDoList);
+router.patch('/:id', todoController.updateStatusToDoList);
+router.delete('/:id', todoController.deleteToDoList);
 
 module.exports = router;
