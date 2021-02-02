@@ -1,5 +1,7 @@
 const e = require('express')
 const { Todo, User } = require('../models')
+const sendMail = require('../helper/nodemailer')
+const axios = require('axios')
 
 class Controller {
   static todosList(req, res) {
@@ -22,14 +24,25 @@ class Controller {
   }
   static addTodos(req, res) {
     const { title, description, status, due_date } = req.body
-    const data = { title, description, status, due_date }
+    const dataTodo = { title, description, status, due_date }
     // data.UserId = req.params.id
-    Todo.create(data)
-      .then(success => {
-        res.status(201).json(success)
+    Todo.create(dataTodo)
+    .then(success => {
+      sendMail(req.decoded.email)
+      return success
+    })
+    .then(success => {
+      axios({
+        method: 'get',
+        url: `https://calendarific.com/api/v2/holidays?api_key=d0693b1ca06cc5c9f6c0235fd094272630490b22`
+      }).then(data => {
+        res.status(200).json(data)
+      }).catch(err => {
+        res.status(500).json(err)
       })
-      .catch(err => {
-        if (err.errors[0].message === 'Terlambat') {
+    })
+    .catch(err => {
+      if (err.errors[0].message === 'Terlambat') {
           res.status(400).json(err.errors[0])
         } else {
           res.status(500).json(err)
