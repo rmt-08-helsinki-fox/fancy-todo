@@ -4,11 +4,11 @@ const TodoController = require('../controller/todoController');
 const mid = require('../helper/middleware');
 
 router.use(mid);
-router.get('/todos', TodoController.showAllTodos);
-router.get('/todos/:id', TodoController.showTodo);
-router.post('/todos', TodoController.addTodo);
-router.put('/todos/:id', TodoController.updateTodo);
-router.patch('/todos/:id', TodoController.updateStatus);
-router.delete('/todos/:id', TodoController.destroy);
+router.get('/', TodoController.showAllTodos);
+router.get('/:id', TodoController.showTodo);
+router.post('/', TodoController.addTodo);
+router.put('/:id', TodoController.updateTodo);
+router.patch('/:id', TodoController.updateStatus);
+router.delete('/:id', TodoController.destroy);
 
 module.exports = router;
