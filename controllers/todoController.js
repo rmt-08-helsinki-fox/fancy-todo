@@ -1,4 +1,5 @@
 const { TODO } = require('../models/')
+const axios = require('axios');
 
 class todoController {
   static add(req, res){
@@ -97,6 +98,16 @@ class todoController {
     })
     .catch(err =>{
       res.status(500).json({msg: "Internal Server Error"})
+    })
+  }
+
+  static searchBook(req, res) {
+    axios.get("https://fakerapi.it/api/v1/books?_quantity=2")
+    .then(books => {
+      res.json(books.data)
+    })
+    .catch(err =>{
+      res.status(500).json(err)
     })
   }
 }

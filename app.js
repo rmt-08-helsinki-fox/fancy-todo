@@ -6,6 +6,7 @@ const express = require('express');
 const app = express()
 
 const router = require('./routes/')
+const errorHandlers = require('./middleware/errorHandlers')
 const port = 3001
 
 app.set ('view engine', 'ejs')
@@ -13,6 +14,8 @@ app.set ('view engine', 'ejs')
 app.use(express.urlencoded({extended: true}))
 
 app.use('/', router)
+
+app.use(errorHandlers)
 
 app.listen(port, (err, res) => {
   if(err) {
