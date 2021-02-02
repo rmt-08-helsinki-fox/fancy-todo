@@ -1,9 +1,11 @@
+const http = require("https");
 const { Todo } = require('../models/index');
 
 class todoController {
   static async addToDoList(req, res, next) {
 
     const { title, description, status, due_date } = req.body;
+    const { id } = req.decoded;
 
     try {
 
@@ -165,6 +167,35 @@ class todoController {
       next(err);
 
     }
+  }
+
+  static async getDictionary(req, res, next) {
+    const app_id = process.env.OXFORD_APP_ID; // insert your APP Id
+    const app_key = process.env.OXFORD_APP_KEY; // insert your APP Key
+    const wordQuery = req.query.word;
+    const strictMatch = "false";
+
+    const options = {
+      host: 'od-api.oxforddictionaries.com',
+      port: '443',
+      path: '/api/v2/entries/en-gb/' + wordQuery + '?strictMatch=' + strictMatch,
+      method: "GET",
+      headers: {
+        'app_id': app_id,
+        'app_key': app_key
+      }
+    };
+
+    http.get(options, (resp) => {
+      let body = '';
+      resp.on('data', (d) => {
+        body += d;
+      });
+      resp.on('end', () => {
+        let parsed = JSON.parse(body);
+        res.status(200).json({ definition: parsed.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0] });
+      });
+    });
   }
 }
 
