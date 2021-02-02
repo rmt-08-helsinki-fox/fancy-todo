@@ -31,13 +31,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
       validate:{
-        notEmpty:true
+        notEmpty:{
+          args : true,
+          msg: "Password cannot be empty",
+        },
+        notNull:{
+          args : true,
+          msg: "Password cannot be null",
+        }
       }
     }
   }, {
     hooks:{
       beforeCreate: (user,opt)=>{
-        console.log("kesini");
         user.password = hashing(user.password)
       }
     },

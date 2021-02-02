@@ -10,7 +10,7 @@ const authorize = (req,res,next)=>{
     .then((todo)=>{
         if (!todo) {
             throw {
-                name : "notfound",
+                name : "NotFound",
                 msg:"Invalid Todo Id"
             }   
         }
@@ -18,19 +18,13 @@ const authorize = (req,res,next)=>{
             next()
         } else {
             throw {
-                name : "notauthorize",
+                name : "NotAuthorize",
                 msg:"Not Authorize"
             } 
         }
     })
     .catch((err)=>{
-        if (err.name === "notfound") {
-            res.status(404).json(err.msg)
-        } else if(err.name === "notauthorize") {
-            res.status(401).json(err.msg)
-        } else {
-            res.status(500).json(err)
-        }
+        next(err)
     })
 }
 

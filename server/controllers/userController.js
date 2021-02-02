@@ -4,7 +4,7 @@ const {token} = require("../helpers/generateToken")
 
 class UserController{
 
-    static postRegister(req,res){
+    static postRegister(req, res, next){
         const { email, password } = req.body
         User.create({email, password})
         .then((user)=>{
@@ -15,15 +15,15 @@ class UserController{
             })
         })
         .catch((err)=>{
-            res.status(400).json(err)
+            next(err)
         })
     }
 
-    static postLogin(req,res){
+    static postLogin(req,res,next){
         const { email, password } = req.body
         User.findOne({where:{email}})
         .then((user)=>{
-            if (!user) throw { msg: "invalid pass or email"}
+            if (!user) throw({name:"ErrorLogin", msg: "invalid pass or email"})
             const match = compare(password, user.password)
             if (match) {
                 const accessToken = token({
@@ -34,11 +34,11 @@ class UserController{
                 console.log(accessToken);
                 res.status(200).json({accessToken})
             } else {
-                throw { msg: "invalid pass or email"}
+                throw({name:"ErrorLogin", msg: "invalid pass or email"})
             }
         })
         .catch((err)=>{
-            res.status(400).json(err.msg)
+            next(err)
         })
     }
 }

@@ -8,7 +8,8 @@ const authenticate = (req,res,next)=>{
         next()
     } catch(err) {
         // err
-        res.status(401).json({
+        next({
+            name:"WrongToken",
             msg:"Invalid Token"
         })
     }

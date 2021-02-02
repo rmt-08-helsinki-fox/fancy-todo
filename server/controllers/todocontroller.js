@@ -2,17 +2,20 @@ const {Todo, User} = require("../models/index")
 
 class TodoController{
 
-    static showTodo(req,res){
-        Todo.findAll()
+    static showTodo(req,res,next){
+        const UserId = req.decoded.id
+        Todo.findAll({where:{
+            UserId
+        }})
         .then((todoData)=>{
             res.status(200).json(todoData)
         })
         .catch((err)=>{
-            res.status(500).json(err)
+            next(err)
         })
     }
 
-    static postTodo(req, res){
+    static postTodo(req, res, next){
         const {title, description, status, due_date} = req.body
         const {id} = req.decoded
         let newTodo = {
@@ -27,16 +30,11 @@ class TodoController{
             res.status(201).json(result)
         })
         .catch((err)=>{
-            if (err.name === "SequelizeValidationError") {
-                let errors = err.errors.map(error=>error.message)
-                res.status(400).json(errors)
-            } else {
-                res.status(500).json(err)
-            }
+            next(err)
         })
     }
 
-    static getTodo(req,res){
+    static getTodo(req,res,next){
         const {id} = req.params 
         Todo.findOne({
             where:{
@@ -47,16 +45,18 @@ class TodoController{
             if (todo) {
                 res.status(200).json(todo)
             } else {
-                throw {msg:"error not found"}
+                throw({
+                    name:"NotFound",
+                    msg:"error not found"
+                })
             }
         })
         .catch((err)=>{
-            let error = err.msg
-            res.status(404).json(error)
+            next(err)
         })
     }
 
-    static putTodo(req,res){
+    static putTodo(req,res,next){
         const {id} = req.params
         const UserId = req.decoded.id
         const {title, description, status, due_date} = req.body
@@ -86,19 +86,11 @@ class TodoController{
         })
 
         .catch((err)=>{
-            if (err.name === "SequelizeValidationError") {
-                let errors = err.errors.map(error=>error.message)
-                res.status(400).json(errors)
-            } else if (err.name === "NotFound") {
-                let errors = err.msg
-                res.status(404).json(errors)
-            } else {
-                res.status(500).json(err)
-            }
+            next(err)
         })
     }
 
-    static patchTodo(req,res){
+    static patchTodo(req,res,next){
         const {id} = req.params 
         const {status} = req.body
         let editTodo = {status} 
@@ -119,19 +111,11 @@ class TodoController{
             }
         })
         .catch((err)=>{
-            if (err.name === "SequelizeValidationError") {
-                let errors = err.errors.map(error=>error.message)
-                res.status(400).json(errors)
-            } else if (err.name === "NotFound") {
-                let errors = err.msg
-                res.status(404).json(errors)
-            } else {
-                res.status(500).json(err)
-            }
+            next(err)
         })
     }
 
-    static deleteTodo(req,res){
+    static deleteTodo(req,res,next){
         const {id} = req.params
         Todo.destroy({
             where:{
@@ -151,12 +135,7 @@ class TodoController{
         })
 
         .catch((err)=>{
-            if (err.name === "NotFound") {
-                let errors = err.msg
-                res.status(404).json(errors)
-            } else {
-                res.status(500).json(err)
-            }
+            next(err)
         })
     }
 }
