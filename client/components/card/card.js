@@ -1,7 +1,7 @@
 //@ts-check
 function generateCard(payload) {
     return `
-        <div>
+        <div id="${payload.id}">
             ${payload.test}
         </div>
         <button id="${payload.id}" click="${payload.handler}">

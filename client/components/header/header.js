@@ -11,8 +11,3 @@ $("#sign-out-button").click((e) => {
 })
 
 auth()
-
-function logout() {
-    localStorage.clear()
-    auth()
-}

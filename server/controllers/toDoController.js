@@ -13,8 +13,9 @@ class toDoController {
             if (data) {
                 res.status(201).json(data)
                 return
+            } else {
+                throw { status: 400 }
             }
-            next({ status: 400 })
         } catch (err) {
             next(err)
         }
@@ -30,11 +31,12 @@ class toDoController {
                 // ! v Usually data becomes object on works, best practice
                 // res.status(200).json({data})
                 return
+            } else {
+                throw {
+                    status: 500,
+                    msg: "No data found",
+                }
             }
-            next({
-                status: 500,
-                msg: "No data found",
-            })
         } catch (err) {
             next(err)
         }
@@ -48,8 +50,9 @@ class toDoController {
             if (data) {
                 res.status(200).json(data)
                 return
+            } else {
+                throw { status: 404 }
             }
-            next({ status: 404 })
         } catch (err) {
             next(err)
         }
@@ -69,10 +72,10 @@ class toDoController {
                 }
             )
             if (count === 0) {
-                next({ status: 404 })
-                return
+                throw { status: 404 }
+            } else {
+                res.status(200).json(data[0])
             }
-            res.status(200).json(data[0])
         } catch (err) {
             next(err)
         }
@@ -92,10 +95,10 @@ class toDoController {
                 }
             )
             if (count === 0) {
-                next({ status: 404 })
-                return
+                throw { status: 404 }
+            } else {
+                res.status(200).json(data[0])
             }
-            res.status(200).json(data[0])
         } catch (err) {
             next(err)
         }
@@ -116,8 +119,7 @@ class toDoController {
                     msg: `ToDo success to delete`,
                 })
             } else {
-                next({ status: 404 })
-                return
+                throw { status: 404 }
             }
         } catch (err) {
             next(err)

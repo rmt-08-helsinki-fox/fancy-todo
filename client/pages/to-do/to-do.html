@@ -4,9 +4,47 @@
 <main>
     <div class="container">
         <h1>Welcome User!</h1>
+        <!-- BUTTON ADD TO DO -->
         <button id="add-to-do-button" class="btn btn-success">Add To Do</button>
-        <h3 class="mt-4">Here is Your To Do List:</h3>
+        <!--  -->
+        <div id="add-to-do-form" style="width: 40rem; margin-bottom: 1rem; margin-top: 1rem">
+            <form onsubmit="addTodo(event)">
+                <div class="row">
+                    <div class="col">
+                        <input
+                            type="text"
+                            class="form-control title"
+                            placeholder="To Do Title"
+                            id="titleAdd"
+                            required
+                        />
+                    </div>
+                    <div class="col">
+                        <input
+                            type="date"
+                            class="form-control due_date"
+                            placeholder="due date"
+                            id="dueDateAdd"
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea
+                        class="form-control description"
+                        id="descriptionAdd"
+                        rows="3"
+                        placeholder="Description Here...."
+                    ></textarea>
+                </div>
+                <p>* Date must not be in the past</p>
+                <button type="submit" class="btn btn-primary">Add</button>
+                <button onclick="cancleAdd(event)" class="btn btn-danger">Cancel</button>
+            </form>
+        </div>
         <!-- LISTING TO DO -->
+        <h3 class="mt-4">Here is Your To Do List:</h3>
+        <!-- LOOPING STARTS HERE -->
         <div class="row mb-3">
             <div class="col-md-9 themed-grid-col">
                 <div class="pb-3"><h5>#1 To Do Title</h5></div>
