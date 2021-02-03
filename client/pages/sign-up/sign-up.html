@@ -3,31 +3,16 @@
 
 <div class="text-center sign-up">
     <main class="form-signup">
-        <form>
+        <form id="form-signup">
             <h1 class="h3 fw-normal">Sign Up Here</h1>
             <label for="inputEmail" class="visually-hidden">Email address</label>
             <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus />
             <label for="inputPassword" class="visually-hidden">Password</label>
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" required />
-            <label for="retypePassword" class="visually-hidden">Retype Password</label>
-            <input
-                type="retypePassword"
-                id="retypePassword"
-                class="form-control"
-                placeholder="Retype Password"
-                required
-            />
-            <button
-                id="sign-up-button"
-                class="w-100 btn btn-lg btn-primary"
-                style="background-color: blue"
-                type="submit"
-            >
-                Sign Up
-            </button>
-            <button id="change-to-sign-in" class="mt-2 w-100 btn btn-lg btn-primary" style="background-color: green">
-                Already Have Account
-            </button>
+            <!-- <label for="retypePassword" class="visually-hidden">Retype Password</label>
+            <input type="password" id="retypePassword" class="form-control" placeholder="Retype Password" required /> -->
+            <button id="sign-up-button" class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
+            <button id="change-to-sign-in" class="mt-2 w-100 btn btn-lg btn-success">Already Have Account</button>
             <p class="mt-5 mb-3 text-muted">&copy; Christ - Hacktiv8</p>
         </form>
     </main>

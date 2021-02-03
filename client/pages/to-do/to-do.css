@@ -1,3 +1,12 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: #eeeeee;
+}
+
 .themed-grid-col {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;

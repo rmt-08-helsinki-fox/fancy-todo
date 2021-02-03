@@ -4,9 +4,9 @@
 <main>
     <div class="container">
         <h1>Welcome User!</h1>
-        <button id="add-to-do-button" class="btn btn-outline-success">Add To Do</button>
-        <!-- LISTING TO DO -->
+        <button id="add-to-do-button" class="btn btn-success">Add To Do</button>
         <h3 class="mt-4">Here is Your To Do List:</h3>
+        <!-- LISTING TO DO -->
         <div class="row mb-3">
             <div class="col-md-9 themed-grid-col">
                 <div class="pb-3"><h5>#1 To Do Title</h5></div>
@@ -21,10 +21,19 @@
                     <label> <input type="checkbox" value="status" /> Status </label>
                 </div>
                 <div class="mt-1">
-                    <button id="edit-to-do-button" class="btn btn-outline-success">Edit</button>
-                    <button id="delete-to-do-button" class="btn btn-outline-success">Delete</button>
+                    <button id="edit-to-do-button" class="btn btn-warning">Edit</button>
+                    <button id="delete-to-do-button" class="btn btn-danger">Delete</button>
                 </div>
             </div>
+        </div>
+        <!--  -->
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <input type="checkbox" aria-label="Checkbox for following text input" />
+                </div>
+            </div>
+            <input type="text" class="form-control" aria-label="Text input with checkbox" />
         </div>
         <!--  -->
     </div>
