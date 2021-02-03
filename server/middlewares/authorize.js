@@ -12,9 +12,11 @@ function authorize(req, res, next){
         }
     })
     .catch(err=>{
-        res.status(401).json({
-            msg: 'Not Authorized'
-        })
+        // res.status(401).json({
+        //     msg: 'Not Authorized'
+        // })
+        err.name = 'Not Authorized'
+        next(err)
     })
 }
 

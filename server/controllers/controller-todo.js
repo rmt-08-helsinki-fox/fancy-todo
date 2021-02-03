@@ -1,7 +1,7 @@
 const {Todo} = require('../models')
 
 class ControllerTodo{
-    static createTodo(req, res){
+    static createTodo(req, res, next){
         const {title, description, status, due_date} = req.body
         console.log(req.body)
         Todo.create({
@@ -12,33 +12,36 @@ class ControllerTodo{
             console.log(data)
             res.status(201).json(data)
         })
-        .catch(err =>{
-            res.status(500).json(err)
-        })
+        // .catch(err =>{
+        //     res.status(500).json(err)
+        // })
+        next(err)
     }
 
-    static getTodo(req, res){
+    static getTodo(req, res, next){
         Todo.findAll()
         .then(todos=>{
             res.status(200).json(todos)
         })
         .catch(err=>{
-            res.status(500).json(err)
+            // res.status(500).json(err)
+            next(err)
         })
     }
 
-    static getTodoById(req, res){
+    static getTodoById(req, res, next){
         Todo.findByPk(req.params.id)
         .then(todo=>{
             res.status(200).json(todo)
             // console.log(todo)
         })
         .catch(err=>{
-            res.status(500).json(err)
+            // res.status(500).json(err)
+            next(err)
         })
     }
 
-    static putTodoUpdate(req, res){
+    static putTodoUpdate(req, res, next){
         const {title, description, status, due_date} = req.body
         const id = +req.params.id
 
@@ -54,11 +57,12 @@ class ControllerTodo{
             res.status(200).json(todo[1][0])
         })
         .catch(err=>{
-            res.status(500).json(err)
+            // res.status(500).json(err)
+            next(err)
         })
     }
 
-    static patchTodoUpdate(req, res){
+    static patchTodoUpdate(req, res, next){
         const id = +req.params.id
         const {title, description, status, due_date} = req.body
 
@@ -74,11 +78,12 @@ class ControllerTodo{
             res.status(200).json(todo)
         })
         .catch(err=>{
-            res.status(500).json(err)
+            // res.status(500).json(err)
+            next(err)
         })
     }
 
-    static deleteTodo(req, res){
+    static deleteTodo(req, res, next){
         const id = +req.params.id
 
         Todo.destroy({
@@ -92,7 +97,8 @@ class ControllerTodo{
             console.log(todo)
         })
         .catch(err=>{
-            res.status(500).json(err)
+            // res.status(500).json(err)
+            next(err)
         })
     }
 }
