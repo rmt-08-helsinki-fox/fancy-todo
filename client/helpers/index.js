@@ -208,8 +208,7 @@ function editTodo() {
         data: {
             title,
             description,
-            due_date,
-            status: false
+            due_date
         }
     })
         .done(() => {

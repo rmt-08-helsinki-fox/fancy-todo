@@ -80,8 +80,8 @@ class TodoController {
     static async updateTodo(req, res, next) {
         try {
             const id = req.params.id;
-            const { title, description, status, due_date } = req.body;
-            const dataUpdate = { title, description, status, due_date };
+            const { title, description, due_date } = req.body;
+            const dataUpdate = { title, description, due_date };
             const opt = {
                 where: {
                     id,

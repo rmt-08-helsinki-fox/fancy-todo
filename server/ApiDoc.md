@@ -219,7 +219,6 @@ _Request Body_
 {
   "title": "<title todo to get insert into>",
   "description": "<description to get insert into>",
-  "status": <Boolean to get insert into>,
   "due_date": <Date(yyyy-mm-dd) to get insert into>,
 }
 ```

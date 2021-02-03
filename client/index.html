@@ -135,7 +135,8 @@
                     <form id="submitCrud">
                         <input type="hidden" id="id">
                         <div class="row mb-3">
-                            <label for="title" class="col-sm-3 col-form-label">Title</label>
+                            <label for="title" class="col-sm-3 col-form-label">Title<sup
+                                    class="text-danger">*</sup></label>
                             <div class="col-sm">
                                 <input type="text" class="form-control" id="title">
                                 <small class="text-danger" id="validateTitle">Title can't be empty</small>
@@ -148,7 +149,8 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="due_date" class="col-sm-3 col-form-label">Due Date</label>
+                            <label for="due_date" class="col-sm-3 col-form-label">Due Date<sup
+                                    class="text-danger">*</sup></label>
                             <div class="col-sm">
                                 <input type="date" class="form-control" id="due_date">
                                 <small class="text-danger" id="validateDueDate">Due date can't be passed</small>
