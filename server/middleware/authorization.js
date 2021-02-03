@@ -20,12 +20,14 @@ function authorization(req, res, next) {
     }
     else {
       // error ketika tidak diauthorized
-      res.status(401).json({ message: 'Not Authorized'})
+      // res.status(401).json({ message: 'Not Authorized'})
+      throw new Error('Not Authorized')
     }
   })
   .catch(err => {
     //error not found dari line 16
-    res.status(404).json({ message: err.message})
+    // res.status(404).json({ message: err.message})
+    next(err)
   })
 }
 

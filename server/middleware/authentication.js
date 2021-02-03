@@ -11,7 +11,8 @@ function authentication(req, res, next) {
     next()
   }
   catch(err) {
-    res.status(401).json({ message: 'Invalid Token' })
+  
+    next(err, err.message = 'Invalid Token')
   }
 
 }

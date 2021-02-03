@@ -1,8 +1,10 @@
-const { Todo, User } = require('../models/')
+const { Todo } = require('../models/')
+const axios = require('axios')
+const WEATHERSTACK_API = process.env.WEATHERSTACK_API
 
 class ControllerTodo {
 
-  static showTodos(req, res) {
+  static showTodos(req, res, next) {
     Todo.findAll({
       order: [["id"]]
     })
@@ -10,57 +12,70 @@ class ControllerTodo {
       res.status(200).json(todos)
     })
     .catch(err => {
-      res.status(500).json( { message: 'Internal ServerError' } )
+      next(err)
     })
 
   }
 
-  static postTodos(req, res) {
-    
-    let user_id = req.userData.id
+  static postTodos(req, res, next) {
+    //didapat pada saat proses decoded
+    let userId = req.userData.id
 
-    const { title, description, status, due_date } = req.body
+    //di client nnt ada field untuk input location(optional)
+    const { title, description, status, due_date, location } = req.body
     
-    let obj = { title, description, status, due_date, user_id }
+    let obj = { title, description, status, due_date, user_id: userId }
     
+    let output = []
+
     Todo.create(obj)
     .then((todo) => {
-      res.status(201).json(todo)
-    })
-    .catch(err => {
-      // error validasi
-      if(Array.isArray(err.errors)) {
-        res.status(400).json({ message: err.message })
+
+      if(location) {
+        output.push(todo)
+        return axios
+          .get(`http://api.weatherstack.com/current?access_key=${WEATHERSTACK_API}&query=${location}`)
       }
       else {
-        // error server
-        res.status(500).json({ message: 'Internal Server Error' })
+        res.status(201).json(todo)
       }
+    })
+    .then(response =>{
+      let currentWeather = response.data.current.weather_descriptions
+
+      output.push(currentWeather)
+      
+      res.status(201).json(output)
+    })
+    .catch(err => {
+    
+      next(err)
     })
   }
 
-  static showTodoById(req, res) {
+  static showTodoById(req, res, next) {
     
     let todoId = +req.params.id
 
     Todo.findByPk(todoId)
     .then(() => { 
-      //parameter kosong karena sudah di search di authorization, data todo ambil dari req.todo pada saat authorization
+      //parameter kosong karena sudah di search di authorization,
+      //data todo ambil dari req.todo pada saat authorization
       let findedTodo  = req.todo
       res.status(200).json(findedTodo)
     })
     .catch(err => {
-      // error yang 404 pindah ke authorization
-      res.status(500).json({ message: 'Internal Server Error' })
+
+      next(err)
     })
   }
 
-  static putTodo(req, res) {
+  static putTodo(req, res, next) {
 
     let todoId = +req.params.id
 
     const { title, description, status, due_date } = req.body
-
+    
     let obj = { title, description, status, due_date }
 
     //langsung diupdated karena findTodo sudah di authorization
@@ -74,23 +89,17 @@ class ControllerTodo {
       res.status(200).json(updatedTodo)
     })
     .catch(err => {
-      // error validasi
-      if(Array.isArray(err.errors)) {
-        res.status(400).json({ message: err.message })
-      }
-      else {
-        // error server
-        res.status(500).json({ message: 'Internal Server Error'})
-      }
+    
+      next(err)
     })
     
   }
 
-  static patchTodo(req, res) {
+  static patchTodo(req, res, next) {
 
     let id = +req.params.id
     //jangan langsung passing req.body
-    const { status } = req.body
+    const  status  = req.body.status
 
     Todo.update({ status }, {
       fields: ['status'],
@@ -103,12 +112,12 @@ class ControllerTodo {
       res.status(200).json(updatedTodo)
     })
     .catch(err => {
-      //error validasi
-      res.status(404).json({ message: err.message })
+
+      next(err)
     })
   }
 
-  static deleteTodo(req, res) {
+  static deleteTodo(req, res, next) {
     
     let todoId = +req.params.id
     
@@ -123,10 +132,9 @@ class ControllerTodo {
     })
     .catch(err => {
 
-      res.status(500).json({ message: 'Internal Server Error' })
+      next(err)
     })
   }
-
 }
 
 module.exports = ControllerTodo

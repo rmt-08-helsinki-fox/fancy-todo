@@ -4,7 +4,7 @@ const { getToken } = require('../helpers/jwt')
 
 class ControllerUser {
   
-  static register(req, res) {
+  static register(req, res, next) {
     const { email, password } = req.body
     let obj = { email, password }
     User.create(obj)
@@ -14,18 +14,12 @@ class ControllerUser {
       res.status(201).json(obj)
     })
     .catch(err => {
-      //error unique
-      if(err.errors[0].type === 'unique violation') {
-        res.status(403).json({ message: 'email already been used by another user' })
-      }
-      else {
-        // error validation field kosong
-        res.status(400).json({ message: err.message })
-      }
+
+      next(err)
     })
   }
 
-  static login(req, res) {
+  static login(req, res, next) {
     const { email, password } = req.body
 
     User.findOne({
@@ -40,11 +34,13 @@ class ControllerUser {
       const access_token = getToken({
         id: user.id,
         email: user.email
+        //pada saat authentication akan ada proses decoded
       })
       res.status(201).json({ access_token })
     })
     .catch(err => {
-      res.status(400).json({ message: err.message })
+      
+      next(err)
     })
   }
 

@@ -39,19 +39,9 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       type: DataTypes.DATE,
       validate: {
-        isToday(value) {
-          let now = new Date()
-          let nowDay = +now.toLocaleString()[2]
-          let nowMonth = +now.toLocaleString()[0]
-          let nowYear = +now.toLocaleString().substring(0, 8).slice(4)
-
-          let dalueDay = +value.toLocaleString()[2]
-          let valueMonth = +value.toLocaleString()[0]
-          let valueYear = +value.toLocaleString().substring(0, 8).slice(4) 
-
-          if(valueYear < nowYear || valueMonth < nowMonth || dalueDay < nowDay) {
-            throw new Error('Cannot input past date')
-          }
+        isAfter: {
+          args: new Date().toString(),
+          msg: 'Date must be greater than today'
         }
       }
     },
