@@ -3,6 +3,8 @@ const todosController = require('../controllers/todosController')
 const { authenticate } = require('../middlewares/authenticate')
 const { authorize } = require('../middlewares/authorize')
 
+
+router.get('/news', todosController.getHeadLineNews)
 router.use(authenticate)
 router.post('/add', todosController.add)
 router.get('/', todosController.getTodos)

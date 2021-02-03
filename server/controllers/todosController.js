@@ -1,5 +1,5 @@
 const { Todo } = require('../models')
-
+const axios = require('axios')
 
 class Controller {
     static async add(req, res, next) {
@@ -154,6 +154,16 @@ class Controller {
             // } else {
             //     res.status(404).json(error)
             // }
+        }
+    }
+
+    static async getHeadLineNews(req, res, next){
+        try {
+            const country = req.query.country || 'id'
+            const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=${country}&${process.env.NEWS_API_KEY}`)
+            res.status(200).json(response.data)
+        } catch (error){
+            next(error)
         }
     }
 }

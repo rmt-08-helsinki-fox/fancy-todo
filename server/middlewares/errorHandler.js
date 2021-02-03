@@ -3,7 +3,7 @@ module.exports = (error, req, res, next) => {
     let errorMessages = []
     let errorMessage = ''
     let errorCode = null
-
+    
     switch (error.name) {
         case 'JsonWebTokenError':
             res.status(401).json({
