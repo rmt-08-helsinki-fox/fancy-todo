@@ -4,6 +4,7 @@ class TodoController {
   static add(req, res, next) {
     const activeUser = Number(req.decoded.id)
     const { title, description, status, dueDate } = req.body
+    console.log('masukkk')
     Todo.create({
       title,
       description,

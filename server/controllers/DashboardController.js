@@ -4,7 +4,7 @@ class DashboardController {
   static calender(req, res) {
     axios.get('https://calendarific.com/api/v2/holidays/', {
       params: {
-        api_key: '1acd1b874a8136b45c45744190e82633741e3d29',
+        api_key: process.env.API_KEY_CALENDER,
         country: 'ID',
         year: '2021'
       }
@@ -34,7 +34,7 @@ class DashboardController {
   static newyorktimes(req, res) {
     axios.get('https://api.nytimes.com/svc/topstories/v2/home.json', {
       params: {
-        'api-key': '0QP7wfhAJVMYaSFTpgdxSRu0o7155Gzm'
+        'api-key': process.env.API_KEY_NYT
       }
     })
       .then(result => {

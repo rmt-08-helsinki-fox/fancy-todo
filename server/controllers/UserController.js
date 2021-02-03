@@ -35,6 +35,7 @@ class UserController {
           email: user.email,
           name: user.name
         })
+        console.log(token)
         res.status(200).json({ token })
       })
       .catch(err => {
