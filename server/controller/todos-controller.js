@@ -82,7 +82,7 @@ class TodosController {
   static updateStatusById(req, res, next) {
     let id = +req.params.id
     let dataInput = {
-      status: req.body.status
+      status: true
     }
     Todo.update(dataInput, {
       where:{
