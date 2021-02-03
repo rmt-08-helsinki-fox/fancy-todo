@@ -1,79 +1,62 @@
-const { Todo } = require('../models');
-const errorMsg  = require('../helpers/errorMsg');
+const { Todo, Food } = require('../models');
+const axios = require('../helpers/axios');
 
 class TodoController{
 
-    static index = async(req,res) => {
+    static index = async(req,res,next) => {
         try {
-            let todos = await Todo.findAll();
+            let todos = await Todo.findAll({ where : { UserId : +req.user.id }, include : 'Food' });
             res.status(200).json(todos);
-        } catch (error) {
-            let err = errorMsg({msg : "failed to fetch todos",statusCode:500})
-            res.status(err.statusCodeRes).json(err.msg)
+        } catch (err) {
+            next(err)
         }
     }
-    static create = async(req,res) => {
+    static create = async(req,res,next) => {
         try {
             let {title,description,status,due_date} = req.body;
-            let todo = await Todo.create({title,description,status,due_date});
+            let todo = await Todo.create({title,description,status,due_date, UserId : req.user.id});
+            let foodReq = await axios.get('/recipes/random');
+            let food = foodReq.data.recipes[0];
+            await Food.create({foodName : food.title, description : food.summary, instruction : food.instructions, TodoId : todo.id})
+            let recipe = await todo.getFood();
+            todo.setDataValue('Food',recipe)
             return res.status(201).json(todo);
         } catch (err) {
-            let error = errorMsg(err);
-            res.status(error.statusCodeRes).json(error.msg);
+            next(err)
         }
     }
-    static update = async(req,res) => {
+    static update = async(req,res,next) => {
         try {
             let {title,description,status,due_date} = req.body;
-            let todo = await Todo.findByPk(+req.params.id);
-            if(!todo){
-                throw {msg : "Not found todo", statusCode : 404}
-            }
-            await todo.update({title,description,status,due_date});
-
-            res.status(200).json(todo);
+            let todo = await Todo.update({title,description,status,due_date},{ where : {id : +req.params.id}, returning : true, individualHooks : true});
+            res.status(200).json(todo[1][0]);
         } catch (err) {
-            let error = errorMsg(err);
-            res.status(error.statusCodeRes).json(error.msg);
+            next(err)
         }
     }
-    static updateStatus = async(req,res) => {
+    static updateStatus = async(req,res,next) => {
         try {
             let {status} = req.body;
-            let todo = await Todo.findByPk(+req.params.id);
-            if(!todo){
-                throw {msg : "Not found todo", statusCode : 404}
-            }
-            await todo.update({status});
-            res.status(200).json(todo);
+            let todo = await Todo.update({status},{ where : {id : +req.params.id}, returning : true, individualHooks : true});
+            res.status(200).json(todo[1][0]);
         } catch (err) {
-            let error = errorMsg(err);
-            res.status(error.statusCodeRes).json(error.msg);
+            next(err)
         }
     }
-    static detail = async(req,res) => {
+    static detail = async(req,res,next) => {
         try {
-            let todo = await Todo.findByPk(+req.params.id);
-            if(!todo){
-                throw {msg : "Not found todo", statusCode : 404}
-            }
+            let todo = await Todo.findByPk(+req.params.id,{ include : 'Food' });
             res.status(200).json(todo);
         } catch (err) {
-            let error = errorMsg(err);
-            res.status(error.statusCodeRes).json(error.msg);
+            next(err)
         }
     }
-    static destroy = async(req,res) => {
+    static destroy = async(req,res,next) => {
         try {
-            let todo = await Todo.findByPk(+req.params.id);
-            if(!todo){
-                throw {msg : "Not found todo", statusCode : 404}
-            }
-            await todo.destroy();
+            await Todo.destroy({ where : { id : +req.params.id} });
             res.status(200).json({msg : "Success to delete"});
         } catch (err) {
-            let error = errorMsg(err);
-            res.status(error.statusCodeRes).json(error.msg);
+            next(err)
         }
     }
 

@@ -12,9 +12,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.hasOne(models.Food);
+      Todo.belongsTo(models.User);
+
     }
   };
   Todo.init({
+    UserId : {
+      type : DataTypes.INTEGER,
+      references : {
+        model : 'Users',
+        key : 'id'
+      }
+    },
     title: {
       type : DataTypes.STRING,
       allowNull : false,

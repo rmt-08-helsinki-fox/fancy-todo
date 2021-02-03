@@ -106,7 +106,8 @@ None
 ```
 201 ( OK )
 {
-		access_token : string
+		name : string,
+		email : string
 }
 ```
 
@@ -155,7 +156,13 @@ Endpoint to create Todo.
 POST
 ```
 
-### URL PARAMS
+### Header
+
+```
+token=access_token // string
+```
+
+#### URL PARAMS
 
 ```
 None
@@ -182,6 +189,15 @@ None
 	description : string,
 	status : boolean,
 	due_date : date // YYYY-MM-DD,
+	food : {
+		id : integer,
+		foodName : string,
+		description : string,
+		instruction : string,
+		TodoId : integer,
+		createdAt : timestamps,
+		updatedAt : timestamps,
+	},
 	createdAt : timestamps,
 	updatedAt : timestamps,
 }
@@ -233,7 +249,13 @@ Endpoint to get All Todos.
 GET
 ```
 
-### URL PARAMS
+### Header
+
+```
+token=access_token // string
+```
+
+#### URL PARAMS
 
 ```
 None
@@ -256,6 +278,15 @@ None
     description : string,
     status : boolean,
     due_date : date // YYYY-MM-DD,
+    food : {
+      id : integer,
+      foodName : string,
+      description : string,
+      instruction : string,
+      TodoId : integer,
+      createdAt : timestamps,
+      updatedAt : timestamps,
+    },
     createdAt : timestamps,
     updatedAt : timestamps,
   }
@@ -295,7 +326,13 @@ Endpoint to get single Todo by Todo id.
 GET
 ```
 
-### URL PARAMS
+### Header
+
+```
+token=access_token // string
+```
+
+#### URL PARAMS
 
 ```
 id=integer
@@ -317,6 +354,15 @@ None
 	description : string,
 	status : boolean,
 	due_date : date // YYYY-MM-DD,
+	food : {
+		id : integer,
+		foodName : string,
+		description : string,
+		instruction : string,
+		TodoId : integer,
+		createdAt : timestamps,
+		updatedAt : timestamps,
+	},
 	createdAt : timestamps,
 	updatedAt : timestamps,
 }
@@ -355,7 +401,13 @@ Endpoint to update data Todo by todo id.
 PUT
 ```
 
-### URL PARAMS
+### Header
+
+```
+token=access_token // string
+```
+
+#### URL PARAMS
 
 ```
 id=integer
@@ -433,7 +485,13 @@ Endpoint to update Todo Status by Todo id.
 PATCH
 ```
 
-### URL PARAMS
+### Header
+
+```
+token=access_token // string
+```
+
+#### URL PARAMS
 
 ```
 id=integer
@@ -508,7 +566,13 @@ Endpoint to delete Todo Status by Todo id.
 DELETE
 ```
 
-### URL PARAMS
+### Header
+
+```
+token=access_token // string
+```
+
+#### URL PARAMS
 
 ```
 id=integer
