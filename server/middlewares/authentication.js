@@ -1,16 +1,15 @@
-const jwt = require('jsonwebtoken')
+const { verify } = require('../helpers/jwt')
 
 const authentication = function (req, res, next) {
   try {
     const token = req.headers.token
-    const decoded = jwt.verify(token, process.env.SECRET)
+    const decoded = verify(token)
     
     req.decoded = decoded
+    
     next()
   } catch (err) {
-    res.status(401).json({
-      error: 'Invalid token'
-    })
+    next({status: 401, msg: 'Invalid Token'})
   }
 }
 

@@ -27,7 +27,21 @@ class TodosController {
       res.status(200).json(data)
     })
     .catch((err) => {
-      res.status(500).json(err)
+      next(err)
+    })
+  }
+
+  static readMyTodos(req, res, next) {
+    Todo.findAll({
+      where: {
+        user_id: req.decoded.id
+      }
+    })
+    .then((data) => {
+      res.status(200).json(data)
+    })
+    .catch((err) => {
+      next(err)
     })
   }
   
@@ -101,7 +115,7 @@ class TodosController {
     
     Todo.destroy(options)
     .then(() => {
-      res.status(200).json({ msg : 'todo success to delete' })
+      res.status(200).json({ message : 'todo success to delete' })
     })
     .catch((err) => {
       next(err)
@@ -119,7 +133,7 @@ class TodosController {
       res.status(200).json(response.data)
     })
     .catch((err) => {
-      res.status(500).json(err)
+      next(err)
     })
   }
 }

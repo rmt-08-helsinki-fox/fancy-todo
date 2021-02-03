@@ -6,6 +6,7 @@ const authorization = require('../middlewares/authorization')
 route.use(authentication)
 route.post('/', TodosController.createTodos)
 route.get('/', TodosController.getTodos)
+route.get('/readMyTodos', TodosController.readMyTodos)
 
 route.get('/weather', TodosController.weather)
 route.use('/:id', authorization)
