@@ -16,8 +16,13 @@ class UserController {
             email: data.email
         }))
         .catch(err => {
-            const error = err.errors[0].message || 'Internal server error'
-          res.status(500).json({ error })
+            // console.log(err.name);
+            if(err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {
+                next({
+                    status: 400,
+                    errors: err.errors
+                })
+            } else next(err)
         })
     }
 
@@ -35,7 +40,6 @@ class UserController {
               id: data.id,
               email: data.email
             })
-            
             res.status(200).json({ access_token })
         })
         .catch(err => {
