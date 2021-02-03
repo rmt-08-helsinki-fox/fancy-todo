@@ -5,18 +5,14 @@ const axios = require('axios')
 
 class Controller {
   static todosList(req, res) {
-    // {
-    //   where: {
-    //     UserId: req.decoded.id
-    //   },
-    //   include: [User]
-    // }
-    Todo.findAll()
+    Todo.findAll({
+      where: {
+        UserId: req.decoded.id
+      }
+      // include: [User]
+    })
       .then(data => {
-        res.status(200).json({
-          data,
-          msg: "success"
-        })
+        res.status(200).json({ data })
       })
       .catch(err => {
         res.status(500).json(err)
@@ -25,24 +21,21 @@ class Controller {
   static addTodos(req, res) {
     const { title, description, status, due_date } = req.body
     const dataTodo = { title, description, status, due_date }
-    // data.UserId = req.params.id
+    dataTodo.UserId = req.decoded.id
     Todo.create(dataTodo)
-    .then(success => {
-      sendMail(req.decoded.email)
-      return success
-    })
-    .then(success => {
-      axios({
-        method: 'get',
-        url: `https://calendarific.com/api/v2/holidays?api_key=d0693b1ca06cc5c9f6c0235fd094272630490b22`
-      }).then(data => {
-        res.status(200).json(data)
-      }).catch(err => {
-        res.status(500).json(err)
+      .then(success => {
+        sendMail(req.decoded.email)
+        axios({
+          method: 'post',
+          url: `https://apilayer.net/api/check?access_key=a3bbf1ef3c6ba6d43f908e3542c224b6&email=${req.decoded.email}`
+        }).then(data => {
+          res.status(200).json({ msg: 'Success add data' })
+        }).catch(err => {
+          res.status(500).json(err)
+        })
       })
-    })
-    .catch(err => {
-      if (err.errors[0].message === 'Terlambat') {
+      .catch(err => {
+        if (err.errors[0].message === 'Terlambat') {
           res.status(400).json(err.errors[0])
         } else {
           res.status(500).json(err)

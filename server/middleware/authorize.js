@@ -1,11 +1,18 @@
+const { Todo } = require('../models')
+
 const authorize = function (req, res, next) {
-    if (req.decoded.role === 'admin') {
+    Todo.findOne({
+        where: {
+            UserId: req.params.id
+        }
+    }).then(found => {
+        if (found.UserId !== req.decoded.id) throw 'invalid'
         next()
-    }else{
-        res.status(401).json({
-            msg:'Not admin'
-        })
-    }
+    }).catch(err => {
+        if (err === 'invalid') {
+            res.status(400).json({ msg: 'Invalid User' })
+        }
+    })
 }
 
 module.exports = { authorize }

@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         isBoolean(value) {
           console.log(typeof value)
           if (typeof value !== 'boolean') {
-            throw new Error('notBool')
+            throw new Error('Must boolean')
           }
         }
       }
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         isLessthanToday(value) {
           let datenow = new Date()
           if (value < datenow) {
-            throw new Error("Terlambat");
+            throw new Error("Date must later than to this day");
           }
         }
       }
