@@ -13,15 +13,14 @@ function errorHandler (err, req, res, next) {
     case 403:
       escape.status(403).json({ error: 'forbidden' })
       break;
-    case 400:
+    case 400 || 'SequelizeUniqueConstraintError':
+      if (errName == 'SequelizeUniqueConstraintError') res.status(400).json({ message: errMsg });
       res.status(400).json({ error: 'bad request' })
       break;
     case 'SequelizeValidationError':
       console.log(errMsg.split('\n'))
       res.status(400).json(errMsg.split(',\n'))
       break;
-    case 'SequelizeUniqueConstraintError':
-      res.status(400).json({ message: errMsg})
     default:
       res.status(500).json({ error: errMsg })
       console.log(err.message)

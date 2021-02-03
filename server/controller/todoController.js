@@ -1,4 +1,4 @@
-const { Todo } = require('../models')
+const { Todo, User } = require('../models')
 
 class Controller {
 
@@ -15,13 +15,9 @@ class Controller {
   }
 
   static getAllTodos (req, res, next) {
-    Todo.findAll()
+    Todo.findAll({ order: [['createdAt', 'ASC']],include: [{ model: User, attributes: ['id', 'email'] }]})
       .then(todos => {
-        if (todos) {
         res.status(200).json(todos)
-        } else {
-          throw ({ name: 404 })
-        }
       })
       .catch(err => {
         console.log(err)

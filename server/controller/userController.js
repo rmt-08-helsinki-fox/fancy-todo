@@ -27,7 +27,7 @@ class Controller {
           }
           const access_token = generateToken(payload)
           req.headers.access_token = access_token
-          res.status(200).json({ access_token })
+          res.status(200).json({ email: user.email, access_token })
         } else {
           throw ({ message: 'wrong username / password' })
         }
