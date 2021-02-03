@@ -1,6 +1,6 @@
 //@ts-check
 // @ts-ignore
-const { User } = require("../models")
+const { User, ToDo } = require("../models")
 
 /**
  *
@@ -8,14 +8,19 @@ const { User } = require("../models")
  * @param {import("express").Response} res
  * @param {import("express").NextFunction} next
  */
-function authorize(req, res, next) {
+async function authorize(req, res, next) {
     try {
-        User.findOne({
-            // @ts-ignore
-            where: { email: req.decoded.email },
+        const data = await ToDo.findByPk(+req.params.id, {
+            where: {
+                UserId: req.decoded.id,
+            },
         })
+        if (data.UserId !== req.decoded.id) {
+            throw err
+        }
         next()
     } catch (err) {
+        console.log("Authorize error")
         res.status(401).json({
             msg: `Not authorized`,
         })
