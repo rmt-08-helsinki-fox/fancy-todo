@@ -19,7 +19,7 @@
 <body>
     <h1>Fancy Todo App</h1>
     <h2 id="welcoming"></h2>
-    <form action="" id="form-login">
+    <form action="" id="form_login">
         <div>
             <label for="email">Email</label><br>
             <input type="text" name="email" id="email">
@@ -29,15 +29,78 @@
             <input type="password" name="password" id="password">
         </div>
         <br>
-        <button type="submit">Click</button>
+        <button type="submit">Login</button>
     </form>
 
     <div id="home">
         <button id="logout">Logout</button>
+        <button id="triggerForm_addTodo">Add Todo</button>
     </div>
     <br>
 
+    <form action="" id="form_Add">
+        <div>
+            <label for="title">Title</label><br>
+            <input type="text" name="title" id="title">
+        </div>
+        <div>
+            <label for="description">Description</label><br>
+            <input type="text" name="description" id="description">
+        </div>
+        <div>
+            <label for="status">Status</label><br>
+            <select name="status" id="status">
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
+        </div>
+        <div>
+            <label for="due_date">Due Date</label><br>
+            <input type="date" name="due_date" id="due_date">
+        </div>
+        <br>
+        <button type="submit">Add</button>
+        <button id="cancelAdd">Cancel</button>
+    </form>
 
+    <form action="" id="form_Edit">
+        <div>
+            <label for="titleEdit">Title</label><br>
+            <input type="text" name="titleEdit" id="titleEdit">
+        </div>
+        <div>
+            <label for="descriptionEdit">Description</label><br>
+            <input type="text" name="descriptionEdit" id="descriptionEdit">
+        </div>
+        <div>
+            <label for="statusEdit">Status</label><br>
+            <select name="statusEdit" id="statusEdit">
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
+        </div>
+        <div>
+            <label for="due_dateEdit">Due Date</label><br>
+            <input type="date" name="due_dateEdit" id="due_dateEdit">
+        </div>
+        <br>
+        <button type="submit">Save</button>
+        <button id="cancelEdit">Cancel</button>
+    </form>
+
+    <form action="" id="form_EditStatus">
+        <p id="EditStatusTitle"></p>
+        <div>
+            <label for="statusEditing">Status</label><br>
+            <select name="statusEditing" id="statusEditing">
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
+        </div>
+        <br>
+        <button type="submit">Save</button>
+        <button id="cancelEditStatus">Cancel</button>
+    </form>
 
     <table border="1" id="todoList">
         <tr>
@@ -45,6 +108,7 @@
             <th>Description</th>
             <th>Status</th>
             <th>Due Date</th>
+            <th>Action</th>
         </tr>
     </table>
 

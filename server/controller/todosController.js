@@ -8,7 +8,8 @@ class Controller {
     Todo.findAll({
       where: {
         UserId: req.decoded.id
-      }
+      },
+      order: [['id', 'ASC']]
       // include: [User]
     })
       .then(data => {
