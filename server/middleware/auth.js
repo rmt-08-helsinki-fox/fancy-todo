@@ -6,7 +6,6 @@ async function authenticate (req, res, next) {
     const access_token = req.headers.access_token
     const email = verify(access_token).email
     const find = await User.findOne({ where: { email }})
-    console.log('dari authenticate')
     if (!access_token || !find) {
       next({
         name: 'authenticate'
@@ -22,7 +21,6 @@ async function authenticate (req, res, next) {
 async function authorized (req, res, next) {
   const UserId = +req.user.id
   const id = +req.params.id
-  console.log('dari authorized')
   try {
     const find = await Todo.findOne({ where: { id }})
     if (!find) {

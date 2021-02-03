@@ -11,12 +11,12 @@ module.exports = (err, req, res, next) => {
     res.status(400).json({ message: errors})
 
   } else if (err.name == "invalidLogin") {
-    const msg = 'Email or password is undefined'
+    const msg = 'Email or password is wrong'
     message.push(msg)
     res.status(400).json({message})
 
   } else if (err.name == "authorized") {
-    const msg = 'Your account Unauthorized'
+    const msg = 'Your account is Unauthorized'
     message.push(msg)
     res.status(400).json({message})
 
@@ -36,7 +36,7 @@ module.exports = (err, req, res, next) => {
     res.status(400).json({message})
   
   } else if (err.name == "undefined") {
-    const msg = 'Todo is undefined'
+    const msg = 'Todo not found'
     message.push(msg)
     res.status(400).json({message})
   }

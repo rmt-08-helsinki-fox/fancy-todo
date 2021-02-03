@@ -10,7 +10,6 @@ class userController {
       res.status(201).json({
         id: create.id,
         email: create.email,
-        password: create.password
       })
     } catch (err) {
       next(err)
@@ -20,18 +19,26 @@ class userController {
     const { email, password } = req.body
     try {
       const find = await User.findOne({ where: { email }})
-      const comparePass = comparePassword(password, find.password)
-      if (!find || !comparePass) {
+      // console.log(password)
+      if (!find) {
         throw {
           name: 'invalidLogin'
         }
       } else {
-        const token = {
-          id: find.id,
-          email: find.email,
+        const comparePass = comparePassword(password, find.password)
+        if (comparePass) {
+
+          const token = {
+            id: find.id,
+            email: find.email,
+          }
+          const access_token = generateToken(token)
+          res.status(200).json({ access_token })
+        } else {
+          throw {
+            name: 'invalidLogin'
+          }
         }
-        const access_token = generateToken(token)
-        res.status(200).json({ access_token })
       }
     } catch (err) {
       next(err)
