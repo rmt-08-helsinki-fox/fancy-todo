@@ -1,6 +1,6 @@
 const { User } = require('../models/')
 const { checkPass } = require('../helpers/bcrypt')
-const generateJwt = require('../helpers/jwt')
+const { generateJwt } = require('../helpers/jwt')
 
 class UserController {
   static register(req, res, next) {
@@ -24,14 +24,14 @@ class UserController {
       }
     })
       .then(data => {
-        if (!data) throw { error: 'Invalid email or password', status: 404 }
+        if (!data) throw { error: 'Invalid Email or Password', status: 400 }
         const checkPwd = checkPass(password, data.password)
-        if (!checkPwd) throw { error: 'Invalid email or password', status: 404 }
-        const token = generateJwt({
+        if (!checkPwd) throw { error: 'Invalid Email or Password', status: 400 }
+        const access_token = generateJwt({
           id: data.id,
           email: data.email
         })
-        res.status(200).json({ token })
+        res.status(200).json({ access_token })
       })
       .catch(err => {
         next(err)

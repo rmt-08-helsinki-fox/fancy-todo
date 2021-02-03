@@ -54,8 +54,36 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       type: DataTypes.INTEGER
+    },
+    priority: {
+      type: DataTypes.STRING,
+      validate: {
+        isIn: {
+          args: [['high', 'medium', 'low']],
+          msg: 'priority value must be High, Medium, or Low'
+        },
+        notEmpty: {
+          msg: 'priority is required'
+        }
+      }
     }
   }, {
+    hooks: {
+      beforeCreate: (todo, options) => {
+        todo.status = 'On Progress'
+      },
+      afterFind: (todo, options) => {
+        if (Array.isArray(todo)) {
+          todo.forEach(itm => {
+            if (new Date(itm.due_date) < new Date()) {
+              if (itm.status !== 'Completed') {
+                itm.status = 'Expired'
+              }
+            }
+          });
+        }
+      }
+    },
     sequelize,
     modelName: 'Todo',
   });

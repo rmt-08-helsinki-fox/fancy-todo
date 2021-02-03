@@ -4,15 +4,16 @@ const api_key = process.env.Api_Key_Calendarific
 
 class TodoController {
   static createTodos(req, res, next) {
-    const { title, description, status, due_date } = req.body
-    const userId = req.token.id
+    const { title, description, status, due_date, priority } = req.body
+    const userId = req.access_token.id
     let dataTodo;
     Todo.create({
       title,
       description,
       status,
       due_date,
-      userId
+      userId,
+      priority
     })
       .then(data => {
         dataTodo = data
@@ -36,7 +37,7 @@ class TodoController {
       })
   }
   static findTodos(req, res, next) {
-    const userId = req.token.id
+    const userId = req.access_token.id
     Todo.findAll({
       where: {
         userId: userId
@@ -57,7 +58,7 @@ class TodoController {
       }
     })
       .then(data => {
-        if (!data) throw { error: 'Not Found', status: 404 }
+        // if (!data) throw { error: 'Not Found', status: 404 }
         res.status(200).json(data)
       })
       .catch(err => {
@@ -66,8 +67,8 @@ class TodoController {
   }
   static editTodos(req, res, next) {
     const id = req.params.id
-    const { title, description, status, due_date } = req.body
-    Todo.update({ title, description, status, due_date }, {
+    const { title, description, status, due_date, priority } = req.body
+    Todo.update({ title, description, status, due_date, priority }, {
       where: {
         id: +id
       },
