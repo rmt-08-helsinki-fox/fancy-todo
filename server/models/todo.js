@@ -48,6 +48,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         notNull: {
           msg: `Status is required`
+        },
+        isBoolean(value) {
+          let boolean = 'true,false'
+          if (!boolean.includes(value)) {
+            throw new Error(`Status must be boolean true or false`)
+          }
         }
       }
     },
@@ -56,12 +62,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isDateNow(value) {
-          if (new Date() - value > 0) {
-            throw new Error('Date harus melibihi dari tanggal hari')
+          if (new Date() - value >= 0) {
+            throw new Error('Date harus melibihi dari tanggal hari ini')
           } 
         },
         notNull: {
           msg: `due_date is required`
+        },
+        notEmpty: {
+          msg: `due_date is required field`
         }
       }
     }

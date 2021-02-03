@@ -42,7 +42,7 @@ class TodoController {
     Todo.findOne({
       where: {
         id: id,
-        UserId: +req.decoded.i
+        UserId: +req.decoded.id
       }
     })
       .then(dataTodo => {
@@ -54,30 +54,30 @@ class TodoController {
   }
   // PUT TODOS BY ID - UPDATE ALL ROWS
   static updateTodosAll(req, res, next) {
-    let message = []
-    if (!req.body.title) {
-      // const message = err.errors.map(element => element.message)
-      // throw { name: 'Invalid Data', statusCode: 400, msg: 'Invalid Data'}
-      message.push('Title is required')
-    } 
-    if (!req.body.description) {
-      message.push(`Description is required`)
-    }
-    if (!req.body.status) {
-      message.push(`Status is required`)
-    } 
-    if (!req.body.due_date) {
-      message.push(`due_date is required`)
-    }
-    if (message.length > 0) {
-      throw { name: `SequelizeValidationError`, statusCode: 400, msg: message}
-    } 
+    // let message = []
+    // if (!req.body.title) {
+    //   // const message = err.errors.map(element => element.message)
+    //   // throw { name: 'Invalid Data', statusCode: 400, msg: 'Invalid Data'}
+    //   message.push('Title is required')
+    // } 
+    // if (!req.body.description) {
+    //   message.push(`Description is required`)
+    // }
+    // if (!req.body.status) {
+    //   message.push(`Status is required`)
+    // } 
+    // if (!req.body.due_date) {
+    //   message.push(`due_date is required`)
+    // }
+    // if (message.length > 0) {
+    //   throw { name: `SequelizeValidationError`, statusCode: 400, msg: message}
+    // } 
     const id = +req.params.id
     const objTodos = {
       title: req.body.title,
       description: req.body.description,
       status: req.body.status,
-      due_date: req.body.due_da
+      due_date: req.body.due_date
     }
     Todo.update(objTodos, {
       where: {
@@ -87,9 +87,12 @@ class TodoController {
       returning: true
     })
       .then(dataTodoUpdate => {
+        // console.log(dataTodoUpdate)
         res.status(200).json(dataTodoUpdate[1][0])
       })
       .catch(err => {
+        console.log(err.errors)
+        // next(err)
         const message = err.errors.map(element => element.message)
         const error = { name: err.name, statusCode: 400, msg: message}
         next(error)
