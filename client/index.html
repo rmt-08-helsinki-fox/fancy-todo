@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fancy Todo</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">To Do List</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" id="btn-register" href="#">Register</a>
+          <a class="nav-item nav-link" id="btn-logout" href="#">Logout</a>
+          <a class="nav-item nav-link" id="btn-login" href="#">Login</a>
+        </div>
+      </div>
+    </nav>
+    <!-- END NAVBAR -->
+
+    <!-- LOGIN FORM -->
+    <div id="login-form" class="container">
+      <h3>LOGIN</h3>
+      <form>
+        <div class="mb-3">
+          <p id="error-login" class="text-danger"></p>
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-control" id="login-email" />
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" class="form-control" id="login-password" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit-login">
+          Submit
+        </button>
+      </form>
+    </div>
+    <!-- END LOGIN FORM -->
+
+    <!-- REGISTER FORM -->
+    <div class="container" id="register-form">
+      <h3>REGISTER</h3>
+      <form>
+        <div class="mb-3">
+          <p id="error-register" class="text-danger"></p>
+          <p id="success-register" class="text-success"></p>
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-control" id="register-email" />
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" class="form-control" id="register-password" />
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">City</label>
+          <input type="text" class="form-control" id="register-city" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit-register">
+          Submit
+        </button>
+      </form>
+    </div>
+    <!-- END REGISTER FORM  -->
+
+    <!-- HOME  -->
+    <div id="homepage">
+			<h1>HOME</h1>
+			<div class="container row" id="list-todo">
+			</div>
+			
+     
+      </script>
+    </div>
+
+		<!-- END HOME  -->
+		<!-- <script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script> -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./index.js"></script>
+  </body>
+</html>
