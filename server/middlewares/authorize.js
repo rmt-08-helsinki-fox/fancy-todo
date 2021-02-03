@@ -11,11 +11,12 @@ const { User, ToDo } = require("../models")
 async function authorize(req, res, next) {
     try {
         const data = await ToDo.findByPk(+req.params.id, {
-            where: {
-                UserId: req.decoded.id,
-            },
+            // @ts-ignore
+            where: { UserId: req.decoded.id },
         })
+        // @ts-ignore
         if (data.UserId !== req.decoded.id) {
+            // @ts-ignore
             throw err
         }
         next()
