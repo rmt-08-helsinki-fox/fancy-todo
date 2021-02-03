@@ -8,6 +8,7 @@ const ThirdPartyAPI = require('../controllers/3rdpartyAPI')
 // User routing
 routes.post('/login', UserController.login)
 routes.post('/register', UserController.register)
+routes.post('/googleLogin', UserController.loginGoogle)
 
 routes.use(authentication)
 
