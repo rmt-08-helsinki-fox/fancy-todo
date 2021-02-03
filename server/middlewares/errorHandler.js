@@ -7,9 +7,9 @@ function errorHandler (err, req, res, next)  {
         res.status(400).json({message:errors})
       } else if (err.name == "bad request" || err.message == "Request failed with status code 400") {
           if (err.message == "Request failed with status code 400") {
-                let errors = []
-                errors.push("location cannot be empty")
-                res.status(400).json({message:errors})
+            let errors = []
+            errors.push("location cannot be empty")
+            res.status(400).json({message:errors})
           } else {
               let errors = []
               errors.push(err.message)

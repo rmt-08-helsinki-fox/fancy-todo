@@ -5,7 +5,7 @@ Fancy todo is an application to help make todo list.
 ---
 * **Method:** 
 
-  `Post /user/register`
+  `Post /users/register`
 
 > Making a new user register
 
@@ -46,7 +46,7 @@ Fancy todo is an application to help make todo list.
 ---
 * **Method:** 
 
-  `Post /user/login`
+  `Post /users/login`
 
 > Making user logged in
 
@@ -87,8 +87,12 @@ Fancy todo is an application to help make todo list.
 
   `get /todos`
 
-> Get all todo-list in server
+> Get all todo-list in server which belongs to user
 
+* **Headers**
+```
+    access_token <access token obtained via login> 
+```
 * **data Params:**
 
     None
@@ -150,7 +154,12 @@ OR
 * **Method:** 
 
   `post /todos`
-> Add a new data into todo-list
+> Add a new data into todo-list which belongs to user
+
+* **Headers**
+```
+    access_token <access token obtained via login> 
+```
 
 * **data Params:**
 
@@ -227,7 +236,12 @@ OR
 
     `Get /todos/:id`
 
-> Get todo-list with spesific id
+> Get todo-list with spesific id which belongs to user
+
+* **Headers**
+```
+    access_token <access token obtained via login> 
+```
 
 * **URL Params:**
 
@@ -298,7 +312,13 @@ OR
 
     `Put /todos/:id`
 
-> Edit a spesific row of todo-list which match with url params id
+> Edit a spesific row of todo-list which match with url params id which belongs to user
+
+* **Headers**
+```
+    access_token <access token obtained via login> 
+```
+
 * **URL Params:**
 
     ```
@@ -391,7 +411,12 @@ OR
 
     `Patch /todos/:id`
 
-> Edit column status of todo-list which match with url params id
+> Edit column status of todo-list which match with url params id which belongs to user
+
+* **Headers**
+```
+    access_token <access token obtained via login> 
+```
 
 * **URL Params:**
 
@@ -478,7 +503,12 @@ OR
 
     `Delete /todos/:id`
 
-> Delete a spesific row of todo-list which match with url params id
+> Delete a spesific row of todo-list which match with url params id which belongs to user
+
+* **Headers**
+```
+    access_token <access token obtained via login> 
+```
 
 * **URL Params:**
 
@@ -544,6 +574,11 @@ OR
     `Get /todos/weather/today`
 
 > get weather infromation for today
+
+* **Headers**
+```
+    access_token <access token obtained via login> 
+```
 
 * **URL params:**
 

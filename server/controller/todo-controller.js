@@ -37,12 +37,7 @@ class Todo2 {
       let id = +req.params.id
       Todo.findOne({where:{id:id}})
         .then(TodoId => {
-          if (TodoId) {
             res.status(200).json(TodoId)
-          } else {
-            let err = {name: "not found", message: "error, not found"}
-            next(err)
-          }
         })
         .catch(err => {
           next(err)
@@ -63,12 +58,7 @@ class Todo2 {
       Todo.update(newTodo,
         {where:{id:id}, returning: true})
           .then(updatedTodo =>{
-            if (Number(updatedTodo[0]) === 1){
               res.status(200).json(updatedTodo[1])
-            } else if (Number(updatedTodo[0]) === 0) {
-              let err = {name: "not found", message: "error, not found"}
-              next(err)
-            }
           })
           .catch (err => {
             next(err)
@@ -83,12 +73,7 @@ class Todo2 {
         where: {id:id},
         returning: true})
         .then(patchedTodo =>{
-          if (Number(patchedTodo[0]) === 1){
             res.status(200).json(patchedTodo[1])
-          } else if (Number(patchedTodo[0]) === 0) {
-            let err = {name: "not found", message: "error, not found"}
-              next(err)
-          }
         })
         .catch (err => {
           next(err)
@@ -101,12 +86,7 @@ class Todo2 {
         where:{id:id},
         returning: true})
           .then(deletestatus => {
-            if (deletestatus === 1){
               res.status(200).json({message:'todo success to delete'})
-            } else if (deletestatus === 0) {
-              let err = {name: "not found", message: "error, not found"}
-              next(err)
-            }
           })
           .catch(err => {
             next(err)

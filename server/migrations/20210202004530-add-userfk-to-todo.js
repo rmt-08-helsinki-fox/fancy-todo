@@ -10,7 +10,7 @@ module.exports = {
      */
     return queryInterface.addColumn('Todos','UserId', {
       type: Sequelize.INTEGER,
-      reference: {
+      references: {
         model: "Users",
         key: "id"
       }
