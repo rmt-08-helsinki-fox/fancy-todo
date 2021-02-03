@@ -27,6 +27,18 @@ module.exports = (err, req, res, next) => {
       errorCode = "INVALID_DATA"
       message = err.message
       break;
+
+    case (err.name === "Not allowed"):
+      statusCode = 401
+      errorCode = "USER_NOT_AUTHENTICATED"
+      message = err.message
+      break;
+
+    case (err.name === "NotAuthorized"):
+      statusCode = 403
+      errorCode = "FORBIDDEN_ACCESS"
+      message = err.message
+      break;
   
     default:
       break;

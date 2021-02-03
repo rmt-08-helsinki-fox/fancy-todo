@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   Todo.init({
     title: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           args: true,
@@ -26,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           args: true,
@@ -35,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
         args: true,
@@ -44,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     due_date: {
       type: DataTypes.DATE,
+      allowNull: false,
       validate: {
         notEmpty: {
           args: true,
@@ -51,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         isTrueDate(value) {
           if ((new Date() - value) > 0) {
-            throw new Error("Tanggal yang anda masukkan tidak valid")
+            throw new Error("Invalid date")
           }
         }
       }

@@ -24,7 +24,7 @@ class Controller {
         next(err)
       })
   }
-  static updateTodo(req, res) {
+  static updateTodo(req, res, next) {
     let id = +req.params.id
     let { title, description, status, due_date } = req.body
     Todo.update({title, description, status, due_date }, {

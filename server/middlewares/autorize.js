@@ -13,10 +13,9 @@ const authorize = (req, res, next) => {
     if (req.decoded.id === todo.UserId) {
       next()
     } else {
-      throw {name: "customError", message: "Not authorized"}
+      throw {name: "NotAuthorized", message: "You are not authorized to access the file"}
     }
   }).catch(err => {
-    // res.status(500).json(err)
     next(err)
   })
 }
