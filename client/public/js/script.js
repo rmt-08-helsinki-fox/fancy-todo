@@ -5,13 +5,20 @@ $(document).ready(function () {
         $('#loginPage').hide();
         $('#registerPage').show();
         $('#todoPage').hide();
+        $('#crud-todo').hide();
+        $('div.validateRegister').hide();
     });
     $('#loginNav').on('click', (e) => {
         e.preventDefault();
         $('#loginPage').show();
         $('#registerPage').hide();
         $('#todoPage').hide();
+        $('div.alert').hide();
     });
+    $('#formRegister').on('submit', e => {
+        e.preventDefault();
+        registration();
+    })
     $('#loginSubmit').on('submit', (e) => {
         e.preventDefault();
         let email = $('#email').val();
