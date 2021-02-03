@@ -12,7 +12,6 @@ router.post('/', TodoController.addTodos) // user authentication
 // GET TODOS
 router.get('/', TodoController.getTodos) // user authentication 
 
-// authorize masih error , put sama patch masih kurang error handler misal datanya tidak di centang atau null
 // GET TODOS BY ID
 router.get('/:id', authorize, TodoController.getTodosById) // user authorize findOne(bersadararkan name)
 // PUT TODOS BY ID - UPDATE ALL ROWS
