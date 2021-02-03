@@ -9,11 +9,11 @@ RouterTodo.use(Authentication)
 RouterTodo.post('/', TodoController.addTodo)
 RouterTodo.get('/', TodoController.read)
 
-// RouterTodo.use(TodoAuthorization)
-RouterTodo.get('/:id', Authentication, TodoAuthorization, TodoController.readById)
-RouterTodo.put('/:id', Authentication, TodoAuthorization, TodoController.editWhole)
-RouterTodo.patch('/:id', Authentication, TodoAuthorization, TodoController.edit)
-RouterTodo.delete('/:id', Authentication, TodoAuthorization, TodoController.delete)
+RouterTodo.use("/:id",TodoAuthorization)
+RouterTodo.get('/:id', TodoController.readById)
+RouterTodo.put('/:id', TodoController.editWhole)
+RouterTodo.patch('/:id', TodoController.edit)
+RouterTodo.delete('/:id', TodoController.delete)
 
 
 module.exports={

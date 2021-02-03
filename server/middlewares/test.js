@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const myPlaintextPassword = '1234';
 const someOtherPlaintextPassword = 'not_bacon';
 
 

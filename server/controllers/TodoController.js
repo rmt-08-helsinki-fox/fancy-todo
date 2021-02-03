@@ -48,12 +48,11 @@ class TodoController{
         }
     }
     static async editWhole(req, res, next){
-        let {title, description, due_date, status} = req.body
+        let {title, description, due_date} = req.body
         let updateTodo = {
             title, 
             description,
-            due_date,
-            status
+            due_date
         }
         try{
             let result = await Todo.update(updateTodo, {

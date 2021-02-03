@@ -14,8 +14,6 @@ const Authentication = (req, res, next) => {
     }catch(err){
         next({name: 'TOKEN_INVALID'})
     }
-
-
 }
 
 module.exports={

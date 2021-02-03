@@ -4,8 +4,9 @@ const jwt = require('jsonwebtoken');
 
 class UserController {
     static register(req, res, next){
-        let {email, password} = req.body
+        let {name, email, password} = req.body
         let newUser = {
+            name,
             email, 
             password
         }
@@ -25,6 +26,7 @@ class UserController {
         })
     }
     static login(req, res, next){
+        console.log(req.body)
         let {email, password} = req.body
         let id
         User.findOne({
@@ -43,7 +45,7 @@ class UserController {
         .then((isPasswordMatched)=>{
             if(isPasswordMatched){
                 let token = jwt.sign({ id: id }, process.env.TOKEN_KEY);
-                res.status(200).json(token)
+                res.status(200).json({token: token})
             }else{
                 next({name: 'LOGIN_GAGAL'})
             }
@@ -51,6 +53,24 @@ class UserController {
         .catch((err)=>{
             next(err)
         })
+    }
+    static auth(req, res, next){
+        let {token} = req.headers
+        // console.log(token)
+        let tokenData = jwt.verify(token, process.env.TOKEN_KEY);
+        // console.log(tokenData)
+        User.findByPk(tokenData.id)
+        .then((result)=>{
+            let user={
+                name: result.name,
+                email: result.email
+            }
+            res.status(200).json(user)
+        })
+        .catch((err)=>{
+            next({name: 'TOKEN_INVALID'})
+        })
+
     }
 }
 

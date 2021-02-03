@@ -3,7 +3,7 @@ const {Todo} = require('../models')
 const TodoAuthorization = (req, res, next) => {
 
     // console.log('authorization')
-    // console.log(req)
+    // console.log(req.params.id)
     Todo.findOne({
         where:{
             id: req.params.id

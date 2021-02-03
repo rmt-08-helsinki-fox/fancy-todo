@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.addColumn('Todos', 'status', Sequelize.STRING)
+    queryInterface.addColumn('Todos', 'status', Sequelize.BOOLEAN)
     /**
      * Add altering commands here.
      *

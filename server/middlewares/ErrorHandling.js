@@ -1,23 +1,26 @@
 const Error = (err, req, res, next) => {
 
     console.log('error handling')
-    console.log(err.name)
+    console.log(err)
 
     let {name} = err
     if(err.errors){
-        res.status(400).json(err.errors[0].message)
+        res.status(400).json({message:err.errors[0].message})
     }else if(name === 'LOGIN_GAGAL'){
-        res.status(400).json('Login Gagal')
+        res.status(400).json({message:'Login Gagal'})
     }else if(name === 'TOKEN_INVALID'){
-        res.status(400).json('Authentication failed')
+        res.status(400).json({message:'Authentication failed'})
     }else if(name === 'NOT_AUTHORIZED'){
-        res.status(400).json('Authorization failed')
+        res.status(403).json({message:'Authorization failed'})
     }else if(name === 'TODO_NOT_FOUND'){
-        res.status(404).json('Todo Tidak ditemukan')
+        res.status(404).json({message:'Todo Tidak ditemukan'})
     }else if(name === 'NOT_FOUND'){
-        res.status(400).json('Error not found')
+        res.status(400).json({message:'Error not found'})
     }else{
-        res.status(500).json('Internal server error')
+        if(err.original){
+            res.status(400).json({message:err.original.toString()})
+        }
+        res.status(500).json({message:'Internal server error'})
     }
 
     // err.errors[0].message
