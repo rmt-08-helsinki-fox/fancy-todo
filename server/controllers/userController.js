@@ -3,7 +3,7 @@ const { compare } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
 
 class UserController {
-  static userRegister(req ,res) {
+  static userRegister(req ,res, next) {
     const { email, password } = req.body
     const newUser = {
       email,
@@ -17,11 +17,11 @@ class UserController {
       })
     })
     .catch(err => {
-      res.status(400).json(err)
+      next(err)
     })
   }
 
-  static userLogin(req ,res) {
+  static userLogin(req ,res, next) {
     const { email, password } = req.body
 
     User.findOne({
@@ -31,13 +31,17 @@ class UserController {
     })
     .then(user => {
       if(!user) {
-        throw { msg: 'Invalid email or password'}
+        throw { 
+          name: "customError",
+          msg: 'Invalid email or password'}
       }
 
       const validate = compare(password, user.password)
 
       if(!validate) {
-        throw { msg: 'Invalid email or password'}
+        throw { 
+          name: "customError",
+          msg: 'Invalid email or password'}
       }
       
       const access_token = generateToken({
@@ -47,8 +51,7 @@ class UserController {
       res.status(200).json({ access_token })
     })
     .catch(err => {
-      const error = err.msg || 'Internal server error'
-      res.status(500). json(err)
+      next(err)
     })
 
   }

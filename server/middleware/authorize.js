@@ -6,12 +6,15 @@ const authorize = (req, res, next) => {
 
   Todo.findByPk(TodoId)
   .then(todo => {
+    if(!todo) {
+      throw {name: 'customError', msg: 'Not found'}
+    }
     todo.UserId === UserId ? next() : res.status(401).json({
       message: 'Not authorize'
     })
   })
   .catch(err => {
-    res.status(500).json({message: 'Internal server error'})
+    next(err)
   })
 }
 

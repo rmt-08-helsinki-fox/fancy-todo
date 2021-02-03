@@ -3,7 +3,7 @@ const axios = require('axios')
 
 class HomeController {
 
-  static showHome(req, res) {
+  static showHome(req, res, next) {
     axios.get('https://api.adviceslip.com/advice')
     .then(adv => {
       let dataAdvice = {
@@ -13,7 +13,7 @@ class HomeController {
       res.json(dataAdvice)
     })
     .catch(err => {
-      res.status(500).json(err)
+      next(err)
     })
 
   }

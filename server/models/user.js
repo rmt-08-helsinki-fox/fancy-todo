@@ -36,7 +36,15 @@ module.exports = (sequelize, DataTypes) => {
         msg: 'Your email has been used'
       },
     },
-    password: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Password tidak boleh kosong'
+        }
+      }
+    }
   }, {
     hooks: {
       beforeCreate: (user, option) => {
