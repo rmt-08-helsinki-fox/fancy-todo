@@ -1,33 +1,40 @@
 const { Todo } = require('../models')
 
 class TodoController {
-  static add(req, res) {
+  static add(req, res, next) {
+    const activeUser = Number(req.decoded.id)
     const { title, description, status, dueDate } = req.body
     Todo.create({
       title,
       description,
       status,
-      dueDate: dueDate
+      dueDate: dueDate,
+      UserId: activeUser
     })
       .then(data => {
         res.status(201).json(data)
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static showAll(req, res) {
-    Todo.findAll()
+  static showAll(req, res, next) {
+    const activeUser = Number(req.decoded.id)
+    Todo.findAll({
+      where: {
+        UserId: activeUser
+      }
+    })
       .then(data => {
         res.status(200).json(data)
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static findById(req, res) {
+  static findById(req, res, next) {
     const targetedId = Number(req.params.todoId)
     Todo.findOne({
       where: {
@@ -35,14 +42,15 @@ class TodoController {
       }
     })
       .then(data => {
+        if (!data) throw { name: 'DATA_NOT_FOUND' }
         res.status(200).json(data)
       })
       .catch(err => {
-        res.status(404).json(err)
+        next(err)
       })
   }
 
-  static update(req, res) {
+  static update(req, res, next) {
     const targetedId = Number(req.params.todoId)
     const { title, description, status, dueDate } = req.body
     Todo.update({
@@ -57,14 +65,15 @@ class TodoController {
       returning: true
     })
       .then(data => {
+        if (!data[0]) throw { name: 'DATA_NOT_FOUND' }
         res.status(201).json(data[1][0])
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static updateStatus(req, res) {
+  static updateStatus(req, res, next) {
     const targetedId = Number(req.params.todoId)
     const { status } = req.body
     Todo.update({
@@ -76,14 +85,15 @@ class TodoController {
       returning: true
     })
       .then(data => {
+        if (!data[0]) throw { name: 'DATA_NOT_FOUND' }
         res.status(201).json(data[1][0])
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static delete(req, res) {
+  static delete(req, res, next) {
     const targetedId = Number(req.params.todoId)
     Todo.destroy({
       where: {
@@ -92,11 +102,12 @@ class TodoController {
       returning: true
     })
       .then(data => {
-        let msg = "Todo success to delete"
+        if (!data) throw { name: 'DATA_NOT_FOUND' }
+        let msg = "Successfully delete one To-do"
         res.status(200).json({ msg })
       })
       .catch(err => {
-        res.status(404).json(err)
+        next(err)
       })
   }
 }
