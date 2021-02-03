@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Todo</title>
+    <link rel="stylesheet" href="./style.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"> -->
+</head>
+<body>
+    <header>
+        <div id="todo">
+            <h1 id="app-name">Fancy Todo App</h1>
+        </div>
+        <nav id="nav-bar">
+            <ul>
+               <li id="login-link"><a href="#" onclick="loginLink()">Login</a></li>
+               <li id="logout-link"><a href="#" onclick="logout()">Logout</a></li>
+               <li id="register-link"><a href="#" onclick="registerLink()">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="login-container">
+        <form method="post" id="login-form" class="form">
+            <h2>Login</h2>
+            <p id='login-error'></p>
+            <label>Email</label><br>
+            <input id="login-email" type="email"><br><br>
+            <label>Password</label><br>
+            <input id="login-password" type="password"><br><br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div id="register-container">
+        <form method="post" id="register-form" class="form">
+            <h2>Register</h2>
+            <p id='register-error'></p>
+            <label>Email</label><br>
+            <input id="register-email" type="email"><br><br>
+            <label>Password</label><br>
+            <input id="register-password" type="password"><br><br>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <div id="add-container">
+      <h2>Add todo</h2>
+      <p id="add-error"></p>
+      <form id="add-form" method="post" class="form">
+        <label>Title</label><br>
+        <input id="title" type="text"><br><br>
+        <label>Description</label><br>
+        <input id="description"type="text"><br><br>
+        <label>Due Date</label><br>
+        <input type="date" id="due_date"><br><br>
+        <button type="submit">Add</button>
+      </form>
+    </div>
+
+    <div id="edit-container">
+      <h2>Edit todo</h2>
+      <p id="edit-error"></p>
+      <form id="edit-form" method="post" class="form">
+        <label>Title</label><br>
+        <input id="edit-title" type="text"><br><br>
+        <label>Description</label><br>
+        <input id="edit-description"type="text"><br><br>
+        <label>Due Date</label><br>
+        <input type="date" id="edit-due_date"><br><br>
+        <button type="submit">Edit</button>
+      </form>
+    </div>
+
+    <div id="list-todo">
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+    <script>
+        const base_url = "http://localhost:3000/"
+        function checkAcessToken() {
+            if (!localStorage.getItem("access_token")) {
+                $("#login-container").show()
+                $("#register-container").hide()
+                $("#list-todo").hide()
+                $('#logout-link').hide()
+                $('#register-link').show()
+                $('#login-link').hide()
+                $('#add-container').hide()
+            } else {
+                $("#login-container").hide()
+                $("#register-container").hide()
+                $("#list-todo").show()
+                $('#login-link').hide()
+                $('#logout-link').show()
+                $('#register-link').hide()
+                $('#add-container').show()
+                $('#edit-container').hide()
+                getTodos()
+            }
+        }
+
+        function registerLink() {
+          $("#register-container").show()
+          $("#login-container").hide()
+          $('#login-link').show()
+          $('#register-link').hide()
+        }
+
+        function loginLink() {
+          $("#register-container").hide()
+          $("#login-container").show()
+          $('#login-link').hide()
+          $('#register-link').show()
+        }
+
+        function editLink() {
+          $("#add-container").hide()
+          $("#list-todo").hide()
+          $('#edit-container').show()
+        }
+
+        function register() {
+          const email = $("#register-email").val()
+          const password = $("#register-password").val()
+          console.log(email, password)
+
+          $.ajax({
+            url: base_url + "users/register",
+            method: "POST",
+            data: {
+              email,
+              password
+            }
+          })
+
+          .done(response => {
+            loginLink()
+          })
+
+          .fail((xhr, errortext) => {
+            let errorString = ""
+            xhr.responseJSON.message.forEach((element) => {
+              errorString += element
+              errorString += '<br>'
+            })
+            $('#register-error').html(errorString)
+            console.log(xhr.responseJSON.message)
+          })
+
+          .always( () => {
+            console.log("always")
+            $("#register-form").trigger("reset")
+          })
+        }
+
+        function login() {
+          const email = $("#login-email").val()
+          const password = $("#login-password").val()
+
+          $.ajax({
+            url: base_url + "users/login",
+            method: "POST",
+            data: {
+              email,
+              password
+            }
+          })
+          .done(response => {
+            console.log(response)
+            localStorage.setItem("access_token", response.access_token)
+            checkAcessToken()
+          })
+
+          .fail((xhr, errortext) => {
+            console.log(xhr.responseJSON.message, errortext)
+            $('#login-error').text(xhr.responseJSON.message)
+          })
+
+          .always( () => {
+            console.log("always")
+            $("#login-form").trigger("reset")
+          })
+        }
+
+        function logout() {
+          localStorage.clear()
+          checkAcessToken()
+          $("#list-todo").empty()
+        }
+
+        function getTodos() {
+          $.ajax({
+            url: base_url + "todos",
+            method: 'GET',
+            headers: {
+              access_token: localStorage.getItem("access_token")
+            }
+          })
+
+          .done(response => {
+            if (response.length === 0) {
+              $('#list-todo').append("<h1>You don't have any todo</h1>")
+            } else {
+              $('#list-todo').append("<h1>Your list todo:</h1>")
+            }
+            response.forEach((element) => {
+              $("#list-todo").append(`
+              <div class="todo">
+                <p class="title">Title: ${element.title}</p>
+                <p>Description: ${element.description}</p>
+                <button onclick="editTodoForm(${element.id})" >Edit</button>
+                <button onclick="deleteTodo(${element.id})">Delete</button>
+                <p>Todo Status! <input type="checkbox" name="" id=""></p>
+              </div>
+              `)
+            })
+          })
+
+          .fail((xhr, errortext) => {
+            console.log(xhr.responseJSON.message, errortext)
+          })
+
+          .always(() => {
+            console.log("always")
+          })
+        }
+
+        function addTodo() {
+          const title = $("#title").val()
+          const description = $("#description").val()
+          const due_date = $("#due_date").val()
+          console.log(typeof(due_date), 'ini duedate')
+
+          $.ajax({
+            url: base_url + "todos",
+            method: "POST",
+            headers: {
+              access_token: localStorage.getItem("access_token")
+            },
+            data: {
+              title,
+              description,
+              due_date
+            }
+          })
+
+          .done(response => {
+            $("#list-todo").empty()
+            $("#add-error").text("")
+            checkAcessToken()
+          })
+
+          .fail((xhr, errortext) => {
+            let errorString = ""
+            xhr.responseJSON.message.forEach((element) => {
+              errorString += element
+              errorString += '<br>'
+            })
+            $('#add-error').html(errorString)
+            console.log(xhr.responseJSON.message)
+          })
+
+          .always( () => {
+            console.log("always")
+            $("#add-form").trigger("reset")
+          })
+        }
+
+        function deleteTodo(id) {
+          $.ajax({
+            url: base_url + `todos/${id}`,
+            method: 'DELETE',
+            headers: {
+              access_token: localStorage.getItem("access_token")
+            }
+          })
+
+          .done(response => {
+            $("#list-todo").empty()
+            checkAcessToken()
+          })
+
+          .fail((xhr, errortext) => {
+            console.log(xhr.responseJSON.message)
+          })
+
+          .always(() => {
+            console.log("always")
+          })
+        }
+
+        function editTodoForm(id) {
+          $.ajax({
+            url: base_url + `todos/${id}`,
+            method: 'GET',
+            headers: {
+              access_token: localStorage.getItem("access_token")
+            }
+          })
+
+          .done(response => {
+            console.log(response)
+            $("#edit-title").val(response.title)
+            $("#edit-description").val(response.description)
+            $("#edit-due_date").val(response.due_date.split('T')[0])
+
+            editLink()
+            console.log("masuk")
+            $("#edit-form").on("submit", (element) => {
+              element.preventDefault()
+              const title = $("#edit-title").val()
+              const email = $("#edit-description").val()
+              const due_date = $("#edit-due_date").val()
+
+              return $.ajax({
+                url: base_url + `todos/${id}`,
+                method: 'PUT',
+                headers: {
+                  access_token: localStorage.getItem("access_token")
+                },
+                data: {
+                  title,
+                  email,
+                  due_date
+                }
+              })
+            })
+          })
+
+          .done(data => {
+            $("#list-todo").empty()
+            checkAcessToken()
+          })
+
+          // .done(data => {
+          //   $("#list-todo").empty()
+          //   checkAcessToken()
+          // })
+
+          .fail((xhr, errortext) => {
+            console.log(xhr.responseJSON.message, errortext)
+          })
+
+          .always(() => {
+            console.log("always")
+          })
+        }
+
+        function editTodo(id) {
+          const title = $("#edit-title").val()
+          const email = $("#edit-description").val()
+          const due_date = $("#edit-due_date").val()
+          $.ajax({
+            url: base_url + `todos/${id}`,
+            method: 'PUT',
+            headers: {
+              access_token: localStorage.getItem("access_token")
+            },
+            data: {
+              title,
+              email,
+              due_date
+            }
+          })
+
+          .done(response => {
+            $("#list-todo").empty()
+            checkAcessToken()
+          })
+
+          .fail((xhr), (errortext) => {
+            let errorString = ""
+            xhr.responseJSON.message.forEach((element) => {
+              errorString += element
+              errorString += '<br>'
+            })
+            $('#edit-error').html(errorString)
+            console.log(xhr.responseJSON.message)
+          })
+
+          .always(() => {
+            console.log("always")
+            $("#edit-form").trigger("reset")
+          })
+        }
+
+
+        $(document).ready(() => {
+          checkAcessToken()
+          $("#login-form").on("submit", (element) => {
+            element.preventDefault()
+            login()
+          })
+
+          $("#register-form").on("submit", (element) => {
+            element.preventDefault()
+            register()
+          })
+
+          $("#add-form").on("submit", (element) => {
+            element.preventDefault()
+            addTodo()
+          })          
+        })
+    </script>
+</body>
+</html>

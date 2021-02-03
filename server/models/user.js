@@ -20,9 +20,6 @@ module.exports = (sequelize, DataTypes) => {
       validate:  {
         notEmpty: {
           msg: "Field email tidak boleh kosong!"
-        },
-        isEmail: {
-          msg: "Format email salah!"
         }
       },
       unique: true

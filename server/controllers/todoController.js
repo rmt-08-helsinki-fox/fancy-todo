@@ -4,11 +4,10 @@ class TodoController {
   static addTodo(req, res, next) {
     // res.status(200).json("masuk controller")
     const UserId = +req.userData.id
-    const { title, description, status, due_date } = req.body
+    const { title, description, due_date } = req.body
     let newTodo = {
       title,
       description,
-      status,
       due_date,
       UserId
     }
@@ -53,7 +52,7 @@ class TodoController {
 
   static editTodo(req, res, next) {
     const id = +req.params.id
-    const { title, description, status, due_date } = req.body
+    const { title, description, due_date } = req.body
     const options = {
       where: {
         id
@@ -63,7 +62,6 @@ class TodoController {
     let editedTodo = {
       title,
       description,
-      status,
       due_date
     }
 

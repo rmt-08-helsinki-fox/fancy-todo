@@ -2,6 +2,7 @@
 const {
   Model, Sequelize
 } = require('sequelize');
+const { options } = require('../Routes');
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -31,25 +32,22 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     status: {
-      type: DataTypes.BOOLEAN,
-      validate: {
-        notEmpty: {
-          msg: "Field status tidak boleh kosong!"
-        }
-      }
+      type: DataTypes.BOOLEAN
     },
     due_date: {
       type: DataTypes.DATE,
       validate: {
-        dateValidation(value) {
-          const todayDate = new Date().toISOString().split("T")[0]
-          const inputedDate = value.toISOString().split("T")[0]
-          if (todayDate > inputedDate) {
-            throw new Error("Tidak dapat memasukkan tanggal sebelum hari ini!")
-          }
-        },
         notEmpty: {
           msg: "Field due date tidak boleh kosong!"
+        },
+        dateValidation(value) {
+          if (value !== '') {
+            const inputedDate = value.toISOString().split("T")[0]
+            const todayDate = new Date().toISOString().split("T")[0]
+            if (todayDate > inputedDate) {
+              throw new Error("Tidak dapat memasukkan tanggal sebelum hari ini!")
+            }
+          }
         }
       }
     },
@@ -60,5 +58,10 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Todo'
   });
+
+  Todo.addHook("beforeCreate", (user, options) => {
+    user.status = false;
+  })
+
   return Todo;
 };
