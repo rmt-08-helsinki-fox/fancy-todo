@@ -1,5 +1,5 @@
 const e = require('express')
-const { Todo, User } = require('../models')
+const { Todo } = require('../models')
 const sendMail = require('../helper/nodemailer')
 const axios = require('axios')
 
