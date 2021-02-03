@@ -1,34 +1,33 @@
 const { User } = require("../models");
 const { compare } = require("../helper/bcrypt");
 const { generateToken } = require("../helper/jwt");
-const axios = require('axios')
-const API_KEY = process.env.API_KEY
-
+const axios = require("axios");
+const API_KEY = process.env.API_KEY;
 
 class UserController {
   static postRegister(req, res, next) {
-    const { email, password,location } = req.body;
+    const { email, password, location } = req.body;
 
-    User.create({ email, password,location })
+    User.create({ email, password, location })
 
-   
-    .then(user => {
-      console.log(user.location)
-      axios.get(`http://api.weatherbit.io/v2.0/alerts?city=${user.location}&country=ID&key=${API_KEY}`)
-      .then(wheater => {
-        res.status(201).json({
-          msg: "registrasi berhasil",
-          user,
-          DetailLocation: wheater.data
-        })
+      .then((user) => {
+        console.log(user.location);
+        axios
+          .get(
+            `http://api.quotable.io/random?tags=love`
+          )
+          .then((wheater) => {
+            res.status(201).json({
+              msg: "registrasi berhasil",
+              user,
+              LoveQuotesForYou: wheater.data.content,
+            });
+          });
       })
-     })
-  
 
-    .catch((err) => {
-      next(err);
-    });
-  
+      .catch((err) => {
+        next(err);
+      });
   }
 
   static postLogin(req, res, next) {

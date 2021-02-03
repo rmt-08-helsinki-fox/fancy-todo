@@ -39,11 +39,9 @@ class TodoController {
     Todo.findByPk(id)
 
       .then((data) => {
-        if (!data) {
-          res.status(404).json({ msg: "kagak ada data" });
-        } else {
+       
           res.status(200).json(data);
-        }
+  
       })
       .catch((err) => {
         res.status(500).json(err);

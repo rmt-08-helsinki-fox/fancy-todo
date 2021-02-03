@@ -17,10 +17,11 @@ async function authentication(req, res, next) {
     } else {
       req.user = data;
       //console.log(data,"data bro")
+      next();
     }
-    next();
+    
   } catch (err) {
-    console.log(err);
+    next(err);
   }
 }
 
