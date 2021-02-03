@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           msg: "Status cannot be NULL"
+        },
+        isIn: {
+          args: [["done", "not done"]],
+          msg: "Status must 'done' or 'not done' "
         }
       }
     },

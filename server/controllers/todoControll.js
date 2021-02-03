@@ -12,7 +12,7 @@ class TodoControll {
     }
 
     if(newTodo.status === ""){
-      newTodo.status = "Not Done Yet"
+      newTodo.status = "not done"
     }
 
     Todo.create(newTodo)
@@ -27,10 +27,14 @@ class TodoControll {
   static findAll(req, res, next){
     let dataTodo
 
-    Todo.findAll()
+    Todo.findAll({
+      where: {
+        UserId: req.dataUser.id
+      }
+    })
     .then(data => {
       dataTodo = data
-      return axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${req.query.location}&APPID=6aa39f91b5429e15d47e5c9a7930e9bc`)
+      return axios.get(`http://api.openweathermap.org/data/2.5/weather?q=Jakarta&APPID=6aa39f91b5429e15d47e5c9a7930e9bc`)
     })
     .then(dataCuaca => {
       res.status(200).json({dataTodo, dataCuaca: dataCuaca.data})
@@ -75,18 +79,25 @@ class TodoControll {
   }
 
   static updateStatus(req, res, next){
-    let newTodo = {
-      status: req.body.status
-    }
+    let newTodo = {}
 
-    Todo.update(newTodo, {
-      where: {
-        id: +req.params.id
-      },
-      returning: true
-    })
+    Todo.findByPk(+req.params.id)
     .then(data => {
-      res.status(200).json(data[1][0])
+      if(data.status === "done"){
+        data.status = "not done"
+      }else{
+        data.status = "done"
+      }
+      newTodo.status = data.status
+      return Todo.update(newTodo, {
+        where: {
+          id: +req.params.id
+        },
+        returning: true
+      })
+    })
+    .then(data2 => {
+      res.status(200).json(data2[1][0])
     })
     .catch(err => {
       next(err)
@@ -97,10 +108,9 @@ class TodoControll {
     Todo.destroy({
       where: {
         id: +req.params.id
-      },
-      returning: true
+      }
     })
-    .then(data => {
+    .then(() => {
       res.status(200).json({message: "todo has been deleted"})
     })
     .catch(err => {
