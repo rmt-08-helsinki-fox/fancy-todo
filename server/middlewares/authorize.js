@@ -7,8 +7,11 @@ const authorize = function (req, res, next) {
         }
     })
     .then(data => {
-        console.log(data, req.decoded)
-        if (req.decoded.id !== data.id) {
+        let userData
+        for (let i = 0; i < data.length; i++) {
+            userData = data[i].UserId
+        }
+        if (req.decoded.id !== userData) {
             let errorMsg = {
                 message: `You are not authorized to do this`
             }
@@ -16,7 +19,7 @@ const authorize = function (req, res, next) {
         }
     })
     .catch(err => {
-        console.log(err)
+        res.status(401).json(err)
     })
 }
 

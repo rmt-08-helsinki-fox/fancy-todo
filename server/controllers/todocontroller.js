@@ -20,11 +20,7 @@ class TodoController {
     }
 
     static readAllTodos(req, res) {
-        Todo.findAll({
-            where: {
-                UserId : req.decoded.id
-            }
-        })
+        Todo.findAll()
         .then(data => {
             res.status(200).json(data)
         })
@@ -33,26 +29,17 @@ class TodoController {
         })
     }
 
-    static todoFindById(req, res) {
-        Todo.findOne({
+    static todoFindById(req, res, next) {
+        Todo.findAll({
             where: {
                 id : +req.params.id
             }
         })
         .then(data => {
-            if (data) {
-                res.status(200).json(data)
-            } else {
-                res.status(404).json({
-                    msg : "Invalid Id"
-                })
-            }
-    
+            res.status(200).json(data)
         })
         .catch(err => {
-            res.status(500).json({
-                msg : "Internal Server Error"
-            })
+            next(err)
         })
     }
 
@@ -131,10 +118,15 @@ class TodoController {
     }
 
     static getWeather(req, res, next) {
-        axios.get("api.openweathermap.org/data/2.5/weather?q=tangerang&appid=538ef4d63afd919c0b6c68dc287a89d3")
+        axios.get("https://api.openweathermap.org/data/2.5/weather?q=tangerang&appid=538ef4d63afd919c0b6c68dc287a89d3")
         .then(response => {
-            console.log(response)
-            res.status(200).json(response)
+            let mainWeather
+            let weatherDesc
+            for (let i = 0; i < response.data.weather.length; i++) {
+                mainWeather = response.data.weather[i].main
+                weatherDesc = response.data.weather[i].description
+            }
+            res.status(200).json({mainWeather, weatherDesc})
         })
         .catch(err => {
             res.status(500).json(err)
