@@ -15,15 +15,16 @@ const authorize = async function (req, res, next) {
     if (+req.decoded.id === +list.UserId) {
       next();
     } else {
-      res.status(401).json({
-        error: 'Not authorized!'
-      });
+      let err = {
+        name: 'CustomError',
+        error: 'Not authorized!',
+        status: 401
+      }
+      next(err);
     }
 
   } catch (err) {
-
     next(err);
-
   }
 
 }

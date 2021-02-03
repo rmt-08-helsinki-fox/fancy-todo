@@ -17,7 +17,7 @@ class todoController {
       }, {
         returning: true
       });
-      if (todo) res.status(201).json(todo);
+      res.status(201).json(todo);
     } catch (err) {
       err.from = 'todoController:addToDoList';
       next(err);
