@@ -26,6 +26,8 @@ function defaultLogout(){
     $("#registerError").hide()
     $("#addTodoForm").hide()
     $("#addTodoError").hide()
+    $("#editTodoForm").hide()
+    $("#editTodoError").hide()
 }
 
 function homepage(){
@@ -107,7 +109,7 @@ $("#register").click(e=>{
     })
     .fail((xhr, err)=>{
         // console.log(xhr.responseJSON.message)
-        $("#registerErrorMessage").text(xhr.responseJSON.message)
+        $("#registerErrorMessage").text(xhr.responseJSON?xhr.responseJSON.message:'No Connection')
         $("#registerError").show()
 
     })
@@ -134,7 +136,7 @@ function login(email, password){
         Auth()
     })
     .fail((xhr, err)=>{
-        $("#loginErrorMessage").text(xhr.responseJSON.message)
+        $("#loginErrorMessage").text(xhr.responseJSON?xhr.responseJSON.message:'No Connection')
         $("#loginError").show()
     })
 }
@@ -216,7 +218,7 @@ function getTodos(){
                 $("#editTodoDuedate").val(due_date.split('T')[0])
             })
             .fail((xhr, err)=>{
-                $("#editTodoErrorMessage").text(xhr.responseJSON.message)
+                $("#editTodoErrorMessage").text(xhr.responseJSON?xhr.responseJSON.message:'No Connection')
                 $("#editTodoError").show()
             })
 
@@ -257,7 +259,7 @@ $("#addTodo").click((e)=>{
         homepage()
     })
     .fail((xhr, err)=>{
-        $("#addTodoErrorMessage").text(xhr.responseJSON.message)
+        $("#addTodoErrorMessage").text(xhr.responseJSON?xhr.responseJSON.message:'No Connection')
         $("#addTodoError").show()
     })
 })
