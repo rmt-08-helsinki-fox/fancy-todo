@@ -22,32 +22,15 @@ class Controller {
                 user_id: req.decoded.id
             }
         })
-        .then(todos => res.status(200).json(todos))
+        .then(todos => {
+            // todos.forEach(todo => todo.due_date = todo.due_date.getUTCDate());//todo.due_date.toLocaleDateString());
+            // console.log(todos);
+            res.status(200).json(todos);
+        })
         .catch(err => next(err));
     }
     static getTodoById(req, res, next) {
-        // ToDo.findByPk(req.params.id)
-        // .then(todo => {
-        //     todo ? res.status(200).json(todo) : res.status(404).json({msg: 'error not found'});
-        // })
-        // .catch(err => res.status(500).json({msg: "Internal server error"}));
-        axios.get(
-            `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${req.todo.title}&api-key=${process.env.NYTAPI}`
-        ).then(({ data }) => {
-            data = data.response.docs;
-            let { headline, abstract, web_url} = data[Math.floor(Math.random()*data.length)];
-            let news = {
-                title: headline.main,
-                abstract,
-                web_url
-            }
-            
-            res.status(200).json({todo: req.todo, news});
-        })
-        .catch(err => {
-            next(err);
-        });
-        
+        res.status(200).json(req.todo);
     }
     static editTodo(req, res, next) {
         let { title, description, status, due_date } = req.body;
@@ -88,6 +71,30 @@ class Controller {
             res.status(200).json(deletedtodo);
         })
         .catch(err => next(err));
+    }
+    static getNewsById(req, res, next) {
+        // ToDo.findByPk(req.params.id)
+        // .then(todo => {
+        //     todo ? res.status(200).json(todo) : res.status(404).json({msg: 'error not found'});
+        // })
+        // .catch(err => res.status(500).json({msg: "Internal server error"}));
+        axios.get(
+            `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${req.todo.title}&api-key=${process.env.NYTAPI}`
+        ).then(({ data }) => {
+            data = data.response.docs;
+            let { headline, abstract, web_url} = data[Math.floor(Math.random()*data.length)];
+            let news = {
+                title: headline.main,
+                abstract,
+                web_url
+            }
+            
+            res.status(200).json({todo: req.todo, news});
+        })
+        .catch(err => {
+            next(err);
+        });
+        
     }
 }
 

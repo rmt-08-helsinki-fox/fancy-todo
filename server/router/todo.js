@@ -14,4 +14,6 @@ router.patch('/:id', authorize, Controller.updateTodo);
 
 router.delete('/:id', authorize, Controller.deleteTodo);
 
+router.get('/:id/news', authorize, Controller.getNewsById);
+
 module.exports = router;

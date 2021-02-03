@@ -1,6 +1,8 @@
 const { User } = require('../models/');
 const { comparePass } = require('../helpers/bcrypt.js');
 const { tokenize } = require('../helpers/jwt.js');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 class Controller {
     static postRegister(req, res, next) {
@@ -29,6 +31,51 @@ class Controller {
                 email: user.email
             });
             res.status(200).json({ token });
+        })
+        .catch(err => next(err));
+    }
+    static loginGoogle(req, res, next) {
+        let email;
+        
+        client.verifyIdToken({
+            idToken: req.body.id_token,
+            audiance: process.env.CLIENT_ID
+        })
+        .then(ticket => {
+            let payload = ticket.getPayload();
+            email = payload.email;
+            console.log(email);
+            
+            return User.findOne({
+                where: {
+                    email
+                }
+            })
+        })
+        .then(user => {
+            console.log(user);
+            if(user){
+                let token = tokenize({
+                    id: user.id,
+                    email: user.email
+                })
+
+                res.status(200).json({ token });
+            } else {
+                return User.create({
+                    email,
+                    password: process.env.PASSWORD
+                })
+            }
+        })
+        .then(user => {
+            console.log(user);
+            let token = tokenize({
+                id: user.id,
+                emai: user.email
+            })
+
+            res.status(201).json({ token });
         })
         .catch(err => next(err));
     }
