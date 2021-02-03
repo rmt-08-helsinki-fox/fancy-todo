@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      todos.belongsTo(models.user, { foreignKey: 'user_id' })
     }
   };
   todos.init({
@@ -46,6 +47,9 @@ module.exports = (sequelize, DataTypes) => {
           else if (date < new Date()) throw new Error (`Due date must be after ${new Date()}`);
         }
       }
+    },
+    user_id: {
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
