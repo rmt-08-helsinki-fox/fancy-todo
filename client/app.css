@@ -1,0 +1,35 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    min-height: 100%;
+}
+
+body{
+    background-color: #f7f9fb;
+    min-height: 100%;
+
+}
+
+.login-form{
+    width: 400px;
+}
+
+.logo-wrapper{
+    margin: 40px auto 40px auto;
+    width: 256px;
+}
+
+.logo{
+    width: 256px;
+}
+
+#registerPage{
+    display: none;
+}
+
+.logout-link{
+    color: #bbb;
+}
