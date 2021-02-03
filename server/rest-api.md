@@ -48,7 +48,7 @@ Success response (200)
 
 ```json
 {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzIsImVtYWlsIjoic2hhcmtAZ21haWwuY29tIiwiaWF0IjoxNjEyMjYwNTE2fQ.8tCkcnrnHe05ETPwkCx_58KosHlgqnIYgN7cNwnVNUc"
+    "access_token": "<token>"
 }
 ```
 

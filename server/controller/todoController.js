@@ -1,5 +1,5 @@
 const http = require("https");
-const { Todo } = require('../models/index');
+const { Todo, User } = require('../models/index');
 
 class todoController {
   static async addToDoList(req, res, next) {
@@ -8,7 +8,6 @@ class todoController {
     const { id } = req.decoded;
 
     try {
-
       const todo = await Todo.create({
         title,
         description,
@@ -18,63 +17,53 @@ class todoController {
       }, {
         returning: true
       });
-
       if (todo) res.status(201).json(todo);
-
     } catch (err) {
-
+      err.from = 'todoController:addToDoList';
       next(err);
-
     }
   }
 
   static async getToDoList(req, res, next) {
-
     try {
-
-      let lists = await Todo.findAll({ order: [['id', 'ASC']] });
-
+      let { id } = req.decoded;
+      let lists = await Todo.findAll({
+        where: {
+          UserId: id
+        },
+        order: [
+          ['id', 'ASC']
+        ],
+        include: [User]
+      });
       if (lists.length === 0) throw {
         name: 'CustomError',
         error: 'No item is found!',
         status: 404
       };
-
       res.status(200).json(lists);
-
     } catch (err) {
-
+      err.from = 'todoController:getToDoList';
       next(err);
-
     }
   }
 
   static async getToDoListIdParam(req, res, next) {
-
     let id = +req.params.id;
-
     try {
-
       let list = await Todo.findOne({ where: { id } });
-
       if (list) res.status(200).json(list);
-
       throw { name: 'CustomError', error: 'ID not found!', status: 404 };
-
     } catch (err) {
-
+      err.from = 'todoController:getToDoListIdParam';
       next(err);
-
     }
   }
 
   static async updateToDoList(req, res, next) {
-
     let id = +req.params.id;
     let { title, description, status, due_date } = req.body;
-
     try {
-
       let list = await Todo.update({
         title,
         description,
@@ -86,7 +75,6 @@ class todoController {
         },
         returning: true
       });
-
       if (list[0] !== 0) {
         res.status(200).json(list[1][0]);
       } else {
@@ -96,76 +84,55 @@ class todoController {
           status: 404
         };
       }
-
     } catch (err) {
-
+      err.from = 'todoController:updateToDoList';
       next(err);
-
     }
   }
 
   static async updateStatusToDoList(req, res, next) {
-
     let id = +req.params.id;
     let { status } = req.body;
-
     try {
-
       let list = await Todo.update({ status }, { where: { id }, returning: true });
-
       if (list[0] !== 0) res.status(200).json(list[1][0]);
-
       throw {
         name: "CustomError",
         error: "ID not found!",
         status: 404
       };
-
     } catch (err) {
-
+      err.from = 'todoController:updateStatusToDoList';
       next(err);
-
     }
   }
 
   static async deleteToDoList(req, res, next) {
-
     let id = +req.params.id;
-
     try {
-
       let listFound = await Todo.findByPk(id);
-
       if (listFound) {
-
         let deletedList = await Todo.destroy({
           where: {
             id: listFound.id
           }
         })
-
         if (deletedList) res.status(200).json({ listDeleted: listFound, message: 'todo success to delete' });
-
         throw {
           name: 'CustomError',
           error: 'ID not found!',
           status: 404
         }
-
       } else {
-
         throw {
           name: 'CustomError',
           error: 'ID not found!',
           status: 404
         }
-
       }
-
     } catch (err) {
-
+      err.from = 'todoController:deleteToDoList';
       next(err);
-
     }
   }
 
@@ -187,7 +154,6 @@ class todoController {
     };
 
     try {
-
       http.get(options, (resp) => {
         let body = '';
         resp.on('data', (d) => {
@@ -195,18 +161,14 @@ class todoController {
         });
         resp.on('end', () => {
           let parsed = JSON.parse(body);
-
           if (!parsed.results) return res.status(404).json({ error: 'Kata yang anda cari tidak terdaftar!' })
-
           res.status(200).json({ definition: parsed.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0] });
-
         });
       });
-
     } catch (err) {
+      err.from = 'todoController:getDictionary';
       res.status(500).json({ error: err });
     }
-
   }
 }
 
