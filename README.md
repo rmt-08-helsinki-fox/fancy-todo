@@ -73,6 +73,13 @@ _Response (500)_
 
 >get all todos list
 
+_Request Header_
+```
+{
+  access_token: token
+}
+```
+
 _Request Body_
 ```
 not needed
