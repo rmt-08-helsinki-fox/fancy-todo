@@ -4,12 +4,17 @@
 
 ## 1. POST /todos
 ```
-add todo data
+add todo data, Dimana setelah proses add app akan menampilkan referensi artikel yang didapat dari wikipedia
 ```
 
 ### -- Request Header --
 
-Belum digunakan
+```js
+
+    token = 'your token'
+
+
+```
 
 ### -- Request Body --
 
@@ -22,13 +27,29 @@ Belum digunakan
 
 ```js
 {
-    "id": 5,
-    "title": null,
-    "description": "Detail pekerjaan data 5",
-    "status": true,
-    "due_date": "2021-02-03T00:00:00.000Z",
-    "updatedAt": "2021-02-02T00:25:07.957Z",
-    "createdAt": "2021-02-02T00:25:07.957Z"
+    
+    "addedTodo": {
+        "id": 10,
+        "title": "Membuat landing page",
+        "description": "Buat sesuai arahan PM",
+        "status": true,
+        "due_date": "2021-02-20T00:00:00.000Z",
+        "UserId": 2,
+        "updatedAt": "2021-02-03T00:06:45.792Z",
+        "createdAt": "2021-02-03T00:06:45.792Z"
+    },
+    "references": [
+        {
+            "ns": 0,
+            "title": "Lockheed L-1011 TriStar",
+            "pageid": 837495,
+            "size": 4318,
+            "wordcount": 371,
+            "snippet": "<span class=\"searchmatch\">landing</span> pada masanya L-1011-1, model pertama L-1011-100 L-1011-50 L-1011-150 L-1011-200 L-1011-250 L-1011-500, model terakhir, paling banyak <span class=\"searchmatch\">dibuat</span> Birtles",
+            "timestamp": "2017-11-24T13:11:35Z"
+        }
+    ]
+    
 }
 
 ```
@@ -45,8 +66,11 @@ Menampilkan seluruh data todo
 
 ### -- Request Header --
 
-belum digunakan
+```js
 
+    token = 'your token'
+
+```
 ### -- Request Body --
 
 tidak dibutuhkan
@@ -89,7 +113,11 @@ Menampilkan data todo berdasarkan id,
 
 ### -- Request Header --
 
-belum digunakan
+```js
+
+    token = 'your token'
+
+```
 
 ### -- Request Body --
 
@@ -121,7 +149,11 @@ Melakukan perubahan data todo berdasarkan id yang dipilih,
 
 ### -- Request Header --
 
-belum digunakan
+```js
+
+    token = 'your token'
+
+```
 
 ### -- Request Body --
 
@@ -157,7 +189,11 @@ Melakukan perubahan status todo berdasarkan id yang dipilih,
 
 ### -- Request Header --
 
-belum digunakan
+```js
+
+    token = 'your token'
+
+```
 
 ### -- Request Body --
 
@@ -190,7 +226,11 @@ menghapus data todo berdasarkan id yang dipilih.
 
 ### -- Request Header --
 
-belum digunakan
+```js
+
+    token = 'your token'
+
+```
 
 ### -- Request Body --
 
@@ -209,6 +249,8 @@ tidak dibutuhkan
 - 404 error not found
 - 500 internal server error
 
+
+
 # FITUR USER
 
 ## 1. POST /users/register
@@ -217,7 +259,7 @@ register new user
 
 ### -- Request Header --
 
-belum digunakan
+tidak dibutuhkan
 
 ### -- Request Body --
 
@@ -240,13 +282,62 @@ belum digunakan
 - 400 uniqe email
 - 500 internal server error
 
+## 2. POST /users/login
+
+login user
+
+### -- Request Header --
+
+tidak dibutuhkan
+
+### -- Request Body --
+
+- email
+- password
+
+### -- Response 200 --
+
+```js
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJyaXpraUBlY2FtcHV6LmNvbSIsImlhdCI6MTYxMjMxMTkwN30.4HCGps4hzqZ7GJf4qqKl2Rs7RCq4ppANw6mqSqFhUSs"
+}
+
+```
+
+### -- Error Response --
+
+- 400 Invalid email or password
+- 500 internal server error
+
+
+
 ## ERROR RESPONSE DETAIL
 
 ### -- 404 Error not found --
 
 ```js
 { 
-    message: "error not found"
+    'message': "error not found"
+}
+```
+
+### -- 400 Unique data --
+
+```js
+{
+    "message": [
+        "email must be unique"
+    ]
+}
+```
+
+### -- 400 Invalid Email or Password --
+
+```js
+{
+    "message": [
+        "Invalid email or password"
+    ]
 }
 ```
 
@@ -254,10 +345,14 @@ belum digunakan
 
 ```js
 { 
-    message: "validation errors"
+    'message': "validation errors"
 }
 ```
 
 ### -- 500 internal server error --
 
-Menampilkan message error dari server.
+```js
+{ 
+    'message': "internal server error"
+}
+```

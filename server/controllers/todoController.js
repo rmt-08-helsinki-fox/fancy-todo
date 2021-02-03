@@ -1,11 +1,13 @@
-const e = require('express')
 const {Todo} = require('../models/index')
+const axios = require('axios')
+const { response } = require('express')
 
 class TodoController {
 
   static addTodo(req, res, next){
     let {title, description, status, due_date} = req.body
     let { id } = req.user
+    let addedTodo = null;
 
     if(status == 'true'){
       status = true
@@ -25,7 +27,16 @@ class TodoController {
 
     Todo.create(newTodo)
       .then( todo => {
-        res.status(201).json(todo)
+        addedTodo = todo
+
+        // 3rd party API Wikipedia untuk memberikan referensi artikel terkait todo yang akan dikerjakan.
+        return axios.get(`https://id.wikipedia.org/w/api.php?action=query&list=search&srsearch=${todo.title}&format=json`)
+      })
+      .then( response => {
+        res.status(201).json({
+          addedTodo,
+          references: response.data.query.search
+        })
       })
       .catch( err => {
         next(err)
