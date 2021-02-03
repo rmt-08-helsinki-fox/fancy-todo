@@ -1,5 +1,9 @@
 $(document).ready(function () {
     auth()
+    $('#form_register').on("submit", (e) => {
+        e.preventDefault();
+        register()
+    });
     $('#form_login').on("submit", (e) => {
         e.preventDefault();
         login()
@@ -34,10 +38,14 @@ $(document).ready(function () {
         e.preventDefault()
         auth()
     });
-    // $('#deleteTodo').click(function () {
-    //     console.log($('#deleteTodo').val())
-    //     deleting()
-    // });
+    $('#LoginPage').click(function () {
+        $('#form_login').show()
+        $('#form_register').hide()
+    });
+    $('#RegisterPage').click(function () {
+        $('#form_login').hide()
+        $('#form_register').show()
+    });
 });
 
 const base_url = "http://localhost:3000/"
@@ -48,19 +56,26 @@ function auth() {
     if (!localStorage.getItem('access_token')) {
         $('#welcoming').hide()
         $('#form_login').show()
+        $('#form_register').hide()
         $('#home').hide()
         $('#todoList').hide()
         $('#form_Add').hide()
         $('#form_Edit').hide()
+        $('#LoginPage').show()
+        $('#RegisterPage').show()
         $('#form_EditStatus').hide()
     } else {
         findAllTodo()
         $('#welcoming').show()
         $('#form_login').hide()
+        $('#form_register').hide()
         $('#home').show()
         $('#todoList').show()
         $('#form_Add').hide()
         $('#form_Edit').hide()
+        $('#form_EditStatus').hide()
+        $('#LoginPage').hide()
+        $('#RegisterPage').hide()
         $('#form_EditStatus').hide()
         $('#triggerForm_addTodo').show()
     }
@@ -88,6 +103,10 @@ function login() {
 }
 
 function logout() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
     localStorage.clear()
     auth()
 }
@@ -110,7 +129,7 @@ function findAllTodo() {
                     <th>${i.status}</th>
                     <th>${i.due_date.slice(0, 10)}</th>
                     <th>
-                        <a href="#" onclick="deleteTodo(${i.id})">Delete</a>
+                        <a href="#" onclick="deleteTodo(${i.id})" >Delete</a>
                         <a href="#" onclick="editAll(${i.id})">EditAll</a>
                         <a href="#" onclick="editStatus(${i.id})">EditStatus</a>
                     </th>
@@ -227,7 +246,7 @@ function edittodo() {
     localStorage.removeItem('idTodoEdit')
 }
 
-function editStatus(id){
+function editStatus(id) {
     console.log('ini edit Status')
     $.ajax({
         url: base_url + "todos/" + id,
@@ -250,7 +269,7 @@ function editStatus(id){
     $('#form_EditStatus').show()
 }
 
-function editStatusPatch(){
+function editStatusPatch() {
     $.ajax({
         url: base_url + "todos/" + localStorage.getItem('idTodoEdit'),
         method: 'patch',
@@ -269,4 +288,68 @@ function editStatusPatch(){
             console.log(err)
         })
     localStorage.removeItem('idTodoEdit')
+}
+
+function onSignIn(googleUser) {
+    var id_token = googleUser.getAuthResponse().id_token;
+    $.ajax({
+        url: base_url + 'users/googlesignin',
+        method: 'post',
+        data: {
+            googleToken: id_token
+        }
+    })
+        .done(response => {
+            localStorage.setItem('access_token', response.access_token)
+            localStorage.setItem('email', $('#email').val())
+            $('#email').val('')
+            $('#password').val('')
+            auth()
+        })
+        .fail(err => {
+            console.log(err, "ini error")
+        })
+}
+
+function onSignUp(googleUser) {
+    console.log('ini google SignUp')
+    var id_token = googleUser.getAuthResponse().id_token;
+    $.ajax({
+        url: base_url + 'users/googlesignup',
+        method: 'post',
+        data: {
+            googleToken: id_token
+        }
+    })
+        .done(response => {
+            localStorage.clear()
+            auth()
+            console.log(JSON.stringify(response))
+        })
+        .fail(err => {
+            console.log(err)
+        })
+}
+
+function register() {
+    console.log('ini register')
+    $.ajax({
+        url: base_url + 'users/signup',
+        method: 'post',
+        data: {
+            email: $('#emailRegister').val(),
+            password: $('#passwordRegister').val()
+        }
+    })
+        .done(success => {
+            localStorage.clear()
+            auth()
+        })
+        .fail(err => {
+            console.log(err)
+        })
+    $('#emailRegister').val('')
+    $('#passwordRegister').val('')
+    $('#email').val('')
+    $('#password').val('')
 }
