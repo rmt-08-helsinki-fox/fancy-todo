@@ -7,7 +7,7 @@ class TodoController {
     let objTodos = {
         title: req.body.title,
         description: req.body.description,
-        status: req.body.status,
+        status: false,
         due_date: req.body.due_date,
         UserId: req.decoded.id
     }
@@ -87,12 +87,9 @@ class TodoController {
       returning: true
     })
       .then(dataTodoUpdate => {
-        // console.log(dataTodoUpdate)
         res.status(200).json(dataTodoUpdate[1][0])
       })
       .catch(err => {
-        console.log(err.errors)
-        // next(err)
         const message = err.errors.map(element => element.message)
         const error = { name: err.name, statusCode: 400, msg: message}
         next(error)
