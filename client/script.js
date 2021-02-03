@@ -24,10 +24,25 @@ function auth () {
     $('#todoList').show()
     getTodo()
     $('#newsCard').show()
+    news()
   }
 }
+
+// <input type="checkbox" value="1" name="checkMeOut" id="checkMeOut" checked="checked" />
+// $('#checkMeOut').prop('checked'); // true
+
+// if($('#checkMeOut').prop('checked')) {
+//   something when checked
+// } else {
+//   something else when not
+//}
+
 function logout () {
   localStorage.clear()
+  var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
   auth()
 }
 function regisToLogin () {
@@ -186,7 +201,7 @@ function findTodo (id) {
       $('#edit_description').val(data.description)
       $('#edit_due_date').val(data.due_date)
       $('#edit_status').val(data.status)
-      update(data.id)
+      $('#submitUpdate').data("id", data.id)
     })
     .fail((err) => {
       console.log(err.responseText)
@@ -232,37 +247,89 @@ function news () {
     }
   })
     .done((data) => {
+      console.log(data)
       data.forEach(el => {
         $('#newsCard').append(
           `<div class="card-body">
-          <img class="card-img-top" src="..." alt="Card image cap">
-          <p class="card-text">${el.author}</p>
+            <img class="card-img-top" src="${el.urlToImage}" alt="Card image cap">
+            <p class="card-text">${el.title}</p>
           </div>`
         )
       })
     })
+    .fail(err => {
+      console.log(err.responseText)
+    })
+    .always(() => {
+      console.log('news is running')
+    })
 }
-function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-}
+// function onSignIn(googleUser) {
+//   var google_token = googleUser.getAuthResponse().id_token;
+//   // console.log(id_token);
+//   $.ajax({
+//     url: server_url + '/googleLogin',
+//     method: 'post',
+//     data: {
+//       google_token
+//     }
+//   })
+//     .done(data => {
+//       console.log(data);
+//       const token = data.access_token;
+//       localStorage.setItem("access_token", token);
+//       auth()
+//     })
+//     .fail(err => {
+//       console.log(err)
+//     })
+// }
 
 $(document).ready(() => {
   auth()
+})
+$('#submitUpdate').on('click', (event) => {
+  event.preventDefault()
+  const id = $('#submitUpdate').data('id')
+  const title = $("#edit_title").val()
+  const description= $("#edit_description").val()
+  const due_date = $("#edit_due_date").val()
+  const status = $("#edit_status").val()
+  console.log(id)
 
-  $('#loginForm').on('submit', (event) => {
-    event.preventDefault()
-    login()
-    auth()
+  $.ajax({
+    url: server_url + '/todos/' + id,
+    method: 'put',
+    data: {
+      title,
+      description,
+      due_date,
+      status
+    },
+    headers: {
+      access_token: localStorage.access_token
+    }
   })
-
-  $('#registerForm').on('submit', (event) => {
-    event.preventDefault()
-    register()
-  })
+    .done((data) => {
+      console.log(data)
+      getTodo()
+      auth()
+    })
+    .fail(err => {
+      console.log(err.responseText)
+    })
+    .always(() => {
+      console.log('from submitUpdate')
+    })
+})
+$('#loginForm').on('submit', (event) => {
+  event.preventDefault()
+  login()
+  auth()
+})
+$('#registerForm').on('submit', (event) => {
+  event.preventDefault()
+  register()
 })
 $('#rgs-lgn-btn').on('click', (event) => {
   event.preventDefault()
