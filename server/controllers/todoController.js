@@ -24,7 +24,7 @@ class TodoController {
       holiday = holiday.data.holidays
       
       if(holiday) res.status(201).json({createdData, holiday})
-      else res.status(201).json({createdData})
+      else res.status(201).json({createdData, holiday: 'No holiday at this day'})
       
     } catch (error) {
       next(error)
@@ -33,8 +33,9 @@ class TodoController {
 
   static async viewAll(req, res, next) {
     try {
-      const todoList = await Todo.findAll()
-      if(!todoList) throw({msg: 'Internal server error'})
+      const todoList = await Todo.findAll({
+        where: {UserId: req.decoded.id}
+      })
       res.status(200).json(todoList)
 
     } catch(error) {
@@ -64,9 +65,6 @@ class TodoController {
         status,
         due_date
       } = req.body
-
-      const selected = await Todo.findByPk(id)
-      if(!selected) throw({msg: 'Error not found'})
       
       const updated = await Todo.update({title, description, status, due_date}, {where: {
         id
@@ -89,9 +87,6 @@ class TodoController {
         status
       } = req.body
 
-      const selected = await Todo.findByPk(id)
-      if(!selected) throw({msg: 'Error not found'})
-
       const updated = await Todo.update({status}, {where: {
         id
       },
@@ -109,15 +104,11 @@ class TodoController {
     try {
       const id = +req.params.id
 
-      const selected = await Todo.findByPk(id)
-      if(!selected) throw ({msg: 'Error not found'})
-
       const deleted = await Todo.destroy({where: {
         id
       }})
-
-      if(!deleted) throw({msg: 'Internal server error'})
-      res.status(200).json({message: 'todo success to delete'})
+      
+      if(deleted) res.status(200).json({message: 'todo success to delete'})
       
     } catch (error) {
       next(error)
