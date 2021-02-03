@@ -1,15 +1,16 @@
 const {Todo} = require("../models/")
 
 const authorize = function (req, res, next) {
-    Todo.findAll({
+    Todo.findOne({
         where: {
             id : req.decoded.id
         }
     })
     .then(data => {
+        console.log(data)
         let userData
         for (let i = 0; i < data.length; i++) {
-            userData = data[i].UserId
+            userData = data[i].id
         }
         if (req.decoded.id !== userData) {
             let errorMsg = {
@@ -19,7 +20,7 @@ const authorize = function (req, res, next) {
         }
     })
     .catch(err => {
-        res.status(401).json(err)
+        next(err)
     })
 }
 

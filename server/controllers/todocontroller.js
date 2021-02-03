@@ -1,8 +1,7 @@
 const {Todo, User} = require("../models/")
-const axios = require("axios").default
 
 class TodoController {
-    static create(req , res) {
+    static create(req , res, next) {
         let input = {
             title : req.body.title,
             description : req.body.description,
@@ -15,26 +14,12 @@ class TodoController {
             res.status(201).json(data)
         })
         .catch(err => {
-            res.status(500).json(err)
+            next(err)
         })
     }
 
-    static readAllTodos(req, res) {
+    static readAllTodos(req, res, next) {
         Todo.findAll()
-        .then(data => {
-            res.status(200).json(data)
-        })
-        .catch(err => {
-            res.status(500).json(err)
-        })
-    }
-
-    static todoFindById(req, res, next) {
-        Todo.findAll({
-            where: {
-                id : +req.params.id
-            }
-        })
         .then(data => {
             res.status(200).json(data)
         })
@@ -43,7 +28,29 @@ class TodoController {
         })
     }
 
-    static updateTodo(req, res) {
+    static todoFindById(req, res, next) {
+        Todo.findByPk({
+            where: {
+                id : +req.params.id
+            }
+        })
+        .then(data => {
+            console.log(data)
+            if (!data) {
+                throw {
+                   name : customError,
+                   msg: `Invalid Id`,
+                   status: 404
+                }
+            }
+            res.status(200).json(data)
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+
+    static updateTodo(req, res, next) {
         const {title, description, status, due_date} = req.body
         const todoData = {title, description, status, due_date}
         Todo.update(todoData, {
@@ -57,17 +64,19 @@ class TodoController {
                 res.status(200).json(data)
             } else {
                 res.status(404).json({
-                    msg : "Invalid ID"
+                    name: "customError",
+                    msg : "Invalid ID",
+                    status: 404
                 })
             }
             
         })
         .catch(err => {
-            res.status(500).json(err)
+            next(err)
         })
     }
 
-    static updateStatusTodo(req, res) {
+    static updateStatusTodo(req, res, next) {
         let input = {
             title,
             description ,
@@ -85,17 +94,19 @@ class TodoController {
                 res.status(200).json(data)
             } else {
                 res.status(404).json({
-                    msg : "Invalid ID"
+                    name: "customError",
+                    msg : "Invalid ID",
+                    status: 404
                 })
             }
             
         })
         .catch(err => {
-            res.status(500).json(err)
+            next(err)
         })
     }
 
-    static deleteTodo(req, res) {
+    static deleteTodo(req, res, next) {
         Todo.destroy({
             where :{
                 id : +req.params.id
@@ -106,30 +117,14 @@ class TodoController {
                 res.status(200).json(data)
             } else {
                 res.status(404).json({
-                    msg: "Invalid Id"
+                    name: "customError",
+                    msg : "Invalid ID",
+                    status: 404
                 })
             }
         })
         .catch(err => {
-            res.status(500).json({
-                msg : "Internal Server Error"
-            })
-        })
-    }
-
-    static getWeather(req, res, next) {
-        axios.get("https://api.openweathermap.org/data/2.5/weather?q=tangerang&appid=538ef4d63afd919c0b6c68dc287a89d3")
-        .then(response => {
-            let mainWeather
-            let weatherDesc
-            for (let i = 0; i < response.data.weather.length; i++) {
-                mainWeather = response.data.weather[i].main
-                weatherDesc = response.data.weather[i].description
-            }
-            res.status(200).json({mainWeather, weatherDesc})
-        })
-        .catch(err => {
-            res.status(500).json(err)
+            next(err)
         })
     }
 }
