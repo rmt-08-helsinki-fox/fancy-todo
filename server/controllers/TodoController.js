@@ -2,7 +2,11 @@ const { Todo } = require("../models");
 
 class TodoController {
 	static getTodos(req, res) {
-		Todo.findAll()
+		Todo.findAll({
+			where: {
+				UserId: req.user.id,
+			},
+		})
 			.then((data) => {
 				res.status(200).json(data);
 			})
@@ -13,8 +17,14 @@ class TodoController {
 
 	static getTodosById(req, res) {
 		const id = +req.params.id;
+		const UserId = req.user.id;
 
-		Todo.findByPk(id)
+		Todo.findOne({
+			where: {
+				id,
+				UserId,
+			},
+		})
 			.then((data) => {
 				if (!data) res.status(404).json({ message: "Error: Not Found" });
 				res.status(200).json(data);
@@ -25,8 +35,9 @@ class TodoController {
 	}
 
 	static postTodos(req, res) {
+		const UserId = req.user.id;
 		const { title, description, status, due_date } = req.body;
-		const dataInput = { title, description, status, due_date };
+		const dataInput = { title, description, status, due_date, UserId };
 
 		Todo.create(dataInput)
 			.then((data) => {
@@ -40,12 +51,14 @@ class TodoController {
 
 	static putTodosById(req, res) {
 		const id = +req.params.id;
+		const UserId = req.user.id;
 		const { title, description, status, due_date } = req.body;
 		const dataInput = { title, description, status, due_date };
 
 		Todo.update(dataInput, {
 			where: {
 				id,
+				UserId,
 			},
 			returning: true,
 		})
@@ -61,11 +74,13 @@ class TodoController {
 
 	static patchTodosById(req, res) {
 		const id = +req.params.id;
+		// const UserId = req.user.id
 		const dataInput = { status: true };
 
 		Todo.update(dataInput, {
 			where: {
 				id,
+				// UserId
 			},
 			returning: true,
 		})
@@ -81,10 +96,12 @@ class TodoController {
 
 	static deleteTodosById(req, res) {
 		const id = +req.params.id;
+		const UserId = req.user.id;
 
 		Todo.destroy({
 			where: {
 				id,
+				UserId,
 			},
 		})
 			.then((data) => {
