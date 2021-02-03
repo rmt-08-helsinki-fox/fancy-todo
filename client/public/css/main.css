@@ -1,0 +1,16 @@
+nav {
+    position: relative;
+}
+
+a {
+    text-decoration: none;
+}
+
+.register {
+    position: absolute;
+    right: 50px;
+}
+.login {
+    position: absolute;
+    right: 140px;
+}
