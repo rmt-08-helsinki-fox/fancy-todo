@@ -111,7 +111,7 @@ class ToDoController {
   }
 
   // static todayWeather(req, res) {
-  //   axios.get(`api.openweathermap.org/data/2.5/weather?q=Jakarta&appid=7e1f5650eb1b7be903f2dd611b07d462&units=metric`)
+  //   axios.get(`api.openweathermap.org/data/2.5/weather?q=Jakarta&appid=${WEATHER_KEY}&units=metric`)
   //     .then(response => {
   //       res.json(response.data)
   //     })
