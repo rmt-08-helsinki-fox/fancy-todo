@@ -8,9 +8,9 @@ routerTodo.use(authenticate)
 routerTodo.post('/todos', ControllerTodo.createTodo)
 routerTodo.get('/todos', ControllerTodo.getTodo)
 // routerTodo.use(authorize)
-routerTodo.get('/todos/:id', ControllerTodo.getTodoById)
-routerTodo.put('/todos/:id', ControllerTodo.putTodoUpdate)
-routerTodo.patch('/todos/:id', ControllerTodo.patchTodoUpdate)
-routerTodo.delete('/todos/:id', ControllerTodo.deleteTodo)
+routerTodo.get('/todos/:id', authorize, ControllerTodo.getTodoById)
+routerTodo.put('/todos/:id', authorize, ControllerTodo.putTodoUpdate)
+routerTodo.patch('/todos/:id', authorize, ControllerTodo.patchTodoUpdate)
+routerTodo.delete('/todos/:id', authorize, ControllerTodo.deleteTodo)
 
 module.exports = routerTodo
