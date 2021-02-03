@@ -19,7 +19,10 @@ class TodoController{
   }
   static getAllTodos (req, res, next){
     //GET
-    Todo.findAll({order: [['id', 'ASC']]})
+    Todo.findAll({
+      where: {user_id: req.user.id},
+      order: [['id', 'ASC']]
+    })
     .then(todos => {
       res.status(200).json(todos)
     })
@@ -77,6 +80,7 @@ class TodoController{
   static patchTodo (req, res, next){
     //PATCH
     let { status } = req.body
+    console.log(status)
     // if (status !== true || status !== false){
 
     // }

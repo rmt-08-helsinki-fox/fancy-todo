@@ -3,6 +3,7 @@ function errorHandler(err, req, res, next){
   console.log(err.name, 'ini err dalem error handler')
   switch (err.name) {
     case 'SequelizeValidationError':
+      console.log(err)
       res.status(400).json(err.message)
       break;
     case 'DataNotFound':
@@ -12,9 +13,11 @@ function errorHandler(err, req, res, next){
       res.status(400).json(err.message)
       break;
     case 'SequelizeUniqueConstraintError':
+      console.log(err.errors[0].message)
       res.status(400).json(err.message)
       break;
     case 'InvalidEmail':
+      console.log(err, 'ini err')
       res.status(err.status).json(err.msg)
       break;
     case 'InvalidPassword':

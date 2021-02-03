@@ -32,7 +32,17 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    status: DataTypes.BOOLEAN,
+    status: {
+      type: DataTypes.BOOLEAN,
+      validate:{
+        isBoolean(status){
+          console.log(status, '<<<< ini dalem custom validation')
+          if ( status !== true && status !== false){
+            throw new Error('Invalid Status Format')
+          }
+        }
+      }
+    },
     due_date: {
       type: DataTypes.DATE,
       validate: {
