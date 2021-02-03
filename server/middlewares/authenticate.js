@@ -16,7 +16,7 @@ function authenticate(req, res, next) {
         req.decoded = decoded
         next()
     } catch (err) {
-        console.log("Authenticate error")
+        console.log("Authenticate error", err.message)
         res.status(401).json({
             msg: `Invalid token`,
         })

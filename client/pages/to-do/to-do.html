@@ -3,12 +3,12 @@
 
 <main>
     <div class="container">
-        <h1>Welcome User!</h1>
+        <h1>Welcome!</h1>
         <!-- BUTTON ADD TO DO -->
         <button id="add-to-do-button" class="btn btn-success">Add To Do</button>
         <!--  -->
         <div id="add-to-do-form" style="width: 40rem; margin-bottom: 1rem; margin-top: 1rem">
-            <form onsubmit="addTodo(event)">
+            <form action="createToDo" onsubmit="createToDo(event)">
                 <div class="row">
                     <div class="col">
                         <input
@@ -29,7 +29,7 @@
                         />
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group mt-2">
                     <textarea
                         class="form-control description"
                         id="descriptionAdd"
@@ -38,41 +38,15 @@
                     ></textarea>
                 </div>
                 <p>* Date must not be in the past</p>
-                <button type="submit" class="btn btn-primary">Add</button>
-                <button onclick="cancleAdd(event)" class="btn btn-danger">Cancel</button>
+                <button id="add-to-do-form-submit" type="submit" class="btn btn-primary">Add</button>
+                <button id="add-to-do-form-cancel" class="btn btn-danger">Cancel</button>
             </form>
         </div>
         <!-- LISTING TO DO -->
         <h3 class="mt-4">Here is Your To Do List:</h3>
         <!-- LOOPING STARTS HERE -->
-        <div class="row mb-3">
-            <div class="col-md-9 themed-grid-col">
-                <div class="pb-3"><h5>#1 To Do Title</h5></div>
-                <div class="row">
-                    <div class="col-md-9 themed-grid-col ellipsis-description">Description</div>
-                    <div class="col-md-3 themed-grid-col">Date</div>
-                </div>
-            </div>
-            <div class="col-md-3 themed-grid-col text-center">
-                <h5>Options</h5>
-                <div class="mt-1">
-                    <label> <input type="checkbox" value="status" /> Status </label>
-                </div>
-                <div class="mt-1">
-                    <button id="edit-to-do-button" class="btn btn-warning">Edit</button>
-                    <button id="delete-to-do-button" class="btn btn-danger">Delete</button>
-                </div>
-            </div>
+        <div id="to-do-list">
+            <!--  -->
         </div>
-        <!--  -->
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <input type="checkbox" aria-label="Checkbox for following text input" />
-                </div>
-            </div>
-            <input type="text" class="form-control" aria-label="Text input with checkbox" />
-        </div>
-        <!--  -->
     </div>
 </main>
