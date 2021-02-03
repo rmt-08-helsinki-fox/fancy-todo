@@ -36,7 +36,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Username is required"
         }
       },
-      unique: true
+      unique: {
+        args: true,
+        msg: "Username not available"
+      }
     },
     email: {
       type: DataTypes.STRING,
@@ -50,7 +53,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Invalid email type"
         }
       },
-      unique: true
+      unique: {
+        args: true,
+        msg: "Email already exists"
+      }
     },
     password: {
       type: DataTypes.STRING,

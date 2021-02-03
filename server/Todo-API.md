@@ -361,7 +361,7 @@
 
 * **Method:**
 
-  `GET`
+  `POST`
   
 *  **URL Params**
 

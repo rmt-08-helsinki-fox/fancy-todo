@@ -6,7 +6,7 @@ router.get('/', TodoController.showTodoUser)
 
 router.post('/', TodoController.createNewTodo)
 
-router.get('/add/:id', TodoController.addTodoPublicById)
+router.post('/add/:id', TodoController.addTodoPublicById)
 
 router.patch('/set-private/:id', authorize, TodoController.editTodoPrivate)
 
