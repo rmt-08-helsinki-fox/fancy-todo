@@ -3,36 +3,36 @@ const { User, Todo } = require('../models')
 
 async function authentication(req, res, next) {
   try {
-    let decoded = verifyToken(req.headers.access_key)
-    let user = await User.findOne({ 
-      where: {
-        email: decoded.email
-      }
+    const authParams = verifyToken(req.headers.access_key)
+    const user = await User.findOne({ 
+      where: { 
+        email: authParams.email 
+      } 
     })
-    req.user = {
+    req.user = { 
       id: user.id, 
-      email: user.email
+      email: user.email 
     }
     next()
-  } catch(err) {
+  } catch (err) {
     next(err)
   }
 }
 
 async function authorization(req, res, next) {
   try {
-    let todo = await Todo.findOne({
-      where: {
-        id: +req.params.id
-      }
+    const todo = await Todo.findOne({ 
+      where: { 
+        id: +req.params.id 
+      } 
     })
     if (!todo) {
-      next({
-        name: 'resourceNotFound'
+      next({ 
+        name: 'resourceNotFound' 
       })
     } else if (todo.UserId !== req.user.id) {
-      next({
-        name: 'accessDenied'
+      next({ 
+        name: 'accessDenied' 
       })
     } else {
       next()
@@ -42,7 +42,4 @@ async function authorization(req, res, next) {
   }
 }
 
-module.exports = { 
-  authentication, 
-  authorization 
-}
+module.exports = { authentication, authorization }

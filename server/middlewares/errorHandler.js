@@ -1,7 +1,7 @@
 function errorHandler(err, req, res, next) {
   switch(err.name) {
     case 'SequelizeValidationError':
-      res.status(400).json(err.errors.map(e => e.message))
+      res.status(400).json(err.errors.map((e) => e.message))
       break
     case 'resourceNotFound':
       res.status(404).json({ 
@@ -24,16 +24,21 @@ function errorHandler(err, req, res, next) {
       })
       break
     case 'SequelizeUniqueConstraintError':
-      res.status(400).json(err.errors.map(e => e.message))
+      res.status(400).json(err.errors.map((e) => e.message))
       break
     case 'JsonWebTokenError':
       res.status(401).json({ 
         message: 'Access Denied'
       })
       break
+    default:
+      res.status(500).json({
+        message: 'Internal Server Error'
+      })
+      break
   }
 }
 
 module.exports = { 
-  errorHandler 
+  errorHandler, 
 }

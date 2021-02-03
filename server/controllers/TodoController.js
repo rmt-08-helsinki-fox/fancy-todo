@@ -1,3 +1,4 @@
+const axios = require('axios')
 const { Todo } = require('../models')
 
 class TodoController {
@@ -6,25 +7,43 @@ class TodoController {
     const { title, description, status, due_date } = req.body
     const obj = { title, description, status, due_date, UserId } 
     Todo.create(obj)
-    .then(todo => {
+    .then((todo) => {
       res.status(201).json(todo)
     })
-    .catch(err => {
+    .catch((err) => {
       next(err)
     })
   }
 
   static showTodos(req, res, next) {
+    const topHeadlineNews = `https://newsapi.org/v2/top-headlines?country=id&apiKey=${process.env.apiKey}`
+    let todoList
     Todo.findAll({
       order: [['id', 'ASC']], 
       attributes: {
         exclude: ['createdAt', 'updatedAt']
       }
     })
-    .then(todo => {
-      return res.status(200).json(todo)
+    .then((todo) => {
+      todoList = todo
+      return axios.get(topHeadlineNews)
     })
-    .catch(err => {
+    .then((headlineNews) => {
+      let topNews = headlineNews.data.articles.map((news) => ({
+        title: news.title,
+        urlToImage: news.urlToImage,
+        description: news.description,
+        source: news.source.name,
+        url: news.url,
+      }))
+      topNews = topNews.slice(0, 5)
+      return res.status(200).json({ 
+        todoList, 
+        topNews 
+      })
+    })
+    .catch((err) => {
+      console.log(err)
       next(err)
     })
   }
@@ -36,14 +55,12 @@ class TodoController {
         exclude: ['createdAt', 'updatedAt']
       }
     })
-    .then(todo => {
-      return res.status(200).json(todo)
-    })
-    .catch(err => {
+    .then((todo) => res.status(200).json(todo))
+    .catch((err) => {
       next(err)
     })
   }
-
+  
   static editTodo(req, res, next) {
     const id = +req.params.id
     const { title, description, status, due_date } = req.body
@@ -55,7 +72,7 @@ class TodoController {
       returning: true, 
       plain: true
     })
-    .then(todo => {
+    .then((todo) => {
       if (todo) {
         return res.status(200).json(todo[1])
       }
@@ -63,7 +80,7 @@ class TodoController {
         name: 'resourceNotFound'
       })
     })
-    .catch(err => {
+    .catch((err) => {
       next(err)
     })
   }
@@ -78,7 +95,7 @@ class TodoController {
       returning: true, 
       plain: true
     })
-    .then(todo => {
+    .then((todo) => {
       if (todo) {
        return res.status(200).json(todo[1])
       }
@@ -86,7 +103,7 @@ class TodoController {
         name: 'resourceNotFound'
       })
     })
-    .catch(err => {
+    .catch((err) => {
       next(err)
     })
   }
@@ -98,7 +115,7 @@ class TodoController {
         id
       }
     })
-    .then(todo => {
+    .then((todo) => {
       if (todo) {
         return res.status(200).json({
           message: 'Todo Success to Delete'
@@ -108,7 +125,7 @@ class TodoController {
         name: 'resourceNotFound'
       })
     })
-    .catch(err => {
+    .catch((err) => {
       next(err)
     })
   }

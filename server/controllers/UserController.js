@@ -7,14 +7,14 @@ class UserController {
     const { name, email, password } = req.body
     const newUser = { name, email, password }
     User.create(newUser)
-    .then(newUser => {
+    .then((registeredUser) => {
       const registered = {
-        id: newUser.id, 
-        email: newUser.email
+        id: registeredUser.id, 
+        email: registeredUser.email
       }
       return res.status(201).json(registered)
     })
-    .catch(err => {
+    .catch((err) => {
       next(err)
     })
   }
@@ -26,7 +26,7 @@ class UserController {
         email 
       }
     })
-    .then(user => {
+    .then((user) => {
       if (!user) {
         next({
           name: 'passEmailNotMatched'
@@ -40,16 +40,15 @@ class UserController {
           }
           const accessToken = generateToken(payload)
           return res.status(200).json({ 
-            accessToken 
-          })
-        } else {
-          next({
-            name: 'passEmailNotMatched'
+            access_token: accessToken 
           })
         }
+        next({
+          name: 'passEmailNotMatched'
+        })
       }
     })
-    .catch(err => {
+    .catch((err) => {
       next(err)
     })
   }
