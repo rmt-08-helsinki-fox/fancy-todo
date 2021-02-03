@@ -27,6 +27,7 @@ class UserController{
             })
             res.status(200).json({acces_token})
         }).catch((err) => {
+            console.log(err);
             const error = err.msg || 'Internal server error'
             res.status(500).json({error})
         });

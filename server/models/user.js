@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.todo, {foreignKey:'UserId'})
+      User.hasMany(models.todo, {foreignKey:'UserId', targetKey:'id'})
     }
   };
   User.init({

@@ -1,4 +1,5 @@
 const {todo, User} = require('../models/')
+const axios = require('axios')
 
 
 class TodoController {
@@ -9,8 +10,9 @@ class TodoController {
             description,
             status,
             due_date,
-            UserId : req.decode.id
+            UserId : +req.decode.id
         }
+        console.log(data,'cekkkkkkkkkkkkkk');
         todo.create(data)
         .then((data) => {
             res.status(201).json(data)
@@ -22,6 +24,7 @@ class TodoController {
     }
     
     static getTodos(req, res, next){
+        let todoData;
         User.findOne({
             where:{
                 id:req.decode.id
@@ -29,7 +32,12 @@ class TodoController {
             include: todo
         })
         .then((data) => {
-            res.status(200).json(data.todos)
+            todoData = data.todos
+            return axios.get('https://api.quotable.io/random')
+        })
+        .then((data) => {
+            console.log(todoData)
+            res.status(200).json({quote:data.data, todos: todoData})
         }).catch((err) => {
             next(err)
         });
@@ -54,17 +62,13 @@ class TodoController {
     static edit(req, res, next){
         const {title, descriiption, status, due_date} = req.body
 
-        console.log(req.params.id);
-
         todo.findOne({where:{id:+req.params.id}})
         .then((data) => {
             if(!data) throw {name:'customError' ,code: 404 ,msg:'data not found'}
-            console.log(data);
             return todo.update({title, descriiption, status, due_date}, {where:{id:+req.params.id}})
             
         })
         .then((data) => {
-            console.log(data);
             res.status(200).json({ message:'Successfully update Todos'})
         }).catch((err) => {
             next(err)           

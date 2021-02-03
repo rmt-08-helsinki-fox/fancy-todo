@@ -3,7 +3,7 @@ const {todo} = require('../models/')
 const authorize = (req, res, next) =>{
     todo.findOne({
         where:{
-            id: req.params.id
+            id: +req.params.id
         }
     })
     .then((todo) => {
