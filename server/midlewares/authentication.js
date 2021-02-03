@@ -9,6 +9,7 @@ const authentication = function (req, res, next){
         next()
     } catch(err){
         next(err)
+        console.log(err)
         // res.status(401).json({
         //     message : "invalid token"
         // })

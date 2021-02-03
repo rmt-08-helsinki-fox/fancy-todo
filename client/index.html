@@ -18,6 +18,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
+          <a class="nav-item nav-link" href="#" id="home">Home</a>
           <a class="nav-item nav-link" href="#" id="login">Login</a>
           <a class="nav-item nav-link" href="#" id="register">Register</a>
           <a class="nav-item nav-link" href="#" id="logout">Logout</a>
@@ -44,18 +45,8 @@
             <th scope="col">Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Name</td>
-            <td>Description</td>
-            <td>Due Date</td>
-            <td>Status</td>
-            <td>
-              <button type="button" class="btn btn-primary">Edit</button>
-              <button type="button" class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
+        <tbody id="todo-list">
+          
           <center><button type="button" class="btn btn-success" id="addTodo">Add Todo</button></center> <br>
         </tbody>
       </table>
@@ -94,10 +85,36 @@
             <label for="exampleInputPassword1">Password</label>
             <input type="password" class="form-control" id="inputPassword" placeholder="Password">
           </div>
-          <button type="submit" class="btn btn-primary">Register</button>
+          <button type="submit" class="btn btn-primary" id="reg-submit">Register</button>
         </form>
       </div>
     </center>
+
+    <center>
+      <div class="container" id="container-create">
+        <form id="form-register" class="needs-validation" novalidate>
+          <h2>Create Your Todo</h2>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Title</label>
+            <input type="email" class="form-control" id="create-title" aria-describedby="emailHelp" placeholder="Title Todo" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Description</label>
+            <input type="email" class="form-control" id="create-desc" aria-describedby="emailHelp" placeholder="Describe your Todo"  required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Due Date</label>
+            <input type="date" class="form-control" id="create-dueDate" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Status</label>
+            <input type="text" class="form-control" id="create-status" placeholder="Status">
+          </div>
+          <button type="submit" class="btn btn-primary" id="reg-submit">Register</button>
+        </form>
+      </div>
+    </center>
+
 
 
 
@@ -109,7 +126,7 @@
     <script>
       const base_url = "http://localhost:3000/"
       function authentic(){
-        if(!localStorage.getItem("access_token")){ 
+        if(!localStorage.getItem("token")){ 
           $("#form-login").show()
           $("#form-register").hide()
           $("#table-todo").hide()
@@ -117,12 +134,25 @@
           $("#login-success").hide()
           $("#logout").hide()
           $("#todoTitle").hide()
-          $("#addTodo").hide()    
+          $("#addTodo").hide()
+          $("#login").hide()
+          $("#container-create").hide()
+          //register()    
         }else{
+          $("#form-login").hide()
+          $("#form-register").hide()
           $("#table-todo").show()
+          $("#login-fail").hide()
           $("#login-success").show()
+          $("#logout").show()
+          $("#todoTitle").show()
+          $("#addTodo").show()
+          $("#login").hide()
+          $("#register").hide()
+          $("#container-create").hide()
+          getTodo()
+         
         }
-
       }
 
       function login(){
@@ -138,7 +168,8 @@
         })
         .done((response) => {
           console.log(response)
-          localStorage.setItem("acces_token", response.acces_token)
+          localStorage.setItem("token", response.token)
+          authentic()
         })
         .fail((xhr, text) => {
           $("#login-fail").show()
@@ -151,13 +182,168 @@
         })
       }
 
-      $(document).ready(() => {  
-        authentic()
-
-        $("#form-login").on("submit", (el)=> {
-          el.preventDefault()
-          login()
+      function getTodo(){
+        $.ajax({
+          url : base_url + "todos",
+          method : "GET",
+          headers : {
+            token : localStorage.getItem("token")
+          }
         })
+        .done((response) => {
+          console.log(response)
+          $("#todo-list").empty()
+          response.data.forEach(el =>{
+            $("#todo-list").append(
+              `<tr>
+              <th scope="row">1</th>
+              <td>${el.title}</td>
+              <td>${el.description}</td>
+              <td>${el.due_date}</td>
+              <td>${el.status}</td>
+              <td>
+              <button type="button" class="btn btn-primary">Edit</button>
+              <button type="button" class="btn btn-danger">Delete</button>
+              </td>
+            </tr>`
+            )
+          })
+          
+        })
+        .fail((xhr, text) => {
+          console.log(xhr, text)
+          //console.log(localStorage.getItem("access_token"), "<<<<<")
+          
+        })
+
+      }
+
+      function logout(){
+        localStorage.clear()
+        authentic()
+        $("#register").show()
+        $("#login").show()
+      }
+
+      $("#logout").on("click", (el) => {
+        el.preventDefault()
+        logout()
+      })
+
+      $("#register").on("click", (el) =>{
+        el.preventDefault()
+        $("#form-login").hide()
+        $("#form-register").show()
+        $("#register").hide()
+        $("#login").show()
+      })
+
+      $("#login").on("click", (el) =>{
+        el.preventDefault()
+        $("#form-login").show()
+        $("#form-register").hide()
+        $("#register").show()
+        $("#login").hide()
+      })
+
+      $("#form-register").on("submit", (el) =>{
+        el.preventDefault()
+        register()
+      })
+
+      $("#addTodo").on("click", (el) =>{
+        el.preventDefault()
+        $("#container-create").show()
+        $("#table-todo").hide()
+        $("#addTodo").hide()
+        $("#todoTitle").hide()
+        $("#login-success").hide()
+      })
+
+      $("#container-create").on("submit", (el) =>{
+        el.preventDefault()
+        create()
+        $("#form-login").hide()
+        $("#form-register").hide()
+        $("#table-todo").show()
+        $("#login-fail").hide()
+        $("#login-success").hide()
+        $("#logout").show()
+        $("#todoTitle").show()
+        $("#addTodo").show()
+        $("#login").hide()
+        $("#register").hide()
+        $("#container-create").hide()
+        getTodo()
+      })
+
+      function register(){
+        const email = $("#inputEmail").val()
+        const username = $("#inputUsername").val()
+        const password = $("#inputPassword").val()
+        console.log(email, username, password)
+
+        $.ajax({
+          url : base_url + "users/register",
+          method : "POST",
+          data : {
+            email,
+            username,
+            password
+          }
+        })
+        .done((response) => {
+          console.log(response)
+          $("#inputEmail").val("")
+          $("#inputUsername").val("")
+          $("#inputPassword").val("")
+
+        })
+        .fail((xhr, text) =>{
+          console.log(xhr, text)
+        })
+        .always(() =>{
+          console.log("register")
+        })
+      }
+
+      function create(){
+        const title = $("#create-title").val()
+        const description = $("#create-desc").val()
+        const due_date = $("#create-dueDate").val()
+        const status = $("#create-status").val()
+
+        $.ajax({
+          url : base_url + "todos",
+          method : "POST",
+          headers : {
+            token : localStorage.getItem("token")
+          },
+          data : {
+            title,
+            description,
+            due_date,
+            status
+          }
+        })
+        .done((response) => {
+          console.log(response)
+        })
+        .fail((xhr, text) => {
+          console.log(xhr, text)
+        })
+        .always(() => {
+          console.log("success create")
+        })
+      }
+      
+      $("#form-login").on("submit", (el)=> {
+        el.preventDefault()
+        login()
+      })
+
+      $(document).ready(() => {  
+         authentic()
       })
     </script>
 

@@ -10,7 +10,7 @@ class UserController {
           res.status(201).json({
             msg : "register berhasil",
             id : user.id,
-            username : user.username
+            emmail : user.email
           })
         })
         .catch(err => {
@@ -25,11 +25,11 @@ class UserController {
         if(!user) throw { name : 'login'}
         const comparedPass = comparePassword(password, user.password)
         if(!comparedPass) throw {name : 'login'}
-        const acces_token = generateToken({
+        const token = generateToken({
           id : user.id,
           email : user.email
         })
-        res.status(200).json({ acces_token })
+        res.status(200).json({ token })
       })
       .catch(err => {
         next(err)

@@ -41,6 +41,7 @@ class TodoController {
         })
         .catch(err => {
             next(err)
+            console.log(err)
             //res.status(500).json({ message : "internal server error"})
         })
     }
