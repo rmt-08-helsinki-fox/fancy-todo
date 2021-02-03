@@ -605,9 +605,9 @@ input format :
   ```
 
 ### Get Weather Information
-> Get weather information by id
+> Get weather information by todo id
 
-- **URL** : `/todos/:id/weather-info?city=<city name>`
+- **URL** : `/weathers/:id?city=<city name>`
 - **Method** : `GET`
 - **URL Params** : `id=integer`
 

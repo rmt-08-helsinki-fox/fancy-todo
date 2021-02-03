@@ -14,7 +14,5 @@ router.put('/:id', authorization, TodoController.updateTodo);
 router.patch('/:id', authorization, TodoController.updateStatus);
 router.delete('/:id', authorization, TodoController.deleteTodo);
 
-router.get('/:id/weather-info', authorization, TodoController.getForecastWeather);
-
 
 module.exports = router;
