@@ -10,6 +10,6 @@ module.exports = function (err, req, res, next) {
   } else if (err.name === "JsonWebTokenError") {
     res.status(401).json({ errors: ["Invalid Token"] })
   } else {
-    res.status(500).json({ error: [err.errors.message] })
+    res.status(500).json({ error: [err.errors] })
   }
 }

@@ -10,7 +10,7 @@ router.post("/", TodoController.addTodo)
 
 router.get("/", TodoController.showTodos)
 
-router.get("/:id", TodoController.showTodo)
+router.get("/:id", authorize, TodoController.showTodo)
 
 router.put("/:id", authorize, TodoController.editTodo)
 

@@ -16,7 +16,7 @@ const authorize = (req, res, next) => {
         }
       }
 
-      if (Todo.UserId !== req.decoded.id) {
+      if (todo.UserId !== req.decoded.id) {
         throw {
           name: "customError",
           msg: "Unauthorized Access",

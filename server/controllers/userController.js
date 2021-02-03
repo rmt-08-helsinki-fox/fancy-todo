@@ -35,11 +35,11 @@ module.exports = class UserController {
             status: 400
           }
         }
-        const accessToken = generateToken({
+        const access_token = generateToken({
           id: user.id,
           email: user.email
         })
-        res.status(200).json({ accessToken })
+        res.status(200).json({ access_token })
       })
       .catch(err => {
         next(err)
