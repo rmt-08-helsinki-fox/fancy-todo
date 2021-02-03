@@ -4,7 +4,7 @@ const { authorization } = require('../middlewares/auth')
 
 app.post('/', TodoController.createTodo)
 app.get('/', TodoController.getAllTodo)
-app.get('/:id', authorization, TodoController.findOneTodo)
+app.get('/search', authorization,  TodoController.findOneTodo)
 app.put('/:id', authorization, TodoController.updateTodo)
 app.patch('/:id', authorization, TodoController.updateStatusTodo)
 app.delete('/:id', authorization, TodoController.deleteTodo)

@@ -1,4 +1,5 @@
 const { Todo } = require('../models/index')
+const { Op } = require("sequelize");
 
 class TodoController {
   static createTodo (req, res, next) {
@@ -28,7 +29,11 @@ class TodoController {
   }
 
   static getAllTodo (req, res, next) {
-    Todo.findAll()
+    let id = req.user.id
+    Todo.findAll({where: {
+      UserId : id
+      }
+    })
       .then(dataTodo => {
         res.status(200).json(dataTodo)
       })
@@ -38,13 +43,21 @@ class TodoController {
   }
 
   static findOneTodo (req, res, next) {
-    let id = +req.params.id
+    let UserId = req.user.id
+    let search = `%${req.query.title}%`
 
-    Todo.findByPk(id)
-      .then(dataTodo => {
+    Todo.findAll({where: {
+      title: {
+        [Op.like]: search
+        },
+        UserId 
+      }
+    })
+    .then(dataTodo => {
         res.status(200).json(dataTodo)
       })
       .catch(err => {
+        console.log(err);
         next(err)
       })
   }

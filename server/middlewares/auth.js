@@ -32,7 +32,23 @@ class Auth {
     const id = +req.params.id
     const UserData = req.user.id
 
-    Todo.findByPk(id)
+    // Todo.findByPk(id)
+    //   .then(dataTodo => {
+    //     if (!dataTodo) {
+    //       throw({name: 'NotFoundError', message: 'Data Todo Not Found'})
+    //     } else if (UserData !== dataTodo.UserId) {
+    //       throw({name: 'Forbidden', message: 'You Dont Have to Access'})
+    //     } else {
+    //       next()
+    //     }
+    //   })
+    //   .catch(err => {
+    //     next(err)
+    //   })
+
+      Todo.findOne({where: {
+        UserId: UserData
+      }})
       .then(dataTodo => {
         if (!dataTodo) {
           throw({name: 'NotFoundError', message: 'Data Todo Not Found'})
