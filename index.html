@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id" content="931519687590-iqhuudva8e6gn39iti1rkcjedicephpp.apps.googleusercontent.com">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
   <title>Document</title>
 </head>
@@ -14,6 +15,14 @@
   <div id="register">
     <button class="btn btn-primary mb-2">Register</button>
   </div>
+
+  <!--Welcome-->
+  <center>
+    <div id="welcome">
+      <h1>Hey guys.. Welcome in Fancy Todo Aplication</h1>
+      <p>you can make your to-do list</p>
+    </div> <br>
+  </center>
 
   <!--log out-->
   <div id="logout">
@@ -94,6 +103,13 @@
     </center>
   </div>
 
+  <!--Google Button-->
+  <div id="google-button">
+    <center>
+      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </center>
+  </div>
+
   <!--Register-->
   <div id="form-register">
     <center>
@@ -112,280 +128,8 @@
     </center>
   </div>
 
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-  <script>
-    let base_url = "http://localhost:3000/"
-    function aut () {
-      if(!localStorage.getItem("access_token")) {
-        $("#form-login").show()
-        $("#form-register").hide()
-        $("#form-edit-todo").hide()
-        $("#todo-table").hide()
-        $("#form-add-todo").hide()
-        $("#logout").hide()
-        $("#name").hide()
-        $("#register").show()
-      } else {
-        $("#form-login").hide()
-        $("#form-register").hide()
-        $("#form-edit-todo").hide()
-        $("#todo-table").show()
-        $("#form-add-todo").show()
-        $("#logout").show()
-        $("#name").show()
-        $("#register").hide()
-        getTodos()
-      }
-    }
-    function login() {
-      const email = $("#login-email").val()
-      const password = $("#login-password").val()
-      $.ajax({
-        url: base_url + "users/login",
-        method: "POST",
-        data: {
-          email, 
-          password
-        }
-      })
-        .done(response => {
-          localStorage.setItem("access_token", response.getToken)
-          aut()
-        })
-        .fail((xhr, text) => {
-          console.log(xhr, text)
-        })
-        .always(_ => {
-          $("#form-login").trigger("reset")
-        })
-    }
-
-    function logout() {
-      localStorage.clear()
-      aut()
-    }
-
-    function getTodos() {
-      console.log(localStorage.getItem("access_token"))
-      $.ajax({
-        url: base_url + "todos",
-        method: "GET",
-        headers: {
-          token: localStorage.getItem("access_token")
-        }
-      })
-        .done((respons) => {
-          console.log(respons)
-          $("#todo-list").empty()
-          respons.forEach(value => {
-            $("#todo-list").append(`
-            <tr>
-              <th scope="row">${value.id}</th>
-              <td>${value.title}</td>
-              <td>${value.description}</td>
-              <td>${value.status}</td>
-              <td>${value.due_date}</td>
-              <td>
-                <button class="btn btn-primary mb-2" onclick="showFormEdit(${value.id})">Edit</button>
-                <button class="btn btn-primary mb-2" onclick="isDone(${value.id})">Done</button>
-                <button class="btn btn-danger" onclick="remove(${value.id})">Delete</button>
-            </tr>
-            `)
-          });
-        })
-        .fail((xhr, text) => {
-          console.log(xhr, text)
-        })
-    }
-
-    function addTodo() {
-      const title = $("#todo-title-add").val()
-      const description = $("#todo-description-add").val()
-      const status = $("#todo-status-add").val()
-      const due_date = $("#todo-due_date-add").val()
-      // console.log(title)
-      // console.log(description)
-      // console.log(status)
-      // console.log(due_date)
-      $.ajax({
-        url: base_url + "todos",
-        method: "POST",
-        headers: {
-          token: localStorage.getItem("access_token")
-        },
-        data: {
-          title,
-          description,
-          status,
-          due_date
-        }
-      })
-        .done(response => {
-          console.log('masuk response <<<<<<<<<<<<<<<')
-          console.log(response)
-          aut()
-        })
-        .fail((xhr, text) => {
-          console.log('masuk fail<<<<<<<<<<<<<')
-          console.log(xhr, text)
-        })
-    }
-
-    function showRegisterForm() {
-        $("#form-login").hide()
-        $("#form-register").show()
-        $("#form-edit-todo").hide()
-        $("#todo-table").hide()
-        $("#form-add-todo").hide()
-        $("#logout").hide()
-        $("#name").hide()
-        $("#register").hide()
-    }
-
-    function register() {
-      const email = $("#register-email").val()
-      const password = $("#register-password").val()
-      const location = $("#register-location").val()
-      $.ajax({
-        url: base_url + "users/register",
-        method: "POST",
-        data: {
-          email, 
-          password,
-          location
-        }
-      })
-        .done(response => {
-          aut()
-        })
-        .fail((xhr, text) => {
-          console.log(xhr, text)
-        })
-    }
-
-    function remove(id) {
-      $.ajax({
-        url: base_url + `todos/${id}`,
-        method: "DELETE",
-        headers: {
-          token: localStorage.getItem("access_token")
-        }
-      })
-        .done(response => {
-          aut()
-        })
-        .fail((xhr, text) => {
-          console.log(xhr, text)
-        })
-    }
-
-    function getOneTodo(id) {
-      $.ajax({
-        url: base_url + `todos/${id}`,
-        method: "GET",
-        headers: {
-          token: localStorage.getItem("access_token")
-        }
-      })
-        .done(response => {
-          console.log(response)
-          $("#form-edit-todo").data('val', response.id)
-        })
-        .fail((xhr, text) => {
-          console.log(xhr, text)
-        })
-
-    }
-    function showFormEdit(id) {
-        $("#form-login").hide()
-        $("#form-register").hide()
-        getOneTodo(id)
-        $("#form-edit-todo").show()
-        $("#todo-table").hide()
-        $("#form-add-todo").hide()
-        $("#logout").hide()
-        $("#name").hide()
-        $("#register").hide()
-    }
-
-    function edit(id) {
-      const title = $("#todo-title-edit").val()
-      const description = $("#todo-description-edit").val()
-      const status = $("#todo-status-edit").val()
-      const due_date = $("#todo-due_date-edit").val()
-      console.log(id)
-      console.log(title)
-      console.log(description)
-      console.log(status)
-      console.log(due_date);
-      $.ajax({
-        url: base_url + `todos/${id}`,
-        method: "PUT",
-        headers: {
-          token: localStorage.getItem("access_token")
-        }, 
-        data: {
-          title,
-          description,
-          status,
-          due_date
-        }
-      })
-        .done(response => {
-          aut()
-        })
-        .fail((xhr, text) => {
-          console.log(xhr, text)
-        })
-    }
-    function isDone(id) {
-      $.ajax({
-        url: base_url + `todos/${id}`,
-        method: "PATCH",
-        headers: {
-          token: localStorage.getItem("access_token")
-        }
-      })
-        .done(response => {
-          aut()
-        })
-        .fail((xhr, text) => {
-          console.log(xhr, text)
-        })
-    }
-
-    $(document).ready(function(){
-      aut()
-      $("#form-login").on("submit", (e) => {
-        e.preventDefault()
-        login()
-      })
-      
-      $("#logout").on("click", (e) => {
-        e.preventDefault()
-        logout()
-      })
-
-      $("#form-add-todo").on("submit", (e) => {
-        e.preventDefault()
-        addTodo()
-      })
-
-      $("#register").on("click", (e) => {
-        e.preventDefault()
-        showRegisterForm()
-      })
-      $("#form-register").on("submit", (e) => {
-        e.preventDefault()
-        register()
-      })
-
-      $("#form-edit-todo").on("submit", (e) => {
-        e.preventDefault()
-        let id = $('#form-edit-todo').data('val'); //
-        edit(id)
-      })
-    });
-  </script>
+  <script src="./script.js"></script>
 </body>
 </html>
