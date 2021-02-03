@@ -1,11 +1,11 @@
 module.exports = (err, req, res, next) => {
   if (err.name == "SequelizeValidationError") {
-    const error = err.errors[0].message 
-    res.status(400).json({error})
+    const errors = err.errors.map(error => error.message)
+    res.status(400).json({ errors })
   } else if (err.name == "SequelizeUniqueConstraintError") {
-    const error = err.errors[0].message 
-    res.status(400).json({error})
-  }else if (err.msg === "invalid email or password!") {
+    const errors = err.errors.map(error => error.message)
+    res.status(400).json({ errors })
+  }else if (err.error === "invalid email or password") {
     const error = err.msg 
 		res.status(400).json({error})
   } else if (err.error == "404 not found!") {

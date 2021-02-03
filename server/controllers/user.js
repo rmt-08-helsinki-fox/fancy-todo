@@ -17,7 +17,7 @@ class UserController {
       })
     })
     .catch( err => {
-      res.status(500).json(err)
+      next({ error: err.message, code: 500 })
     })
   }
 
@@ -33,11 +33,11 @@ class UserController {
           access_token: jwt.sign({ id: data.id, email: data.email }, process.env.SECRET_KEY),
         })
       } else {
-        res.status(401).json({ error: 'invalid email or password' })
+        next({ error: 'invalid email or password', code: 401 })
       }
     })
     .catch( err => {
-      res.status(500).json(err.message)
+      next({ error: err.message, code: 500 })
     })
   }
 

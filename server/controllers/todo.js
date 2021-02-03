@@ -2,7 +2,7 @@ const { Todo } = require('../models')
 
 class TodoController {
 
-  static add(req, res) {
+  static add(req, res, next) {
     const { title, description, due_date } = req.body
     Todo.create({
       title: title,
@@ -15,11 +15,11 @@ class TodoController {
       res.status(201).json(data)
     })
     .catch( err => {
-      res.status(400).json({ error: err.message })
+      next({ error: err.message, code: 400 })
     })
   }
 
-  static showAll(req, res) {
+  static showAll(req, res, next) {
     Todo.findAll()
     .then( data => {
       if (data.length !== 0) {
@@ -29,12 +29,11 @@ class TodoController {
       }
     })
     .catch( err => {
-      console.log(err);
-      res.status(500).json({error: err.message})
+      next({error: err.message, code: 500})
     })
   }
 
-  static showById(req, res) {
+  static showById(req, res, next) {
     const id = +req.params.id
     Todo.findByPk(id)
     .then( data => {
@@ -45,11 +44,11 @@ class TodoController {
       }
     })
     .catch( err => {
-      res.status(500).json({error: err.message})
+      next({error: err.message, code: 500})
     })
   }
 
-  static update(req, res) {
+  static update(req, res, next) {
     const { title, description, status, due_date } = req.body
     const id = +req.params.id
     Todo.update(
@@ -72,14 +71,12 @@ class TodoController {
       }
     })
     .catch( err => {
-      console.log(err);
-      res.status(500).json({error: err.message})
+      next({error: err.message, code: 500})
     })
   }
 
-  static updateStatus(req, res) {
+  static updateStatus(req, res, next) {
     const { status } = req.body
-    console.log(status);
     const id = +req.params.id
     Todo.update(
       { status: status },
@@ -96,11 +93,11 @@ class TodoController {
       }
     })
     .catch( err => {
-      res.status(400).json({error: err.message})
+      next({error: err.message, code: 500})
     })
   }
 
-  static delete(req, res) {
+  static delete(req, res, next) {
     const id = +req.params.id
     Todo.destroy(
       { 
@@ -119,7 +116,7 @@ class TodoController {
       }
     })
     .catch( err => {
-      res.status(400).json({error: err.message})
+      next({error: err.message, code: 500})
     })
   }
 
