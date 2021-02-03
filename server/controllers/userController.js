@@ -10,18 +10,19 @@ class UserController {
     // compare password
     // jwt sign (npm install jsonwebtoken dulu)
     // jwt.sign(data = {}, secretKey = process.env.SECRETKEY)
-    static register(req, res) {
+    static register(req, res, next) {
         const {email, password} = req.body
         User.create({email, password})
         .then(function(data) {
             res.status(201).json(data)
         }).catch(function(err) {
             // console.log(err);
-            res.status(400).json(err)
+            // res.status(400).json(err)
+            next(err)
         })
     }
 
-    static login(req, res) {
+    static login(req, res, next) {
         const {email, password} = req.body
         let result
         User.findOne({
@@ -46,8 +47,9 @@ class UserController {
         }).then(function(response) {
             res.status(200).json(response.data.slip.advice)
         }).catch(function(err) {
-            const error = err.msg || 'Internal Server Error'
-            res.status(500).json({ error })
+            // const error = err.msg || 'Internal Server Error'
+            // res.status(500).json({ error })
+            next(err)
         })
     }
 }

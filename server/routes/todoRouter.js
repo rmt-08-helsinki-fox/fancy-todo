@@ -12,10 +12,11 @@ router.use(authentication)
 router.post('/', TodoController.addTodo)
 router.get('/', TodoController.getAll)
 
-router.get('/:id', authorizeTodo, TodoController.getById)
-router.put('/:id', authorizeTodo, TodoController.editPutById)
-router.patch('/:id', authorizeTodo, TodoController.editPatchById)
-router.delete('/:id', authorizeTodo, TodoController.destroy)
+router.use('/:id', authorizeTodo)
+router.get('/:id', TodoController.getById)
+router.put('/:id', TodoController.editPutById)
+router.patch('/:id', TodoController.editPatchById)
+router.delete('/:id', TodoController.destroy)
 
 
 module.exports = router
