@@ -1,15 +1,18 @@
 const { ToDo } = require('../models/')
+const axios = require('axios')
 
 class ToDoController {
-  static async createToDo(req, res) {
+  static async createToDo(req, res, next) {
     try {
+      const UserId = req.decoded.id
       const { title, description, status, due_date } = req.body
 
       const newToDo = {
         title,
         description,
         status,
-        due_date
+        due_date,
+        UserId
       }
 
       const data = await ToDo.create(newToDo)
@@ -18,31 +21,28 @@ class ToDoController {
 
       res.status(201).json(data)
     } 
-
     catch (error) {
-      if (error.errors) {
-        res.status(400).json(error.errors)
-      } else {
-        res.status(500).json()
-      }
+      next(error)
     }
   }
 
-  static async getAll(req, res) {
+  static async getAll(req, res, next) {
     try {
-      const data = await ToDo.findAll()
+      const UserId = req.decoded.id
+      const data = await ToDo.findAll({
+        where: { UserId }
+      })
 
       if(!data) throw (error)
 
       res.status(200).json(data)
     } 
-    
     catch (error) {
-      res.status(500).json()
+      next(error)
     }
   }
 
-  static async getById(req, res) {
+  static async getById(req, res, next) {
     try {
       const { id } = req.params
 
@@ -55,13 +55,12 @@ class ToDoController {
 
       res.status(200).json(data)
     } 
-    
     catch (error) {
-      res.status(404).json(error)
+      next(error)
     }
   }
 
-  static async editAllFieldById(req, res) {
+  static async editAllFieldById(req, res, next) {
     try {
       const { id } = req.params
       const { title, description, status, due_date } = req.body
@@ -73,13 +72,6 @@ class ToDoController {
         due_date
       }
 
-      const checkIdExist = await ToDo.findByPk(id)
-
-      if (!checkIdExist) throw ({
-        status: 404,
-        error: "id not found"
-      })
-
       const data = await ToDo.update(editedToDo, {
         where: { id },
         returning: true
@@ -89,29 +81,15 @@ class ToDoController {
 
       res.status(200).json(data)
     } 
-
     catch (error) {
-      if (error.status === 404) {
-        res.status(404).json(error)
-      } else if(error.errors) {
-        res.status(400).json(error)
-      } else {
-        res.status(500).json()
-      }
+      next(error)
     }
   }
 
-  static async editSpecificFieldById(req, res) {
+  static async editSpecificFieldById(req, res, next) {
     try {
       const { id } = req.params
       const { status } = req.body
-
-      const checkIdExist = await ToDo.findByPk(id)
-
-      if (!checkIdExist) throw ({
-        status: 404,
-        error: "id not found"
-      })
 
       const data = await ToDo.update({status}, {
         where: {
@@ -124,27 +102,14 @@ class ToDoController {
 
       res.status(200).json(data)
     } 
-    
     catch (error) {
-      if (error.status === 404) {
-        res.status(404).json(error)
-      } else if (error) {
-        res.status(400).json(error)
-      } else {
-        res.status(500).json()
-      }
+      next(error)
     }
   }
 
-  static async deleteById(req, res) {
+  static async deleteById(req, res, next) {
     try {
       const { id } = req.params
-
-      const checkIdExist = await ToDo.findByPk(id)
-      if (!checkIdExist) throw ({
-        status: 404,
-        error: "id not found"
-      })
 
       const data = await ToDo.destroy({
         where: {
@@ -156,13 +121,8 @@ class ToDoController {
         message: "todo success to delete"
       })
     }
-     
     catch (error) {
-      if (error.status === 404) {
-        res.status(404).json(error)
-      } else {
-        res.status(500).json()
-      }
+      next(error)
     }
   }
 }
