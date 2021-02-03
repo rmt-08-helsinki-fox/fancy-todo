@@ -15,15 +15,34 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Todo.init({
-    title: DataTypes.STRING,
-    description: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Title Tidak Boleh Kosong'
+        }
+      }
+    },
+    description: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Description Tidak Boleh Kosong'
+        }
+      }
+    },
     status: DataTypes.BOOLEAN,
     due_date: {
       type: DataTypes.DATE,
       validate: {
         dateNow(value) {
+          let input = new Date(value)
           let now = new Date()
-          if(value < now){
+          now.setDate(now.getDate() - 1)
+          
+          if(input <= now){
             throw new Error('Input Tanggal Tidak boleh hari yang sudah lewat dari hari ini')
           }
         }

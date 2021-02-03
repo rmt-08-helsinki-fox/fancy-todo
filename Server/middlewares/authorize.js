@@ -1,7 +1,7 @@
-const {Todo, User} = require('../models')
+const {Todo} = require('../models')
 
 function authorize(req, res, next) {
-    let UserId = req.headers.UserId
+    let UserId = req.headers.User.id
     Todo.findOne({
         where: {UserId}
     })
@@ -10,15 +10,15 @@ function authorize(req, res, next) {
         if(todo === null){
             throw {
                 name: "customError",
-                status: 404,
-                message: "Data Not Found"
+                status: 401,
+                message: "Your not Authorized"
               }
         }else{
             next()
         }
     })
     .catch(err => {
-        res.status(err.status).json(err.message)
+        next(err)
     })
 }
 

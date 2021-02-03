@@ -1,9 +1,11 @@
 const {Todo} = require('../models')
 const axios = require('axios')
+const moment = require('moment')
 
 class ControllerTodo {
   static listTodo(req, res, next){
-    Todo.findAll()
+    let UserId = req.headers.User.id
+    Todo.findAll({where: {UserId}})
     .then(todo => {
       res.status(200).json(todo)
     })
@@ -13,8 +15,11 @@ class ControllerTodo {
   }
 
   static addTodo(req, res, next){
-    let {title, description, status, due_date} = req.body
-    let UserId = req.headers.UserId
+    let title = req.body.title || ''
+    let description = req.body.description || ''
+    let status = req.body.status || ''
+    let due_date = req.body.due_date || ''
+    let UserId = req.headers.User.id
     Todo.create({title, description, status, due_date, UserId})
     .then(todo => {
       res.status(201).json(todo)
@@ -26,8 +31,7 @@ class ControllerTodo {
 
   static getById(req, res, next){
     let id = +req.params.id
-    let UserId = req.headers.UserId
-
+    let UserId = req.headers.User.id
     Todo.findOne({
       where: {id, UserId}
     })
@@ -48,10 +52,13 @@ class ControllerTodo {
   }
 
   static editTodo(req, res, next){
-    let id = +req.params.id
-    let UserId = req.headers.UserId
+    let id = +req.body.id
+    let UserId = req.headers.User.id
+    let title = req.body.title || ''
+    let description = req.body.description || ''
+    let status = req.body.status || ''
+    let due_date = req.body.due_date || ''
     let status = req.body.status || false
-    let {title, description, due_date} = req.body
     Todo.update({title, description, status, due_date}, {where: {id, UserId}, returning: true})
     .then(todo => {
       if(!todo[0]){
@@ -70,11 +77,12 @@ class ControllerTodo {
   }
 
   static updateStatus(req ,res, next) {
-    let id = +req.params.id
-    let UserId = req.headers.UserId
-    let {status} = req.body
+    let id = +req.body.id
+    let UserId = req.headers.User.id
+    let status = true
     Todo.update({status}, {where: {id, UserId}, returning: true})
     .then(todo => {
+      console.log(todo)
       if(!todo[0]){
         throw {
           name: "customError",
@@ -92,7 +100,7 @@ class ControllerTodo {
 
   static deleteTodo(req, res, next){
     let id = +req.params.id
-    let UserId = req.headers.UserId
+    let UserId = req.headers.User.id
     Todo.destroy({where: {id, UserId}, returning: true})
     .then(todo => {
       if(!todo){

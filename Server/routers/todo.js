@@ -9,7 +9,6 @@ router.get('/calendar', ControllerTodo.seeCalendar)
 router.use(authenticate)
 router.get('/', ControllerTodo.listTodo)
 router.post('/', ControllerTodo.addTodo)
-
 router.use(authorize)
 router.get('/:id', ControllerTodo.getById)
 router.put('/:id', ControllerTodo.editTodo)
