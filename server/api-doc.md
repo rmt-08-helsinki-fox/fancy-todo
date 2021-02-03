@@ -35,7 +35,7 @@
 * **Error message**
 
   * **Code:** 500 INTERNAL SERVER ERROR <br/>
-    **Content:** `{message: "Data tidak ditemukan"}`
+    **Content:** `{message: "Internal server error"}`
 
 ----
 
@@ -84,7 +84,7 @@ Membuat data Todos
   OR
 
   * **Code:** 500 INTERNAL SERVER ERROR <br/>
-    **Content:** `{message: "Data not found"}`
+    **Content:** `{message: "Internal server error"}`
 
 ----
 
@@ -202,7 +202,7 @@ Merubah data Todos
   
   none
 
-* **Request Body***
+* **Request Body**
 
   ```javascript
   status: true

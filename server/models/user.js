@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty:{
           args: true,
           msg: "username cannot be empty"
+        },
+        len: {
+          args: [5,20],
+          msg: "Your username must be 5-20 characters long"
         }
       }
     },
@@ -43,6 +47,10 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty:{
           args:  true,
           msg: "Password cannot be empty"
+        },
+        len: {
+          args: [5,20],
+          msg: "Your password must be 5-20 characters long"
         }
       }
     }
