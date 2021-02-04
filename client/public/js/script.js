@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     auth();
     $('#registerNav').on('click', (e) => {
@@ -50,6 +51,7 @@ $(document).ready(function () {
         e.preventDefault();
         localStorage.clear();
         renderLoginPage();
+        signOut();
     });
     $('#btn-add-todo').on('click', e => {
         e.preventDefault();

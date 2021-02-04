@@ -234,3 +234,28 @@ function deleteTodo(id) {
             console.log(err);
         })
 }
+
+function onSignIn(googleUser) {
+    let id_token = googleUser.getAuthResponse().id_token;
+    $.ajax({
+        url: 'http://localhost:3000/auth/loginOauth',
+        method: 'POST',
+        data: {
+            tokenOauth: id_token
+        }
+    })
+        .done((res) => {
+            localStorage.setItem('token', res.token);
+            renderTodoPage();
+        })
+        .fail(err => {
+            console.log(err);
+        })
+}
+
+function signOut() {
+    let auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+        console.log('User signed out.');
+    });
+}

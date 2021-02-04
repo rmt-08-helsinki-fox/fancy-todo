@@ -1,6 +1,8 @@
 const { User } = require('../models');
 const { checkPassword } = require('../helper/hashing');
 const { generateToken } = require('../helper/jwt');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client('197969529634-6buqntmaukffr1s1fubr3v1qe45e55bj.apps.googleusercontent.com');
 
 class AuthController {
     static async registration(req, res, next) {
@@ -48,6 +50,47 @@ class AuthController {
                 response: true
             }
             res.status(200).json(msg);
+        } catch (err) {
+            next(err);
+        }
+    }
+    static async oauthGoogleLogin(req, res) {
+        try {
+            const token = req.body.tokenOauth;
+            const ticket = await client.verifyIdToken({
+                idToken: token,
+                audience: '197969529634-6buqntmaukffr1s1fubr3v1qe45e55bj.apps.googleusercontent.com',
+            });
+            const payload = ticket.getPayload();
+            const email = payload.email;
+
+            let user = await User.findOne({
+                where: {
+                    email
+                }
+            });
+
+            if (!user) {
+                const newUser = {
+                    email,
+                    password: payload.sub
+                }
+                user = await User.create(newUser);
+            }
+
+            const userHasLogin = {
+                id: user.id,
+                email: user.email
+            }
+
+            const token_oauth = generateToken(userHasLogin);
+            const msg = {
+                message: 'Success',
+                token: token_oauth,
+                response: true
+            }
+            res.status(200).json(msg);
+
         } catch (err) {
             next(err);
         }
