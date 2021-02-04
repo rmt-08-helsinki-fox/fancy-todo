@@ -23,21 +23,17 @@ class toDoController {
     // ? 2. Read ToDo => 200, 500
     static async read(req, res, next) {
         try {
+            // console.log(req.decoded, "<= req decoded Read To Do")
             const data = await ToDo.findAll({
+                order: [["id", "ASC"]],
                 where: { UserId: +req.decoded.id },
             })
-            if (data.length) {
-                res.status(200).json(data)
-                // ! v Usually data becomes object on works, best practice
-                // res.status(200).json({data})
-                return
-            } else {
-                throw {
-                    status: 500,
-                    msg: "No data found",
-                }
-            }
+            res.status(200).json(data)
+            // ! v Usually data becomes object on works, best practice
+            // res.status(200).json({data})
+            return
         } catch (err) {
+            console.log(err)
             next(err)
         }
     }

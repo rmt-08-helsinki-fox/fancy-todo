@@ -10,7 +10,7 @@ const { Error, ValidationError } = require("sequelize")
  */
 function errorHandler(err, req, res, next) {
     // ? Printing error on the terminal
-    console.log(err)
+    // console.log(err)
     // ? Error Sequelize
     if (err instanceof Error) {
         switch (true) {

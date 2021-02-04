@@ -14,6 +14,7 @@ function authenticate(req, res, next) {
         const decoded = jwt.verify(token, process.env.SECRET_JWT)
         // @ts-ignore
         req.decoded = decoded
+        // console.log(req.decoded, "<= req decoded authenticate")
         next()
     } catch (err) {
         console.log("Authenticate error", err.message)

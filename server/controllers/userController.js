@@ -53,10 +53,10 @@ class UserController {
                 audience: process.env.CLIENT_ID_GOOGLE,
             })
             const payload = LoginTicket.getPayload()
-            const user = User.findOne({ where: { email: payload.email } })
+            const user = await User.findOne({ where: { email: payload.email } })
             // ? User exist
             if (user) {
-                console.log(`User already exist`)
+                console.log(`User already exist`, user)
                 const token = generateToken({
                     id: user.id,
                     email: user.email,

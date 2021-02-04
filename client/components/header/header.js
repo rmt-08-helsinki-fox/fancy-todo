@@ -16,13 +16,3 @@ $("#sign-out-button").click((e) => {
 })
 
 auth()
-
-// ? FUNCTION HEADER SIGN-OUT
-function logout() {
-    localStorage.removeItem("accessToken")
-    // var auth2 = gapi.auth2.getAuthInstance()
-    // auth2.signOut().then(() => {
-    //     console.log("User signed out.")
-    //     auth()
-    // })
-}
