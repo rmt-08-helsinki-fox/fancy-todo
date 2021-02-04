@@ -29,6 +29,7 @@ class TodoController {
       }
     })
     .then(data => {
+      console.log(data)
         res.status(200).json(data);
     })
     .catch(err => {
@@ -126,11 +127,12 @@ class TodoController {
     })
   }
 
-  static getWeather(req,res, next) {
-    let location = req.body.location
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${process.env.WEATHERKEY}`)
+  static postWeather(req,res, next) {
+    let city = req.body.city;
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.WEATHERKEY}`)
       .then(weather => {
-        res.status(200).json(weather.data)
+        console.log(weather)
+        res.status(200).json(weather.data.weather)
       })
       .catch(err => {
         next(err)

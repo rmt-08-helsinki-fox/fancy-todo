@@ -2,6 +2,8 @@ const { User } = require("../models/index");
 const { comparePassword } = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
 
+const {OAuth2Client} = require('google-auth-library');
+
 /**
  * PROSES REGISTER
  * 1. HTTP request dengan data req body email dan password
@@ -63,29 +65,55 @@ class UserController {
       });
   }
 
-  // contoh async
+  static googleLogin(req, res, next) {
+    const client = new OAuth2Client(process.env.CLIENT_ID);
+    let email;
+    let name;
+    let avatar;
+    client
+    .verifyIdToken({
+      idToken: req.body.googleToken,
+      audience: process.env.CLIENT_ID
+    })
+    .then((ticket) => {
+      const payload = ticket.getPayload();
+      console.log(payload);
+      email = payload.email;
+      name = payload.name;
+      avatar = payload.picture;
 
-  // static async postLogin(req, res) {
-  //   try{
-  //     const { email, password } = req.body;
-  //     const user = await User.findOne({
-  //       where: {
-  //         email
-  //       }
-  //     })
-  //     if (!user) throw { msg: 'Invalid email or password' };
-  //     const comparedPassword = comparePassword(password, user.password);
-  //       if (!comparedPassword) throw ('ini pesan error');
-  //       const access_token = generateToken({
-  //         id: user.id,
-  //         email: user.email
-  //       })
-  //       res.status(200).json({access_token})
-  //   } catch(err) {
-  //     const error = err.msg || 'Internal server error';
-  //     res.status(500).json({ error })
-  //   }
-  // }
+      return User.findOne({ where: { email }})
+    })
+    .then(user => {
+      console.log(user)
+      if(user) {
+        //generate token
+        let token = generateToken({
+          id: user.id,
+          email: user.email
+        })
+        console.log('didalam if lalu res lho')
+        res.status(200).json({access_token: token})
+      } else {
+        return User.create({
+          email,
+          password: process.env.USER_PWD_GOOGLE
+        })
+        .then(registeredUser => {
+          console.log(registeredUser); // ini menghasilkan undefined kalo masuk case usernya sudah ada
+          let token = generateToken({
+            id: registeredUser.id,
+            email: registeredUser.email
+          })
+          res.status(201).json({access_token: token})
+        })
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
 }
 
 module.exports = UserController;

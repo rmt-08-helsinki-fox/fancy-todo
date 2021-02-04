@@ -1,11 +1,11 @@
-const TodoController = require("../controller/todoController");
+const { Todo }= require("../models");
 
 function authorize(req, res, next) {
   // req.decoded === { id, email, iat }
   let idTodo = +req.params.id;
   let currUserId = +req.decoded.id;
 
-  TodoController.findByPk(idTodo)
+  Todo.findByPk(idTodo)
     .then((todo) => {
       if (!todo) {
         throw {

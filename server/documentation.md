@@ -1,6 +1,33 @@
 # FANCY TODO
+# RESTful ENDPOINTS:
+## TODO endpoints
+### **POST /todos/weather** 
+> Get current weather based on city input
+* **request body:**
+```
+{
+    "city": "Jakarta"
+}
+```
 
-## RESTful endpoints
+* **Success response (200):**
+```
+[
+    {
+        "id": 721,
+        "main": "Haze",
+        "description": "haze",
+        "icon": "50d"
+    }
+]
+```
+* **Error response (500):**
+```
+{
+    message: "internal server error"
+}
+```
+---
 ### **POST /todos** 
 > Insert new Todo
 * **request body:** 
@@ -203,6 +230,79 @@ not needed
 ```
 {
     msg: "error not found"
+}
+```
+* **Error response (500):**
+```
+{
+    message: "internal server error"
+}
+```
+---
+
+## USER endpoints
+### **POST /user/register** 
+> Register new User
+* **request body:** 
+    * _email must be unique_
+    * _password minimum length is 6 characters_
+```
+{
+    "email" : "<email>",
+    "password": "<password>"
+}
+```
+
+* **Success response (201 - Created):**
+```
+{
+    "id": <given id by system>,
+    "email": "<user email>",
+    "password": "<asset description>",
+    "updatedAt": "2021-02-01T13:13:18.409Z",
+    "createdAt": "2021-02-01T13:13:18.409Z"
+}
+```
+* **Error response (400):**
+```
+{
+    message: "Invalid requests"
+}
+```
+* **Error response (500):**
+```
+{
+    message: "internal server error"
+}
+```
+---
+### **POST /user/login** 
+> Authenticate login user
+* **request body:** 
+    * _email must be unique_
+    * _password minimum length is 6 characters_
+    * _email and password must match with data in database_
+```
+{
+    "email" : "<email>",
+    "password": "<password>"
+}
+```
+
+* **Success response (201 - Created):**
+```
+{
+    "id": <given id by system>,
+    "email": "<user email>",
+    "password": "<asset description>",
+    "updatedAt": "2021-02-01T13:13:18.409Z",
+    "createdAt": "2021-02-01T13:13:18.409Z"
+}
+```
+* **Error response (400):**
+```
+{
+    message: "Invalid email/password"
 }
 ```
 * **Error response (500):**
