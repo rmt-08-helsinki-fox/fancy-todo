@@ -1,14 +1,14 @@
 const router = require('express').Router();
 const TodoController = require('../controller/todoController');
 
-const mid = require('../helper/middleware');
+const { mid, checkParamsId } = require('../helper/middleware');
 
 router.use(mid);
 router.get('/', TodoController.showAllTodos);
-router.get('/:id', TodoController.showTodo);
+router.get('/:id', checkParamsId, TodoController.showTodo);
 router.post('/', TodoController.addTodo);
-router.put('/:id', TodoController.updateTodo);
-router.patch('/:id', TodoController.updateStatus);
-router.delete('/:id', TodoController.destroy);
+router.put('/:id', checkParamsId, TodoController.updateTodo);
+router.patch('/:id', checkParamsId, TodoController.updateStatus);
+router.delete('/:id', checkParamsId, TodoController.destroy);
 
 module.exports = router;

@@ -35,6 +35,9 @@ function registration() {
                 } else if (e === `Password can't be empty`) {
                     $('div.validateRegister').append(`<p>${e}</p>`);
                     $('div.validateRegister').show();
+                } else if (e === `Password minimal 6 characters`) {
+                    $('div.validateRegister').append(`<p>${e}</p>`);
+                    $('div.validateRegister').show();
                 }
             });
             resetRegister();

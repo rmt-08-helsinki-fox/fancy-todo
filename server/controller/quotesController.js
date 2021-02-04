@@ -1,6 +1,6 @@
 const axios = require('axios');
 class QuotesController {
-    static async getQuote(req, res) {
+    static async getQuote(req, res, next) {
         try {
             // Shot api quotes
             const getQuotes = await axios({

@@ -54,12 +54,12 @@ class AuthController {
             next(err);
         }
     }
-    static async oauthGoogleLogin(req, res) {
+    static async oauthGoogleLogin(req, res, next) {
         try {
             const token = req.body.tokenOauth;
             const ticket = await client.verifyIdToken({
                 idToken: token,
-                audience: '197969529634-6buqntmaukffr1s1fubr3v1qe45e55bj.apps.googleusercontent.com',
+                audience: process.env.GOOGLE_CLIENT_ID
             });
             const payload = ticket.getPayload();
             const email = payload.email;
