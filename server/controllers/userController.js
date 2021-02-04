@@ -27,21 +27,15 @@ class UserController {
       where: { email },
     })
       .then((user) => {
-        if (!user) {
-          throw {
-            message: "Wrong Email or Password",
-            status: 500,
-            name: "custom",
-          };
-        }
         const compared = compare(password, user.password);
-        if (!compared) {
+        if (!user || !compared) {
           throw {
             message: "Wrong Email or Password",
             status: 500,
-            name: "custom",
+            name: "Custom",
           };
         }
+
         const access_token = generateToken({
           id: user.id,
           email: user.email,
@@ -53,10 +47,10 @@ class UserController {
           url: `http://api.weatherstack.com/current?access_key=${apiKey}&query=${user.location}`,
         }).then((response) => {
           const apiResponse = response.data;
-          console.log(apiResponse);
           weather.location = apiResponse.location.name;
           weather.weatherStatus = apiResponse.current.weather_descriptions[0];
           weather.temperature = apiResponse.current.temperature;
+          weather.url_img = apiResponse.current.weather_icons;
           res.status(200).json({ access_token, weather });
         });
       })
@@ -69,13 +63,13 @@ class UserController {
     User.findOne({ where: { id: userId } })
       .then((user) => {
         if (!user)
-          throw { message: "User not found", status: 404, name: "custom" };
+          throw { message: "User not found", status: 404, name: "Custom" };
         axios({
           method: "get",
           url: `http://api.weatherstack.com/current?access_key=${apiKey}&query=${user.location}`,
         }).then((response) => {
           const apiResponse = response.data;
-          res.json(apiResponse.curre.weather_descriptions);
+          res.json(apiResponse);
         });
       })
       .catch((err) => {
