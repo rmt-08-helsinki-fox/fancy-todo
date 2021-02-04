@@ -19,7 +19,7 @@ class TodoController {
   static async list(req, res, next) {
     try {
       const UserId = req.decoded.id
-      const todos = await Todo.findAll({ where: { UserId } })
+      const todos = await Todo.findAll({ where: { UserId }, order: [["id"]] })
 
       res.status(200).json(todos)
     } catch (err) {
@@ -86,20 +86,23 @@ class TodoController {
   }
 
   static async weather(req, res, next) {
-    try {
-      const city = req.query.city || ""
-
-      const response = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.OPEN_WEATHER_APIKEY}`)
-      const localweather = {
-        weather: response.data.weather[0].main,
-        temp: response.data.main.temp,
-        city: response.data.name
-      }
-
-      res.status(200).json(localweather)
-    } catch (err) {
-      next(err)
-    }
+    const apiURL = `https://api.currentsapi.services/v1/latest-news?country=ID&apiKey=6cHyeWL2ZD3W4RK5yf1fnRFHWZV-5sUZosV2I0r4_f3tOB66`
+    axios
+      .get(apiURL)
+      .then(response => {
+        const news = response.data.news.slice(0, 3).map(el => {
+          return {
+            title: el.title,
+            published: el.published,
+            url: el.url,
+            image: el.image
+          }
+        })
+        res.status(200).json(news)
+      })
+      .catch(err => {
+        next(err)
+      })
   }
 
 }

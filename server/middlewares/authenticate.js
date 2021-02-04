@@ -2,8 +2,8 @@ const { verifyToken } = require("../helpers/jwt")
 
 module.exports = (req, _, next) => {
   try {
-    const token = req.headers.token
-    req.decoded = verifyToken(token)
+    const access_token = req.headers.access_token
+    req.decoded = verifyToken(access_token)
 
     next();
   } catch (err) {
