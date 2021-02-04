@@ -1,60 +1,85 @@
-let baseUrl = "http://localhost:3000";
+let baseUrl = "http://localhost:3000"; //id pake kebab case, jangan pake onclick di html
+//benerin controller ud ngasihnya dalam object(done)//edit buton rusak
 
 $(document).ready(function() {
     view();
 
-    $("#loginForm").on("submit", (e) => {
+    $("#login-form").on("submit", (e) => {
         e.preventDefault();
         
         login();
-    })
-    $("#registerForm").on("submit", (e) => {
+    });
+    $("#register-form").on("submit", (e) => {
         e.preventDefault();
-
+       
         register();
-    })
-    $("#addToDoForm").on("submit", (e) => {
+    });
+    $("#add-to-do-form").on("submit", (e) => {
         e.preventDefault();
 
         add();
+    });
+    $("#add-to-do").on("click", () => {
+        addToDo();
+    })
+    $("#logout").on("click", () => {
+        logout();
+    })
+    $("#show-register-btn").on("click", () => {
+        showRegister();
+    })
+    $("#back-register-btn").on("click", () => {
+        backRegister();
+    })
+    $("#add-to-do-back").on("click", () => {
+        backAdd();
+    })
+    $("#edit-to-do-back").on("click", () => {
+        backEdit();
     })
 })
 
 function view(){
     if(!localStorage.getItem("token")){
-        $("#loginForm").show();
-        $("#registerForm").hide();
-        $("#addToDoForm").hide();
-        $("#todoList").hide();
-        $("#editToDoForm").hide();
+        $("#login-form").show();
+        $("#register-form").hide();
+        $("#add-to-do-form").hide();
+        $("#todo-list").hide();
+        $("#edit-to-do-form").hide();
+        $("#add-to-do").hide();
+        $("#logout").hide();
     } else {
-        $("#loginForm").hide();
-        $("#registerForm").hide();
-        $("#addToDoForm").hide();
-        $("#editToDoForm").hide();
-        $("#todoList").show();
+        $("#login-form").hide();
+        $("#register-form").hide();
+        $("#add-to-do-form").hide();
+        $("#edit-to-do-form").hide();
+        $("#todo-list").show();
+        $("#add-to-do").show();
+        $("#logout").show();
         findAllToDO();
     }
 }
 
 function showRegister(){
-    $("#loginForm").hide();
-    $("#registerForm").show();
+    $("#login-form").hide();
+    $("#register-form").show();
+    $("#loginError").remove();
+    // $("#loginError").removeAttr("class");
 }
 
 function showEdit(){
-    $("#todoList").hide();
-    $("#editToDoForm").show();
+    $("#todo-list").hide();
+    $("#edit-to-do-form").show();
 }
 
 function addToDo(){
-    $("#todoList").hide();
-    $("#addToDoForm").show();
+    $("#todo-list").hide();
+    $("#add-to-do-form").show();
 }
 
 function login(){
-    let email = $("#loginEmail").val();
-    let password = $("#loginPassword").val();
+    let email = $("#login-email").val();
+    let password = $("#login-password").val();
     $.ajax({
         url: baseUrl + "/login",
         method: "POST",
@@ -68,18 +93,20 @@ function login(){
         view();
     })
     .fail((xhr, text) => {
-        $("#loginError").empty();
+        $("#loginError").remove();
+        $("#login-form").append(`<div class="alert alert-danger" id="loginError"></div>`);
+        // $("#loginError").attr("class", "alert alert-danger");
         xhr.responseJSON.errors.forEach(err => {
-            $("#loginError").append(err);
+            $("#loginError").append(`<li>${err}</li>`);
         });
         // console.log(xhr.responseJSON.errors, text)
     })
-    .always(() => $("#loginForm").trigger("reset"));
+    .always(() => $("#login-form").trigger("reset"));
 }
 
 function register(){
-    let email = $("#registerEmail").val();
-    let password = $("#registerPassword").val();
+    let email = $("#register-email").val();
+    let password = $("#register-password").val();
     $.ajax({
         url: baseUrl + "/register",
         method: "POST",
@@ -93,13 +120,21 @@ function register(){
         view();
     })
     .fail((xhr, text) => {
-        $("#registerError").empty();
+        $("#registerError").remove();
+        $("#register-form").append(`<div class="alert alert-danger" id="registerError"></div>`);
+        // $("#registerError").attr("class", "alert alert-danger");
         xhr.responseJSON.errors.forEach(err => {
-            $("#registerError").append(err);
+            $("#registerError").append(`<li>${err}</li>`);
         });
         // console.log(xhr.responseJSON.errors, text)
     })
-    .always(() => $("#registerForm").trigger("reset"));
+    .always(() => $("#register-form").trigger("reset"));
+}
+
+function backRegister() {
+    $("#registerError").remove();
+    // $("#registerError").removeAttr("class");
+    view();
 }
 
 function findAllToDO(){
@@ -110,19 +145,19 @@ function findAllToDO(){
             token: localStorage.getItem("token")
         }
     })
-    .done((todos) => {
-        console.log(todos);
-        $("#todoList").empty();
+    .done(({ todos }) => {
+        $("#todo-list").empty();
         todos.forEach(todo => {
-            $("#todoList").append(`
-            <div class="row">
-                <div class="col-sm" id="todo-${todo.id}">
+            $("#todo-list").append(`
+            <div class="card" id="todo-${todo.id}" style="min-width: 20em">
+                <div class="card-body">
                     <h3>${todo.title}</h3>
                     <p>${todo.description || "No Description"}</p>
-                    ${todo.status}
+                    <div id="todo${todo.id}status" class="btn btn-info" onclick="update(${todo.id})">${todo.status}</div>
                     <b>Due date: ${todo.due_date.split('T')[0]}</b>
-                    <button class="btn btn-primary" onclick="edit(${todo.id})">Edit</button>
-                    <button class="btn btn-primary" onclick="update(${todo.id})">Done</button>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary" onclick="populateEdit(${todo.id})">Edit</button>
                     <button class="btn btn-primary" onclick="news(${todo.id})">News</button>
                     <button class="btn btn-primary" onclick="remove(${todo.id})">Delete</button>
                 </div>
@@ -133,7 +168,7 @@ function findAllToDO(){
     .fail((xhr, text) => console.log(xhr, text))
 }
 
-function edit(id) {
+function populateEdit(id) {
     $.ajax({
         url: baseUrl + "/todos/" + id,
         method: "GET",
@@ -141,27 +176,65 @@ function edit(id) {
             token: localStorage.getItem("token")
         }
     })
-    .done(todo => {
-        console.log(todo.due_date.split("T")[0]);
-
-        $("#titleEditToDo").val(todo.title);
-        $("#descEditToDo").val(todo.description);
+    .done(({ todo }) => {
+        $("#title-edit-to-do").val(todo.title);
+        $("#desc-edit-to-do").val(todo.description);
         if(todo.status === "done"){
-            $("#doneEdit").attr("checked", "true");
+            $("#done-edit").attr("checked", "true");
         } else {
-            $("#notdoneEdit").attr("checked", "true")
+            $("#notdone-edit").attr("checked", "true")
         }
-        $("#dueDateEditToDo").val(todo.due_date.split("T")[0]);
+        $("#due-date-edit-to-do").val(todo.due_date.split("T")[0]);
+        // $("#submitButtonEdit").attr("onclick", submitEdit(id));
+        $("#edit-to-do-form").on("submit", (e) => {
+            e.preventDefault();
+    
+            submitEdit(id)
+        })
 
         showEdit();
     })
 }
 
+function submitEdit(id){
+    let title = $("#title-edit-to-do").val();
+    let description = $("#desc-edit-to-do").val();
+    let status = $("input[name='statusEdit']:checked").val();
+    let due_date = $("#due-date-edit-to-do").val();
+
+    $.ajax({
+        url: baseUrl + "/todos/" + id,
+        method: "PUT",
+        headers: {
+            token: localStorage.getItem("token")
+        },
+        data: {
+            title,
+            description,
+            status,
+            due_date
+        }
+    })
+    .done(() => view())
+    .fail((xhr, text) => {
+        $("#editToDoError").remove();
+        $("#edit-to-do-form").append(`<div id="editToDoError" class="alert alert-danger" role="alert" ></div>`);
+        xhr.responseJSON.errors.forEach(err => {
+            $("#editToDoError").append(`<li>${err}</li>`)
+        });
+    });
+}
+
+function backEdit() {
+    $("#editToDoError").remove();
+    view();
+}
+
 function add(){
-    let title = $("#titleAddToDo").val();
-    let decription = $("#descAddToDo").val();
+    let title = $("#title-add-to-do").val();
+    let description = $("#desc-add-to-do").val();
     let status = $("input[name='statusCreate']:checked").val();
-    let due_date = $("#dueDateAddToDo").val();
+    let due_date = $("#due-date-add-to-do").val();
 
     $.ajax({
         url: baseUrl + "/todos",
@@ -171,29 +244,34 @@ function add(){
         },
         data: {
             title,
-            decription,
+            description,
             status,
             due_date
         }
     })
     .done(() => view())
     .fail((xhr, text) => {
-        $("#addToDoError").empty();
+        $("#addToDoError").remove();
+        $("#add-to-do-form").append(`<div id="addToDoError" class="alert alert-danger" role="alert" ></div>`);
         xhr.responseJSON.errors.forEach(err => {
-            $("#addToDoError").append(err);
+            $("#addToDoError").append(`<li>${err}</li>`);
         });
-        console.log(xhr);
+        // console.log(xhr);
     })
-    .always(() => $("#addToDoForm").trigger("reset"));
+    .always(() => $("#add-to-do-form").trigger("reset"));
+}
+
+function backAdd() {
+    $("#addToDoError").remove();
+    view();
 }
 
 function update(id) {
-    // console.log(status, setStatus);
-    // let setStatus = "done";
+    let setStatus;
 
-    // if(status === "done") setStatus = "not done"
-    // else setStatus = "done";
-    // console.log(status);
+    if($(`#todo${id}status`).text() === "done") setStatus = "not done"
+    else setStatus = "done";
+    console.log($(`#todo${id}status`).text());
 
     $.ajax({
         url: baseUrl + "/todos/" + id,
@@ -202,7 +280,7 @@ function update(id) {
             token: localStorage.getItem("token")
         },
         data: {
-            status: "done"
+            status: setStatus
         }
     })
     .done(() => view())
@@ -210,7 +288,8 @@ function update(id) {
 }
 
 function news(id) {
-    view();
+    // view();
+    $(`#todo-${id}`).append(`<div class="spinner-border text-primary" id="loadNews"></div>`)
     $.ajax({
         url: baseUrl + "/todos/" + id + "/news",
         method: "GET",
@@ -218,11 +297,14 @@ function news(id) {
             token: localStorage.getItem("token")
         }
     })
-    .done(res => $(`#todo-${id}`).append(`
-        <h3>${res.news.title}</h3>
-        <p>${res.news.abstract}</p>
-        <a href="${res.news.web_url}">Read More</a>
-    `))
+    .done(({ news }) => {
+        $(`#todo-${id}`).append(`
+        <h3>${news.title}</h3>
+        <p>${news.abstract}</p>
+        <a href="${news.web_url}">Read More</a>
+    `)
+        $("#loadNews").remove();
+    })
     .fail((xhr, text) => console.log(xhr, text));
 }
 
@@ -258,5 +340,11 @@ function onSignIn(googleUser) {
             id_token
         }
     })
-    .done()
+    .done(({ token }) => {
+        localStorage.setItem("token", token);
+        view();
+    })
+    .fail((xhr, text) => {
+        console.log(xhr.responseJSON.errors, text)
+    })
 }

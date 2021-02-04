@@ -13,24 +13,25 @@ class Controller {
         };
 
         ToDo.create(newtodo)
-        .then(todo => res.status(201).json(todo))
+        .then(todo => res.status(201).json({todo}))
         .catch(err => next(err));
     }
     static getTodo(req, res, next) {
         ToDo.findAll({
             where: {
                 user_id: req.decoded.id
-            }
+            },
+            order: [["due_date", "DESC"]]
         })
         .then(todos => {
             // todos.forEach(todo => todo.due_date = todo.due_date.getUTCDate());//todo.due_date.toLocaleDateString());
             // console.log(todos);
-            res.status(200).json(todos);
+            res.status(200).json({todos});
         })
         .catch(err => next(err));
     }
     static getTodoById(req, res, next) {
-        res.status(200).json(req.todo);
+        res.status(200).json({ todo: req.todo });
     }
     static editTodo(req, res, next) {
         let { title, description, status, due_date } = req.body;
@@ -43,7 +44,7 @@ class Controller {
             returning: true
         })
         .then(todo => {
-            res.status(200).json(todo[1][0]);
+            res.status(200).json({todo: todo[1][0]});
         })
         .catch(err => next(err));
     }
@@ -55,7 +56,7 @@ class Controller {
             returning: true
         })
         .then(todo => {
-            res.status(200).json(todo[1][0]);
+            res.status(200).json({todo: todo[1][0]});
         })
         .catch(err => next(err));
     }
@@ -67,17 +68,12 @@ class Controller {
                 id: req.params.id
             }
         })
-        .then(todo => {
-            res.status(200).json(deletedtodo);
+        .then(() => {
+            res.status(200).json({ deletedtodo });
         })
         .catch(err => next(err));
     }
     static getNewsById(req, res, next) {
-        // ToDo.findByPk(req.params.id)
-        // .then(todo => {
-        //     todo ? res.status(200).json(todo) : res.status(404).json({msg: 'error not found'});
-        // })
-        // .catch(err => res.status(500).json({msg: "Internal server error"}));
         axios.get(
             `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${req.todo.title}&api-key=${process.env.NYTAPI}`
         ).then(({ data }) => {
@@ -89,7 +85,7 @@ class Controller {
                 web_url
             }
             
-            res.status(200).json({todo: req.todo, news});
+            res.status(200).json({ news });
         })
         .catch(err => {
             next(err);
