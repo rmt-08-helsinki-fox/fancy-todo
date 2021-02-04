@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id" content="1021984575214-ng4ahqufqgq7tis6r0hhmnlia3e4c4h3.apps.googleusercontent.com">
+  <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+  <!-- <link rel="stylesheet" href="/fancy-todo/client/style.css"> -->
+  
+  <!-- nav bar -->
+  <title>Fancy Todo</title>
+</head>
+<body>
+  <div>
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link disabled" id="title" aria-disabled="true">Fancy Todo</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" id="nav-register">Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" id="nav-login">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="" id="logout">Logout</a>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Register -->
+  <div class="container" id="register-container">
+    <div class="row">
+      <div>
+        <form action="" method="post" id="register">
+          <div>
+            <label for="">Full Name</label>
+            <input type="text" name="name" id="register-name">
+          </div>
+          <div>
+            <label for="">Email</label>
+            <input type="email" name="email" id="register-email">
+          </div>
+          <div>
+            <label for="">Password</label>
+            <input type="password" name="password" id="register-password">
+          </div>
+          <button type="submit">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Register -->
+
+  <!-- Login -->
+  <div class="container" id="login-container">
+    <div class="row">
+      <div>
+        <form action="" method="post" id="login">
+          <div>
+            <label for="">Email</label>
+            <input type="email" name="email" id="login-email">
+          </div>
+          <div>
+            <label for="">Password</label>
+            <input type="password" name="password" id="login-password">
+          </div>
+          <button type="submit">login</button>
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Login -->
+
+
+  <!-- List Todo -->
+  <div class="container" id="list-todo">
+    <div class="row">
+      <div>
+        <table>
+          <tr>
+            <th></th>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- List Todo -->
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+  <script>
+    const baseUrl = "http://localhost:3000"
+
+    function auth() {
+      if(!localStorage.getItem("accessToken")) {
+        $("#login-container").show()
+        $("#register-container").hide()
+        $("#list-todo").hide()
+      } else {
+        $("#login-container").hide()
+        $("#register-container").show()
+        $("#list-todo").show()
+      }
+    }
+
+    function login() {
+      const email = $("#login-email").val()
+      const password = $("#login-password").val()
+      console.log({email, password});
+      $.ajax({
+        url: `${baseUrl}/users/login`,
+        method: "POST",
+        data: {
+          email,
+          password
+        }
+      })
+        .done((response) => {
+          console.log({response});
+          localStorage.setItem("accessToken", response.accessToken)
+          auth()
+        })
+        .fail((xhr, text) => {
+          console.log({xhr, text});
+        })
+        .always(() => {
+          $("#login").trigger("reset")
+        })
+    }
+
+    function register() {
+      const name = $("#register-name").val()
+      const email = $("#register-email").val()
+      const password = $("#register-password").val()
+      console.log({name, email, password});
+      $.ajax({
+        url: `${baseUrl}/users/register`,
+        method: "POST",
+        data: {
+          name,
+          email,
+          password
+        }
+      })
+        .done(success => {
+          localStorage.clear()
+          auth()
+        })
+        .fail((xhr, text) => {
+          console.log({xhr, text});
+        })
+        .always(() => {
+          $("#register").trigger("reset")
+        })
+    }
+
+    function logout() {
+      localStorage.removeItem('accessToken')
+      let auth2 = gapi.auth2.getAuthInstance()
+      auth2.signOut().then(function() {
+        console.log('user logout');
+      })
+      auth()
+    }
+
+    function onSignIn(googleUser) {
+      // var profile = googleUser.getBasicProfile();
+      // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      // console.log('Name: ' + profile.getName());
+      // console.log('Image URL: ' + profile.getImageUrl());
+      // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+      var id_token = googleUser.getAuthResponse().id_token
+      console.log({id_token});
+      $.ajax({
+        url: `${baseUrl}/users/googleLogin`,
+        method: "POST",
+        data: {
+          googleToken: id_token
+        }
+      })
+      .done(response => {
+        console.log(response);
+      })
+      .fail(err => {
+        console.log(err);
+      })
+    }
+
+    $(document).ready(() => {
+      auth()
+
+      $("#register").on("submit", (e) => {
+        e.preventDefault()
+        register()
+      })
+
+      $("#login").on("submit", (e) => {
+        e.preventDefault()
+        login()
+      })
+
+      $("#logout").click(function () {
+        logout()
+      })
+
+    })
+
+  </script>
+</body>
+</html>

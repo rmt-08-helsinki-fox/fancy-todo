@@ -3,19 +3,21 @@ const axios = require('axios')
 const APIKEY = process.env.APIKEY
 
 class TodoController {
-  static addTodo(req, res) {
-    const { title, description, status, due_date } = req.body
-    const dataTodo = { title, description, status, due_date }
-    Todo.create(dataTodo)
+  static addTodo(req, res, next) {
+    const { title, description, status, due_date, UserId } = req.body
+    const dataTodo = { title, description, status, due_date, UserId: req.currentUser.id }
+    Todo.create(dataTodo, {
+      returning: true
+    })
     .then(todo => {
       res.status(201).json(todo)
     })
     .catch(err => {
-      res.status(400).json(err)
+      next(err)
     })
   }
 
-  static showTodo(req, res) {
+  static showTodo(req, res, next) {
     let dataTodos = null
     Todo.findAll()
     .then(todos => {
@@ -36,22 +38,29 @@ class TodoController {
       })
     })
     .catch(err => {
-      res.status(500).json(err)
+      next(err)
     })
   }
   
-  static showById(req, res) {
+  static showById(req, res, next) {
     const todoId = +req.params.id
     Todo.findByPk(todoId)
     .then(todo => {
-      res.status(200).json(todo)
+      if (todo !== null) {
+        res.status(200).json(todo)
+        
+      } else {
+        next({
+          message: 'data not found'
+        })
+      }
     })
     .catch(err => {
-      res.status(404).json(err)
+      next(err)
     })
   }
 
-  static updateById(req, res) {
+  static updateById(req, res, next) {
     const todoId = +req.params.id
     const { title, description, status, due_date } = req.body
     const dataTodo = { title, description, status, due_date }
@@ -65,12 +74,12 @@ class TodoController {
       res.status(200).json(todo[1][0])
     })
     .catch(err => {
-      res.json(err)
+      next(err)
     })
   }
     
 
-  static updateByPatch(req, res) {
+  static updateByPatch(req, res, next) {
     const todoId = +req.params.id
     const { status } = req.body
     const data = { status }
@@ -84,22 +93,31 @@ class TodoController {
       res.status(200).json(data[1][0])
     })
     .catch(err => {
-      res.status(500).json(err)
+      // res.status(500).json(err)
+      res.json(err)
+      // next(err)
     })
   }
 
-  static deleteTodo(req, res) {
+  static deleteTodo(req, res, next) {
     const todoId = +req.params.id
     Todo.destroy({
       where: {
         id: todoId
       }
     })
-    .then(() => {
-      res.status(200).json({ message: 'Todo success to delete' })
+    .then(todo => {
+      if (!todo) {
+        next({
+          message: 'data not found'
+        })
+      } else {
+        res.status(200).json({ message: 'Todo success to delete' })
+      }
     })
     .catch(err => {
-      res.status(500).json(err)
+      // res.status(500).json(err)
+      res.json(err)
     })
   }
 }

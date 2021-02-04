@@ -17,12 +17,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   User.init({
-    role: {
+    name: {
       type: DataTypes.STRING,
       validate: {
         notEmpty: {
           args: true,
-          msg: 'please enter role'
+          msg: 'please enter name'
         }
       }
     },

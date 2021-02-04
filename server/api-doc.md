@@ -7,8 +7,14 @@ Fancy Todo is an application to manage your todos. This app has:
 ## Endpoint CRUD
 -----
 ### _POST /todos_
-> Create new Todo
+> `Create new Todo`
 
+* Request Headers
+  ```javascript
+    { 
+      "token": "<token to get insert into>"
+    }
+  ```
 * Request Body
   ```javascript
     { 
@@ -47,8 +53,14 @@ Fancy Todo is an application to manage your todos. This app has:
   ```
 
 ### _GET /todos_
-> Get all Todos
+> `Get all Todos`
 
+* Request Headers
+  ```javascript
+    { 
+      "token": "<token to get insert into>"
+    }
+  ```
 * Request Body
   ```javascript
     not need
@@ -75,8 +87,14 @@ Fancy Todo is an application to manage your todos. This app has:
   ```
 
 ### _GET /todos/:id_
-> Get Todo by id
+> `Get Todo by id`
 
+* Request Headers
+  ```javascript
+    { 
+      "token": "<token to get insert into>"
+    }
+  ```
 * Request Params
   ```javascript
     "id": "<to get insert into>"
@@ -107,8 +125,14 @@ Fancy Todo is an application to manage your todos. This app has:
   ```
 
 ### _PUT /todos/:id_
-> Update all Todo by id
+> `Update all Todo by id`
 
+* Request Headers
+  ```javascript
+    { 
+      "token": "<token to get insert into>"
+    }
+  ```
 * Request Params
   ```javascript
     "id": "<to get insert into>"
@@ -158,8 +182,14 @@ Fancy Todo is an application to manage your todos. This app has:
   ```
 
 ### _PATCH /todos/:id_
-> Update patch Todo by id
+> `Update patch Todo by id`
 
+* Request Headers
+  ```javascript
+    { 
+      "token": "<token to get insert into>"
+    }
+  ```
 * Request Params
   ```javascript
     "id": "<to get insert into>"
@@ -200,8 +230,14 @@ Fancy Todo is an application to manage your todos. This app has:
   ```
 
 ### _DELETE /todos/:id_
-> delete Todo by id
+> `delete Todo by id`
 
+* Request Headers
+  ```javascript
+    { 
+      "token": "<token to get insert into>"
+    }
+  ```
 * Request Params
   ```javascript
     "id": "<to get insert into>"
@@ -236,7 +272,7 @@ Fancy Todo is an application to manage your todos. This app has:
 ## Users
 -----
 ### _POST /users/register_
-> create new user
+> `create new user`
 
 * Request Body
   ```javascript
@@ -250,12 +286,10 @@ Fancy Todo is an application to manage your todos. This app has:
   * Code: 201 - Created
   ```javascript
     {
+      "message": "Register success",
       "id": "<given id by system>",
       "role": "<posted role>",
-      "email": "<posted email>",
-      "password": "<posted password>"
-      "updatedAt": "2021-02-01T14:38:20.158Z",
-      "createdAt": "2021-02-01T14:38:20.158Z"
+      "email": "<posted email>"
     }
   ```
 * Error Response
@@ -267,7 +301,7 @@ Fancy Todo is an application to manage your todos. This app has:
   ```
 
 ### _POST /users/login_
-> login user
+> `login user`
 
 * Request Body
   ```javascript
