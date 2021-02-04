@@ -8,7 +8,7 @@ class HomeController {
     .then(adv => {
       let dataAdvice = {
         advice: adv.data.slip.advice,
-        author: 'unknown'
+        label: '-random advice'
       }
       res.json(dataAdvice)
     })

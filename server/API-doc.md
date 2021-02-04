@@ -116,7 +116,10 @@ NONE
 ```
 
 * **Response (500) :**
-```
+```json
+{
+    "error": "Internal server error"
+}
 
 ```
 
@@ -124,7 +127,9 @@ NONE
 
 * **Request Header :**
 ```json
-NONE
+{
+    "access_token": "<your access token>"
+}
 ```
 
 * **Request Body :**
@@ -161,8 +166,10 @@ id = <INTEGER>
 ## 4. PUT /todos/:id
 
 * **Request Header :**
-```
-NONE
+```json
+{
+    "access_token": "<your access token>"
+}
 ```
 
 * **Request Body :**
@@ -229,14 +236,19 @@ NONE
 
 * **Response (500) :**
 ```json
+{
+    "error": "Internal server error"
+}
 
 ```
 
 ## 5. PATCH /todos/:id
 
 * **Request Header :**
-```
-NONE
+```json
+{
+    "access_token": "<your access token>"
+}
 ```
 
 * **Request Body :**
@@ -292,15 +304,20 @@ NONE
 ```
 
 * **Response (500) :**
-```
+```json
+{
+    "error": "Internal server error"
+}
 
 ```
 
 ## 6. DELETE /todos/:id
 
 * **Request Header :**
-```
-NONE
+```json
+{
+    "access_token": "<your access token>"
+}
 ```
 
 * **Request Body :**
@@ -328,7 +345,10 @@ id = <INTEGER>
 ```
 
 * **Response (500) :**
-```
+```json
+{
+    "error": "Internal server error"
+}
 
 ```
 
