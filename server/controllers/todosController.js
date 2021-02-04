@@ -17,7 +17,9 @@ class Controller {
 
     static async getTodos(req, res, next) {
         try {
-            const todos = await Todo.findAll()
+            const todos = await Todo.findAll({
+                order: [['id', 'ASC']]
+            })
             res.status(200).json(todos)
         } catch (error) {
             next(error)
@@ -32,22 +34,15 @@ class Controller {
                 res.status(200).json(todo)
                 
             } else {
-                // throw {
-                //     name: 'Custom error',
-                //     error: {
-                //         code: 404,
-                //         message: 'id was not found'
-                //     }
-                // }
+                throw {
+                    name: 'Custom error',
+                    error: {
+                        code: 404,
+                        message: 'id was not found'
+                    }
+                }
             }
         } catch (error) {
-            // const errorCode = error.error.code
-            // if (errorCode === 404) {
-            //     res.status(404).json(error) //not found
-            // } else {
-            //     res.status(500).json({ error: { code: 500, message: 'internal server error' } })
-            // }
-            
             next(error)
         }
     }
@@ -71,24 +66,6 @@ class Controller {
             }
         } catch (error) {
             next(error)
-            // if (error.errors) {
-            //     let errorMessages = error.errors.map(e => {
-            //         return e.message
-            //     })
-            //     let errorTypes = error.errors.map(e => {
-            //         return e.type
-            //     })
-
-            //     if (errorTypes) {
-            //         res.status(400).json({ error: { code: 400, messages: errorMessages } })
-            //     } else {
-            //         res.status(500).json({ error: { code: 500, message: 'internal server error' } })
-            //     }
-            // } else if (error.error.code) {
-            //     res.status(404).json(error)
-            // } else {
-            //     res.status(500).json({ error: { code: 500, message: 'internal server error' } })
-            // }
         }
     }
 
@@ -96,7 +73,6 @@ class Controller {
         try {
             const todoId = +req.params.id
             let updatedTodo = {}
-            const key = "status"
             const { status } = req.body
             
 
@@ -113,22 +89,9 @@ class Controller {
                     }
                 }
             }
-
-
         } catch (error) {
             next(error)
-            // if (error.errors) {
-            //     if (errors.length > 0) {
-            //         res.status(400).json({ error: { code: 400, message: 'invalid input' } })
-            //     } else {
-            //         res.status(500).json({ errors: { code: 500, message: 'internal server error' } })
-            //     }
-
-            // } else {
-            //     res.status(400).json(error)
-            // }
         }
-
     }
 
     static async deleteTodo(req, res, next) {
@@ -148,12 +111,6 @@ class Controller {
             }
         } catch (error) {
             next(error)
-            // const errors = error.errors
-            // if (errors) {
-            //     res.status(500).json({ errors: { code: 500, message: 'internal server error' } })
-            // } else {
-            //     res.status(404).json(error)
-            // }
         }
     }
 

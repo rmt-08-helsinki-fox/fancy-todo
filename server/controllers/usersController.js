@@ -1,6 +1,6 @@
 const { hashPassword, comparePassword } = require('../helpers/bcrypt')
 const { User } = require('../models')
-const { getToken } = require('../helpers/jwt')
+const { getAccessToken } = require('../helpers/jwt')
 class UserController {
     static async signUp(req, res, next) {
         try {
@@ -26,25 +26,20 @@ class UserController {
             if (user) {
                 const comparedPassword = comparePassword(req.body.password, user.password)
                 if (comparedPassword) {
-                    // console.log('MATCH');
-                    const token = getToken({
+                    const accessToken = getAccessToken({
                         id: user.id,
                         email: user.email
                     })
-                    res.status(200).json({ token })
-
+                    res.status(200).json({ accessToken })
                 } else  {
-                    // console.log('NOT MATCH');
                     throw {
                         name: 'Custom error',
                         error: {
                             code: 400,
                             message: 'invalid email or password'
                         }
-
                     }
                 }
-
             } else {
                 throw {
                     name: 'Custom error',
@@ -56,11 +51,8 @@ class UserController {
             }
         } catch (error) {
             next(error)
-            
         }
     }
-
-
 }
 
 module.exports = UserController

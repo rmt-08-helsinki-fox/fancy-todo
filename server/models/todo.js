@@ -32,16 +32,21 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.STRING,
-      validate: {
-        notEmpty: true
-      }
     },
     due_date: {
       type: DataTypes.DATE,
       validate: {
         notEmpty: true,
         isNextDay: function (value){
-          if(value.toDateString() < new Date().toDateString()){
+          const currentYear = new Date().getFullYear()
+          const currentMonth = new Date().getMonth()
+          const currentDate = new Date().getDate()
+
+          if(
+          value.getFullYear() < currentYear ||
+          (value.getFullYear() === currentYear && value.getMonth() < currentMonth) ||
+          (value.getFullYear() === currentYear && value.getMonth() === currentMonth && value.getDate() < currentDate )
+          ){
             throw 'Cannot input past day in due_date parameter'
           }
         }
