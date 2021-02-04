@@ -39,6 +39,7 @@ class TodoController {
         })
       })
       .catch( err => {
+        err.from = 'todoController - addTodo'
         next(err)
       })
       
@@ -56,6 +57,7 @@ class TodoController {
         res.status(200).json(todos)
       })
       .catch( err => {
+        err.from = 'todoController - todoGet'
         next(err)
       })
   }
@@ -78,6 +80,7 @@ class TodoController {
           
       })
       .catch( err => {
+        err.from = 'todoController - showTodoById'
         next(err)
       })
   }
@@ -113,6 +116,7 @@ class TodoController {
     
     })
     .catch( err => {
+      err.from = 'todoController - editTodo'
       next(err)
     })
 
@@ -144,6 +148,7 @@ class TodoController {
 
     })
     .catch( err => {
+      err.from = 'todoController - editTodoStatus'
       next(err)
     })
   }
@@ -172,6 +177,7 @@ class TodoController {
         }
       })
       .catch( err => {
+        err.from = 'todoController - deleteTodo'
         next(err)
       })
   }

@@ -22,6 +22,7 @@ class UserController{
         })
       })
       .catch( err => {
+        err.from = 'userController - register'
         next(err)
       })
 
@@ -51,6 +52,7 @@ class UserController{
 
     })
     .catch( err => {
+      err.from = 'userController - login'
       next(err)
     })
 

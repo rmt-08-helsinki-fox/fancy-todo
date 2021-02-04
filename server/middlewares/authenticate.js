@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken')
+const { verify } = require('../helpers/jwt')
 
 const authenticate = (req, res, next) => {
     try{
       const token = req.headers.token
-      const decoded = jwt.verify(token, process.env.SECRET )
+      const decoded = verify(token, process.env.SECRET )
 
       req.user = decoded
 

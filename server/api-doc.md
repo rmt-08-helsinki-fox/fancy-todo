@@ -11,7 +11,7 @@ add todo data, Dimana setelah proses add app akan menampilkan referensi artikel 
 
 ```js
 
-    token = 'your token'
+    token = '<token>'
 
 
 ```
@@ -68,7 +68,7 @@ Menampilkan seluruh data todo
 
 ```js
 
-    token = 'your token'
+    token = '<token>'
 
 ```
 ### -- Request Body --
@@ -115,7 +115,7 @@ Menampilkan data todo berdasarkan id,
 
 ```js
 
-    token = 'your token'
+    token = '<token>'
 
 ```
 
@@ -151,7 +151,7 @@ Melakukan perubahan data todo berdasarkan id yang dipilih,
 
 ```js
 
-    token = 'your token'
+    token = '<token>'
 
 ```
 
@@ -191,7 +191,7 @@ Melakukan perubahan status todo berdasarkan id yang dipilih,
 
 ```js
 
-    token = 'your token'
+    token = '<token>'
 
 ```
 
@@ -228,7 +228,7 @@ menghapus data todo berdasarkan id yang dipilih.
 
 ```js
 
-    token = 'your token'
+    token = '<token>'
 
 ```
 
@@ -299,7 +299,7 @@ tidak dibutuhkan
 
 ```js
 {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJyaXpraUBlY2FtcHV6LmNvbSIsImlhdCI6MTYxMjMxMTkwN30.4HCGps4hzqZ7GJf4qqKl2Rs7RCq4ppANw6mqSqFhUSs"
+    "accessToken": "<token>"
 }
 
 ```

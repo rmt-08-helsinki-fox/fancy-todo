@@ -12,9 +12,7 @@ const authorize = (req,res,next) => {
             message: "error not found",
             status: 404 
           }
-        }
-
-        if(req.user.id == todo.UserId ){
+        } else if (req.user.id == todo.UserId ){
             next()
         } else {
           throw { 
@@ -23,6 +21,7 @@ const authorize = (req,res,next) => {
             status: 401
           }
         }
+
       })
       .catch( err => {
         next(err)
