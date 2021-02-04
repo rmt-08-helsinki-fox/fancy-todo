@@ -1,5 +1,4 @@
 const { Todo } = require('../models');
-const axios = require('axios');
 
 class TodoController {
     static async addTodo(req, res, next) {
@@ -8,25 +7,9 @@ class TodoController {
             const newTodo = { title, description, status, due_date, user_id: req.decoded.id };
             const insertTodo = await Todo.create(newTodo);
 
-            // Shot api quotes
-            const getQuotes = await axios({
-                method: 'get',
-                url: 'https://andruxnet-random-famous-quotes.p.rapidapi.com?cat=famous',
-                headers: {
-                    'x-rapidapi-key': process.env.RAPIDAPI_KEY,
-                    'x-rapidapi-host': process.env.RAPIDAPI_HOST
-                },
-            });
-
-
-            const quotes = `${getQuotes.data[0].quote} --${getQuotes.data[0].author}`;
-            const data = {
-                todo: insertTodo,
-                quotes
-            }
             const msg = {
                 message: 'Success',
-                data,
+                data: insertTodo,
                 response: true
             }
             res.status(201).json(msg);
@@ -34,6 +17,7 @@ class TodoController {
             next(err);
         }
     }
+
     static async showAllTodos(req, res, next) {
         try {
             const opt = {

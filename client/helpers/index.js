@@ -28,11 +28,28 @@ function renderLoginPage(invalidAuth = null) {
     $('#password').val('');
 }
 
+function getQuotes() {
+    $.ajax({
+        url: 'http://localhost:3000/quotes',
+        method: 'GET',
+        headers: { token: localStorage.getItem('token') }
+    })
+        .done(res => {
+            let text = `=== Quotes for You ===<br>"${res.data}"`;
+            $('div.quotes').show();
+            $('div.quotes').html(text);
+        })
+        .fail(err => {
+            console.log(err);
+        })
+}
+
 function renderTodoPage() {
     if (!localStorage.getItem('token')) {
         renderLoginPage();
         return false;
     }
+    getQuotes();
     $('#loginPage').hide();
     $('#registerPage').hide();
     $('#crud-todo').hide();
