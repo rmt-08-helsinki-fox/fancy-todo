@@ -8,8 +8,9 @@ class todoController {
         let newTodo = {
             title: req.body.title,
             description: req.body.description,
-            status: req.body.status,
-            due_date: req.body.due_date
+            status: req.body.status || false,
+            due_date: req.body.due_date,
+            UserId: +req.decoded.id
         }
 
         Todo.create(newTodo)
@@ -29,8 +30,14 @@ class todoController {
 
     static getTodo (req, res, next) {
         let todo;
-        Todo.findAll({order: [['id', 'ASC']]})
+        Todo.findAll({
+            order: [['id', 'DESC']],
+            where: {
+                UserId: +req.decoded.id
+            }
+        })
         .then((todos) => {
+            //console.log(req.decoded.id);
             todo = todos
             return axios({
                 method: "get",
@@ -68,6 +75,7 @@ class todoController {
             //res.status(404).json(err)
         })
     }
+    
 
     static putTodo(req, res,next) {
         let updateTodo = {

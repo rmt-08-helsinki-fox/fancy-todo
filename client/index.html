@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>my todo lists</title>
+  <meta name="google-signin-client_id" content="130727583267-ddevj4n71uh6c83623m90kecgtfd4pla.apps.googleusercontent.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <style>
+    
+    h1 {
+      margin-left: 40%;
+    }
+  </style>
+</head>
+<body>
+    <h1>My Todo list</h1>
+    <nav class="navBar">
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo right">ridano</a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+          <li><a href="#"> <button id="addTodoBtn">add todo list </button> </a></li>
+          <li><a href="#"> <button id="myTodo">My Todo</button> </a></li>
+          <li><a href="#"> <button id="logout">logout</button> </a></li>
+        </ul>
+        
+      </div>
+    </nav>
+    <nav  class="navBar">
+      <div class="nav-wrapper">
+        <form>
+          <div class="input-field">
+            <input id="search" type="search" required>
+            <label class="label-icon" for="search"><i class="material-icons">search by todo id</i></label>
+            <i class="material-icons">close</i>
+          </div>
+        </form>
+      </div>
+    </nav>
+    <!-- <button id="addTodoBtn" >add todo list </button> -->
+    <div id="register-page">
+      <h2>Register</h2>
+      <div class="row">
+        <form id="register-form" class="col s12">
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="emailRegister" type="email" class="validate" placeholder="Email">
+              <label for="email" ></label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="passwordRegister" type="password" class="validate" placeholder="Password">
+              <label for="password"></label>
+            </div>
+          </div>
+          <button class="waves-effect waves-light btn" type="submit">Register</button>
+          <button class="switchbtn btn">login to my account</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- login form -->
+      <div id="login-page">
+        <h2>Login</h2>
+        <div class="row">
+          <form id="login-form" class="col s12">
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="emailLogin" type="email" class="validate" placeholder="Email">
+                <label for="email" ></label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="passwordLogin" type="password" class="validate" placeholder="Password">
+                <label for="password"></label>
+              </div>
+            </div>
+            <button class="waves-effect waves-light btn" type="submit">Login</button>
+            <button class="switchbtn btn" type="button">register new account</button>
+            <br>
+            <br>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            
+          </form>
+        </div>
+      </div>
+
+      <!-- add todo -->
+      <div id="addTodo">
+        <h2>Add new Todo</h2>
+        <form>
+          <div class="row">
+            <div class="input-field col s6">
+              <input id="title" type="text" class="validate" name="title">
+              <label class="active" for="title">Title</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s6">
+              <input id="description" type="text" class="validate" name="description">
+              <label class="active" for="description">Description</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s6">
+              <input id="due_date" type="date" class="validate">
+              <label class="active" for="due_date">Due Date</label>
+            </div>
+          </div>
+          <button id="addNewTodo" class="waves-effect waves-light btn" type="submit">Add todo</button>
+          
+        </form>
+      </div>
+      
+      <!-- list todo -->
+      <div id="todoCard">
+      </div>
+      <!-- show all todo -->
+      <!-- search one -->
+      <!-- put -->
+      <!-- patch -->
+      <!-- delete -->
+  <script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+  <script src="./script.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+</body>
+</html>

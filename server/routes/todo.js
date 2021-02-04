@@ -4,14 +4,15 @@ const authenticate = require('../middlewares/authentication')
 const authorize = require('../middlewares/authorization')
 
 
-
 router.use(authenticate)
 
 router.post('/', todoController.PostAddTodo) //token auth
 
 router.get('/', todoController.getTodo) //token auth
 
+
 router.use('/:id',authorize)
+
 router.get('/:id', todoController.findTodo) //authorization
 
 router.put('/:id',  todoController.putTodo) //authorization

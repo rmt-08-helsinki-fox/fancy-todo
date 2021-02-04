@@ -20,28 +20,26 @@ hanya user yang ter <i>authenticate</i> yang bisa mendapatkan semua list dari to
         "author": "Henry Ward Beecher",
         "length": 71
     },
-    [
-        {
-            "id": 1,
-            "title": "makana temen",
-            "description": "makan",
-            "status": false,
-            "due_date": "2021-02-05T00:00:00.000Z",
-            "UserId": 1,
-            "createdAt": "2021-02-01T06:36:14.789Z",
-            "updatedAt": "2021-02-02T11:24:19.432Z"
-        },
-        {
-            "id": 2,
-            "title": "mandi",
-            "description": "di kali",
-            "status": true,
-            "due_date": "2021-02-05T00:00:00.000Z",
-            "UserId": 1,
-            "createdAt": "2021-02-01T06:37:23.500Z",
-            "updatedAt": "2021-02-02T11:25:20.536Z"
-        },
-    ]
+    {
+        "id": 1,
+        "title": "makana temen",
+        "description": "makan",
+        "status": false,
+        "due_date": "2021-02-05T00:00:00.000Z",
+        "UserId": 1,
+        "createdAt": "2021-02-01T06:36:14.789Z",
+        "updatedAt": "2021-02-02T11:24:19.432Z"
+    },
+    {
+        "id": 2,
+        "title": "mandi",
+        "description": "di kali",
+        "status": true,
+        "due_date": "2021-02-05T00:00:00.000Z",
+        "UserId": 1,
+        "createdAt": "2021-02-01T06:37:23.500Z",
+        "updatedAt": "2021-02-02T11:25:20.536Z"
+    },
 ]
 ```
 **error responses**
@@ -80,7 +78,7 @@ input:
   id: given
   title: "makan"
   description: "makan nasi uduk"
-  due_date: 2021-01--31
+  due_date: 2021-01-31
   createdAt: given
   updatedAt: given
 ```
@@ -306,7 +304,7 @@ user yang login akan memiliki token yang unik
 
 ```javascript
 {
-    "acces_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ3dWh1QG1haWwuY29tIiwiaWF0IjoxNjEyMTk1ODAzfQ.D9JOrkcxLPREgmE4IUNKCZPie7w5jNpeGMX0uxMKis0"
+    "acces_token": "<token>"
 }
 ```
 

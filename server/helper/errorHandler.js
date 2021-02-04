@@ -9,10 +9,10 @@ module.exports = (err, req, res, next) => {
     const error = err.msg 
 		res.status(400).json({error})
   } else if (err.msg == "404 not found!") {
-    res.status(404).json(err)
+    res.status(404).json({err})
   } else if (err.msg == 'Not Authorized') {
     res.status(401).json({err})
   } else {
-    res.status(500).json({msg: 'Internal server error'}) //{msg: 'Internal server error'}
+    res.status(500).json(err) //{msg: 'Internal server error'}
   }
 }
