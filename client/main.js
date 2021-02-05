@@ -43,7 +43,7 @@ function refreshVisualToDoList(data) {
                     <div class="card" style="width: 50rem">
 
                         <div class="card-body" id="edit-to-do-form-${e.id}">
-                            <form onsubmit="confirmUpdateToDo(${e.id}))">
+                            <form onsubmit="confirmUpdateToDo(${e.id})">
                                 <div class="row">
                                     <div class="col">
                                         <input
@@ -97,8 +97,7 @@ function refreshVisualToDoList(data) {
                                     <button
                                         id="form-edit-to-do-button-${e.id}"
                                         type="button"
-                                        class="btn btn-warning"
-                                        onclick="editToDoForm(${e.id}">
+                                        class="btn btn-warning">
                                     Edit
                                     </button>
                                     <button

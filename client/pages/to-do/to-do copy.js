@@ -142,7 +142,7 @@ function readToDoList() {
                                             id="form-edit-to-do-button-${e.id}" 
                                             type="button"
                                             class="btn btn-warning"
-                                            onclick="editToDoForm(${e.id}">
+                                            onclick="editToDoForm(${e.id})">
                                         Edit
                                         </button>
                                         <button 
