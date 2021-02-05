@@ -15,7 +15,7 @@ const base_url = "http://localhost:3000/"
       } else {
         $('#login-page').hide()
         $('#todoCard').show()
-        $('#navBar').show()
+        $('nav.navBar').show()
         getAllTodos()
       }
     }
@@ -406,10 +406,9 @@ const base_url = "http://localhost:3000/"
         login()
       })
 
-      $('#register-form').on('submit', (event) => {
+      $('#register-btn').on('click', (event) => {
         event.preventDefault()
         register()
-        
       })
 
       $("#addTodoBtn").on('click', (event)=> {
