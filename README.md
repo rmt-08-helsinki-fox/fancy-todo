@@ -7,9 +7,11 @@ CHRIST LORENZO HARLYANDI
 > Postman Documentation Christ :
 > https://documenter.getpostman.com/view/14217230/TW6zHT1W
 
+> server>api-doc.md
+
 ## 2. Routes REST API = DONE
 
->
+> server/routes
 
 ## 3. CRUD To Do = DONE
 
