@@ -24,8 +24,10 @@ const mid = async (req, res, next) => {
 const checkParamsId = async (req, res, next) => {
     try {
         const id = Number(req.params.id);
-        const todo = Todo.findByPk(id);
+        const todo = await Todo.findByPk(id);
         if (!todo) throw 404;
+        const user_id = req.decoded.id;
+        if (todo.user_id != user_id) throw 404;
         next();
     } catch (err) {
         next(err);
