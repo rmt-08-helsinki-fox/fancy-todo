@@ -2,6 +2,7 @@ const { User } = require('../models');
 const { compare } = require('../helpers/bcrypt');
 const { genToken } = require('../helpers/jwt')
 const sendEmail = require('../helpers/mailgun');
+const {OAuth2Client} = require('google-auth-library');
 
 class UserController {
 
@@ -12,11 +13,12 @@ class UserController {
     User.create(newUser)
     .then((user) => {
       if (user) {
-        sendEmail(user.email)
+        // sendEmail(user.email)
         res.status(201).json({
           success: 'Registration success',
           id: user.id,
-          email: user.email
+          email: user.email,
+          city: user.city
         })
       }
     })
@@ -40,7 +42,8 @@ class UserController {
         if(comparedPass) {
           const payload = { 
             id: user.id,
-            email: user.email
+            email: user.email,
+            city: user.city
           }
           const accessToken = genToken(payload)
 
@@ -55,6 +58,51 @@ class UserController {
     .catch((err) => {
       next(err);
     })
+  }
+
+  static googleLogin(req, res, next) {
+    const client = new OAuth2Client(process.env.CLIENT_ID);
+    let email = '';
+
+    client.verifyIdToken({
+      idToken: req.body.googleToken,
+      audience: process.env.CLIENT_ID
+    })
+    .then(ticket => {
+      const payload = ticket.getPayload();
+      email = payload.email;
+
+      return User.findOne({where: { email }})
+    })
+    .then(user => {
+
+      if (user) {
+        const accessToken = genToken({
+          id: user.id,
+          email: user.email,
+          city: user.city
+        })
+        res.status(200).json( {accessToken} )
+      } else {
+        return User.create({
+          email: email,
+          password: process.env.RANDOM_PASSWORD
+        })
+        .then(user => {
+          const accessToken = genToken({
+            id: user.id,
+            email: user.email,
+            city: user.city
+          })
+    
+          res.status(201).json( {accessToken} )
+        })
+      }
+    })
+    .catch((err) => {
+      next(err);
+    })
+
   }
 }
 

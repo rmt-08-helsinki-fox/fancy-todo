@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: { 
         isAfter: {
           args: new Date().toString(),
-          msg: `Can't enter a date that has already passed`
+          msg: `Date must be greater than today`
         }
       }
     },
@@ -41,6 +41,14 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Todo',
+    hooks: {
+      beforeCreate: (todo, options) => {
+        !todo.status ? todo.status = false : {}
+      },
+      beforeUpdate: (todo, options) => {
+        !todo.status ? todo.status = false : {}
+      }
+    }
   });
   return Todo;
 };

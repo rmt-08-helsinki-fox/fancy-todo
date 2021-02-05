@@ -1,5 +1,6 @@
 const { Todo } = require('../models');
 const axios = require('axios');
+const momentJs = require('../helpers/moment')
 
 class TodoController {
 
@@ -21,7 +22,6 @@ class TodoController {
 
   static list(req, res, next) {
     const userId = req.decoded.id;
-    let dataTodos = null;
     Todo.findAll({
       where: {
         UserId: userId
@@ -29,19 +29,9 @@ class TodoController {
       order: [['id', 'asc']]
     })
       .then((todos) => {
-        dataTodos = todos;
-        //* untuk ganti kotanya harus tambah field kota di tabel Users 
-        //* payloadnya juga ditambahin kota
-        const secret = process.env.WEATHER_ACCESS_KEY
-
-        return axios.get(`http://api.weatherstack.com/current?access_key=${secret}&query=Yogyakarta`)
-      })
-      .then((response) => {
-        const send = {
-          todos: dataTodos,
-          weather: response.data
-        }
-        res.status(200).json(send)
+        const moment = todos.map((todo) => momentJs(todo.due_date))
+ 
+        res.status(200).json({todos, moment})
       })
       .catch((err) => {
         next(err);
@@ -77,7 +67,8 @@ class TodoController {
       where: {
         id
       },
-      returning: true
+      returning: true,
+      individualHooks: true
     })
       .then((todo) => {
         if (todo[0] > 0) {
@@ -101,7 +92,8 @@ class TodoController {
       where: {
         id
       },
-      returning: true
+      returning: true,
+      individualHooks: true
     })
       .then((todo) => {
         if (todo[0] > 0) {
@@ -133,6 +125,10 @@ class TodoController {
       .catch((err) => {
         next(err);
       })
+  }
+
+  static weather(req, res, next) {
+    
   }
 }
 

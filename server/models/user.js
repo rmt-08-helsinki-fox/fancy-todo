@@ -44,13 +44,22 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Password is required'
         }
       }
+    },
+    city: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'City is required'
+        }
+      }
     }
   }, {
     sequelize,
     modelName: 'User',
     hooks:{
       beforeCreate : (user, options) => {
-        user.password = hashing(user.password)
+        user.password = hashing(user.password);
+        !user.city ? user.city = 'Jakarta' : {}
       }
     }
   });
