@@ -86,7 +86,7 @@ function getTodo() {
     .done((response) => {
 
       $('#todo').empty();
-      $('#todo').append(`<h2 class="text-center my-5">Welcome back, ${response[0].User.email}!</h2>`);
+      $('#todo').append(`<h2 class="text-center my-4">Welcome back, ${response[0].User.email}!</h2>`);
       response.forEach(value => {
         $('#todo').append(`
         <div class="card d-inline-block m-3" id="todo-${value.id}" style="width: 20rem;">
@@ -261,6 +261,27 @@ function update(id) {
     })
 }
 
+function getDictionary() {
+  const word = $("#word-search").val();
+  $.ajax({
+    url: base_url + "todos/dictionary",
+    method: "GET",
+    headers: {
+      token: localStorage.getItem('access_token')
+    },
+    data: {
+      word
+    }
+  })
+    .done(response => {
+      $("#word-search").val("");
+      $("#search-result").text(response.definition);
+    })
+    .fail(err => {
+      console.log(err);
+    })
+}
+
 function auth() {
   if (!localStorage.getItem('access_token')) {
     $("#register").show();
@@ -297,6 +318,11 @@ $(document).ready(() => {
   $("#login-form").on("submit", (e) => {
     e.preventDefault();
     login();
+  })
+
+  $("#word-btn").on("click", (e) => {
+    e.preventDefault();
+    getDictionary();
   })
 
   $("#update-form").on("submit", (e) => {
