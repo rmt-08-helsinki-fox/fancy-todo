@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // define association here 
+      Todo.belongsTo(models.User)
     }
   };
   Todo.init({
@@ -64,6 +65,9 @@ module.exports = (sequelize, DataTypes) => {
           msg : 'Due_date must be today or after today date' 
         } 
       } 
+    }, 
+    UserId : { 
+      type : DataTypes.INTEGER
     } 
   }, {
     sequelize,
