@@ -3,20 +3,12 @@ const axios = require('axios');
 const convertDate = require('../helpers/convertDate');
 
 class WeatherController {
-  static postCity(req, res, next) {
-    try {
-      const city = req.body.city;
+  
+  static postForecastWeather(req, res, next) {
+    const city = req.body.city;
 
-      if (!city) throw { name: 'CustomError', msg: 'You must enter the city name', status: 400 };
-
-      res.status(200).json({ city });
-    } catch (err) {
-      next(err);
-    }
-  }
-
-  static getForecastWeather(req, res, next) {
-    const city = req.query.city;
+    if (!city) throw { name: 'Error400', msg: 'You must enter the city name', status: 400 };
+    
     const id = +req.params.id;
     let dueDateTodo;
 
@@ -41,7 +33,7 @@ class WeatherController {
         if (foundData) {
           res.status(200).json(foundData);
         } else {
-          throw { name: 'CustomError', msg: 'Sorry, weather prediction is not available yet', status: 400 };
+          throw { name: 'Error400', msg: 'Sorry, weather prediction is not available yet', status: 400 };
         }
 
       })

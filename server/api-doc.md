@@ -2,20 +2,9 @@
 
 base url : http://localhost:PORT
 
-## App Requirements
 ---
-
-Dependencies :
-- expres
-- pg
-- sequelize
-- axios
-- bcryptjs
-- jsonwebtoken
-
 
 ## Endpoint List
----
 
 ## 1. User
 
@@ -25,8 +14,8 @@ Dependencies :
 - **Method** : `POST`
 - **Data Params** :
     ```
-    email=string
-    password=string
+    email=string (required)
+    password=string (required)
     ```
 
   _Request Header_
@@ -88,8 +77,8 @@ Dependencies :
 - **Method** : `POST`
 - **Data Params** :
     ```
-    email=string
-    password=string
+    email=string (required)
+    password=string (required)
     ```
 
   _Request Header_
@@ -150,9 +139,9 @@ input format :
 - **Method** : `POST`
 - **Data Params** :
     ```
-    title=string
+    title=string (required)
     description=string
-    due_date=string format YYYY-MM-DD
+    due_date=string format YYYY-MM-DD (required)
     ```
 
   _Request Header_
@@ -385,9 +374,9 @@ input format :
 - **URL Params** : `id=integer`
 - **Data Params** :
     ```
-    title=string
+    title=string (required)
     description=string
-    due_date=string format YYYY-MM-DD
+    due_date=string format YYYY-MM-DD (required)
     ```
 
   _Request Header_
@@ -471,7 +460,7 @@ input format :
 - **URL Params** : `id=integer`
 - **Data Params** :
     ```
-    status=boolean
+    status=boolean (required)
     ```
 
   _Request Header_
@@ -607,8 +596,8 @@ input format :
 ### Get Weather Information
 > Get weather information by todo id
 
-- **URL** : `/weathers/:id?city=<city name>`
-- **Method** : `GET`
+- **URL** : `/weathers/:id`
+- **Method** : `POST`
 - **URL Params** : `id=integer`
 
   _Request Header_

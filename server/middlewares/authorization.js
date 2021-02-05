@@ -7,12 +7,12 @@ const authorization = (req, res, next) => {
     where: { id: id }
   })
     .then(todo => {
-      if (!todo) throw { name: "CustomError", msg: 'Task Not Found', status: 404 };
+      if (!todo) throw { name: "Error404", msg: 'Task Not Found', status: 404 };
 
       if (todo.userId === req.decoded.id) {
         next();
       } else {
-        throw { name: "CustomError", msg: 'You are not authorized to access', status: 401 };
+        throw { name: "Error401", msg: 'You are not authorized to access', status: 401 };
       }
     })
     .catch(err => {

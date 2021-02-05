@@ -1,15 +1,5 @@
 const baseUrl = 'http://localhost:3000'
 
-function convertDate(d) {
-  if (d) {
-      d = new Date(d);
-      return [d.getFullYear(), d.getMonth()+1, d.getDate()]
-          .map(el => el < 10 ? `0${el}` : `${el}`).join('-');
-  } else {
-      return d;
-  }
-}
-
 function checkPage() {
   if (!localStorage.getItem('token')) {
     if (localStorage.currentPage === 'login') {
@@ -42,6 +32,251 @@ function showLogin() {
   $('#navigation-bar').hide()
   $('#list-todo-container').hide()
 }
+
+function showRegister() {
+  localStorage.setItem('currentPage', 'register')
+  $('#login-container').hide()
+  $('#register-container').show()
+  $('#dashboard').hide()
+  $('#navigation-bar').hide()
+  $('#list-todo-container').hide()
+}
+
+function showDashboard() {
+  console.log('DASHBOARD');
+  localStorage.setItem('currentPage', 'dashboard')
+  $('#login-container').hide()
+  $('#register-container').hide()
+  $('#list-todo-container').hide()
+
+  $('#dashboard').show()
+  $('#navigation-bar').show()
+  $('#content-nav').empty().append(`
+    <li class="nav-item active">
+      <a class="nav-link" href="#" onclick="showDashboard()"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
+    </li>
+
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-list"></i> Todo
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#" onclick="showTodo()">My Todo List</a>
+        <a class="dropdown-item" href="#" onclick="showTodoDone()">My Todo List Done</a>
+        
+        <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" role="button" data-toggle="modal" id="#createTodo-nav"
+            data-target="#createModal">Add Todo</a>
+        </div>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" href="#" id="logout-nav" onclick="logout()"><i class="fa fa-sign-out"></i> Logout</a>
+    </li>
+  `)
+  
+  clockUpdate();
+  setInterval(clockUpdate, 1000);
+}
+
+function showTodo() {
+  console.log('TODO LIST');
+  localStorage.setItem('currentPage', 'viewListTodo')
+  $("#login-container").hide()
+  $("#register-container").hide()
+  $("#dashboard").hide()
+
+  $('#list-todo-container').show()
+  $('#buttonAddTodo').show()
+  $('#buttonAddTodo').empty().append(`
+  <button class="btn btn-light btn-lg mt-3 mx-auto" data-toggle="modal" id="#createTodoButton" data-target="#createModal">Add Todo</a>
+  `)
+  $('#navigation-bar').show()
+  $('#content-nav').empty().append(`
+    <li class="nav-item">
+      <a class="nav-link" href="#" onclick="showDashboard()"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
+    </li>
+
+    <li class="nav-item dropdown active">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-list"></i> Todo
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#" onclick="showTodo()">My Todo List</a>
+        <a class="dropdown-item" href="#" onclick="showTodoDone()">My Todo List Done</a>
+        
+        <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" role="button" data-toggle="modal" id="#createTodo-nav"
+            data-target="#createModal">Add Todo</a>
+        </div>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" href="#" id="logout-nav" onclick="logout()"><i class="fa fa-sign-out"></i> Logout</a>
+    </li>
+  `)
+  getTodosUndone()
+}
+
+function showDetailTodo(id, status) {
+  localStorage.setItem('currentPage', 'viewListTodo')
+  $("#login-container").hide()
+  $("#register-container").hide()
+  $("#dashboard").hide()
+
+  $('#list-todo-container').show()
+  $('#navigation-bar').show()
+  $('#buttonAddTodo').hide()
+  $('#content-nav').empty().append(`
+    <li class="nav-item">
+      <a class="nav-link" href="#" onclick="showDashboard()"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
+    </li>
+
+    <li class="nav-item dropdown active">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-list"></i> Todo
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#" onclick="showTodo()">My Todo List</a>
+        <a class="dropdown-item" href="#" onclick="showTodoDone()">My Todo List Done</a>
+        
+        <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" role="button" data-toggle="modal" id="#createTodo-nav"
+            data-target="#createModal">Add Todo</a>
+        </div>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" href="#" id="logout-nav" onclick="logout()"><i class="fa fa-sign-out"></i> Logout</a>
+    </li>
+  `)
+  getTodoDetail(id, status)
+}
+
+function showCreateForm() {
+  localStorage.setItem('currentPage', 'createTodo')
+  $("#login-container").hide()
+  $("#register-container").hide()
+  $("#dashboard").hide()
+
+  $('#list-todo-container').show()
+  getTodosUndone()
+
+  $('#createModal').show()
+}
+
+function showEdit(id, title, description, due_date) {
+  $("#login-container").hide()
+  $("#register-container").hide()
+  $("#dashboard").hide()
+
+  $('#list-todo-container').show()
+
+  $('#editModal').show()
+  $('#editModalForm').empty().append(`
+      <div class="form-group">
+        <label for="titleEditModal">Task Title</label>
+        <input type="text" class="form-control" id="titleEdit" name="title" value="${title}">
+      </div>
+
+      <div class="form-group">
+        <label for="descriptionEditModal">Description Task</label>
+        <textarea class="form-control" rows="5" id="descriptionEdit" name="description">${description}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="dueDateEditModal">Due Date</label>
+          <input type="date" class="form-control" id="dueDateEdit" name="date" value="${convertDate(due_date)}">
+      </div>
+  `)
+  $('#editModalFooter').empty().append(`
+  <button type="button" class="btn btn-success" id="saveEditModal" onclick="editTodo('${id}')">Edit</button>
+  <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>`
+  )
+}
+
+function showTodoDone() {
+  localStorage.setItem('currentPage', 'viewListTodoDone')
+  $("#login-container").hide()
+  $("#register-container").hide()
+  $("#dashboard").hide()
+
+  $('#list-todo-container').show()
+  $('#navigation-bar').show()
+  $('#content-nav').empty().append(`
+    <li class="nav-item">
+      <a class="nav-link" href="#" onclick="showDashboard()"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
+    </li>
+
+    <li class="nav-item dropdown active">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-list"></i> Todo
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#" onclick="showTodo()">My Todo List</a>
+        <a class="dropdown-item" href="#" onclick="showTodoDone()">My Todo List Done</a>
+        
+        <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" role="button" data-toggle="modal" id="#createTodo-nav"
+            data-target="#createModal">Add Todo</a>
+        </div>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" href="#" id="logout-nav" onclick="logout()"><i class="fa fa-sign-out"></i> Logout</a>
+    </li>
+  `)
+  getTodosDone()
+}
+
+function showDelete(id, status) {
+  $('#login-container').hide()
+  $('#register-container').hide()
+
+  $('#deleteModal').show()
+  $('#deleteModalFooter').empty().append(`
+    <button type="button" class="btn btn-success" id="saveDeleteModal" onclick="deleteTodo('${id}', '${status}')" data-dismiss="modal">Yes</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>`
+  )
+}
+
+function showModalWeather(id) {
+  $("#login-container").hide()
+  $("#register-container").hide()
+  $("#dashboard").hide()
+
+  $('#list-todo-container').show()
+
+  $('#weatherModal').show()
+
+  $('#modalWeather-content').empty()
+  $('#modalWeather-content').append(`
+  <div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-edit"></i> Input City</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+  </div>
+
+  <!-- Modal body -->
+  <div class="modal-body">
+    <div class="container">
+      <form action="" id="weatherModalForm">
+        <div class="form-group" id="cityInputForm">
+          <label for="weatherModal">City Name</label>
+          <input type="text" class="form-control" id="cityName" placeholder="Enter your city" name="title">
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-footer" id="weatherModalFooter">
+    <button type="button" class="btn btn-success" id="saveCityModal" onclick="getWeatherInfo('${id}')">Submit</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+  </div>
+  `)
+
+}
+
+/*************************************************** */
 
 function login() {
   $.ajax({
@@ -82,6 +317,7 @@ function onSignIn(googleUser) {
     }
   })
     .done(response => {
+      console.log(response);
       localStorage.setItem('token', response.accessToken)
       localStorage.setItem('currentPage', 'dashboard')
       checkPage()
@@ -98,15 +334,6 @@ function logout() {
     console.log('User signed out.')
   })
   checkPage()
-}
-
-function showRegister() {
-  localStorage.setItem('currentPage', 'register')
-  $('#login-container').hide()
-  $('#register-container').show()
-  $('#dashboard').hide()
-  $('#navigation-bar').hide()
-  $('#list-todo-container').hide()
 }
 
 function register() {
@@ -138,104 +365,8 @@ function register() {
     })
 }
 
-function showDashboard() {
-  localStorage.setItem('currentPage', 'dashboard')
-  $('#login-container').hide()
-  $('#register-container').hide()
-  $('#list-todo-container').hide()
-
-  $('#dashboard').show()
-  $('#navigation-bar').show()
-  $('#content-nav').empty().append(`
-    <li class="nav-item active">
-      <a class="nav-link" href="#" onclick="showDashboard()"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
-    </li>
-
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-list"></i> Todo
-      </a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#" onclick="showTodo()">My Todo List</a>
-        <a class="dropdown-item" href="#" onclick="showTodoDone()">My Todo List Done</a>
-        
-        <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" role="button" data-toggle="modal" id="#createTodoButton"
-            data-target="#createModal">Add Todo</a>
-        </div>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="#" id="logout-nav" onclick="logout()"><i class="fa fa-sign-out"></i> Logout</a>
-    </li>
-  `)
-  clockUpdate();
-  setInterval(clockUpdate, 1000);
-}
-
-function clockUpdate() {
-  var date = new Date();
-  $('.digital-clock').css({'color': '#fff', 'text-shadow': '0 0 6px gray'});
-  function addZero(x) {
-    if (x < 10) {
-      return '0' + x;
-    } else {
-      return x;
-    }
-  }
-
-  function twelveHour(x) {
-    if (x > 12) {
-      return x - 12;
-    } else if (x == 0) {
-      return 12;
-    } else {
-      return x;
-    }
-  }
-
-  var h = addZero(twelveHour(date.getHours()));
-  var m = addZero(date.getMinutes());
-  var s = addZero(date.getSeconds());
-
-  $('.digital-clock').text(h + ':' + m + ':' + s)
-}
-
-function showTodo() {
-  localStorage.setItem('currentPage', 'viewListTodo')
-  $("#login-container").hide()
-  $("#register-container").hide()
-  $("#dashboard").hide()
-
-  $('#list-todo-container').show()
-  $('#navigation-bar').show()
-  $('#content-nav').empty().append(`
-    <li class="nav-item">
-      <a class="nav-link" href="#" onclick="showDashboard()"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
-    </li>
-
-    <li class="nav-item dropdown active">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-list"></i> Todo
-      </a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#" onclick="showTodo()">My Todo List</a>
-        <a class="dropdown-item" href="#" onclick="showTodoDone()">My Todo List Done</a>
-        
-        <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" role="button" data-toggle="modal" id="#createTodoButton"
-            data-target="#createModal">Add Todo</a>
-        </div>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="#" id="logout-nav" onclick="logout()"><i class="fa fa-sign-out"></i> Logout</a>
-    </li>
-  `)
-  getTodosUndone()
-}
-
 function getTodosUndone() {
+  console.log(`Get todos undone`);
   $.ajax({
     url: `${baseUrl}/todos?status=false`,
     method: 'GET',
@@ -244,31 +375,48 @@ function getTodosUndone() {
     }
   })
     .done(response => {
+      console.log(response);
+      $('#buttonAllTodo').empty()
       $('#card-content').empty()
       response.forEach((value, index) => {
         const date = convertDate(value.due_date)
+        const dateToday = convertDate(new Date())
+        let status = '';
+        if (dateToday > date) {
+          status = `Due date has passed!`
+        } else if (dateToday == date) {
+          status = 'The due date is today!'
+        } else {
+          status = 'Safe'
+        }
+
         $('#card-content').append(`
         <div class="col-sm-4">
-          <div class="card mt-3 mx-3" style="width: 18rem;">
+          <div class="card mt-5 mx-3 mb-5" style="width: 18rem;">
+            <div class="card-header">
+              <button type="button" class="btn btn-success btn-sm" onclick="updateStatusTodo('${value.id}', true)"
+                  id="doneTodoButton"><i class="fa fa-check-square-o"></i></button>
+
+              <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                data-target="#deleteModal" id="deleteTodoButton" onclick="showDelete('${value.id}', 'undone')"><i class="fas fa-trash-alt"></i></button>
+            </div>
+
             <div class="card-body">
               <h5 class="card-title text-center">${value.title}</h5>
-              <h6 class="card-subtitle mb-2 text-muted text-center">${date}</h6>
+              <h6 class="card-subtitle mb-2 text-muted text-center">Due date : ${date}</h6>
               <br>
-              
-              <p><b>Description</b><p>
-              <p class="card-text">${value.description}</p>
-              
-              <button type="button" class="btn btn-info btn-block" data-toggle="modal"
-              data-target="#weatherModal" id="weatherTodoButton" onclick="showModalWeather('${value.id}')"><i class="fa fa-sun-o"></i> See Weather Prediction</button>
-              
-              <button type="button" class="btn btn-success btn-block" onclick="updateStatusTodo('${value.id}', true)"
-                id="doneTodoButton"><i class="fa fa-check-square-o"></i> Done</button>
+
+              <button type="button" class="btn btn-secondary btn-block" id="detailTodoButton" onclick="showDetailTodo('${value.id}', 'undone')"><i class="fa fa-file"></i> Detail</button>
               
               <button type="button" class="btn btn-warning btn-block" id="editTodoButton${index}" data-toggle="modal"
                   data-target="#editModal"><i class="fas fa-edit"></i> Edit</button>
-              
-              <button type="button" class="btn btn-danger btn-block" data-toggle="modal"
-                data-target="#deleteModal" id="deleteTodoButton" onclick="showDelete('${value.id}')"><i class="fas fa-trash-alt"></i> Delete</button>
+
+            </div>
+
+            <div class="card-footer">
+              <div class="d-flex justify-content-center">
+                ${status}
+              </div>
             </div>
           </div>
         </div>
@@ -284,18 +432,83 @@ function getTodosUndone() {
     })
 }
 
-function showCreateForm() {
-  localStorage.setItem('currentPage', 'createTodo')
-  $("#login-container").hide()
-  $("#register-container").hide()
-  $("#dashboard").hide()
+function getTodoDetail(id, status) {
+  $.ajax({
+    url: `${baseUrl}/todos/${id}`,
+    method: 'GET',
+    headers: {
+      token: localStorage.getItem('token')
+    }
+  })
+    .done((response) => {
+      const date = convertDate(response.due_date)
 
-  $('#list-todo-container').show()
-  getTodosUndone()
-
-  $('#createModal').show()
-
-  $('#createModalForm').trigger('reset')
+      if (status == 'undone') {
+        $('#buttonAllTodo').append(`
+        <button type="button" class="btn btn-primary btn-lg mt-3 mx-auto" onclick="showTodo()">All Todo List</button>
+        `)
+        $('#card-content').empty().append(`
+          <div class="col-sm-4 mx-auto">
+            <div class="card mt-5 mx-auto" style="width: 18rem;">
+              <div class="card-header">
+                <button type="button" class="btn btn-success btn-sm" onclick="updateStatusTodo('${response.id}', true)"
+                    id="doneTodoButton"><i class="fa fa-check-square-o"></i></button>
+  
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                  data-target="#deleteModal" id="deleteTodoButton" onclick="showDelete('${response.id}', 'undone')"><i class="fas fa-trash-alt"></i></button>
+              </div>
+  
+              <div class="card-body">
+                <h5 class="card-title text-center">${response.title}</h5>
+                <h6 class="card-subtitle mb-2 text-muted text-center">${date}</h6>
+                <br>
+                
+                <p><b>Description</b><p>
+                <p class="card-text">${response.description}</p>
+  
+                <button type="button" class="btn btn-info btn-block" data-toggle="modal"
+                  data-target="#weatherModal" id="weatherTodoButton" onclick="showModalWeather('${response.id}')"><i class="fa fa-sun-o"></i> See Weather Prediction</button>
+                
+                <button type="button" class="btn btn-warning btn-block" id="editTodoButton${response.id}" data-toggle="modal"
+                    data-target="#editModal"><i class="fas fa-edit"></i> Edit</button>
+              </div>
+            </div>
+          </div>
+          `)
+          $(`#editTodoButton${response.id}`).click(() => {
+            showEdit(response.id, response.title, response.description, response.due_date)
+          })
+      } else {
+        $('#buttonAllTodo').append(`
+        <button type="button" class="btn btn-primary btn-lg mt-3 mx-auto" onclick="showTodoDone()">All Todo List Done</button>
+        `)
+        $('#card-content').empty().append(`
+          <div class="col-sm-4 mx-auto">
+            <div class="card mt-5 mx-auto" style="width: 18rem;">
+              <div class="card-header">
+                <button type="button" class="btn btn-success btn-sm" onclick="updateStatusTodo('${response.id}', true)"
+                    id="doneTodoButton"><i class="fa fa-check-square-o"></i></button>
+  
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                  data-target="#deleteModal" id="deleteTodoButton" onclick="showDelete('${response.id}')"><i class="fas fa-trash-alt"></i></button>
+              </div>
+  
+              <div class="card-body">
+                <h5 class="card-title text-center">${response.title}</h5>
+                <h6 class="card-subtitle mb-2 text-muted text-center">${date}</h6>
+                <br>
+                
+                <p><b>Description</b><p>
+                <p class="card-text">${response.description}</p>  
+              </div>
+            </div>
+          </div>
+          `)
+      }
+    })
+    .fail((jqXHR, text) => {
+      console.log(jqXHR);
+    })
 }
 
 function createTodo() {
@@ -313,42 +526,24 @@ function createTodo() {
   })
     .done((response) => {
       console.log(response)
-      showTodo()
+      setTimeout(() => {$('#createModal').modal('hide')}, 400);
+      showTodo();
     })
     .fail((jqXHR, text) => {
       console.log(jqXHR.responseJSON)
+      $('#errorCreate').empty()
+      jqXHR.responseJSON.errors.forEach(err => {
+        $('#errorCreate').append(`
+        <div class="alert alert-danger alert-dismissible fade show">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>Error!</strong> ${err}
+        </div>
+      `)
+      })
     })
-}
-
-function showEdit(id, title, description, due_date) {
-  $("#login-container").hide()
-  $("#register-container").hide()
-  $("#dashboard").hide()
-
-  $('#list-todo-container').show()
-  getTodosUndone()
-
-  $('#editModal').show()
-  $('#editModalForm').empty().append(`
-        <div class="form-group">
-        <label for="titleEditModal">Task Title</label>
-        <input type="text" class="form-control" id="titleEdit" name="title" value="${title}">
-      </div>
-
-      <div class="form-group">
-        <label for="descriptionEditModal">Description Task</label>
-        <textarea class="form-control" rows="5" id="descriptionEdit" name="description">${description}</textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="dueDateEditModal">Due Date</label>
-          <input type="date" class="form-control" id="dueDateEdit" name="date" value="${convertDate(due_date)}">
-      </div>
-  `)
-  $('#editModalFooter').empty().append(`
-  <button type="button" class="btn btn-success" id="saveEditModal" onclick="editTodo('${id}')" data-dismiss="modal">Edit</button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>`
-  )
+    .always((_) => {
+      $('#createModalForm').trigger('reset')
+    })
 }
 
 function editTodo(id) {
@@ -366,10 +561,20 @@ function editTodo(id) {
   })
     .done((response) => {
       console.log(response);
+      setTimeout(() => {$('#editModal').modal('hide')}, 400);
       getTodosUndone()
     })
     .fail((jqXHR, text) => {
       console.log(jqXHR.responseJSON)
+      $('#errorEdit').empty()
+      jqXHR.responseJSON.errors.forEach(err => {
+        $('#errorEdit').append(`
+        <div class="alert alert-danger alert-dismissible fade show">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>Error!</strong> ${err}
+        </div>
+      `)
+      })
     })
 }
 
@@ -396,40 +601,6 @@ function updateStatusTodo(id, value) {
     })
 }
 
-function showTodoDone() {
-  localStorage.setItem('currentPage', 'viewListTodoDone')
-  $("#login-container").hide()
-  $("#register-container").hide()
-  $("#dashboard").hide()
-
-  $('#list-todo-container').show()
-  $('#navigation-bar').show()
-  $('#content-nav').empty().append(`
-    <li class="nav-item">
-      <a class="nav-link" href="#" onclick="showDashboard()"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
-    </li>
-
-    <li class="nav-item dropdown active">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-list"></i> Todo
-      </a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#" onclick="showTodo()">My Todo List</a>
-        <a class="dropdown-item" href="#" onclick="showTodoDone()">My Todo List Done</a>
-        
-        <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" role="button" data-toggle="modal" id="#createTodoButton"
-            data-target="#createModal">Add Todo</a>
-        </div>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="#" id="logout-nav" onclick="logout()"><i class="fa fa-sign-out"></i> Logout</a>
-    </li>
-  `)
-  getTodosDone()
-}
-
 function getTodosDone() {
   $.ajax({
     url: `${baseUrl}/todos?status=true`,
@@ -439,25 +610,28 @@ function getTodosDone() {
     }
   })
     .done(response => {
+      $('#buttonAllTodo').empty()
       $('#card-content').empty()
       response.forEach((value, index) => {
         const date = convertDate(value.due_date)
         $('#card-content').append(`
         <div class="col-sm-4">
-          <div class="card mt-3 mx-3" style="width: 18rem;">
+          <div class="card mt-5 mx-3 mb-5" style="width: 18rem;">
+            <div class="card-header">
+              <button type="button" class="btn btn-success btn-sm" onclick="updateStatusTodo('${value.id}', false)"
+                id="doneTodoButton"><i class="fa fa-window-close-o"></i></button>
+
+              <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                data-target="#deleteModal" id="deleteTodoButton" onclick="showDelete('${value.id}')"><i class="fas fa-trash-alt"></i></button>
+            </div>
+
             <div class="card-body">
               <h5 class="card-title text-center">${value.title}</h5>
               <h6 class="card-subtitle mb-2 text-muted text-center">${date}</h6>
               <br>
               
-              <p><b>Description</b><p>
-              <p class="card-text">${value.description}</p>
-              
-              <button type="button" class="btn btn-success btn-block" onclick="updateStatusTodo('${value.id}', false)"
-                id="doneTodoButton"><i class="fa fa-window-close-o"></i> Undone</button>
-              
-              <button type="button" class="btn btn-danger btn-block" data-toggle="modal"
-                data-target="#deleteModal" id="deleteTodoButton" onclick="showDelete('${value.id}')"><i class="fas fa-trash-alt"></i> Delete</button>
+              <button type="button" class="btn btn-secondary btn-block" id="detailTodoButton" onclick="showDetailTodo('${value.id}')"><i class="fa fa-file"></i> Detail</button>
+            
             </div>
           </div>
         </div>
@@ -469,7 +643,7 @@ function getTodosDone() {
     })
 }
 
-function deleteTodo(id) {
+function deleteTodo(id, status) {
   $.ajax({
     url: `${baseUrl}/todos/${id}`,
     method: 'DELETE',
@@ -478,84 +652,25 @@ function deleteTodo(id) {
     }
   })
     .done((response) => {
-      showTodo()
+      if (status == 'undone') {
+        showTodo()
+      } else {
+        showTodoDone()
+      }
     })
     .fail((jqXHR, status) => {
       console.log(jqXHR.responseJSON)
     })
 }
 
-function showDelete(id) {
-  $('#login-container').hide()
-  $('#register-container').hide()
-
-  $('#deleteModal').show()
-  $('#deleteModalFooter').empty().append(`
-    <button type="button" class="btn btn-success" id="saveDeleteModal" onclick="deleteTodo('${id}')" data-dismiss="modal">Yes</button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>`
-  )
-}
-
-function showModalWeather(id) {
-  $("#login-container").hide()
-  $("#register-container").hide()
-  $("#dashboard").hide()
-
-  $('#list-todo-container').show()
-
-  $('#weatherModal').show()
-
-  $('#modalWeather-content').empty()
-  $('#modalWeather-content').append(`
-  <div class="modal-header">
-    <h4 class="modal-title"><i class="fas fa-edit"></i> Input City</h4>
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
-  </div>
-
-  <!-- Modal body -->
-  <div class="modal-body">
-    <div class="container">
-      <form action="" id="weatherModalForm">
-        <div class="form-group" id="cityInputForm">
-          <label for="weatherModal">City Name</label>
-          <input type="text" class="form-control" id="cityName" placeholder="Enter your city" name="title">
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-footer" id="weatherModalFooter">
-    <button type="button" class="btn btn-success" id="saveCityModal" onclick="getCityName('${id}')">Yes</button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-  </div>
-  `)
-
-}
-
-function getCityName(id) {
+function getWeatherInfo(id) {
+  const city = $('#cityName').val()
   $.ajax({
     url: `${baseUrl}/weathers/${id}`,
     method: 'POST',
     data: {
-      city: $('#cityName').val()
+      city: city
     },
-    headers: {
-      token: localStorage.getItem('token')
-    }
-  })
-    .done(response => {
-      // console.log(response);
-      getWeatherInfo(id, response.city);
-    })
-    .fail((jqXHR, text) => {
-      console.log(jqXHR.responseJSON);
-    })
-}
-
-function getWeatherInfo(id, city) {
-  $.ajax({
-    url: `${baseUrl}/weathers/${id}?city=${city}`,
-    method: 'GET',
     headers: {
       token: localStorage.getItem('token')
     }
@@ -594,4 +709,40 @@ function getWeatherInfo(id, city) {
       </div>
       `)
     })
+}
+
+
+/***************************************** */
+function convertDate(d) {
+  if (d) {
+      d = new Date(d);
+      return [d.getFullYear(), d.getMonth()+1, d.getDate()]
+          .map(el => el < 10 ? `0${el}` : `${el}`).join('-');
+  } else {
+      return d;
+  }
+}
+
+function clockUpdate() {
+  const date = new Date();
+  $('#digital-clock').css({'color': '#fff', 'text-shadow': '0 0 6px gray'});
+  let h = date.getHours(); // 0 - 23
+  let m = date.getMinutes(); // 0 - 59
+  let s = date.getSeconds(); // 0 - 59
+  let session = "AM";
+  
+  if(h == 0){
+      h = 12;
+  }
+  
+  if(h > 12){
+      h = h - 12;
+      session = "PM";
+  }
+  
+  h = (h < 10) ? "0" + h : h;
+  m = (m < 10) ? "0" + m : m;
+  s = (s < 10) ? "0" + s : s;
+
+  $('#digital-clock').text(`${convertDate(date)}\n` + h + ':' + m + ':' + s + ` ${session}`)
 }

@@ -1,6 +1,6 @@
 const { User } = require('../models/');
 const { comparePassword } = require('../helpers/bcrypt');
-const generateToken = require('../helpers/jwt');
+const { generateToken } = require('../helpers/jwt');
 const { OAuth2Client } = require('google-auth-library');
 
 class UserController {
@@ -24,11 +24,11 @@ class UserController {
       where: { email }
     })
       .then(user => {
-        if (!user) throw { name: 'CustomError', msg: 'Invalid email or password', status: 400 };
+        if (!user) throw { name: 'Error400', msg: 'Invalid email or password', status: 400 };
         
         const resultCompare = comparePassword(password, user.password);
 
-        if (!resultCompare) throw { name: 'CustomError', msg: 'Invalid email or password', status: 400 };
+        if (!resultCompare) throw { name: 'Error400', msg: 'Invalid email or password', status: 400 };
 
         const accessToken = generateToken({
           id: user.id,
@@ -54,7 +54,7 @@ class UserController {
       .then(ticket => {
         const payload = ticket.getPayload();
         email = payload.email;
-
+        console.log(payload);
         return User.findOne({ where: { email } })
       })
       .then(user => {
@@ -83,8 +83,6 @@ class UserController {
       .catch(err => {
         next(err)
       })
-
-
   }
 }
 
