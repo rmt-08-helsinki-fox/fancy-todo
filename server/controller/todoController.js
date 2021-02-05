@@ -36,11 +36,6 @@ class todoController {
         ],
         include: [User]
       });
-      if (lists.length === 0) throw {
-        name: 'CustomError',
-        error: 'No item is found!',
-        status: 404
-      };
       res.status(200).json(lists);
     } catch (err) {
       err.from = 'todoController:getToDoList';
