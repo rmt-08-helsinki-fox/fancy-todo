@@ -18,7 +18,7 @@ class TodoController {
         const value = {
             title: req.body.title,
             description: req.body.description,
-            status: req.body.status,
+            status: req.body.status || "false",
             due_date: req.body.due_date,
             UserId: req.user.id
         }

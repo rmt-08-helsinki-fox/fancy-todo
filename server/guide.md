@@ -299,3 +299,25 @@ Response (500 - Internal Server Error)
 {
     "message": "Internal server error"
 }
+
+
+- GET /todos/weather
+- Get weather
+
+Request Headers
+}
+    "access_token": "user after login"
+}
+
+Response (200 - Ok)
+{
+    "name": "Bandung",
+    "icon": "04n",
+    "description": "overcast clouds",
+    "temp": 294.14
+}
+
+Response (404 - Not Found)
+{
+    "message": "Data not found"
+}
