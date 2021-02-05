@@ -36,7 +36,6 @@ module.exports = (sequelize, DataTypes) => {
             args: 8,
             msg: "Password must be more than 8",
           },
-          max: 18,
         },
       },
       location: {

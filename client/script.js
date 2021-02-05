@@ -37,6 +37,10 @@ $(document).ready(() => {
     e.preventDefault();
     showTodoForm();
   });
+  $("#link-back").click((e) => {
+    e.preventDefault();
+    auth();
+  });
 });
 
 // Auth
@@ -45,10 +49,12 @@ function auth() {
     $("#link-login").show(500);
     $("#link-register").show(500);
     $("#link-logout").hide(500);
+    $("#link-back").hide(500);
     $("#form-register").hide(500);
     $("#form-login").hide(500);
     $("#todo-table").hide(500);
     $("#form-add-todo").hide(500);
+    $("#form-update-todo").hide(500);
   } else {
     $("#img").empty();
     $("#list-todo").empty();
@@ -56,15 +62,21 @@ function auth() {
     $("#form-register").hide(500);
     $("#form-login").hide(500);
     $("#link-logout").show(500);
+    $("#link-back").hide(500);
     $("#link-login").hide(500);
     $("#link-register").hide(500);
     $("#todo-table").show(500);
-    $("#img").append(
-      `<img src="${localStorage.getItem(
-        "url_img"
-      )}"class="card-img-top" alt="status weather" style="width: 2rem;">`
-    );
+    if (!localStorage.getItem("url_img")) {
+      $("#img").empty();
+    } else {
+      $("#img").append(
+        `<img src="${localStorage.getItem(
+          "url_img"
+        )}"class="card-img-top" alt="status weather" style="width: 2rem;">`
+      );
+    }
     $("#form-add-todo").hide(500);
+    $("#form-update-todo").hide(500);
     getListTodo();
   }
 }
@@ -143,7 +155,7 @@ function getListTodo() {
                    <a class="btn btn-primary" onclick="remove(${
                      el.id
                    })" href="#">Delete</a>
-                   <a class="btn btn-primary" onclick="update(${
+                   <a class="btn btn-primary" onclick="show(${
                      el.id
                    })" href="#">Update</a>
                    <a class="btn btn-primary" onclick="complete(${
@@ -194,6 +206,121 @@ function createTodo() {
     });
 }
 
+function remove(id) {
+  $.ajax({
+    url: base_url + "/todos/" + id,
+    method: "DELETE",
+    headers: {
+      access_token: localStorage.getItem("access_token"),
+    },
+  })
+    .done(() => {
+      auth();
+    })
+    .fail((xhr, text) => {
+      console.log(xhr, text);
+    });
+}
+
+function update(id) {
+  const title = $("#updateTitle").val();
+  const description = $("#updateDesc").val();
+  const status = $("#updateStatus").val();
+
+  $.ajax({
+    url: base_url + "/todos/" + id,
+    method: "PUT",
+    headers: {
+      access_token: localStorage.getItem("access_token"),
+    },
+    data: {
+      title,
+      description,
+      status,
+    },
+  })
+    .done(() => {
+      auth();
+    })
+    .fail((xhr, text) => {
+      console.log(xhr, text);
+    })
+    .always(() => {
+      $("#updateTodo").trigger("reset");
+    });
+}
+
+function show(id) {
+  $("#todo-table").hide(500);
+  $.ajax({
+    url: base_url + "/todos/" + id,
+    method: "GET",
+    headers: {
+      access_token: localStorage.getItem("access_token"),
+    },
+  })
+    .done((todo) => {
+      $("#list-update").append(`
+        <form class="row g-2" id="updateTodo">
+        <div class="form-floating mb-2">
+        <label class="bg-secondary d-block text-center text-white">Title</label>
+        <input 
+          type="text"
+          class="form-control"
+          id="updateTitle"
+          value="${todo.title}"/>
+        </div>
+        <div class="form-floating mb-2">
+        <label class="bg-secondary d-block text-center text-white">Description</label>
+        <input
+          type="text"
+          class="form-control"
+          id="updateDesc"
+          value="${todo.description}"/>
+        </div>
+        <div class="form-floating mb-2">
+        <label class="bg-secondary d-block text-center text-white">Status</label>
+        <input
+          type="text"
+          class="form-control"
+          id="updateStatus"
+          value="${todo.status}"/>
+        </div>
+        <div class="col-6">
+        <div class="col-12">
+        <button 
+          type="submit"
+          class="btn btn-primary btn-block btn-floating mb-2"
+          id="btn-addTodo"
+          onclick="update(${todo.id})">Update</button>
+        </div>
+        </form>
+        `);
+    })
+    .fail((xhr, text) => {
+      auth();
+      console.log(xhr, text);
+    });
+  $("#form-update-todo").show(1000);
+  $("#link-back").show(500);
+}
+
+function complete(id) {
+  $.ajax({
+    url: base_url + "/todos/" + id,
+    method: "PATCH",
+    headers: {
+      access_token: localStorage.getItem("access_token"),
+    },
+  })
+    .done(() => {
+      auth();
+    })
+    .fail((xhr, text) => {
+      console.log(xhr, text);
+    });
+}
+
 // Other Function
 function showLogin() {
   $("#link-register").show();
@@ -210,23 +337,36 @@ function showRegis() {
 function logout() {
   $("#img").empty();
   localStorage.clear();
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log("User signed out.");
+  });
   auth();
 }
 
 function showTodoForm() {
   $("#todo-table").hide(500);
   $("#form-add-todo").show(1000);
+  $("#link-back").show(500);
 }
 
-function remove(id) {
+function onSignIn(googleUser) {
+  // var profile = googleUser.getBasicProfile();
+  // console.log(profile, "<<<<<<<<<<<<<<<<");
+  // console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  // console.log("Name: " + profile.getName());
+  // console.log("Image URL: " + profile.getImageUrl());
+  // console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+  var id_token = googleUser.getAuthResponse().id_token;
   $.ajax({
-    url: base_url + "/todos/" + id,
-    method: "DELETE",
-    headers: {
-      access_token: localStorage.getItem("access_token"),
+    url: base_url + "/users/loginOAuth",
+    method: "POST",
+    data: {
+      googleToken: id_token,
     },
   })
-    .done(() => {
+    .done((response) => {
+      localStorage.setItem("access_token", response.access_token);
       auth();
     })
     .fail((xhr, text) => {

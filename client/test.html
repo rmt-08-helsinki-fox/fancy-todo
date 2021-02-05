@@ -156,3 +156,77 @@
     </script>
   </body>
 </html>
+
+<form class="row g-2" id="updateTodo">
+  <div class="form-floating mb-2">
+    <label class="bg-secondary d-block text-center text-white">Title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="updateTitle"
+      placeholder="Title"
+    />
+  </div>
+  <div class="form-floating mb-2">
+    <label class="bg-secondary d-block text-center text-white"
+      >Description</label
+    >
+    <input
+      type="text"
+      class="form-control"
+      id="updateDesc"
+      placeholder="Description"
+    />
+  </div>
+  <div class="form-floating mb-2">
+    <label class="bg-secondary d-block text-center text-white">Status</label>
+    <input
+      type="text"
+      class="form-control"
+      id="updateStatus"
+      placeholder="Status"
+    />
+  </div>
+  <div class="form-floating mb-2">
+    <label class="bg-secondary d-block text-center text-white">Due Date</label>
+    <input type="date" class="form-control" id="updateDueDate" />
+  </div>
+  <div class="col-6">
+    <div class="col-12">
+      <button
+        type="submit"
+        class="btn btn-primary btn-block btn-floating mb-2"
+        id="btn-updateTodo"
+      >
+        Update
+      </button>
+    </div>
+  </div>
+</form>
+
+<script>
+  $("#list-update").append(`
+    <form class="row g-2" id="updateTodo">
+      <div class="form-floating mb-2">
+        <label class="bg-secondary d-block text-center text-white">Title</label>
+        <input type="text" class="form-control" id="updateTitle" value:"${todo.title}"/>
+      </div>
+      <div class="form-floating mb-2">
+        <label class="bg-secondary d-block text-center text-white">Description</label>
+        <input type="text" class="form-control" id="updateDesc" value:"${todo.description}"/>
+      </div>
+      <div class="form-floating mb-2">
+        <label class="bg-secondary d-block text-center text-white">Status</label>
+        <input type="text" class="form-control" id="updateStatus" value:"${todo.status}"/>
+      </div>
+      <div class="form-floating mb-2">
+        <label class="bg-secondary d-block text-center text-white">Due Date</label>
+        <input type="text" class="form-control" id="updateDueDate" value:"${todo.due_date}"/>
+      </div>
+      <div class="col-6">
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary btn-block btn-floating mb-2" id="btn-addTodo">Update</button>
+    </div>
+    </form>
+  `);
+</script>

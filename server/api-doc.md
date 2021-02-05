@@ -19,9 +19,10 @@ Make a new user
 - #### Data Params
 
   ```javascript
-  body: {
-  	email : req.body.email,
-  	password : req.body.password
+  {
+  	email : <String> (Required)
+  	password : <String> (Required)
+    location : <String> (Required)
   }
   ```
 
@@ -30,11 +31,11 @@ Make a new user
   ##### `code: 201`
 
   ```javascript
-  json({
-    msg: 'Succes create a user'
-    id: user.id
-    email: user.email
-  })
+  {
+    message: 'Succes create a user'
+    id: (user.id) <Integer>
+    email: (user.email) <String>
+  }
   ```
 
 - #### Error Response
@@ -42,9 +43,9 @@ Make a new user
   ##### `code: 500`
 
   ```javascript
-  json({
-    msg: "Invalid format of email",
-  });
+  {
+    message: "Invalid format of email",
+  }
   ```
 
 <br><br>
@@ -68,38 +69,40 @@ Login a user to aplication
 - #### Data Params
 
   ```javascript
-  body: {
-  	email : req.body.email,
-  	password : req.body.password
+  {
+  	email : <String> (Required)
+  	password : <String> (Required)
   }
   ```
 
 - #### Succes Response
 
-  `Get an access token`
+  `Get an access token and info of weather`
 
   ##### `code: 200`
 
   ```javascript
-  json({
-    access_token,
-  });
+  {
+    access_token: <String>
+    weather: <Object>
+  }
   ```
 
 - #### Error Response
 
+  ##### `code: 400`
+
   ```javascript
-  if user not found => {
-    code/status: 400
-    msg: 'Wrong Email or Password'
+  {
+    message: "Wrong Email or Password";
   }
-  if password wrong => {
-    code/status: 400
-    msg: 'Wrong Email or Password'
-  }
-  if server error => {
-    code/status: 500
-    msg: 'Internal server error'
+  ```
+
+  ##### `code: 500`
+
+  ```javascript
+  {
+    message: "Internal server error";
   }
   ```
 
@@ -134,9 +137,9 @@ Showing all ToDo from database
   ##### `code: 200`
 
   ```javascript
-  json({
-    data all todos
-  })
+  {
+    data: <Array of object>
+  }
   ```
 
 - #### Error Response
@@ -144,7 +147,9 @@ Showing all ToDo from database
   ##### `code: 500`
 
   ```javascript
-  msg: "Internal server Error";
+  {
+    message: "Internal server Error";
+  }
   ```
 
 <br><br>
@@ -168,7 +173,12 @@ Make a ToDo
 - #### Data Params
 
   ```javascript
-  {title,description,status,due_date} = req.body
+  {
+   title: <String> (Required)
+   description <String>
+   status <String>
+   due_date <Date> (Required)
+  }
   ```
 
 - #### Succes Response
@@ -178,27 +188,34 @@ Make a ToDo
   ##### `code: 201`
 
   ```javascript
-  json(
-  ToDo(has been created)
-  )
+  {
+   Data: <Object>
+  }
   ```
 
 - #### Error Response
 
+  ##### `code: 400`
+
   ```javascript
-  if Validation Error => {
-    msg: 'Date must be after this day'
-    code/status: 400
+  {
+    message: "Date must be after this day";
   }
-  if server error => {
-    msg: 'Internal server error'
-  	code/status: 500
+  ```
+
+  ##### `code: 500`
+
+  ```javascript
+  {
+    message: "Internal server error";
   }
   ```
 
 <br><br>
 
 ## <u>Show ToDo By Id</u>
+
+Show a ToDo by his Id
 
 - #### Url
 
@@ -210,12 +227,12 @@ Make a ToDo
 
 - #### Url Params
 
-  ##### Required: `id:[INTEGER]`
+  ##### Required: `id:<Integer>`
 
 - #### Data Params
 
   ```javascript
-  id : req.params.id AS Interger
+  id : <Integer> (Required)
   ```
 
 - #### Succes Response
@@ -225,9 +242,9 @@ Make a ToDo
   ##### `code: 200`
 
   ```javascript
-  json({
-    data a todo
-  })
+  {
+    data: <Object>
+  }
   ```
 
 - #### Error Response
@@ -235,12 +252,14 @@ Make a ToDo
   ##### `code: 404`
 
   ```javascript
-  msg: "Data not Found";
+  message: "Data not found";
   ```
 
 <br><br>
 
 ## <u>Update ToDo By Id</u>
+
+Update a ToDo by his Id
 
 - #### Url
 
@@ -252,15 +271,18 @@ Make a ToDo
 
 - #### Url Params
 
-  ##### Required: `id:[INTEGER]`
+  ##### Required: `id:<Integer>`
 
 - #### Data Params
 
   ```javascript
   {
-    id: req.params.id AS Integer
+    id: <Integer> (Required)
+    titel: <String>
+    description: <String>
+  	status: <String>
+    due_date: <Date>
   }
-  {title,description,status,due_date} = req.body
   ```
 
 - #### Succes Response
@@ -270,31 +292,42 @@ Make a ToDo
   ##### `code: 200`
 
   ```javascript
-  json({
-    data an updated todo
-  })
+  {
+    data: <Object>
+  }
   ```
 
 - #### Error Response
 
+  ##### `code: 404`
+
   ```javascript
-  if todo not found => {
-    msg: 'Data not Found'
-  	code/status: 404
+  {
+    message: "Data not found";
   }
-  if validation error => {
-    msg: 'Date must be after this day'
-  	code/status: 400
+  ```
+
+  ##### `code: 400`
+
+  ```javascript
+  {
+    message: "Date must be after this day";
   }
-  if server error => {
-    msg: 'Internal server Error'
-  	code/status: 500
+  ```
+
+  ##### `code: 500`
+
+  ```javascript
+  {
+    message: "Internal server error";
   }
   ```
 
 <br><br>
 
 ## <u>Update Status ToDo By Id</u>
+
+Update a Status of ToDo by his Id
 
 - #### Url
 
@@ -306,15 +339,14 @@ Make a ToDo
 
 - #### Url Params
 
-  ##### Required: `id:[INTEGER]`
+  ##### Required: `id:<Integer>`
 
 - #### Data Params
 
   ```javascript
   {
-    id: req.params.id AS Integer
+    id: <Integer> (Required)
   }
-  {title,description,status,due_date} = req.body
   ```
 
 - #### Succes Response
@@ -324,31 +356,42 @@ Make a ToDo
   ##### `code: 200`
 
   ```javascript
-  json({
-    data an updated todo
-  })
+  {
+    data: <Object>
+  }
   ```
 
 - #### Error Response
 
+  ##### `code: 404`
+
   ```javascript
-  if todo not found => {
-    msg: 'Data not Found'
-  	code/status: 404
+  {
+    message: "Data not found";
   }
-  if validation error => {
-    msg: 'Date must be after this day'
-  	code/status: 400
+  ```
+
+  ##### `code: 400`
+
+  ```javascript
+  {
+    message: "Date must be after this day";
   }
-  if server error => {
-    msg: 'Internal server Error'
-  	code/status: 500
+  ```
+
+  ##### `code: 500`
+
+  ```javascript
+  {
+    message: "Internal server error";
   }
   ```
 
 <br><br>
 
 ## <u>Delete a ToDo By Id</u>
+
+Delete a ToDo by his Id
 
 - #### Url
 
@@ -360,13 +403,13 @@ Make a ToDo
 
 - #### Url Params
 
-  ##### Required: `id:[INTEGER]`
+  ##### Required: `id:<Integer>`
 
 - #### Data Params
 
   ```javascript
   {
-    id: req.params.id AS Integer
+    id: <Integer> (Required)
   }
   ```
 
@@ -377,18 +420,23 @@ Make a ToDo
   ##### `code: 200`
 
   ```javascript
-  msg: "todo success to delete";
+  message: "Todo success to delete";
   ```
 
 - #### Error Response
 
+  ##### `code: 404`
+
   ```javascript
-  if todo not found => {
-    msg: 'Data not Found'
-  	code/status: 404
+  {
+    message: "Data not found";
   }
-  if server error => {
-    msg: 'Internal server error'
-  	code/status: 500
+  ```
+
+  ##### `code: 500
+
+  ```javascript
+  {
+    message: "Internal server error";
   }
   ```

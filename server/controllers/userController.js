@@ -3,6 +3,7 @@ const { compare } = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
 const axios = require("axios");
 const apiKey = process.env.API_WEATHER;
+const { OAuth2Client } = require("google-auth-library");
 
 class UserController {
   static register(req, res, next) {
@@ -71,6 +72,45 @@ class UserController {
           const apiResponse = response.data;
           res.json(apiResponse);
         });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+  static loginOAuth(req, res, next) {
+    const client = new OAuth2Client(process.env.GOOGLE_KEY);
+    let email;
+    client
+      .verifyIdToken({
+        idToken: req.body.googleToken,
+        audience: process.env.GOOGLE_KEY,
+      })
+      .then((ticket) => {
+        const paylod = ticket.getPayload();
+        email = paylod.email;
+        return User.findOne({ where: { email } });
+      })
+      .then((user) => {
+        if (user) {
+          const access_token = generateToken({
+            id: user.id,
+            email: user.email,
+          });
+          res.status(200).json({ access_token });
+        } else {
+          return User.create({
+            email,
+            password: process.env.PASS_RAND,
+            location: "Jakarta",
+          });
+        }
+      })
+      .then((registered) => {
+        const access_token = generateToken({
+          id: registered.id,
+          email: registered.email,
+        });
+        res.status(201).json({ access_token });
       })
       .catch((err) => {
         next(err);
