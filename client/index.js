@@ -3,6 +3,8 @@ let baseUrl = "http://localhost:3000";
 
 let toDoId = null;
 
+$('#register-form').hide()
+
 function checkAuthentication() {
   console.log(localStorage.access_token);
   if (localStorage.access_token) {
@@ -22,6 +24,7 @@ function loggedIn(){
     $('#register-form').hide()
     $('#add-todo').show()
     $('#add-form').hide()
+    $('#main-weather').show()
    
 }
 
@@ -31,6 +34,7 @@ $("#login-form").show()
 $('#logout-button').hide()
 $('#register-form').hide()
 $('#add-todo').hide()
+$('#main-weather').hide()
 
 localStorage.clear()   
 }
@@ -39,7 +43,9 @@ localStorage.clear()
 $(document).ready(function () {
 
     console.log('page di reload')
+  
     checkAuthentication()
+    
 })
 
 $('#login-button').click(function (event) {
@@ -86,9 +92,34 @@ $('#add-button').click(function (event) {
   AddTodo()
 })
 
+//=========GOOGLE LOGIN========
 
+function onSignIn(googleUser) {
 
+  const id_token = googleUser.getAuthResponse().id_token
 
+  $.ajax({
+      method: "POST",
+      url: `${baseUrl}/users/googlelogin`,
+      data: {
+          id_token
+      }
+  }).done(result => {
+      // console.log(result)
+      localStorage.setItem('access_token', result.access_token)
+      loggedIn()
+      // console.log(result)
+  }).fail(err => {
+      console.log(err)
+  })
+}
+
+function signOut() {
+  const auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+      console.log('User signed out.');
+  });
+}
 
 
 
@@ -148,7 +179,13 @@ function register(){
             },
           })
 
-          .done(response=>{
+          .done(({msg,LoveQuotesForYou})=>{
+            console.log(msg)
+            console.log(LoveQuotesForYou)  // INI 3rd API PARTYNYA KA 
+            swal(`${LoveQuotesForYou} Thank u for Registering Honey 💋 ` ) 
+            // $('#quite').append(`
+            
+            // `)
               loggedOut()
           })
           .fail(err=>{

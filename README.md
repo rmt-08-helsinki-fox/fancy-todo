@@ -7,6 +7,7 @@ Create fancy to do lover app, to-do app for lover man,and women to reach their f
 * RESTful endpoint for Todo List's CRUD operation
 * JSON formatted response
 * Web Server response
+* Weather bit 3rd parties
 ```
 
 # USAGE
