@@ -20,15 +20,131 @@ function auth() {
     }
 }
 
-// ? FUNCTION HEADER SIGN-OUT
-function logout() {
-    localStorage.removeItem("accessToken")
-    var auth2 = gapi.auth2.getAuthInstance()
-    auth2.signOut().then(() => {
-        console.log("User signed out.")
-        auth()
-    })
+// ? FUNCTION REFRESH VISUAL
+function refreshVisualToDoList(data) {
+    $("#to-do-list").empty()
+    if (data.length > 0) {
+        data.forEach((e) => {
+            $("#to-do-list").append(`
+                <div class="input-group mb-3 d-flex justify-content-center">
+                    <div class="card">
+                        <div class="d-flex align-items-center">
+                            <div id="checkbox-div" class="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    id="checkbox${e.id}"
+                                    onclick="patchToDoStatus(${e.id})"
+                                    ${e.status ? "checked" : ""}
+                                />
+                            </div>
+                        <div>
+                    </div>
+
+                    <div class="card" style="width: 50rem">
+
+                        <div class="card-body" id="edit-to-do-form-${e.id}">
+                            <form onsubmit="confirmUpdateToDo(${e.id}))">
+                                <div class="row">
+                                    <div class="col">
+                                        <input
+                                            type="text"
+                                            class="form-control title"
+                                            placeholder="${e.title}"
+                                            value="${e.title}"
+                                            id="title-edit-${e.id}"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="col">
+                                        <input
+                                            type="date"
+                                            class="form-control due_date"
+                                            id="due-date-add-${e.id}"
+                                            value="${e.due_date.slice(0, 10)}"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <textarea
+                                        class="form-control description"
+                                        id="description-edit-${e.id}"
+                                        rows="3"
+                                        placeholder="${e.description}">${e.description}</textarea>
+                                </div>
+                                <p>* Date must not be in the past</p>
+                                <div>
+                                    <button
+                                        id="edit-to-do-button-${e.id}"
+                                        class="btn btn-primary">
+                                    Edit
+                                    </button>
+                                    <button
+                                        id="cancel-edit-to-do-button-${e.id}"
+                                        class="btn btn-danger">
+                                    Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card-body" id="card-to-do-${e.id}">
+                            <div id="to-do-card-value-${e.id}" style="">
+                                <h5 id="title-${e.id}" class="card-title">${e.title}</h5>
+                                <p class="card-text">${e.description}</p>
+                                <h6 class="card-subtitle mb-2 text-muted">${e.due_date.slice(0, 10)}</h6>
+                                <div>
+                                    <button
+                                        id="form-edit-to-do-button-${e.id}"
+                                        type="button"
+                                        class="btn btn-warning"
+                                        onclick="editToDoForm(${e.id}">
+                                    Edit
+                                    </button>
+                                    <button
+                                        id="delete-to-do-button"
+                                        class="btn btn-danger"
+                                        onclick="deleteToDo(${e.id})">
+                                    Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <script>
+                    // ? Hide To Do Update Form
+                    $("#edit-to-do-form-${e.id}").hide()
+                    // ? Button Show To Do Form
+                    $("#form-edit-to-do-button-${e.id}").click((e) => {
+                        e.preventDefault()
+                        $("#edit-to-do-form-${e.id}").show()
+                        $("#to-do-card-value-${e.id}").hide()
+                    })
+                    // ? Button Cancel and Hide To Do Form
+                    $("#cancel-edit-to-do-button-${e.id}").click((e) => {
+                        e.preventDefault()
+                        $("#edit-to-do-form-${e.id}").hide()
+                        $("#to-do-card-value-${e.id}").show()
+                    })
+                    // ? Button Submit Update To Do Form
+                    $("#edit-to-do-form-${e.id}").on("submit", (e) => {
+                        e.preventDefault()
+                        confirmUpdateToDo(${e.id})
+                        readToDoList()
+                    })
+                </script>
+            `)
+        })
+    } else {
+        $("#to-do-list").append(`<p>You don't have to do list</p>`)
+    }
 }
+
+// ? FUNCTION HEADER SIGN-OUT
+// * inside header.js
 
 // ? FUNCTION SIGN-IN
 function login() {
@@ -131,138 +247,19 @@ function createToDo() {
 }
 
 // ? FUNCTION READ TO-DO-LIST
-function readToDoList() {
-    $.ajax({
-        url: base_url + "todos",
-        method: "GET",
-        headers: {
-            token: localStorage.getItem("accessToken"),
-        },
-    })
-        .done((res) => {
-            // console.log(res)
-            if (res.length > 0) {
-                res.forEach((e) => {
-                    $("#to-do-list").append(`
-                        <div class="input-group mb-3">
-                            <div class="card">
-                                <div class="d-flex align-items-center">
-                                    <div class="input-group-text">
-                                        <input
-                                            type="checkbox"
-                                            id="checkbox${e.id}"
-                                            onclick="patchToDoStatus(${e.id})" 
-                                        />
-                                    </div>
-                                <div>
-                            </div>
-
-                            <div class="card" style="width: 50rem">
-                            
-                                <div class="card-body" id="edit-to-do-form-${e.id}">
-                                    <form onsubmit="confirmUpdateToDo(${e.id}))">
-                                        <div class="row">
-                                            <div class="col">
-                                                <input
-                                                    type="text"
-                                                    class="form-control title"
-                                                    placeholder="${e.title}"
-                                                    value="${e.title}"
-                                                    id="title-edit-${e.id}"
-                                                    required
-                                                />
-                                            </div>
-                                            <div class="col">
-                                                <input
-                                                    type="date"
-                                                    class="form-control due_date"
-                                                    id="due-date-add-${e.id}"
-                                                    value="${e.due_date.slice(0, 10)}"
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="form-group mt-2">
-                                            <textarea
-                                                class="form-control description"
-                                                id="description-edit-${e.id}"
-                                                rows="3"
-                                                placeholder="${e.description}">${e.description}</textarea>
-                                        </div>
-                                        <p>* Date must not be in the past</p>
-                                        <div>
-                                            <button 
-                                                id="edit-to-do-button-${e.id}"
-                                                class="btn btn-primary">
-                                            Edit
-                                            </button>
-                                            <button 
-                                                id="cancel-edit-to-do-button-${e.id}"
-                                                class="btn btn-danger">
-                                            Cancel
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-
-
-
-                                <div class="card-body" id="card-to-do-${e.id}">
-                                    <div id="to-do-card-value-${e.id}" style="">
-                                        <h5 id="title-${e.id}" class="card-title">${e.title}</h5>
-                                        <p class="card-text">${e.description}</p>
-                                        <h6 class="card-subtitle mb-2 text-muted">${e.due_date.slice(0, 10)}</h6>
-                                        <div>
-                                            <button 
-                                                id="form-edit-to-do-button-${e.id}" 
-                                                type="button"
-                                                class="btn btn-warning"
-                                                onclick="editToDoForm(${e.id}">
-                                            Edit
-                                            </button>
-                                            <button 
-                                                id="delete-to-do-button" 
-                                                class="btn btn-danger"
-                                                onclick="deleteToDo(${e.id})">
-                                            Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <script>
-                            $("#edit-to-do-form-${e.id}").hide()
-
-                            $("#form-edit-to-do-button-${e.id}").click((e) => {
-                                e.preventDefault()
-                                $("#edit-to-do-form-${e.id}").show()
-                                $("#to-do-card-value-${e.id}").hide()
-                            })
-                            $("#cancel-edit-to-do-button-${e.id}").click((e) => {
-                                e.preventDefault()
-                                $("#edit-to-do-form-${e.id}").hide()
-                                $("#to-do-card-value-${e.id}").show()
-                            })
-                            
-                            $("#edit-to-do-form-${e.id}").on("submit", (e) => {
-                                e.preventDefault()
-                                confirmUpdateToDo(${e.id})
-                                auth()
-                            })
-                        </script>
-                    `)
-                })
-            } else {
-                $("#to-do-list").append(`<p>You don't have to do list</p>`)
-            }
-            // ! Looping ditaruh satu function terpisah jadinya parameter data response
+async function readToDoList() {
+    try {
+        const response = await axios({
+            url: base_url + "todos",
+            method: "GET",
+            headers: {
+                token: localStorage.getItem("accessToken"),
+            },
         })
-        .fail((xhr, text) => {
-            console.log(xhr, text)
-        })
+        refreshVisualToDoList(response.data)
+    } catch (error) {
+        console.log(error.message)
+    }
 }
 
 // ? FUNCTION UPDATE PUT TO-DO
@@ -292,8 +289,8 @@ function confirmUpdateToDo(toDoId) {
         },
     })
         .done((res) => {
+            readToDoList()
             console.log(res)
-            auth()
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
@@ -302,28 +299,21 @@ function confirmUpdateToDo(toDoId) {
 
 // ? FUNCTION UPDATE PATCH TO-DO
 function patchToDoStatus(toDoId) {
-    const status = $(`#checkbox${toDoId}`).val()
-    let newStatus
-    if (status === "on") {
-        newStatus = true
-    } else {
-        newStatus = true
-    }
-    console.log(status)
-    console.log(newStatus)
+    const debug = document.querySelector(`#checkbox${toDoId}`)
+    console.log(debug, "<<")
     $.ajax({
         url: base_url + `todos/${toDoId}`,
         method: "PATCH",
         data: {
-            status: newStatus,
+            status: debug.checked,
         },
         headers: {
             token: localStorage.getItem("accessToken"),
         },
     })
         .done((res) => {
+            readToDoList()
             console.log(res)
-            auth()
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
@@ -340,8 +330,8 @@ function deleteToDo(toDoId) {
         },
     })
         .done((res) => {
+            readToDoList()
             console.log(res)
-            auth()
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
