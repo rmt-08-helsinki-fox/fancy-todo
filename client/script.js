@@ -36,7 +36,7 @@ function register() {
     }
   })
     .done(response => {
-      auth();
+      afterRegister();
     })
     .fail((xhr, text) => {
       console.log(xhr, text);
@@ -44,6 +44,11 @@ function register() {
     .always(() => {
       $("#register-form").trigger('reset');
     })
+}
+
+function afterRegister() {
+  $("#register").hide();
+  $("#login").show();
 }
 
 function login() {
@@ -81,7 +86,7 @@ function getTodo() {
     .done((response) => {
 
       $('#todo').empty();
-      $('#todo').append(`<h2 class="text-center mt-3">Welcome back, ${response[0].User.email}!</h2>`);
+      $('#todo').append(`<h2 class="text-center my-5">Welcome back, ${response[0].User.email}!</h2>`);
       response.forEach(value => {
         $('#todo').append(`
         <div class="card d-inline-block m-3" id="todo-${value.id}" style="width: 20rem;">
@@ -259,11 +264,15 @@ function update(id) {
 function auth() {
   if (!localStorage.getItem('access_token')) {
     $("#register").show();
-    $("#login").show();
+    $("#loginNav").show();
+    $("#registerNav").show();
+    $("#login").hide();
     $("#todo").hide();
     $('#logout').hide();
     $('#addTodo').hide();
   } else {
+    $("#loginNav").hide();
+    $("#registerNav").hide();
     $("#login").hide();
     $("#register").hide();
     $("#todo").show();
@@ -303,11 +312,24 @@ $(document).ready(() => {
   $("#register-form").on("submit", (e) => {
     e.preventDefault();
     register();
+    afterRegister();
   })
 
   $("#addTodo-form").on("submit", (e) => {
     e.preventDefault();
     addTodo();
+  })
+
+  $("#loginNav").on("click", (e) => {
+    e.preventDefault();
+    $("#login").show();
+    $("#register").hide();
+  })
+
+  $("#registerNav").on("click", (e) => {
+    e.preventDefault();
+    $("#register").show();
+    $("#login").hide();
   })
 
   $("#logout").on("click", (e) => {
