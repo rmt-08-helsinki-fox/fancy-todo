@@ -1,10 +1,11 @@
-const { Todo } = require('../models')
-const axios = require('axios')
+const { Todo, User } = require('../models')
+const mailjet = require('../helpers/mailjet')
 const api_key = process.env.Api_Key_Calendarific
 
 class TodoController {
   static createTodos(req, res, next) {
     const { title, description, status, due_date, priority } = req.body
+    let dataToEmail
     const userId = req.access_token.id
     let dataTodo;
     Todo.create({
@@ -16,21 +17,23 @@ class TodoController {
       priority
     })
       .then(data => {
-        dataTodo = data
-        let month = data.due_date.split('-')[1]
-        return axios.get(`https://calendarific.com/api/v2/holidays?api_key=${api_key}&country=id&year=2021&month=${month}`)
+        dataTodo = data;
+        dataToEmail = {
+          title: data.title,
+          description: data.description,
+          status: data.status,
+          due_date: data.due_date,
+          priority: data.priority
+        }
+        return User.findByPk(data.userId)
       })
-      .then(response => {
-        let data = response.data.response.holidays
-        let holidays = []
-        data.forEach(element => {
-          holidays.push({
-            name: element.name,
-            date: element.date.iso,
-            type: element.type
-          })
-        });
-        res.status(201).json({ dataTodo, holidays })
+      .then(dataUser => {
+        dataToEmail.email = dataUser.email
+        return mailjet(dataToEmail.title, dataToEmail.due_date, dataToEmail.status, dataToEmail.priority, dataToEmail.email)
+      })
+      .then(data => {
+        console.log(data.body);
+        res.status(201).json({ dataTodo, msg: 'Check your email' })
       })
       .catch(err => {
         next(err)

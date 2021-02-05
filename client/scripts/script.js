@@ -19,6 +19,33 @@ function authentication() {
   }
 }
 
+function onSignIn(googleUser) {
+  let id_token = googleUser.getAuthResponse().id_token;
+  $.ajax({
+    url: `${host}googleLogin`,
+    method: 'POST',
+    data: {
+      googleToken: id_token
+    }
+  })
+    .done(response => {
+      localStorage.setItem("access_token", response.access_token)
+      authentication()
+    })
+    .fail(err => {
+      $('#login-title').after(
+        `<div class="error-msg" id="err-msg">
+            <p>${err.responseJSON.error}</p>
+        </div>`
+      )
+    })
+    .always(() => {
+      $('#err-msg').remove()
+      $('#email').val('')
+      $('#password').val('')
+    })
+}
+
 function register() {
   $('#register').show()
   $('#login').hide()
@@ -39,12 +66,10 @@ function userLogin() {
     data: { email, password }
   })
     .done(response => {
-      $('#err-msg').remove()
       localStorage.setItem("access_token", response.access_token)
       authentication()
     })
     .fail(err => {
-      $('#err-msg').remove()
       $('#login-title').after(
         `<div class="error-msg" id="err-msg">
             <p>${err.responseJSON.error}</p>
@@ -52,6 +77,7 @@ function userLogin() {
       )
     })
     .always(() => {
+      $('#err-msg').remove()
       $('#email').val('')
       $('#password').val('')
     })
@@ -104,6 +130,11 @@ function userRegister() {
 
 function logout() {
   localStorage.clear()
+  let auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut()
+    .then(() => {
+      console.log('User signed out.');
+    });
   authentication()
 }
 
@@ -295,6 +326,7 @@ function addTodo() {
     }
   })
     .done(response => {
+      $('#err-msg').remove()
       console.log(response);
       getTodos()
     })
@@ -317,6 +349,7 @@ function addTodo() {
       `)
     })
     .always(() => {
+
       const title = $('#title').val('')
       const description = $('#description').val('')
       const priority = $('#priority').val('')

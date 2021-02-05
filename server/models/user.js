@@ -44,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeCreate: (user, options) => {
+        user.email = user.email.toLowerCase()
         user.password = hashingPass(user.password)
       }
     },

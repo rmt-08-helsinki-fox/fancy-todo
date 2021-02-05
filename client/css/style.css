@@ -43,6 +43,19 @@ select {
   font-weight: bolder;
 }
 
+.cont-google-register {
+  display: flex;
+}
+
+.g-signin {
+  float: right;
+  margin-left: 580px;
+}
+
+.g-signin2 {
+  margin-left: 30px;
+}
+
 .button {text-align: center;}
 
 button {

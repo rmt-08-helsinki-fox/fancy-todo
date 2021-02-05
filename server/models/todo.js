@@ -75,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
       afterFind: (todo, options) => {
         if (Array.isArray(todo)) {
           todo.forEach(itm => {
-            if (new Date(itm.due_date) < new Date()) {
+            if (new Date(itm.due_date) >= validationDate()) {
               if (itm.status !== 'Completed') {
                 itm.status = 'Expired'
               }
