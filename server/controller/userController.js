@@ -1,10 +1,10 @@
 const { User } = require('../models/index');
 const { comparePass } = require('../helpers/bcrypt');
 const { generateToken } = require('../helpers/jwt');
+const { OAuth2Client } = require('google-auth-library');
 
 class userController {
   static async register(req, res) {
-
     const { email, password } = req.body;
 
     try {
@@ -50,6 +50,44 @@ class userController {
       if (err.error) res.status(404).json({ error: err.error })
       res.status(500).json({ err });
     }
+  }
+
+  static googleLogin(req, res, next) {
+    const client = new OAuth2Client(process.env.CLIENT_ID);
+    let email = "";
+    client.verifyIdToken({
+      idToken: req.body.googleToken,
+      audience: process.env.CLIENT_ID
+    })
+      .then(ticket => {
+        const payload = ticket.getPayload();
+        email = payload.email;
+        return User.findOne({ where: { email } });
+      })
+      .then(user => {
+        if (user) {
+          const token = generateToken({
+            id: user.id,
+            email: user.email
+          })
+          res.status(201).json({ access_token: token });
+        } else {
+          return User.create({
+            email,
+            password: process.env.RANDOM_PASSWORD
+          })
+        }
+      })
+      .then(registeredUser => {
+        const token = generateToken({
+          id: registeredUser.id,
+          email: registeredUser.email
+        })
+        res.status(201).json({ access_token: token });
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 }
 
