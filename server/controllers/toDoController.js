@@ -31,7 +31,6 @@ class toDoController {
             res.status(200).json(data)
             // ! v Usually data becomes object on works, best practice
             // res.status(200).json({data})
-            return
         } catch (err) {
             console.log(err)
             next(err)

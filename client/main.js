@@ -167,6 +167,7 @@ function readToDoList() {
                                                     type="text"
                                                     class="form-control title"
                                                     placeholder="${e.title}"
+                                                    value="${e.title}"
                                                     id="title-edit-${e.id}"
                                                     required
                                                 />
@@ -176,6 +177,7 @@ function readToDoList() {
                                                     type="date"
                                                     class="form-control due_date"
                                                     id="due-date-add-${e.id}"
+                                                    value="${e.due_date.slice(0, 10)}"
                                                     required
                                                 />
                                             </div>

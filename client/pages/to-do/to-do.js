@@ -13,7 +13,7 @@ $("#add-to-do-form-cancel").click((e) => {
     $("#add-to-do-form").hide()
 })
 
-$("#add-to-do-form-submit").click((e) => {
+$("#add-to-do-form").on("submit", (e) => {
     e.preventDefault()
     createToDo()
     auth()
