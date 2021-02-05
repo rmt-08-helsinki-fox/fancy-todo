@@ -6,11 +6,140 @@ Fancy Todo App is an application to manage your Todo. This app has :
 &nbsp;
 
 ## RESTful endpoints
-### GET /todos
 
-> Get all todos
+### POST /auth/registration
+> Registration new user
 
 &nbsp;
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+    email: <Your Email>,
+    password: <Your password>
+}
+```
+
+_Response (200 - OK)_
+```
+{
+    "message": "Success",
+    "data": {
+        "id": 31,
+        "email": "arfah@gmail.com",
+        "createdAt": "2021-02-05T09:34:43.239Z"
+    },
+    "response": true
+}
+```
+_Response (400 - Bad Request)_
+```
+{
+    "message": [
+        "Email has been used"
+    ],
+    "response": false
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
+```
+
+&nbsp;
+
+
+### POST /auth/login
+> Login user
+
+&nbsp;
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+    email: <Your Email>,
+    password: <Your Password>
+}
+```
+
+_Response (200 - OK)_
+```
+{
+    "message": "Success",
+    "token": <Your access token>,
+    "response": true
+}
+```
+_Response (401 - Unauthorized)_
+```
+{
+    "message": "Invalid email or password",
+    "response": false
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
+```
+
+&nbsp;
+
+### POST /auth/loginOauth
+> Login user by Oauth Google
+
+&nbsp;
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+    tokenOauth: <Your token google oauth>
+}
+```
+
+_Response (200 - OK)_
+```
+{
+    message: 'Success',
+    token: token_oauth,
+    response: true
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
+```
+
+&nbsp;
+
+---
+### GET /todos
+
+> Get All Todos
+
+&nbsp;
+
+_Request Params_
+```
+not needed
+```
 
 _Request Header_
 ```
@@ -24,33 +153,25 @@ _Request Body_
 not needed
 ```
 
-_Response (200 - OK)_
+_Response (200)_
 ```
 {
     "message": "Success",
     "data": [
         {
-            "id": 13,
-            "title": "doing rest api",
-            "description": "ngerjain server todo app",
-            "status": false,
-            "due_date": "2021-02-01",
-            "createdAt": "2021-02-01T12:12:49.124Z",
-            "updatedAt": "2021-02-01T12:12:49.124Z"
-        },
-        {
-            "id": 14,
-            "title": "doing rest api",
-            "description": "ngerjain server todo app",
-            "status": false,
-            "due_date": "2021-02-01",
-            "createdAt": "2021-02-01T12:12:50.197Z",
-            "updatedAt": "2021-02-01T12:12:50.197Z"
-        }
-    ],
+        "id": 14,
+        "title": "doing rest api",
+        "description": "ngerjain server todo app",
+        "status": false,
+        "due_date": "2021-02-01",
+        "createdAt": "2021-02-01T12:12:50.197Z",
+        "updatedAt": "2021-02-01T12:12:50.197Z"
+    },
+    ]
     "response": true
 }
 ```
+
 _Response (404 - Not Found)_
 ```
 {
@@ -66,6 +187,11 @@ _Response (401 - Unauthorized)_
     "response": false
 }
 ```
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
+```
+
 
 &nbsp;
 
@@ -125,6 +251,11 @@ _Response (401 - Unauthorized)_
     "response": false
 }
 ```
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
+```
+
 
 &nbsp;
 
@@ -192,6 +323,11 @@ _Response (401 - Unauthorized)_
     "message": "Invalid token",
     "response": false
 }
+```
+
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
 ```
 
 &nbsp;
@@ -268,6 +404,11 @@ _Response (401 - Unauthorized)_
 }
 ```
 
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
+```
+
 &nbsp;
 
 ### PATCH /todos/:id
@@ -337,6 +478,11 @@ _Response (401 - Unauthorized)_
 }
 ```
 
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
+```
+
 &nbsp;
 
 ### DELETE /todos/:id
@@ -395,4 +541,56 @@ _Response (401 - Unauthorized)_
     "message": "Invalid token",
     "response": false
 }
+```
+
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
+```
+
+&nbsp;
+
+### GET /quotes
+
+> Get random quote
+
+&nbsp;
+
+_Request Params_
+```
+not needed
+```
+
+_Request Header_
+```
+{
+  "access_token": "<your access token>"
+}
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Response (200 - Ok)_
+```
+{
+    "message": "Success",
+    "data": <Random Quotes>
+}
+```
+
+
+_Response (401 - Unauthorized)_
+```
+{
+    "message": "Invalid token",
+    "response": false
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+<Internal server error messages>
 ```
