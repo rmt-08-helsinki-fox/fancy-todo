@@ -6,6 +6,8 @@ const Error = (err, req, res, next) => {
     let {name} = err
     if(err.errors){
         res.status(400).json({message:err.errors[0].message})
+    }else if(err.original){
+        res.status(400).json({message:err.original.toString()})
     }else if(name === 'LOGIN_GAGAL'){
         res.status(400).json({message:'Login Gagal'})
     }else if(name === 'TOKEN_INVALID'){
@@ -17,13 +19,8 @@ const Error = (err, req, res, next) => {
     }else if(name === 'NOT_FOUND'){
         res.status(400).json({message:'Error not found'})
     }else{
-        if(err.original){
-            res.status(400).json({message:err.original.toString()})
-        }
         res.status(500).json({message:'Internal server error'})
     }
-
-    // err.errors[0].message
 
 }
 

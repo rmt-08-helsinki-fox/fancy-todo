@@ -1,6 +1,8 @@
 const {User} = require('../models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 class UserController {
     static register(req, res, next){
@@ -70,7 +72,46 @@ class UserController {
         .catch((err)=>{
             next({name: 'TOKEN_INVALID'})
         })
+    }
+    static async googleLogin(req, res, next){
+        try{
+            const ticket = await client.verifyIdToken({
+                idToken: req.headers.token,
+                audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+                // Or, if multiple clients access the backend:
+                //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+            });
+            const payload = ticket.getPayload()
+            
+            let {given_name, email} = payload
 
+            console.log(given_name, email)
+
+            // normal login
+            let checkUser = await User.findOne({
+                where: {
+                    email: email
+                }
+            })
+            if(checkUser){
+                let token = jwt.sign({ id: checkUser.id }, process.env.TOKEN_KEY);
+                res.status(200).json({token: token})
+            }else{
+                // user does not exist
+                // create user
+                let newUser = {
+                    name: given_name,
+                    email,
+                    password: 'googleUser'
+                }
+                let userCreated = await User.create(newUser)
+                let token2 = jwt.sign({ id: userCreated.id }, process.env.TOKEN_KEY);
+                res.status(200).json({token: token2})
+            }
+            
+        }catch(err){
+            next(err)
+        }
     }
 }
 

@@ -79,7 +79,8 @@ class TodoController{
             let result = await Todo.update(updateTodo, {
                 where: {
                     id: req.params.id
-                }
+                },
+                returning: true
             })
             if(result[0]){
                 res.status(200).send(result[1][0])
