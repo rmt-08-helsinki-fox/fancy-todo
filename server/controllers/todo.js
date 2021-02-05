@@ -15,7 +15,7 @@ class TodoController {
       res.status(201).json(data)
     })
     .catch( err => {
-      next({ error: err.message, code: 400 })
+      next(err)
     })
   }
 
@@ -29,7 +29,7 @@ class TodoController {
       }
     })
     .catch( err => {
-      next({error: err.message, code: 500})
+      next(err)
     })
   }
 
@@ -44,7 +44,7 @@ class TodoController {
       }
     })
     .catch( err => {
-      next({error: err.message, code: 500})
+      next(err)
     })
   }
 
@@ -71,7 +71,7 @@ class TodoController {
       }
     })
     .catch( err => {
-      next({error: err.message, code: 500})
+      next(err)
     })
   }
 
@@ -93,7 +93,7 @@ class TodoController {
       }
     })
     .catch( err => {
-      next({error: err.message, code: 500})
+      next({err)
     })
   }
 
@@ -116,7 +116,7 @@ class TodoController {
       }
     })
     .catch( err => {
-      next({error: err.message, code: 500})
+      next(err)
     })
   }
 

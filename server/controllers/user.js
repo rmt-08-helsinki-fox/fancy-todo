@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 class UserController {
 
-  static register(req, res) {
+  static register(req, res, next) {
     const { email, password } = req.body
     User.create({ email, password })
     .then( data => {
@@ -17,11 +17,11 @@ class UserController {
       })
     })
     .catch( err => {
-      next({ error: err.message, code: 500 })
+      next(err)
     })
   }
 
-  static login(req, res) {
+  static login(req, res, next) {
     const { email, password } = req.body
     User.findOne({
       where: { email }
@@ -37,7 +37,7 @@ class UserController {
       }
     })
     .catch( err => {
-      next({ error: err.message, code: 500 })
+      next(err)
     })
   }
 

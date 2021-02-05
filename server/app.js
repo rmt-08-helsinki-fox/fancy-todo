@@ -6,11 +6,12 @@ const app = express();
 const route = require("./routes");
 const errorHandler = require("./helpers/errorHandler");
 const cors = require('cors')
-const PORT = 3000;
+const PORT = 3001;
 
-app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cors())
 app.use(route);
 app.use(errorHandler);
 
