@@ -1,24 +1,28 @@
-const base_url = "http://localhost:3000/"
+ const base_url = "http://localhost:3000/"
 function auth() {
   if(!localStorage.getItem("access_token")) {
     $("#login-container").show()
-    $("#register-container").show()
+    $("#register-container").hide()
     $("#nav-login").show()
     $("#nav-register").show()
     $("#add-todos-container").hide()
     $("#list-todos-container").hide()
     $("#nav-logout").hide()
     $("#update-container").hide()
+    $("#yourTodos").hide()
+    $("#addTodos-nav").hide()
   } else {
     $("#login-container").hide()
     $("#register-container").hide()
     $("#nav-login").hide()
     $("#nav-register").hide()
     $("#nav-logout").show()
-    $("#add-todos-container").show()
+    $("#add-todos-container").hide()
     $("#list-todos-container").show()
     getTodos()
     $("#update-container").hide()
+    $("#yourTodos").show()
+    $("#addTodos-nav").show()
   }
 }
 
@@ -54,10 +58,17 @@ function register() {
     }
   })
     .done((response) => {
-      console.log(response)
+      Swal.fire(
+        'Register Succes!',
+        'Kamu dapat login sekarang'
+      )
     })
     .fail((xhr, status) => {
-      console.log(xhr, status)
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: xhr.responseJSON.error.join('<br/>'),
+      })
     })
     .always(() => {
       $("#register-form").trigger("reset")
@@ -81,7 +92,11 @@ function login() {
       auth()
     })
     .fail((xhr, status) => {
-      console.log(xhr, status)
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: xhr.responseJSON,
+      })
     })
     .always(() => {
       $("#login-form").trigger("reset")
@@ -90,12 +105,12 @@ function login() {
 // Logout
 function logout() {
   localStorage.clear()
+  auth()
   var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
-    });
-  auth()
-  $("#login-container").hide()
+  });
+  $("#login-container").show()
 }
 // Get Todos
 function getTodos() {
@@ -108,14 +123,16 @@ function getTodos() {
   })
     .done(data => {
       $("#tbody-id").empty()
-      data.forEach(value => {
+      data.forEach((value,i) => {
         $("#tbody-id").append(`
           <tr>
             <td>${value.title}</td>
             <td>${value.description}</td>
             <td>${value.due_date}</td>
+            <td>${value.status ? 'Finished' : 'Pending'}</td>
             <td>
-              <a href="#" onclick="updateTodos(${value.id})">Update Todos</a> 
+              <a href="#" onclick="updateTodosStatus(${value.id},${value.status})">Update Status</a> |
+              <a href="#" onclick="updateTodos(${value.id})">Update Todos</a> |
               <a class="w3-btn w3-green" href="#" onclick="hapus(${value.id})">Delete Todos</a>
             </td>
           </tr>
@@ -159,7 +176,6 @@ function updateTodos(id) {
   $("#add-todos-container").hide()
   $("#list-todos-container").hide()
   $("#update-container").show()
-  
   $.ajax({
     url: base_url + "todos/" + id,
     method: "GET",
@@ -168,6 +184,7 @@ function updateTodos(id) {
     }
   })
     .done((dataFindById) => {
+      $("#update-todos-form").find('input[name=todo_id]').val(id);
       $("#titleTodosUpdate").val(dataFindById.title)
       $("#descriptionTodosUpdate").val(dataFindById.description)
       $("#due_dateTodosUpdate").val(dataFindById.due_date.substring(0,10))
@@ -177,23 +194,33 @@ function updateTodos(id) {
     })
 }
 
-function updateTodosById() {
-  const title = $("#titleTodosUpdate").val()
-  const description = $("#descriptionTodosUpdate").val()
-  const due_date = $("#due_dateTodosUpdate").val()
-    $.ajax({
-        url: base_url + "todos/" + id,
-        method: "PUT",
-        headers: {
-          access_token: localStorage.getItem("access_token")
-        },
-        data: {
-          title,
-          description,
-          due_date
-        }
+function updateTodosStatus(id,currentStatus) {
+  let status = !currentStatus;
+  $.ajax({
+    url: base_url + 'todos/' + id,
+    method: "PATCH",
+    headers: {
+      access_token: localStorage.getItem("access_token")
+    },
+    data:{
+      status
+    }
+  })
+    .done(response => {
+      Swal.fire(
+        'Update Status Succes!',
+      )
+      auth()
+    })
+    .fail((xhr, status) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: xhr.responseJSON,
+      })
     })
 }
+
 function hapus(id) {
   $.ajax({
     url: base_url + "todos/" + id,

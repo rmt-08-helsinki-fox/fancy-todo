@@ -1,21 +1,30 @@
 $(document).ready(() => {
   auth()
-  $("#login-container").hide()
-  $("#nav-register").addClass("active")
+  $("#login-container").addClass("active")
 
   $("#nav-login").click(() => {
-    $(this).addClass("active");
-      $("#nav-register").removeClass("active")
-        $("#login-container").show()
-          $("#register-container").hide()
+    $("#login-container").show()
+      $("#register-container").hide()
   })
 
   $("#nav-register").click(() => {
-    $(this).addClass("active");
-      $("#nav-login").removeClass("active")
-          $("#register-container").show()
-            $("#login-container").hide()
+      $("#register-container").show()
+        $("#login-container").hide()
   })
+  $("#login-ahref").click(() => {
+    $("#login-container").show()
+  })
+  $("#addTodos-nav").click(() => {
+    $("#add-todos-container").show()
+    $("#list-todos-container").hide()
+    $("#update-container").hide()
+  })
+  $("#yourTodos").click(() => {
+    $("#list-todos-container").show()
+    $("#add-todos-container").hide()
+    $("#update-container").hide()
+  })
+
   // Register
   $("#register-form").on("submit", (event) => {
     event.preventDefault()
@@ -35,11 +44,35 @@ $(document).ready(() => {
   $("#add-todos-form").on("submit", (event) => {
     event.preventDefault()
     addTodos()
+    $("#list-todos-container").show()
+    $("#add-todos-container").hide()
   })
   // Update todos
   $("#update-todos-form").on("submit", (event) => {
     event.preventDefault()
-    updateTodosById()
+    const title = $("#titleTodosUpdate").val()
+    const description = $("#descriptionTodosUpdate").val()
+    const due_date = $("#due_dateTodosUpdate").val()
+    const id = $("#update-todos-form").find('input[name=todo_id]').val();
+    $.ajax({
+        url: base_url + "todos/" + id,
+        method: "PUT",
+        headers: {
+          access_token: localStorage.getItem("access_token")
+        },
+        data: {
+          title,
+          description,
+          due_date
+        }
+    })
+      .done(data => {
+        console.log(data)
+        auth()
+      })
+      .fail((err, status) => {
+        console.log(err, status)
+      })
   })
 
   $("#nav-logout").on("click", (event) => {

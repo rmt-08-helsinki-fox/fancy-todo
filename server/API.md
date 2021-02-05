@@ -1,34 +1,174 @@
 **FANCY TODOS**
 ----
-  <_Additional information about FANCY TODOS API call. Try to use verbs that match both request type (fetching vs modifying) and plurality (one vs multiple)._>
 
----- 
+Fancy Todos . This app has : 
+* RESTful endpoint 
+* JSON formatted response
 
-* **URL** 
+List of available endpoints:
+​
+- `POST /users/register`
+- `POST /users/login`
+- `POST /users/googleLoginp`
+- `GET /todos/`
+- `POST /todos/`
+- `GET /todos/:id`
+- `PUT /todos/:id`
+- `PATCH /todos/:id`
+- `DELETE /todos/:id`
+- `GET /todos/searchBook/`
 
-  1. /todos/
-  
-* **Method:**
+### POST /users/register`
+> Create New Account
+Request:
 
-  `POST`
-  
-*  **URL Params**
+- data:
 
-   **Required:**
- 
-   `None`
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
 
-   **Optional:**
- 
-   `None`
+Response:
 
-* **Data Params**
+- status: 201
+- body:
+  ​
 
-  `None`
+```json
+{
+  "id": "integer",
+  "email": "string"
+}
+```
 
 * **Success Response:**
 
   * **Code:** 201 <br />
+    **Content:** `{
+      "msg": "Register Succes",
+      "id": 3,
+      "email": "hacktiv8@gmail.com",
+      "password": "$2a$10$dE2/DshitsFkdzUt9nKdXOOG0CEohiz6Pez4RaOE..UbwFOKPRhri"
+    }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{
+      "message": [
+          "Invalid email format",
+          "email tidak boleh kosong"
+      ]
+    }`
+
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `error html`
+
+### POST /users/login`
+
+> Login User
+
+Request:
+
+- data:
+
+```json
+{
+  "email": "string",
+}
+```
+
+Response:
+
+- status: 200
+- body:
+  ​
+
+```json
+{
+  "id": "integer",
+  "email": "string"
+}
+```
+
+* **Success Response:**
+
+  * **Code:** 200 OK<br />
+    **Content:** `{
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTYxMjE5NzU2Nn0.AjHfLXVC5c_rgIDq7fv_8nFxPc1nHFn6mMag6ctANE8"
+    }`
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `"Internal server error"`
+
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `error html`
+
+### `POST /users/googleLoginp`
+
+> Login with Google Account
+
+Request:
+
+- data:
+
+```json
+{
+  "idToken": "<your token>",
+}
+```
+
+Response:
+
+- status: 201
+- body:
+  ​
+
+```json
+{
+  "idToken": "integer",
+  "email": "string"
+}
+```
+
+### `GET /todos/`
+
+> Get list of Todos
+
+Request:
+
+- data:
+
+```json
+{
+  "UserId": "<your token id>",
+}
+```
+
+Response:
+
+- status: 201
+- body:
+  ​
+
+```json
+{
+  "idToken": "integer",
+  "email": "string"
+}
+```
+* **Success Response:**
+
+  * **Code:** 200 <br />
     **Content:** `{
       "id": 20,
       "title": "Tessss",
@@ -54,45 +194,36 @@
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** `error html`
 
-* **Sample Call:**
-  ```javascript
-    $.ajax({
-      url: "/todos/",
-      dataType: "json",
-      type : "POST",
-      success : function(r) {
-        console.log(r);
-      }
-    });
+### `POST /todos/`
 
-* **Notes:**
+> Create new Todos
 
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+Request:
 
-----
+- data:
 
+```json
+{
+  "title": "<string>",
+  "description": "<string>",
+  "status": "<false>",
+  "due_date": "<date>",
+  "UserId": "<your token id>"
+}
+```
 
-* **URL** 
+Response:
 
-  2. /todos/
-  
-* **Method:**
+- status: 200
+- body:
+  ​
 
-  `GET`
-  
-*  **URL Params**
-
-   **Required:**
- 
-   `None`
-
-   **Optional:**
- 
-   `None`
-
-* **Data Params**
-
-  `None`
+```json
+{
+  "idToken": "integer",
+  "email": "string"
+}
+```
 
 * **Success Response:**
 
@@ -141,46 +272,37 @@
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** `error html`
 
-* **Sample Call:**
-  ```javascript
-    $.ajax({
-      url: "/todos/",
-      dataType: "json",
-      type : "GET",
-      success : function(r) {
-        console.log(r);
-      }
-    });
+### `GET /todos/:id`
 
-* **Notes:**
-
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+> Find todo by Id
 
 
----- 
+Request: 
 
-* **URL** 
+- data
+```json
+{
+    "id": "<interger>",
+    "UserId": "<your token id>"
+}
+```
 
-  3. /todos/:id
+Response:
+
+- status: 200
+- data
+```json
+{
+    "title": "<string>",
+    "description": "<string>",
+    "status": "<false>",
+    "due_date": "<date>",
+    "UserId": "<your token id>",
+    "createdAt": "<date>",
+    "updatedAt": "<date>"
+}
+```
   
-* **Method:**
-
-  `GET`
-  
-*  **URL Params**
-
-   **Required:**
- 
-   `id=[integer]`
-
-   **Optional:**
- 
-   `None`
-
-* **Data Params**
-
-  `None`
-
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -201,45 +323,34 @@
       "msg": "error not found"
     }`
 
-* **Sample Call:**
-  ```javascript
-    $.ajax({
-      url: "/todos/:id",
-      dataType: "json",
-      type : "GET",
-      success : function(r) {
-        console.log(r);
-      }
-    });
+### `PUT /todos/:id`
 
-* **Notes:**
+> Update todos by Id
 
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+Request:
 
----- 
+- data
+```json
+{
+    "id": "<integer>",
+    "UserId": "<your token id>"
+}
+```
 
-* **URL** 
+Response:
 
-  4. /todos/:id
-  
-* **Method:**
-
-  `PUT`
-  
-*  **URL Params**
-
-   **Required:**
- 
-   `id:[integer]`
-
-   **Optional:**
- 
-   `None`
-
-* **Data Params**
-
-  `None`
-
+- status: 200
+- data
+```json
+{
+    "title": "<string>",
+    "description": "<string>",
+    "status": "<your update status>",
+    "due_date": "<date>",
+    "createdAt": "<date>",
+    "updatedAt": "<date>"
+}
+```
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -268,44 +379,35 @@
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** `error html`
 
-* **Sample Call:**
-  ```javascript
-    $.ajax({
-      url: "/todos/:id",
-      dataType: "json",
-      type : "PUT",
-      success : function(r) {
-        console.log(r);
-      }
-    });
 
-* **Notes:**
+### `PATCH /todos/:id`
 
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+> Update selected rows by Id
 
----- 
+Request:
 
-* **URL** 
+- data
+```json
+{
+    "id": "<integer>",
+    "UserId": "<your token id>"
+}
+```
 
-  5. /todos/:id
-  
-* **Method:**
+Response:
 
-  `PATCH`
-  
-*  **URL Params**
-
-   **Required:**
- 
-   `id:[integer]`
-
-   **Optional:**
- 
-   `None`
-
-* **Data Params**
-
-  `None`
+- status: 200
+- data
+```json
+{
+    "title": "<string>",
+    "description": "<string>",
+    "status": "<your update status>",
+    "due_date": "<date>",
+    "createdAt": "<date>",
+    "updatedAt": "<date>"
+}
+```
 
 * **Success Response:**
 
@@ -325,8 +427,7 @@
   * **Code:** 400 BAD REQUEST <br />
     **Content:** `{
       "message": [
-          "Title is required",
-          "Description is required"
+          "status id required"
       ]
     }`
 
@@ -335,45 +436,31 @@
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** `error html`
 
-* **Sample Call:**
-  ```javascript
-    $.ajax({
-      url: "/todos/:id",
-      dataType: "json",
-      type : "PATCH",
-      success : function(r) {
-        console.log(r);
-      }
-    });
 
-* **Notes:**
+### `DELETE todos/:id`
 
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+> Delete todos by Id
 
----- 
+Request:
 
-* **URL** 
+- data
+```json
+{
+    "id": "<integer>",
+    "UserId": "<your token id>"
+}
+```
 
-  6. /todos/:id
-  
-* **Method:**
+Response:
 
-  `DELETE`
-  
-*  **URL Params**
+- status: 200
+- data
 
-   **Required:**
- 
-   `id:[integer]`
-
-   **Optional:**
- 
-   `None`
-
-* **Data Params**
-
-  `None`
-
+```json
+{
+    "message": "todo succes to delete"
+}
+```
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -390,139 +477,3 @@
 
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** `error html`
-
-* **Sample Call:**
-  ```javascript
-    $.ajax({
-      url: "/todos/:id",
-      dataType: "json",
-      type : "POST",
-      success : function(r) {
-        console.log(r);
-      }
-    });
-
-* **Notes:**
-
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
----- 
-
-* **URL** 
-
-  7. /users/register
-  
-* **Method:**
-
-  `POST`
-  
-*  **URL Params**
-
-   **Required:**
- 
-   `None`
-
-   **Optional:**
- 
-   `None`
-
-* **Data Params**
-
-  `None`
-
-* **Success Response:**
-
-  * **Code:** 201 <br />
-    **Content:** `{
-      "msg": "Register Succes",
-      "id": 3,
-      "email": "hacktiv8@gmail.com",
-      "password": "$2a$10$dE2/DshitsFkdzUt9nKdXOOG0CEohiz6Pez4RaOE..UbwFOKPRhri"
-    }`
- 
-* **Error Response:**
-
-  * **Code:** 400 BAD REQUEST <br />
-    **Content:** `{
-      "message": [
-          "Invalid email format",
-          "email tidak boleh kosong"
-      ]
-    }`
-
-  OR
-
-  * **Code:** 500 INTERNAL SERVER ERROR <br />
-    **Content:** `error html`
-
-* **Sample Call:**
-  ```javascript
-    $.ajax({
-      url: "/users/post",
-      dataType: "json",
-      type : "POST",
-      success : function(r) {
-        console.log(r);
-      }
-    });
-
-* **Notes:**
-
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
-
----- 
-
-* **URL** 
-
-  8. /users/login
-  
-* **Method:**
-
-  `POST`
-  
-*  **URL Params**
-
-   **Required:**
- 
-   `None`
-
-   **Optional:**
- 
-   `None`
-
-* **Data Params**
-
-  `None`
-
-* **Success Response:**
-
-  * **Code:** 200 <br />
-    **Content:** `{
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTYxMjE5NzU2Nn0.AjHfLXVC5c_rgIDq7fv_8nFxPc1nHFn6mMag6ctANE8"
-    }`
- 
-* **Error Response:**
-
-  * **Code:** 400 BAD REQUEST <br />
-    **Content:** `"Internal server error"`
-
-  OR
-
-  * **Code:** 500 INTERNAL SERVER ERROR <br />
-    **Content:** `error html`
-
-* **Sample Call:**
-  ```javascript
-    $.ajax({
-      url: "/user/login",
-      dataType: "json",
-      type : "POST",
-      success : function(r) {
-        console.log(r);
-      }
-    });
-
-* **Notes:**
-
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
-
-
