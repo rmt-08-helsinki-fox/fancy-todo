@@ -3,34 +3,36 @@ const url = 'http://localhost:4000/';
 
 function auth() {
   if (!localStorage.getItem("token")) {
-    $("#main-login").hide();
-    $("#login-container").show();
-    $("#google-login").show();
+    $("#login-container").show(500);
+    $("#google-login").show(500);
+    $("#click-register").show(500);
+    $("#greeting").show();
     $("#nav-logout").hide();
     $("#register-container").hide();
     $("#add-todo-container").hide();
     $("#todo-list-container").hide();
     $("#add-todo").hide();
+    $("#weather").hide();
     $("#update-todo-container").hide();
   } else {
     getTodos();
     $("#nav-logout").show();
     $("#add-todo").show();
-    $("#todo-list-container").show();
+    $("#weather").show();
+    $("#todo-list-container").slideDown();
+    $("#greeting").hide();
     $("#add-todo-container").hide();
     $("#login-container").hide();
     $("#register-container").hide();
     $("#update-todo-container").hide();
-    $("#google-login").hide();
-    $("#main-login").hide();
   }
 }
 
-//* bikinin attribute onClick aja
+// ============= Buttons =====================
 function clickRegister() {
   $("#click-register").on("click", (e) => {
     e.preventDefault();
-    $("#register-container").toggle();
+    $("#register-container").show(500);
     $("#login-container").hide();
     $("#google-login").hide();
   })
@@ -39,12 +41,19 @@ function clickRegister() {
 function addTodoClick() {
   $("#add-todo").on("click", (e) => {
     e.preventDefault();
-    $("#add-todo-container").toggle();
-    $("#todo-list-container").slideDown();
+    $("#add-todo-container").toggle(500);
     $("#update-todo-container").hide();
+    $("#todo-list-container").show(500);
 
   })
 }
+
+function cancleEdit() {
+  $("#update-todo-container").hide();
+  $("#todo-list-container").slideDown();
+}
+
+
 
 //* ==================== Login & Registrer =====================
 
@@ -94,8 +103,6 @@ function register() {
   .done((res) => {
     console.log(res);
     auth();
-    $("#main-login").show();
-    $("#login-form").show();
   })
   .fail((xhr, text) => {
     console.log(xhr, text);
@@ -151,23 +158,22 @@ function getTodos() {
         <div class="card-header">
           <div class="row">
             <div class="col-8">
-            <p class="bg-warning text-white text-center rounded">
-            Must be done <br>
-            ${data.moment[i]}
-            </p>
+              <p class="bg-warning text-white text-center rounded">
+                Must be done <br>
+                ${data.moment[i]}
+              </p>
             </div>
             <div class="col-4">
-            <a href = "#" onClick = update(${todo.id}) class="btn btn-outline-primary"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> </a>
+              <a href = "#" onClick = update(${todo.id}) class="btn btn-outline-primary"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> </a>
               <a href = "#" onClick = destroy(${todo.id}) class="btn btn-outline-danger"> <i class="fa fa-trash" aria-hidden="true"></i> </a>
             </div>
           </div>
         </div>
         <div class="card-body">
           <div class="row">
-
             <div class="col-9">
-              <h5 class="card-title">${todo.title}</h5>
-              <p class="card-text">${todo.description}</p>
+              <h5 class="card-title" id="title-${todo.id}">${todo.status ? '<s>' + todo.title + '</s>' : todo.title}</h5>
+              <p class="card-text" id="description-${todo.id}">${todo.status ? '<s>' + todo.description + '</s>' : todo.description}</p>
             </div>
             <div class="col-3 text-center">
               <div class="form-check-inline">
@@ -206,13 +212,21 @@ function update(todoId) {
     console.log(todo);
     $("#update-form").empty()
     $("#update-form").append(`
-      <label>Title:</label><br>
-      <input id="update-title" value="${todo.title}"><br>
-      <label>Description:</label><br>
-      <textarea id="update-description" cols="20" rows="8">${todo.description}</textarea><br>
-      <label>Due Date:</label><br>
-      <input type="date" id="update-date" value="${todo.due_date.split('T')[0]}"><br>
-
+      <div class="row">
+        <div class="col-5 ms-2">
+          <label class="form-label">Title:</label><br>
+          <input class="form-control" id="update-title" value="${todo.title}"><br>
+        </div>
+        <div class="col me-2">
+          <label class="form-label">Due Date:</label><br>
+          <input class="form-control" type="date" id="update-date" value="${todo.due_date.split('T')[0]}"><br>
+        </div>
+      </div>
+      <div class="row ms-2 me-2 mb-2">
+        <label class="form-label">Description:</label><br>
+        <textarea class="form-control" id="update-description" cols="10" rows="3">${todo.description}</textarea><br>
+      </div>
+    
       <a href = "#" onClick = confirmEdit(${todo.id}) class="btn btn-success btn-sm mt-2"> save </a>
       <a href = "#" onClick = cancleEdit() class="btn btn-danger btn-sm mt-2"> cancel </a>
     `)
@@ -223,11 +237,6 @@ function update(todoId) {
   .fail((xhr, text) => {
     console.log(xhr, text);
   })
-}
-
-function cancleEdit() {
-  $("#update-todo-container").hide();
-  $("#todo-list-container").slideDown();
 }
 
 function confirmEdit(todoId) {
@@ -284,9 +293,25 @@ function cheklist(todoId) {
     })
   })
   .done(response => {
-    !response.status ? $(`#todo-${todo.id}`).addClass("opacity-1") : $(`#todo-${todo.id}`).removeClass("opacity-1")
+    const updatedTodo = response
     console.log('status: changed');
     console.log(!response.status);
+    if(!response.status) {
+      $(`#title-${updatedTodo.id}`).html(`
+      <h5 class="card-title" id="title-${updatedTodo.id}"><s>${updatedTodo.title}</s></h5>
+      `)
+      $(`#description-${updatedTodo.id}`).html(`
+      <p class="card-text" id="description-${updatedTodo.id}"><s>${updatedTodo.description}</s></p>
+      `)
+    } else {
+      $(`#title-${updatedTodo.id}`).html(`
+      <h5 class="card-title" id="title-${updatedTodo.id}">${updatedTodo.title}</h5>
+      `)
+      $(`#description-${updatedTodo.id}`).html(`
+      <p class="card-text" id="description-${updatedTodo.id}">${updatedTodo.description}</p>
+      `)
+
+    }
   })
   .fail(err => {
     console.log(err);
@@ -316,12 +341,6 @@ function destroy(todoId) {
 
 //* ===================== OAuth Google ========================
 function onSignIn(googleUser) {
-  // var profile = googleUser.getBasicProfile();
-  // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  // console.log('Name: ' + profile.getName());
-  // console.log('Image URL: ' + profile.getImageUrl());
-  // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
   const id_token = googleUser.getAuthResponse().id_token;
 
   $.ajax({
@@ -361,34 +380,52 @@ function onSignIn(googleUser) {
       const weather_desc = weather.weather_descriptions[0]
       const cloud = weather.cloudcover
       const pressure = weather.pressure
-      const time = res.location.localtime
-      const date = new Date(time)
-      const dates = date.toString().split('G')[0]
-      const take = dates.split(' ')
-      const output = `${take[0]}, ${take[2]} ${take[1]} ${take[3]}`
-      // console.log(time);
-      // console.log(res);
-      // console.log(location);
-      // console.log(icon);
-      // console.log(temperature);
-      // console.log(weather_desc);
-      // console.log(cloud);
-      // console.log(pressure);
-      // console.log(dates);
+      const getTheDate = res.location.localtime
+      const date = new Date(getTheDate)
+      const dateString = date.toString().split('G')[0]
+      const splitDate = dateString.split(' ')
+      const formatedDate = `${splitDate[0]}, ${splitDate[2]} ${splitDate[1]} ${splitDate[3]}`
 
       $("#weather").empty();
       $("#weather").append(`
 
-      <div class=" text-center">
-          <div class="card">
-              <h2 class="card-header">${location}</h2>
-              <p class="">${weather_desc}</p>
-              <h1 class="">${temperature}&#176;C</h1>
-              <p class="">Pressure: ${pressure}</p>
-              <p class="">Cloud: ${cloud}</span></p>
-              <p class="">${output}</p>
+      <div class="card-header bg-info">
+            <h2>${location}</h2>
           </div>
-      </div>
+
+          <div class="card-body">
+
+            <div class="row">
+
+              <div class="col">
+                <img class="card-img"
+                  src="${icon}"
+                  alt="light-rain">
+              </div>
+
+              <div class="col" style="margin-top: 3.5rem;">
+                <h3 class="">${weather_desc}</h3>
+              </div>
+
+            </div>
+
+            <h1 class="">${temperature}&#176;C</h1>
+
+            <div class="row">
+              <div class="col">
+                <p class="">Pressure</p>
+                <p class="">${pressure}</p>
+              </div>
+              <div class="col">
+                <p class="">Cloud</p>
+                <p class="">${cloud}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <p class="">${formatedDate}</p>
+          </div>
       `)
     })
     .fail((xhr, text) => {
@@ -415,18 +452,10 @@ function logout() {
 //* ================= Jquery =============================
 
 $(document).ready( () => {
-  weather()
   auth();
+  // weather();
   clickRegister();
   addTodoClick();
-
-  $("#nav-login").on("click", (e) => {
-    e.preventDefault();
-    $("#main-login").toggle();
-    $("#login-container").show();
-    $("#google-login").show();
-    $("#register-container").hide();
-  })
 
   $("#register-form").on("submit", (e) => {
     e.preventDefault();
@@ -450,8 +479,8 @@ $(document).ready( () => {
   })
   $("#btn-register-cancel").on("click", (e) => {
     e.preventDefault();
-    $("#login-container").show();
-    $("#google-login").show();
+    $("#login-container").show(500);
+    $("#google-login").show(500);
     $("#register-container").hide();
   })
 

@@ -13,6 +13,7 @@ class WeatherController {
         res.status(200).json(response.data)
       })
       .catch((err) => {
+        console.log(err, 'weaher ==========================');
         next(err);
       })
   }
