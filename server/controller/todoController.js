@@ -112,17 +112,12 @@ class todoController {
     try {
       let listFound = await Todo.findByPk(id);
       if (listFound) {
-        let deletedList = await Todo.destroy({
+        Todo.destroy({
           where: {
             id: listFound.id
           }
         })
-        if (deletedList) res.status(200).json({ listDeleted: listFound, message: 'todo success to delete' });
-        throw {
-          name: 'CustomError',
-          error: 'ID not found!',
-          status: 404
-        }
+        res.status(200).json({ listDeleted: listFound, message: 'todo success to delete' });
       } else {
         throw {
           name: 'CustomError',
@@ -131,7 +126,6 @@ class todoController {
         }
       }
     } catch (err) {
-      err.from = 'todoController:deleteToDoList';
       next(err);
     }
   }
