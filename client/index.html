@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="google-signin-client_id" content="267760670011-3ghgd0s863mt86n50k24r9s8vsk4ceqe.apps.googleusercontent.com">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <title>Fancy-todo</title>
 </head>
+
 <body>
 
   <!-- nav -->
@@ -26,14 +30,15 @@
   <div class="container" id="register">
     <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
       <div class=" my-5">
-        <div class="alert alert-success" id="succesRegister" role="alert" >
-          Succses register <a href="#" id="toLogin" class="alert-link">Login</a>. Click login 
+        <div class="alert alert-success" id="succesRegister" role="alert">
+          Succses register <a href="#" id="toLogin" class="alert-link">Login</a>. Click login
         </div>
         <h5 class="card-title text-center">Register</h5>
         <form id="registerForm">
           <div class="form-group">
             <label for="registerEmail">Email address</label>
-            <input type="email" class="form-control" id="registerEmail" aria-describedby="emailHelp" placeholder="Enter email">
+            <input type="email" class="form-control" id="registerEmail" aria-describedby="emailHelp"
+              placeholder="Enter email">
           </div>
           <div class="form-group">
             <label for="registerPassword">Password</label>
@@ -53,7 +58,8 @@
         <form id="loginForm">
           <div class="form-group">
             <label for="loginEmail">Email address</label>
-            <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="Enter email">
+            <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp"
+              placeholder="Enter email">
           </div>
           <div class="form-group">
             <label for="loginPassword">Password</label>
@@ -61,9 +67,14 @@
           </div>
           <button type="submit" class="btn btn-primary">Login</button>
         </form>
+        <div class="mx-auto w-full flex justify-center">
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        </div>
       </div>
     </div>
   </div>
+
+
 
   <!-- content -->
   <!-- input Todo -->
@@ -71,7 +82,7 @@
   <div class="container" id="inputTodo">
     <div class="row">
       <div class="col" id="saveTodo">
-        <form>
+        <form id="inputForm">
           <div class="form-group">
             <label for="tileTodo">Title</label>
             <input type="text" class="form-control" id="tileTodo">
@@ -80,26 +91,55 @@
             <label for="descriptionTodo">Description</label>
             <textarea class="form-control" id="descriptionTodo" rows="3"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" >Add Todo</button>
+          <button type="submit" class="btn btn-primary">Add Todo</button>
         </form>
       </div>
       <div class="col" id="quote">
-        
+
       </div>
-      
+
     </div>
   </div>
-  
+
   <!-- table Todo -->
   <div class="container">
     <div class="row" id="showTodo">
 
     </div>
   </div>
-    <!-- script -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+  
+
+<!-- Modal -->
+<div class="container my-4" >
+  <div id="food-list"></div>
+  <div class="modal fade" id="detail-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Food Detail</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Content</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- script -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="./js/script.js"></script>
 </body>
+
 </html>

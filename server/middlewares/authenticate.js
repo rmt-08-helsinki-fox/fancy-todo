@@ -7,7 +7,7 @@ const authenticate = (req, res, next) =>{
         req.decode = decode
         next()
     } catch (err) {
-        res.status(401).json({err: 'Invalid token'})
+        next(err)
     }
 }
 

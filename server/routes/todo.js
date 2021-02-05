@@ -8,5 +8,5 @@ routes.get('/', TodoController.getTodos)
 routes.get('/:id',authorize ,TodoController.getTodoById)
 routes.put('/:id', authorize,TodoController.edit)
 routes.patch('/:id',authorize ,TodoController.editStatus)
-routes.delete('/:id',authorize ,TodoController.delete)
+routes.delete('/:id',authorize, TodoController.delete)
 module.exports = routes

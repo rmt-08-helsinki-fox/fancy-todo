@@ -45,10 +45,10 @@ module.exports = (sequelize, DataTypes) => {
         isAfter:{
           args: new Date().toISOString(),
           msg: "Input must be after today's date"
-        }
+        }  
       }
     }
-  }, {
+  }, {        
     sequelize,
     modelName: 'todo',
     hooks:{

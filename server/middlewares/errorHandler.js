@@ -6,6 +6,8 @@ const errorHandler = (err, req, res,next) =>{
        return res.status(400).json({errors: errors}) 
     }else if(err.name == 'customError'){
        return res.status(err.code).json({err: err.msg})
+    }else if(err.name == 'JsonWebTokenError'){
+       return res.status(401).json({err: 'Invalid token'}) 
     }else{
        return res.status(500).json({error: 'Internal Server Error'})
     }

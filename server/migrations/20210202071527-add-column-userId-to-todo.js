@@ -12,7 +12,7 @@ module.exports = {
      await queryInterface.addColumn('todos', 'UserId',{
        type: Sequelize.INTEGER,
        references:{
-         model:'todos',
+         model:'Users',
          key:'id'
        },
        onUpdate:'CASCADE',
