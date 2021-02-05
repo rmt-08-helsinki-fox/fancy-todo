@@ -160,7 +160,7 @@ function readToDoList() {
                             <div class="card" style="width: 50rem">
                             
                                 <div class="card-body" id="edit-to-do-form-${e.id}">
-                                    <form onsubmit="confirmUpdateToDo(event))">
+                                    <form onsubmit="confirmUpdateToDo(${e.id}))">
                                         <div class="row">
                                             <div class="col">
                                                 <input
@@ -193,14 +193,12 @@ function readToDoList() {
                                         <div>
                                             <button 
                                                 id="edit-to-do-button-${e.id}"
-                                                class="btn btn-primary"
-                                                onclick="confirmUpdateToDo(${e.id})">
+                                                class="btn btn-primary">
                                             Edit
                                             </button>
                                             <button 
                                                 id="cancel-edit-to-do-button-${e.id}"
-                                                class="btn btn-danger"
-                                                onclick="cancelUpdateToDo(${e.id})">
+                                                class="btn btn-danger">
                                             Cancel
                                             </button>
                                         </div>
@@ -237,16 +235,23 @@ function readToDoList() {
 
                         <script>
                             $("#edit-to-do-form-${e.id}").hide()
+
                             $("#form-edit-to-do-button-${e.id}").click((e) => {
+                                e.preventDefault()
                                 $("#edit-to-do-form-${e.id}").show()
                                 $("#to-do-card-value-${e.id}").hide()
                             })
                             $("#cancel-edit-to-do-button-${e.id}").click((e) => {
+                                e.preventDefault()
                                 $("#edit-to-do-form-${e.id}").hide()
                                 $("#to-do-card-value-${e.id}").show()
                             })
-
-
+                            
+                            $("#edit-to-do-form-${e.id}").on("submit", (e) => {
+                                e.preventDefault()
+                                confirmUpdateToDo(${e.id})
+                                auth()
+                            })
                         </script>
                     `)
                 })
