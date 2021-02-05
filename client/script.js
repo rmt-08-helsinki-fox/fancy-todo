@@ -1,5 +1,4 @@
-let baseUrl = "http://localhost:3000"; //id pake kebab case, jangan pake onclick di html
-//benerin controller ud ngasihnya dalam object(done)//edit buton rusak
+let baseUrl = "http://localhost:3000"; 
 
 $(document).ready(function() {
     view();
@@ -41,18 +40,18 @@ $(document).ready(function() {
 
 function view(){
     if(!localStorage.getItem("token")){
-        $("#login-form").show();
-        $("#register-form").hide();
-        $("#add-to-do-form").hide();
+        $("#login-container").show();
+        $("#register-container").hide();
+        $("#add-to-do-container").hide();
         $("#todo-list").hide();
-        $("#edit-to-do-form").hide();
+        $("#edit-to-do-container").hide();
         $("#add-to-do").hide();
         $("#logout").hide();
     } else {
-        $("#login-form").hide();
-        $("#register-form").hide();
-        $("#add-to-do-form").hide();
-        $("#edit-to-do-form").hide();
+        $("#login-container").hide();
+        $("#register-container").hide();
+        $("#add-to-do-container").hide();
+        $("#edit-to-do-container").hide();
         $("#todo-list").show();
         $("#add-to-do").show();
         $("#logout").show();
@@ -61,20 +60,19 @@ function view(){
 }
 
 function showRegister(){
-    $("#login-form").hide();
-    $("#register-form").show();
+    $("#login-container").hide();
+    $("#register-container").show();
     $("#loginError").remove();
-    // $("#loginError").removeAttr("class");
 }
 
 function showEdit(){
     $("#todo-list").hide();
-    $("#edit-to-do-form").show();
+    $("#edit-to-do-container").show();
 }
 
 function addToDo(){
     $("#todo-list").hide();
-    $("#add-to-do-form").show();
+    $("#add-to-do-container").show();
 }
 
 function login(){
@@ -97,7 +95,7 @@ function login(){
         $("#login-form").append(`<div class="alert alert-danger" id="loginError"></div>`);
         // $("#loginError").attr("class", "alert alert-danger");
         xhr.responseJSON.errors.forEach(err => {
-            $("#loginError").append(`<li>${err}</li>`);
+            $("#loginError").append(`${err}`);
         });
         // console.log(xhr.responseJSON.errors, text)
     })
@@ -120,20 +118,17 @@ function register(){
         view();
     })
     .fail((xhr, text) => {
-        $("#registerError").remove();
-        $("#register-form").append(`<div class="alert alert-danger" id="registerError"></div>`);
-        // $("#registerError").attr("class", "alert alert-danger");
+        $("#register-error").remove();
+        $("#register-form").append(`<div class="alert alert-danger" id="register-error"></div>`);
         xhr.responseJSON.errors.forEach(err => {
-            $("#registerError").append(`<li>${err}</li>`);
+            $("#register-error").append(`<li>${err}</li>`);
         });
-        // console.log(xhr.responseJSON.errors, text)
     })
     .always(() => $("#register-form").trigger("reset"));
 }
 
 function backRegister() {
-    $("#registerError").remove();
-    // $("#registerError").removeAttr("class");
+    $("#register-error").remove();
     view();
 }
 
@@ -147,23 +142,32 @@ function findAllToDO(){
     })
     .done(({ todos }) => {
         $("#todo-list").empty();
-        todos.forEach(todo => {
+        if(todos.length > 0) {
+            todos.forEach(todo => {
+                $("#todo-list").append(`
+                <div class="card mb-3 p-3" id="todo-${todo.id}" style="min-width: 25em; max-width: 25em;">
+                    <div class="card-body">
+                        <h3>${todo.title}</h3>
+                        <p>${todo.description || "No Description"}</p>
+                        <div id="todo${todo.id}status" class="btn btn-info" onclick="update(${todo.id})">${todo.status}</div>
+                        <b>Due date: ${todo.due_date.split('T')[0]}</b>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary" onclick="populateEdit(${todo.id})">Edit</button>
+                        <button class="btn btn-secondary" onclick="news(${todo.id})">News</button>
+                        <button class="btn btn-danger" onclick="remove(${todo.id})">Delete</button>
+                    </div>
+                </div>
+                `)
+            })
+        } else {
             $("#todo-list").append(`
-            <div class="card" id="todo-${todo.id}" style="min-width: 20em">
-                <div class="card-body">
-                    <h3>${todo.title}</h3>
-                    <p>${todo.description || "No Description"}</p>
-                    <div id="todo${todo.id}status" class="btn btn-info" onclick="update(${todo.id})">${todo.status}</div>
-                    <b>Due date: ${todo.due_date.split('T')[0]}</b>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" onclick="populateEdit(${todo.id})">Edit</button>
-                    <button class="btn btn-primary" onclick="news(${todo.id})">News</button>
-                    <button class="btn btn-primary" onclick="remove(${todo.id})">Delete</button>
-                </div>
+            <div class="container mt-3 p-3" style="color: white">
+                <h3>Your to do list will be displayed here</h3>
+                <p>Start adding to do with the <b>Add To Do</b> link on Navigation Bar</p>
             </div>
             `)
-        })
+        }
     })
     .fail((xhr, text) => console.log(xhr, text))
 }
@@ -185,7 +189,6 @@ function populateEdit(id) {
             $("#notdone-edit").attr("checked", "true")
         }
         $("#due-date-edit-to-do").val(todo.due_date.split("T")[0]);
-        // $("#submitButtonEdit").attr("onclick", submitEdit(id));
         $("#edit-to-do-form").on("submit", (e) => {
             e.preventDefault();
     
@@ -256,7 +259,6 @@ function add(){
         xhr.responseJSON.errors.forEach(err => {
             $("#addToDoError").append(`<li>${err}</li>`);
         });
-        // console.log(xhr);
     })
     .always(() => $("#add-to-do-form").trigger("reset"));
 }
@@ -288,8 +290,8 @@ function update(id) {
 }
 
 function news(id) {
-    // view();
-    $(`#todo-${id}`).append(`<div class="spinner-border text-primary" id="loadNews"></div>`)
+    $(`#news${id}`).remove();
+    $(`#todo-${id}`).append(`<div class="spinner-border text-primary" id="loadNews" style="margin: auto"></div>`)
     $.ajax({
         url: baseUrl + "/todos/" + id + "/news",
         method: "GET",
@@ -299,9 +301,11 @@ function news(id) {
     })
     .done(({ news }) => {
         $(`#todo-${id}`).append(`
-        <h3>${news.title}</h3>
-        <p>${news.abstract}</p>
-        <a href="${news.web_url}">Read More</a>
+        <div id="news${id}">
+            <h3>${news.title}</h3>
+            <p>${news.abstract}</p>
+            <a href="${news.web_url}" class="btn btn-primary">Read More</a>
+        </div>
     `)
         $("#loadNews").remove();
     })

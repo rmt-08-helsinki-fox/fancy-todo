@@ -24,8 +24,8 @@ class Controller {
             }
         })
         .then(user => {
-            if(!user) throw ({name: "customErr",msg: "Email atau Password salah", status: 400});
-            if(!comparePass(password, user.password)) throw ({name: "customErr",msg: "Email atau Password salah", status: 400});
+            if(!user) throw ({name: "customErr",msg: "Email or Password is wrong", status: 400});
+            if(!comparePass(password, user.password)) throw ({name: "customErr",msg: "Email or Password is wrong", status: 400});
             let token = tokenize({
                 id: user.id,
                 email: user.email
@@ -53,7 +53,6 @@ class Controller {
             })
         })
         .then(user => {
-            console.log(user);
             if(user){
                 let token = tokenize({
                     id: user.id,
@@ -69,7 +68,6 @@ class Controller {
             }
         })
         .then(user => {
-            console.log(user);
             let token = tokenize({
                 id: user.id,
                 emai: user.email

@@ -21,11 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           args: true,
-          msg: "Judul tidak boleh kosong"
+          msg: "Title cannot be empty"
         },
         notNull: {
           args: true,
-          msg: "Judul tidak boleh kosong"
+          msg: "Title cannot be empty"
         }
       }
     },
@@ -36,11 +36,11 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isIn: {
           args: [['done', 'not done']],
-          msg: 'Input antara done dan not done'
+          msg: 'Input between done and not done'
         },
         notNull: {
           args: true,
-          msg: "Status tidak boleh kosong"
+          msg: "Status cannot be empty"
         }
       }
     },
@@ -50,11 +50,15 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isAfter: {
           args: new Date().toDateString(),
-          msg: "Tanggal harus setelah hari ini dengan format DD-MM-YYYY"
+          msg: "Date have to be after today"
         },
         notNull: {
           args: true,
-          msg: "Tanggal tidak boleh kosong"
+          msg: "Date cannot be empty"
+        },
+        notEmpty:{
+          args: true,
+          msg: "Date cannot be empty"
         }
       }
     },

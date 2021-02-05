@@ -35,27 +35,27 @@
             ```
             {
                 id: 1,
-                title: "Gosok Gigi",
-                description: "Gosok gigi sampe bersih",
-                status: "not done",
-                due_date: "02-02-2021
+                title: <todo title>,
+                description: <todo decription>,
+                status: <done or not done>,
+                due_date: <todo due date DD-MM-YYYY>
             }
             ```
     
     * **Error Response:**
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Judul tidak boleh kosong" }`
+            **Content:** `{ error : "Title cannot be empty" }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input antara done dan not done" }`
+            **Content:** `{ error : "Input between done and not done" }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Tanggal harus setelah hari ini  dengan format DD-MM-YYYY" }`
+            **Content:** `{ error : "Date have to be after today" }`
 
             OR
 
@@ -66,6 +66,24 @@
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
             **Content:** `{ error : "Internal Server Error" }`
+        
+    * **Sample Call:**
+
+        ```javascript
+            $.ajax({
+                url: baseUrl + "/todos",
+                method: "POST",
+                headers: {
+                    token: localStorage.getItem("token")
+                },
+                data: {
+                    title,
+                    description,
+                    status,
+                    due_date
+                }
+            });
+        ```
 
 
 * **Display All Todo**
@@ -95,10 +113,10 @@
             ```
             [{
                 id: 1,
-                title: "Gosok Gigi",
-                description: "Gosok gigi sampe bersih",
-                status: "not done",
-                due_date: "02-02-2021
+                title: <todo title>,
+                description: <todo decription>,
+                status: <done or not done>,
+                due_date: <todo due date DD-MM-YYYY>
             },
             { ...
             }]
@@ -113,6 +131,18 @@
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
             **Content:** `{ error : "Internal Server Error" }`
+
+    * **Sample Call:**
+
+        ```javascript
+            $.ajax({
+                url: baseUrl + "/todos",
+                method: "GET",
+                headers: {
+                    token: localStorage.getItem("token")
+                }
+            });
+        ```
 
 
 * **Display Todo By Id**
@@ -143,10 +173,10 @@
             ```
             {
                 id: 1,
-                title: "Gosok Gigi",
-                description: "Gosok gigi sampe bersih",
-                status: "not done",
-                due_date: "02-02-2021
+                title: <todo title>,
+                description: <todo decription>,
+                status: <done or not done>,
+                due_date: <todo due date DD-MM-YYYY>
             }
             ```
     
@@ -169,6 +199,18 @@
             
         * **Code:** 500 INTERNAL SERVER ERROR <br />
             **Content:** `{ error : "Internal Server Error" }`
+
+    * **Sample Call:**
+
+        ```javascript
+            $.ajax({
+                url: baseUrl + "/todos/" + id,
+                method: "GET",
+                headers: {
+                    token: localStorage.getItem("token")
+                }
+            });
+        ```
 
 
 * **Edit Todo**
@@ -207,27 +249,27 @@
             ```
             {
                 id: 1,
-                title: "Gosok Gigi",
-                description: "Gosok gigi sampe bersih",
-                status: "not done",
-                due_date: "02-02-2021
+                title: <todo title>,
+                description: <todo decription>,
+                status: <done or not done>,
+                due_date: <todo due date DD-MM-YYYY>
             }
             ```
     
     * **Error Response:**
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Judul tidak boleh kosong" }`
+            **Content:** `{ error : "Title cannot be empty" }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input antara done dan not done" }`
+            **Content:** `{ error : "Input between done and not done" }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Tanggal harus setelah hari ini dengan format DD-MM-YYYY" }`
+            **Content:** `{ error : "Date have to be after today" }`
 
             OR
 
@@ -248,6 +290,24 @@
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
             **Content:** `{ error : "Internal Server Error" }`
+
+    * **Sample Call:**
+
+    ```javascript
+        $.ajax({
+            url: baseUrl + "/todos/" + id,
+            method: "PUT",
+            headers: {
+                token: localStorage.getItem("token")
+            },
+            data: {
+                title,
+                description,
+                status,
+                due_date
+            }
+        });
+    ```
 
 
 * **Update Todo Status**
@@ -279,10 +339,10 @@
             ```
             {
                 id: 1,
-                title: "Gosok Gigi",
-                description: "Gosok gigi sampe bersih",
-                status: "not done",
-                due_date: "02-02-2021
+                title: <todo title>,
+                description: <todo decription>,
+                status: <done or not done>,
+                due_date: <todo due date DD-MM-YYYY>
             }
             ```
     
@@ -294,7 +354,7 @@
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input antara done dan not done" }`
+            **Content:** `{ error : "Input between done and not done" }`
 
             OR
 
@@ -310,6 +370,21 @@
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
             **Content:** `{ error : "Internal Server Error" }`
+
+    * **Sample Call:**
+
+    ```javascript
+        $.ajax({
+            url: baseUrl + "/todos/" + id,
+            method: "PATCH",
+            headers: {
+                token: localStorage.getItem("token")
+            },
+            data: {
+                status: setStatus
+            }
+        });
+    ```
 
 
 * **Delete Todo**
@@ -340,10 +415,10 @@
             ```
             {
                 id: 1,
-                title: "Gosok Gigi",
-                description: "Gosok gigi sampe bersih",
-                status: "not done",
-                due_date: "02-02-2021
+                title: <todo title>,
+                description: <todo decription>,
+                status: <done or not done>,
+                due_date: <todo due date DD-MM-YYYY>
             }
             ```
     
@@ -366,6 +441,18 @@
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
             **Content:** `{ error : "Internal Server Error" }`
+
+    * **Sample Call:**
+
+    ```javascript
+        $.ajax({
+            url: baseUrl + "/todos/" + id,
+            method: "DELETE",
+            headers: {
+                token: localStorage.getItem("token")
+            }
+        });
+    ```
 
 
 * **Register User**
@@ -403,23 +490,36 @@
     
     * **Error Response:**
 
-        * **Code:** 400 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Input email dengan format yang valid" }`
-
-            OR
-
-        * **Code:** 400 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Email sudah digunakan" }`
+        * **Code:** 400 BAD REQUEST <br />
+            **Content:** `{ error : "Input a valid email format" }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Password minimal 6 karakter" }` 
+            **Content:** `{ error : "Email already taken" }`
+
+            OR
+
+        * **Code:** 400 BAD REQUEST <br />
+            **Content:** `{ error : "Minimum password is 6 character" }` 
         
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
             **Content:** `{ error : "Internal Server Error" }`
+
+    * **Sample Call:**
+
+    ```javascript
+        $.ajax({
+            url: baseUrl + "/register",
+            method: "POST",
+            data: {
+                email,
+                password
+            }
+        });
+    ```
 
 * **Login User**
     Login an existing user
@@ -449,16 +549,145 @@
             **Content:** 
             ```
             {
-               token: JSON Web Token
+               token: <JSON Web Token>
             }
             ```
     
     * **Error Response:**
 
-        * **Code:** 400 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Email atau Password salah" }`
+        * **Code:** 400 BAD REQUEST <br />
+            **Content:** `{ error : "Email or Password is wrong" }`
         
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
             **Content:** `{ error : "Internal Server Error" }`
+
+     * **Sample Call:**
+
+        ```javascript
+            $.ajax({
+                url: baseUrl + "/login",
+                method: "POST",
+                data: {
+                    email,
+                    password
+                }
+            });
+        ```
+* **Get News**
+
+    Get news from New York Times base on search query and display it
+
+    * **URL**
+
+        /todos/:id/news
+
+    * **Method:**
+
+        `GET`
+    
+    *  **URL Params**
+
+        None
+
+    * **Data Params**
+
+        None
+
+    * **Success Response:**
+
+        * **Code:** 200 <br />
+            **Content:** 
+            ```
+            {
+                title: <news title>,
+                abstract: <news abstract>,
+                web_url: <news url>,
+            }
+            ```
+    
+    * **Error Response:**
+         
+        * **Code:** 401 NOT AUTHORIZED <br />
+            **Content:** `{ error : "Invalid Token" }`
+
+            OR
+
+        * **Code:** 401 NOT AUTHORIZED <br />
+            **Content:** `{ error : "Not authorized" }`
+
+      
+            OR
+
+        * **Code:** 500 INTERNAL SERVER ERROR <br />
+            **Content:** `{ error : "Internal Server Error" }`
+        
+    * **Sample Call:**
+
+        ```javascript
+            $.ajax({
+                url: baseUrl + "/todos/" + id + "/news",
+                method: "GET",
+                headers: {
+                    token: localStorage.getItem("token")
+                }
+            });
+        ```
+* **OAuth**
+
+    Authenticate user using google
+
+    * **URL**
+
+        /oAuth
+
+    * **Method:**
+
+        `POST`
+    
+    *  **URL Params**
+
+        None
+
+    * **Data Params**
+        
+        *  **Required:**
+        
+        `id_token=[string]`
+
+    * **Success Response:**
+
+        * **Code:** 200 <br />
+            **Content:** 
+            ```
+            {
+                token: <access_token>
+            }
+            ```
+        OR
+
+        * **Code:** 201 <br />
+            **Content:** 
+            ```
+            {
+                token: <access_token>
+            }
+            ```
+    
+    * **Error Response:**
+
+        * **Code:** 500 INTERNAL SERVER ERROR <br />
+            **Content:** `{ error : "Internal Server Error" }`
+        
+    * **Sample Call:**
+
+        ```javascript
+            $.ajax({
+                url: baseUrl + "/oAuth",
+                method: "POST",
+                data: {
+                    id_token
+                }
+            });
+        ```

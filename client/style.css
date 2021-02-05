@@ -1,0 +1,29 @@
+body {
+    background-image: url(https://wallpapercave.com/wp/ci55fQf.jpg);
+    background-repeat: no-repeat; 
+    background-size: 100%;
+    background-position: center;
+    background-attachment: fixed;
+}
+.card {
+    background-color: rgba(245, 245, 245, 0.75);
+    color: black
+}
+.card-deck {
+    padding-bottom: 5em;
+}
+.container-sm {
+    background-color: rgba(245, 245, 245, 0.75);
+    max-width: 30em;
+}
+.container-sm h1, .container-sm h3 {
+    text-align: center;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    width: 100vw;
+    padding: 1vw;
+    background-color: whitesmoke;
+}

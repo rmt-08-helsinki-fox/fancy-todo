@@ -78,7 +78,7 @@ class Controller {
             `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${req.todo.title}&api-key=${process.env.NYTAPI}`
         ).then(({ data }) => {
             data = data.response.docs;
-            let { headline, abstract, web_url} = data[Math.floor(Math.random()*data.length)];
+            let { headline, abstract, web_url } = data[Math.floor(Math.random()*data.length)];
             let news = {
                 title: headline.main,
                 abstract,
