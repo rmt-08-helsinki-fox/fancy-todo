@@ -7,5 +7,5 @@ $("#change-to-sign-up").click((e) => {
 $("#form-signin").on("submit", (e) => {
     e.preventDefault()
     login()
-    $("#main").load("./pages/to-do/to-do.html")
+    auth()
 })

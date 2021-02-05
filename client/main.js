@@ -7,6 +7,14 @@ $(document).ready(() => {
 
 const base_url = "http://localhost:3000/"
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+})
+
 // ? FUNCTION AUTHENTICATION LOG IN USER
 function auth() {
     if (!localStorage.getItem("accessToken")) {
@@ -161,11 +169,21 @@ function login() {
         .done((res) => {
             console.log(res, "Function Sign In <<<")
             localStorage.setItem("accessToken", res.accessToken)
+            // ! Sweet Alert Toast
+            Toast.fire({
+                icon: "success",
+                title: "Sign in with your email success!",
+            })
             auth()
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
-            $("#main").load("./pages/sign-in/sign-in.html")
+            // ! Sweet Alert
+            Swal.fire({
+                icon: "error",
+                title: `Oops... ${xhr.responseJSON.status}`,
+                text: `${xhr.responseJSON.msg}`,
+            })
         })
         .always((_) => {
             $("form-signin").trigger("reset")
@@ -184,10 +202,21 @@ function onSignIn(googleUser) {
         .done((res) => {
             console.log(res, "Function Google Sign In <<<")
             localStorage.setItem("accessToken", res.accessToken)
+            // ! Sweet Alert Toast
+            Toast.fire({
+                icon: "success",
+                title: "Sign in with your Google Account success!",
+            })
             auth()
         })
         .fail((err) => {
             console.log(err)
+            // ! Sweet Alert
+            Swal.fire({
+                icon: "error",
+                title: `Oops... 404`,
+                text: `Unable to Sign in with Google`,
+            })
         })
 }
 
@@ -206,9 +235,22 @@ function register() {
     })
         .done((res) => {
             console.log(res)
+            console.log(res)
+            // ! Sweet Alert Toast
+            Toast.fire({
+                icon: "success",
+                title: "Register success!",
+            })
+            $("#main").load("./pages/sign-in/sign-in.html")
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
+            // ! Sweet Alert
+            Swal.fire({
+                icon: "error",
+                title: `Oops... ${xhr.responseJSON.status}`,
+                text: `${xhr.responseJSON.msg}`,
+            })
         })
         .always((_) => {
             $("#form-signup").trigger("reset")
@@ -236,9 +278,20 @@ function createToDo() {
     })
         .done((res) => {
             console.log(res)
+            // ! Sweet Alert Toast
+            Toast.fire({
+                icon: "success",
+                title: "Created a new to do",
+            })
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
+            // ! Sweet Alert
+            Swal.fire({
+                icon: "error",
+                title: `Oops... ${xhr.status}`,
+                text: `${xhr.responseJSON.msg}`,
+            })
         })
         .always((_) => {
             $("#add-to-do-form").trigger("reset")
@@ -288,11 +341,22 @@ function confirmUpdateToDo(toDoId) {
         },
     })
         .done((res) => {
-            readToDoList()
             console.log(res)
+            // ! Sweet Alert Toast
+            Toast.fire({
+                icon: "success",
+                title: "Edited a new to do",
+            })
+            readToDoList()
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
+            // ! Sweet Alert
+            Swal.fire({
+                icon: "error",
+                title: `Oops... ${xhr.status}`,
+                text: `${xhr.responseJSON.msg}`,
+            })
         })
 }
 
@@ -311,11 +375,17 @@ function patchToDoStatus(toDoId) {
         },
     })
         .done((res) => {
-            readToDoList()
             console.log(res)
+            readToDoList()
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
+            // ! Sweet Alert
+            Swal.fire({
+                icon: "error",
+                title: `Oops... ${xhr.status}`,
+                text: `${xhr.responseJSON.msg}`,
+            })
         })
 }
 
@@ -329,10 +399,21 @@ function deleteToDo(toDoId) {
         },
     })
         .done((res) => {
-            readToDoList()
             console.log(res)
+            // ! Sweet Alert Toast
+            Toast.fire({
+                icon: "success",
+                title: "Success delete to do",
+            })
+            readToDoList()
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
+            // ! Sweet Alert
+            Swal.fire({
+                icon: "error",
+                title: `Oops... ${xhr.status}`,
+                text: `${xhr.responseJSON.msg}`,
+            })
         })
 }

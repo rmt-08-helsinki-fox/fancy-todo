@@ -7,5 +7,4 @@ $("#change-to-sign-in").click((e) => {
 $("#form-signup").on("submit", (e) => {
     e.preventDefault()
     register()
-    $("#main").load("./pages/sign-in/sign-in.html")
 })
