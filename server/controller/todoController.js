@@ -62,14 +62,14 @@ class todoController {
             // if (!todo) {
             //     throw {msg: "404 not found!", status: 404}
             // }
-            return axios({
-                method: "get",
-                url: "https://api.quotable.io/random?tags=technology"
-            })
+            // return axios({
+            //     method: "get",
+            //     url: "https://api.quotable.io/random?tags=technology"
+            // })
+            res.status(200).json(todo)
         })
-        .then(quotes => {
-            res.status(200).json([quotes.data, todo])
-        })
+        //.then(quotes => {
+        //})
         .catch(err=>{
             next(err)
             //res.status(404).json(err)

@@ -6,37 +6,32 @@
   <title>my todo lists</title>
   <meta name="google-signin-client_id" content="130727583267-ddevj4n71uh6c83623m90kecgtfd4pla.apps.googleusercontent.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <style>
-    
-    h1 {
-      margin-left: 40%;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>My Todo list</h1>
-    <nav class="navBar">
-      <div class="nav-wrapper">
-        <a href="#" class="brand-logo right">ridano</a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-          <li><a href="#"> <button id="addTodoBtn">add todo list </button> </a></li>
-          <li><a href="#"> <button id="myTodo">My Todo</button> </a></li>
-          <li><a href="#"> <button id="logout">logout</button> </a></li>
-        </ul>
-        
-      </div>
-    </nav>
-    <nav  class="navBar">
+  <nav class="navBar">
+    <div class="nav-wrapper">
+      <a href="#" id="logout" class="brand-logo right">Logout</a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li><a href="#" id="addTodoBtn"> add todo list </a></li>
+        <li><a href="#" id="myTodo">My Todo </a></li>
+      </ul>
+      
+    </div>
+  </nav>
+  <h1>My Todo list</h1>
+  <hr>
+    <!-- <nav  class="navBar">
       <div class="nav-wrapper">
         <form>
           <div class="input-field">
-            <input id="search" type="search" required>
+            <input id="searchById" type="search" required>
             <label class="label-icon" for="search"><i class="material-icons">search by todo id</i></label>
             <i class="material-icons">close</i>
           </div>
         </form>
       </div>
-    </nav>
+    </nav> -->
     <!-- <button id="addTodoBtn" >add todo list </button> -->
     <div id="register-page">
       <h2>Register</h2>
@@ -118,10 +113,19 @@
       <div id="todoCard">
       </div>
       <!-- show all todo -->
-      <!-- search one -->
+
       <!-- put -->
+      <div id="putTodo">
+        <form action="">
+          
+        </form>
+      </div>
       <!-- patch -->
-      <!-- delete -->
+      <div id="patchTodo">
+
+      </div>
+      
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script
   src="https://code.jquery.com/jquery-3.5.1.min.js"
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="

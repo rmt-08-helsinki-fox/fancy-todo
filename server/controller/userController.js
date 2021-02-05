@@ -1,7 +1,7 @@
 const { User } = require('../models/index')
 const { comparePass } = require('../helper/bcrypt')
 const { generateToken } = require('../helper/jwt')
-const {OAuth2Client} = require('google-auth-library');
+const { OAuth2Client } = require('google-auth-library');
 
 class userController {
 	static register(req, res, next) {
