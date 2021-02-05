@@ -65,7 +65,8 @@ class TodoController {
 
     static putTodo (req, res, next){
         const id = +req.params.id
-        const { title, description, status, due_date, UserId } = req.body  
+        const UserId = req.decoded.id
+        const { title, description, status, due_date,} = req.body  
         TodoList.update({title, description, status, due_date, UserId}, {where : {id}, returning : true})
         .then(data => {
             if(data[1] < 1){
@@ -114,12 +115,12 @@ class TodoController {
         let id = +req.params.id
         TodoList.destroy({where : {id}, returning : true})
         .then(todo => {
-            if(todo < 1){
-                next({err})
-                //res.status(404).json({"error" : "data not found"})
-            }else{
-                res.status(200).json('data deleted succesfully')
-            }
+            // if(todo < 1){
+            //     next({err})
+            //     //res.status(404).json({"error" : "data not found"})
+            // }else{
+                // }
+            res.status(200).json('data deleted succesfully')
         })
         .catch(err => {
             next(err)
