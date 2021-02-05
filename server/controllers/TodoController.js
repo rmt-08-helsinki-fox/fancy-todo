@@ -3,7 +3,12 @@ const { Todo } = require('../models/index')
 class TodoController{
 
     static showTodo(req,res){
-        Todo.findAll()
+        let UserId = req.decoded.id
+        Todo.findAll({
+            where: {
+                UserId
+            },
+          })
         .then((data)=>{
             res.status(200).json(data)
         })
@@ -55,16 +60,15 @@ class TodoController{
 
     static getTodoId(req,res){
         const id = +req.params.id
-        Todo.findOne({
-            where:{
-                id
-            }
-        })
+        Todo.findByPk(id)
         .then((data) => {
-            if(data)
+            if(data){
+            // console.log(data);
             res.status(200).json(data)
-            else
+        }
+            else{
             res.status(404).json('error not found')
+        }
         }).catch((err) => {
             res.status(404).json(err)
         });
