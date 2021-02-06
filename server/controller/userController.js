@@ -15,9 +15,6 @@ class userController {
 		})
 		.catch( err=> {
 			next(err)
-			//console.log(err.constructor.name);
-			//const error = err.errors[0].message || 'Internal server error'
-			//res.status(400).json({ error })
 		})
 	}
 
@@ -38,15 +35,12 @@ class userController {
 			res.status(200).json({ token })
 		})
 		.catch(err => {
-			//console.log(err);
 			next(err)
-			// const error = err.msg || 'Internal server error'
-			// res.status(400).json({error})
 		})
 	}
 
 	static googleLogin(req,res,next) {
-		const client = new OAuth2Client(process.env.CLIENT_ID); //process.env.CLIENT_ID
+		const client = new OAuth2Client(process.env.CLIENT_ID); 
 		let email = ''
 		client.verifyIdToken({
 			idToken : req.body.googleToken,
@@ -81,7 +75,7 @@ class userController {
 			res.status(201).json({token:token})
 		})
 		.catch(err=>{
-			console.log(err);
+			next(err)
 		})
 	}
 }

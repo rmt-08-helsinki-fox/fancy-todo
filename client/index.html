@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <h1>My Todo list</h1>
+  <h5>copyright  &copy; 2021 by Farid Juliano </h5>
+  <hr>
   <nav class="navBar">
     <div class="nav-wrapper">
       <a href="#" id="logout" class="brand-logo right">Logout</a>
@@ -19,31 +22,18 @@
       
     </div>
   </nav>
-  <h1>My Todo list</h1>
-  <hr>
-    <!-- <nav  class="navBar">
-      <div class="nav-wrapper">
-        <form>
-          <div class="input-field">
-            <input id="searchById" type="search" required>
-            <label class="label-icon" for="search"><i class="material-icons">search by todo id</i></label>
-            <i class="material-icons">close</i>
-          </div>
-        </form>
-      </div>
-    </nav> -->
-    <!-- <button id="addTodoBtn" >add todo list </button> -->
+  <!-- register page -->
     <div id="register-page">
       <h2>Register</h2>
-      <div class="row">
+      <div class="container middleintext">
         <form  class="col s12">
-          <div class="row">
+          <div class="container">
             <div class="input-field col s12">
               <input id="emailRegister" type="email" class="validate" placeholder="Email">
               <label for="email" ></label>
             </div>
           </div>
-          <div class="row">
+          <div class="container">
             <div class="input-field col s12">
               <input id="passwordRegister" type="password" class="validate" placeholder="Password">
               <label for="password"></label>
@@ -56,27 +46,27 @@
     </div>
 
     <!-- login form -->
-      <div id="login-page">
-        <h2>Login</h2>
-        <div class="row">
-          <form id="login-form" class="col s12">
-            <div class="row">
+      <div id="login-page"  class="container middleintext">
+        <h2 >Login</h2>
+        <div>
+          <form id="login-form " class="col s12">
+            <div class="container">
               <div class="input-field col s12">
                 <input id="emailLogin" type="email" class="validate" placeholder="Email">
                 <label for="email" ></label>
               </div>
             </div>
-            <div class="row">
+            <div class="container">
               <div class="input-field col s12">
                 <input id="passwordLogin" type="password" class="validate" placeholder="Password">
                 <label for="password"></label>
               </div>
             </div>
-            <button class="waves-effect waves-light btn" type="submit">Login</button>
-            <button class="switchbtn btn" type="button">register new account</button>
+            <button class="waves-effect waves-light btn" type="button" id="loginFormBtn">Login</button>
+            <button class="switchbtn btn " type="button">register new account</button>
             <br>
             <br>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <div class="g-signin2 googleBtn" data-onsuccess="onSignIn"></div>
             
           </form>
         </div>
@@ -84,44 +74,40 @@
 
       <!-- add todo -->
       <div id="addTodo">
-        <h2>Add new Todo</h2>
+        <h2> Add new Todo</h2>
         <form>
-          <div class="row">
+          <div class="container">
             <div class="input-field col s6">
               <input id="title" type="text" class="validate" name="title">
               <label class="active" for="title">Title</label>
             </div>
           </div>
-          <div class="row">
+          <div class="container">
             <div class="input-field col s6">
               <input id="description" type="text" class="validate" name="description">
               <label class="active" for="description">Description</label>
             </div>
           </div>
-          <div class="row">
+          <div class="container">
             <div class="input-field col s6">
               <input id="due_date" type="date" class="validate">
               <label class="active" for="due_date">Due Date</label>
             </div>
           </div>
           <button id="addNewTodo" class="waves-effect waves-light btn" type="submit">Add todo</button>
+          <button id="cancelEdit" onclick="authenticate()"class="waves-effect waves-light btn middleintext" type="button" >Cancel</button>
           
         </form>
       </div>
       
       <!-- list todo -->
       <div id="todoCard">
+        
       </div>
       <!-- show all todo -->
 
       <!-- put -->
       <div id="putTodo">
-        <form action="">
-          
-        </form>
-      </div>
-      <!-- patch -->
-      <div id="patchTodo">
 
       </div>
       

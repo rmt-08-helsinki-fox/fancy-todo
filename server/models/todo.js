@@ -43,7 +43,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       type: DataTypes.DATE,
       validate: {
-        isAfter: new Date().toISOString()
+        isAfter: {
+          args: new Date().toISOString(),
+          msg: "check your date!"
+        } 
       }
     },
     UserId: DataTypes.INTEGER

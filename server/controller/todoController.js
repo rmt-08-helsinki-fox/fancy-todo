@@ -19,12 +19,6 @@ class todoController {
         })
         .catch((err) => {
             next(err)
-            // const error = err.errors[0].message
-            // if(error) {
-            //     res.status(400).json(error)
-            // } else {
-            //     res.status(500).json({msg: 'Internal server error'})
-            // }
         })
     }
 
@@ -37,7 +31,6 @@ class todoController {
             }
         })
         .then((todos) => {
-            //console.log(req.decoded.id);
             todo = todos
             return axios({
                 method: "get",
@@ -45,12 +38,10 @@ class todoController {
             })
         })
         .then(quotes => {
-            //console.log(quotes.data);
             res.status(200).json([quotes.data, todo])
         })
         .catch(err => {
             next(err)
-            //res.status(500).json(err)
         })
     }
 
@@ -59,20 +50,10 @@ class todoController {
         Todo.findByPk(+req.params.id)
         .then(todos => {
             todo = todos
-            // if (!todo) {
-            //     throw {msg: "404 not found!", status: 404}
-            // }
-            // return axios({
-            //     method: "get",
-            //     url: "https://api.quotable.io/random?tags=technology"
-            // })
             res.status(200).json(todo)
         })
-        //.then(quotes => {
-        //})
         .catch(err=>{
             next(err)
-            //res.status(404).json(err)
         })
     }
     
@@ -90,20 +71,11 @@ class todoController {
 
         Todo.update(updateTodo, option)
         .then(todo => {
-            // if (todo[1].length == 0) {
-            //     throw {msg: "404 not found!", status: 404}
-            // }
+
             res.status(200).json(todo[1][0])
         })
         .catch(err => {
             next(err)
-            // if (err.msg == '404 not found') {
-            //     res.status(404).json(err) 
-            // } else if (err.errors[0].message) {
-            //     res.status(400).json({msg: err.errors[0].message})
-            // } else {
-            //     res.status(500).json(err)
-            // }
         })
     }
 
@@ -118,20 +90,10 @@ class todoController {
 
         Todo.update(patch, option)
         .then(todo => {
-            // if (todo[1].length == 0) {
-            //     throw {msg: "404 not found!", status: 404}
-            // }
             res.status(200).json(todo[1][0])
         })
         .catch(err=>{
             next(err)
-            // if (err.msg == '404 not found') {
-            //     res.status(404).json(err) 
-            // } else if (err.errors[0].message) {
-            //     res.status(400).json({msg: err.errors[0].message})
-            // } else {
-            //     res.status(500).json(err)
-            // }
         })
 
     }
@@ -144,18 +106,10 @@ class todoController {
             {id: todoId},
         })
         .then(todo => {
-            // if (!todo) {
-            //     throw {msg: "404 not found", status: 404}
-            // }
             res.status(200).json({msg: 'todo success to delete'})
         })
         .catch(err => {
             next(err)
-            // if (err.msg == '404 not found') {
-            //     res.status(404).json(err) 
-            // } else {
-            //     res.status(500).json(err)
-            // }
         })
 
     }

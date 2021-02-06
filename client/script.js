@@ -1,6 +1,5 @@
-
-
 const base_url = "http://localhost:3000/"
+
     $('#register-page').hide()
     $('#addTodo').hide()
     $('#putTodo').hide()
@@ -11,8 +10,13 @@ const base_url = "http://localhost:3000/"
         $('#addTodo').hide()
         $('#todoCard').hide()
         $('nav.navBar').hide()
-
+        $('#putTodo').hide()
+        $('hr').show()
       } else {
+        $('#register-page').hide()
+        $('#putTodo').hide()
+        $('hr').hide()
+        $('#addTodo').hide()
         $('#login-page').hide()
         $('#todoCard').show()
         $('nav.navBar').show()
@@ -32,7 +36,6 @@ const base_url = "http://localhost:3000/"
         }
       })
       .done((response) => {
-        //console.log(response, 'ini responseee');
         localStorage.setItem('token', response.token)
         authenticate()
 
@@ -65,8 +68,6 @@ const base_url = "http://localhost:3000/"
               console.log('I was closed by the timer')
             }
           })
-        //alert(xhr.responseJSON.error)
-        //console.log(xhr, text);
       })
       .always(()=>{
         $('emailLogin').val("")
@@ -88,9 +89,6 @@ const base_url = "http://localhost:3000/"
       .done((response) => {
         $('#register-page').hide()
         $('#login-page').show()
-        //console.log(response, 'ini responseee');
-        //localStorage.setItem('token', response.token)
-        //authenticate()
 
       })
       .fail((xhr, text) => {
@@ -121,7 +119,6 @@ const base_url = "http://localhost:3000/"
               console.log('I was closed by the timer')
             }
           })
-        //alert(xhr.responseJSON.error)
         console.log(base_url);
         console.log(xhr, text);
       })
@@ -149,30 +146,46 @@ const base_url = "http://localhost:3000/"
         
       })
       .done((data)=>{
-        //console.log(data);
         authenticate()
+        $('#addTodo').hide()
+        $('#title').val('')
+        $('#description').val('')
+        $('#due_date').val('')
       })
       .fail((xhr, text)=>{
-        alert(xhr.responseJSON.error)
+        let timerInterval
+          Swal.fire({
+            title: xhr.responseJSON.error,
+            html: 'please check your input!',
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading()
+              timerInterval = setInterval(() => {
+                const content = Swal.getContent()
+                if (content) {
+                  const b = content.querySelector('b')
+                  if (b) {
+                    b.textContent = Swal.getTimerLeft()
+                  }
+                }
+              }, 100)
+            },
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+            }
+          })
         console.log(xhr, text);
       })
-    }
-
-    function findTodoById() {
-      let id = $('#searchById').val()
-      $.ajax({
-        url: base_url + 'todos/' + id,
-        method: "GET",
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      })
-      .done(todo => {
-        console.log(todo);
-        $('#searchById').append('')
-      })
-      .fail((xhr, text) => {
-        console.log(xhr, text);
+      .always(()=> {
+        $('#title').val('')
+        $('#description').val('')
+        $('#due_date').val('')
       })
     }
 
@@ -187,29 +200,36 @@ const base_url = "http://localhost:3000/"
       .done(response => {
         $('#todoCard').empty()
         $("#todoCard").prepend(`
-        <div class="row">
-          <div class="col s12 m5">
+        <div class="container">
+          <div class="col s12 m5 middleintext">
             <div class="card-panel teal">
-              <span class="white-text"><q>${response[0].content}</q>
+              <span class="white-text flow-text"><q>${response[0].content}</q>
               </span>
               <p class="white-text">-${response[0].author}</p>
             </div>
           </div>
         </div>
         `)
-        response[1].forEach(value =>{
+
+        if (response[1].length == 0) {
+          $("#todoCard").append(`
+          <h3 class="middleintext" > What is your main focus for today?</h3>
+          <h5 class="middleintext" >add new todo from the navigation bar above</h5>
+          `)
+        } else {
+          response[1].forEach(value =>{
           const status = value.status == true ? "Done" : 'Not Done'
           $("#todoCard").append(`
           <div id="card-${value.id}" >
-          <div class="row" >
+          <div class="container" >
           <div class="col s12 m6" >
             <div class="card blue-grey darken-1">
               <div class="card-content white-text">
-                <span class="card-title">${value.title}</span>
-                <p>${value.description}</p>
+                <span class="card-title "><b> - ${value.title.toUpperCase()} - </b></span>
+                <p class="flow-text" > ${value.description}</p>
                   <br>
-                  <p>status: ${status} </p>
-                  <p>due date: ${value.due_date.split('T')[0]}</p>
+                  <p>status: <b>${status}</b> </p>
+                  <p>due date: <b>${value.due_date.split('T')[0]}</b></p>
                 </div>
                 <div class="card-action">
                   <a href="#"> <button class="btn" onclick="patchTodo(${value.id})">mark as done</button> </a>
@@ -222,6 +242,8 @@ const base_url = "http://localhost:3000/"
           </div>
           `)
         })
+        }
+        
       })
       .fail((xhr, text)=>{
         console.log(xhr, text);
@@ -234,7 +256,6 @@ const base_url = "http://localhost:3000/"
       let description = $('#editDescription').val()
       let due_date = $('#editDue_date').val()
       let status = $('input[name="editStatus"]:checked').val();
-      //console.log(title, description, due_date, status);
       $.ajax({
         url: base_url + 'todos/' + id,
         method: "PUT",
@@ -251,16 +272,42 @@ const base_url = "http://localhost:3000/"
       .done(response => {
         $('#putTodo').empty()
         authenticate()
+        
       })
       .fail((xhr, text) => {
+        let timerInterval
+          Swal.fire({
+            title: xhr.responseJSON.error,
+            html: 'please check your input!',
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading()
+              timerInterval = setInterval(() => {
+                const content = Swal.getContent()
+                if (content) {
+                  const b = content.querySelector('b')
+                  if (b) {
+                    b.textContent = Swal.getTimerLeft()
+                  }
+                }
+              }, 100)
+            },
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+            }
+          })
         console.log(xhr, text);
       })
     }
 
     //edit todo
-    //finone -> patch
-
-    
+    //finone -> patch    
     function patchTodo(id) {
       $.ajax({
         url: base_url + "todos/" + id,
@@ -273,6 +320,33 @@ const base_url = "http://localhost:3000/"
         }
       })
       .done(response => {
+        let timerInterval
+          Swal.fire({
+            title: "Marked As Done!",
+            html: 'what do you want to do next?',
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading()
+              timerInterval = setInterval(() => {
+                const content = Swal.getContent()
+                if (content) {
+                  const b = content.querySelector('b')
+                  if (b) {
+                    b.textContent = Swal.getTimerLeft()
+                  }
+                }
+              }, 100)
+            },
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+            }
+          })
         authenticate()
       })
       .fail((xhr, text) => {
@@ -294,25 +368,24 @@ const base_url = "http://localhost:3000/"
       .done(response => {
         const statusTrue = response.status == true ? "checked" : ''
         const statusFalse = response.status == false ? "checked" : ''
-        console.log(statusTrue);
-        console.log(statusFalse);
 
         $('#todoCard').hide()
         $('#putTodo').append(`
-        <form>
-        <div class="row">
-            <div class="input-field col s6">
+        <h2> Edit My Todo </h2>
+        <form  class="middleintext">
+        <div id="edit-page">
+            <div class="container ">
               <input id="editTitle" type="text" class="validate" name="editTitle"  value="${response.title}">
               <label class="active" for="editTitle" >Edit Title</label>
             </div>
           </div>
-          <div class="row">
+          <div class="container">
             <div class="input-field col s6">
               <input id="editDescription" type="text" class="validate" name="editDescription" value="${response.description}">
               <label class="active" for="Edit Description">edit Description</label>
             </div>
           </div>
-          <div class="row">
+          <div class="container">
             <div class="input-field col s6">
               <input id="editDue_date" type="date" class="validate" name="editDue_date" value="${response.due_date.split('T')[0]}">
               <label class="active" for="editDue_date">Edit due date</label>
@@ -322,27 +395,27 @@ const base_url = "http://localhost:3000/"
           <label class="active" for="editStatus" >Edit Status </label>
               <p>
                 <label>
-                  <input  name="editStatus" id="editStatus" type="radio" ${statusTrue}  value="true"/>
+                  <input  name="editStatus"type="radio" ${statusTrue}  value="true"/>
                   <span>Done</span>
                 </label>
               </p>
               <p>
                 <label>
-                  <input name="editStatus" type="radio" ${statusFalse} id="editStatus" value="false"/>
+                  <input name="editStatus" type="radio" ${statusFalse} value="false"/>
                   <span>Not Done</span>
                 </label>
               </p>
           </div>
           <button id="editTodo" class="waves-effect waves-light btn" type="button" onclick="editTodoPost(${response.id})">Edit todo</button>
-          <button id="cancelEdit" class="waves-effect waves-light btn" type="button" >Cancel</button>
+
+          <button id="cancelEdit" onclick="authenticate()"class="waves-effect waves-light btn middleintext" type="button" >Cancel</button>
           </form>
         `)
-        console.log(response);
       })
       .fail((xhr, text) => {
         console.log(xhr, text);
       })
-    }
+    } 
 
     function destroy(id) {
       $.ajax({
@@ -354,15 +427,44 @@ const base_url = "http://localhost:3000/"
       })
       .done(()=>{
         $(`#card-${id}`).remove()
+        authenticate()
+        let timerInterval
+          Swal.fire({
+            title: "Deleted!",
+            html: 'add new todo from the navigation bar',
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading()
+              timerInterval = setInterval(() => {
+                const content = Swal.getContent()
+                if (content) {
+                  const b = content.querySelector('b')
+                  if (b) {
+                    b.textContent = Swal.getTimerLeft()
+                  }
+                }
+              }, 100)
+            },
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+            }
+          })
       })
       .fail((xhr,text)=>{
-        alert(xhr.responseJSON.error)
         console.log(xhr, text);
       })
     }
 
 
     function logout() {
+      $('#todoCard').empty()
+      $('#putTodo').empty()
       localStorage.clear()
       var auth2 = gapi.auth2.getAuthInstance()
       auth2.signOut().then(()=>{
@@ -382,7 +484,6 @@ const base_url = "http://localhost:3000/"
       })
       .done(response=>{
         localStorage.setItem('token', response.token)
-        //console.log(response);
         authenticate()
       })
       .fail(err => {
@@ -397,11 +498,12 @@ const base_url = "http://localhost:3000/"
       authenticate()
       //show register/login
       $("button.switchbtn").on('click', (event)=> {
+        event.preventDefault()
         $('#register-page').toggle()
         $('#login-page').toggle()
       })
 
-      $('#login-form').on('submit', (event)=> {
+      $('#loginFormBtn').on('click', (event)=> {
         event.preventDefault()
         login()
       })
@@ -428,29 +530,13 @@ const base_url = "http://localhost:3000/"
         $('#addTodo').hide()
       })
 
-      // $('a.editOneCard').on('click', (e)=> {
-      //   $('#todoCard').hide()
-      // })
-
       $('#addNewTodo').on('click', (event)=>{
         event.preventDefault()
-        //console.log('masukk addnew todo');
-        
         addNewTodo()
-        $('#addTodo').hide()
-        
-      })
-
-      $('#cancelEdit').on('click', (e) => {
-        //console.log('masukl');
-        e.preventDefault()
-        $('#login-page').show()
-        $('#addTodo').hide()
-        $('#putTodo').hide()
-        $('#todoCard').show()
       })
 
       $('#logout').on('click', (event)=> {
+        event.preventDefault()
         logout()
       })
     })

@@ -18,7 +18,6 @@ const authorize = (req, res, next) => {
   })
   .catch(err => {
     next(err)
-    //res.status(401).json({err})
   })
 }
 

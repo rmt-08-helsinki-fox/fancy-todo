@@ -13,6 +13,6 @@ module.exports = (err, req, res, next) => {
   } else if (err.msg == 'Not Authorized') {
     res.status(401).json({err})
   } else {
-    res.status(500).json(err) //{msg: 'Internal server error'}
+    res.status(500).json({msg: 'Internal server error'})
   }
 }
