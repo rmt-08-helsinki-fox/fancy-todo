@@ -299,7 +299,7 @@ tidak dibutuhkan
 
 ```js
 {
-    "accessToken": "<token>"
+    "access_token": "<token>"
 }
 
 ```

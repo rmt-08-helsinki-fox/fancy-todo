@@ -7,6 +7,9 @@ router.post('/register', UserController.register)
 // proses login
 router.post('/login', UserController.login)
 
+// login google
+router.post('/googlelogin', UserController.googlLogin)
+
 
 
 

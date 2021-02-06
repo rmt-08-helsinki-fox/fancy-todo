@@ -1,6 +1,5 @@
 const {Todo} = require('../models/index')
 const axios = require('axios')
-const { response } = require('express')
 
 class TodoController {
 

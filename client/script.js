@@ -1,5 +1,4 @@
 
-
 const base_url = "http://localhost:3000"
 
       function auth() {
@@ -9,18 +8,36 @@ const base_url = "http://localhost:3000"
           $("#form-add-todo").hide()
           $("#table-todos").hide()
           $("#logout-user").hide()
+          $("#form-edit-todo").hide()
         } else {
           $("#form-login").hide()
           $("#form-register").hide()
           $("#form-add-todo").show()
           $("#table-todos").show()
           $("#logout-user").show()
+          $("#form-edit-todo").hide()
           showTodo()
         }
         
       }
 
-      
+      function authEdit() {
+        if(!localStorage.getItem("accessToken")){
+          $("#form-login").show()
+          $("#form-register").show()
+          $("#form-add-todo").hide()
+          $("#table-todos").hide()
+          $("#logout-user").hide()
+        }else{
+          $("#form-login").hide()
+          $("#form-register").hide()
+          $("#form-add-todo").hide()
+          $("#table-todos").hide()
+          $("#logout-user").hide()
+          $("#form-edit-todo").show()
+        }
+
+      }
 
       function login() {
         const email = $("#loginEmail").val()
@@ -68,13 +85,49 @@ const base_url = "http://localhost:3000"
           } )
           .fail((xhr, text) => {
             console.log(xhr, text)
+            console.log('error')
           })
           .always( _ => {
             $("#form-register-user").trigger("reset")
           })
       }
 
+      function addTodo(){
+        const title = $("#todoTitle").val()
+        const description = $("#todoDescription").val()
+        const dueDate = $("#todoDueDate").val()
+
+        console.log(title, description, dueDate);
+
+
+        $.ajax({
+          url: base_url + '/todos',
+          method: "POST",
+          headers: {
+            token: localStorage.getItem("accessToken")
+          },
+          data: {
+            title: title,
+            description: description,
+            status: "true",
+            due_date: dueDate,
+          }
+        })
+          .done( response => {
+            console.log(response);
+            auth()
+          })
+          .fail((xhr, text) => {
+            console.log(xhr, text)
+          })
+          .always( _ => {
+            $("#form-add-todo-data").trigger("reset")
+          })
+        
+      }
+
       function showTodo(){
+
         $.ajax({
           url: base_url + '/todos',
           method: "GET",
@@ -90,11 +143,88 @@ const base_url = "http://localhost:3000"
             <tr>
             <td>${element.title}</td>
             <td>${element.description}</td>
-            <td>${element.due_date}</td>
-            <td> <a href="#" onclick="deleteTodo(${element.id})"> Delete </a>
+            <td>${element.due_date.split('T')[0]}</td>
+            <td> 
+                <a href="#" onclick="showEditTodo(${element.id})"> Edit </a>
+                <a href="#" onclick="deleteTodo(${element.id})"> Delete </a> 
+            </td>
             </tr>
         `)
           });
+        })
+        .fail((xhr, text) => {
+          console.log(xhr, text);
+        })
+      }
+
+      function onSignIn(googleUser) {
+
+        const id_token = googleUser.getAuthResponse().id_token
+      
+        $.ajax({
+            url: base_url + '/users/googlelogin',
+            method: "POST",
+            data: {
+                id_token
+            }
+        }).done(result => {
+            localStorage.setItem('accessToken', result.access_token)
+            auth()
+        }).fail(err => {
+            console.log(err)
+        })
+      }
+      
+      
+      function showEditTodo(idTodo){
+        authEdit()
+
+        $.ajax({
+          url: base_url + '/todos' + `/${idTodo}`,
+          method: "GET",
+          headers: {
+            token: localStorage.getItem("accessToken")
+          }
+        })
+        .done( response => {
+          
+          let convertedDate = response.due_date.split('T')[0]
+          $("#todoEditId").val(response.id)
+          $("#todoEditTitle").val(response.title)
+          $("#todoEditDescription").val(response.description)
+          $("#todoEditDueDate").val(convertedDate)
+
+        })
+        .fail((xhr, text) => {
+          console.log(xhr, text);
+        })
+
+      }
+
+      function processEditTodo(){
+        const id = $("#todoEditId").val()
+        const title = $("#todoEditTitle").val()
+        const description = $("#todoEditDescription").val()
+        const dueDate = $("#todoEditDueDate").val()
+
+        console.log(base_url + '/todos' + `/${id}`)
+
+        $.ajax({
+          url: base_url + '/todos' + `/${id}`,
+          method: "PUT",
+          headers: {
+            token: localStorage.getItem("accessToken")
+          },
+          data: {
+            title: title,
+            description: description,
+            status: "true",
+            due_date: dueDate,
+          }
+        })
+        .done( response => {
+          console.log(response)
+          auth()
         })
         .fail((xhr, text) => {
           console.log(xhr, text);
@@ -119,11 +249,16 @@ const base_url = "http://localhost:3000"
 
       function logoutUser(){
           localStorage.clear()
+          const auth2 = gapi.auth2.getAuthInstance();
+          auth2.signOut().then(function () {
+            console.log('User signed out.');
+          });
           auth()
       }
 
 
       $(document).ready(() => {
+
         auth()
         $("#form-login-user").on("submit", (event) => {
           event.preventDefault()
@@ -135,9 +270,20 @@ const base_url = "http://localhost:3000"
           register()
         })
 
+        $("#form-add-todo-data").on("submit", (event) => {
+          event.preventDefault()
+          addTodo()
+        })
+
         $("#logout-user").on("click",(event) => {
             event.preventDefault()
             logoutUser()
         })
+
+        $("#form-edit-todo-data").on("submit", (event) => {
+          event.preventDefault()
+          processEditTodo()
+        })
+
 
       })

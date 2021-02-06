@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="726832526892-1hlgccen4skgh3a5vd20ntqdetspqqg5.apps.googleusercontent.com">
     <title>Todo App</title>
 </head>
 <body>
@@ -20,6 +21,7 @@
         <br>
         <button type="submit">LOGIN</button>
       </form>
+      <div class="g-signin2" data-onsuccess="onSignIn"></div>
     </div>
 
     <div id="form-register">
@@ -52,6 +54,27 @@
       </form>
     </div>
 
+    <div id="form-edit-todo">
+      <h1> EDIT TODO</h1>
+
+          <form id="form-edit-todo-data">
+            <label>Tittle : </label>
+            <input type="hidden" name="title" id="todoEditId" value="">
+            <input type="text" name="title" id="todoEditTitle" value="">
+            <br>
+            <label>Description : </label>
+            <input type="text" name="description" id="todoEditDescription" value="">
+            <br>
+            <label>Due Date : </label>
+            <input type="date" name="date" id="todoEditDueDate" value="">
+            <br>
+            <button type="submit">SIMPAN</button>
+            <a href="#"><button>KEMBALI</button> </a>
+          </form>
+
+    </div>
+    
+
     <div id="table-todos">
       <h1>TODOS</h1>
       <table border="2">
@@ -60,6 +83,7 @@
             <th>Title</th>
             <th>Description</th>
             <th>Due Date</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody id="table-datas-todo">
@@ -72,6 +96,7 @@
 			  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
               crossorigin="anonymous">
     </script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="./script.js">
         
     </script>
