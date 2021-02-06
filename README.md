@@ -423,7 +423,7 @@ not needed
 _Request Body_
 ```
 {
-    "query": "<choosen city>"
+    "city": "<choosen city>"
 }
 ```
 

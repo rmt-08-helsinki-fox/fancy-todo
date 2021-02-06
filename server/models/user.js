@@ -34,9 +34,10 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           msg: "Field password tidak boleh kosong!"
         },
-        min: {
-          args: 6,
-          msg: "Password harus terdiri dari 6 karakter atau lebih!"
+        checkLength(value) {
+          if(value.length < 7) {
+            throw new Error("Password minimal harus memiliki 6 karakter")
+          }
         }
       }
     }
