@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { hash } = require('../helper/bcrypt')
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -11,14 +12,48 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Todo)
     }
   };
   User.init({
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        isEmail: {
+          args: true,
+          msg: 'Invalid email format'
+        },
+        notEmpty: {
+          msg: 'please fill the email '
+        }
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'please fill the password'
+        },
+        min:{
+          args : 6,
+          msg: "The Password Must be at Least 6 characters"
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',
+    hooks: {
+      beforeCreate: (user, opt) => {
+        user.password = hash(user.password)
+      }
+    }
   });
   return User;
+
 };
+
+// (async () => {
+//   await sequelize.sync({ force: true });
+//   // Code here
+// })();

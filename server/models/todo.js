@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User)
+
     }
   };
   Todo.init({
@@ -50,6 +52,15 @@ module.exports = (sequelize, DataTypes) => {
           msg : 'Please fill the Date Greater than Today'
         }
       }
+    },
+    UserId:{
+      type: DataTypes.INTEGER,
+      validate:{
+        notEmpty:{
+          msg: 'UserId cannot be empty'
+        }
+      }
+      
     }
   }, {
     sequelize,
