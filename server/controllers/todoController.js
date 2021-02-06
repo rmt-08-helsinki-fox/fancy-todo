@@ -23,7 +23,7 @@ class TodoController {
 
       holiday = holiday.data.holidays
       
-      if(holiday) res.status(201).json({createdData, holiday})
+      if(holiday.length > 0) res.status(201).json({createdData, holiday})
       else res.status(201).json({createdData, holiday: 'No holiday at this day'})
       
     } catch (error) {

@@ -17,14 +17,24 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       validate: {
+        len: {
+          args: [1,20],
+          msg: 'Maximum 20 characters'
+        },
         notEmpty: {
           args: true,
           msg: 'Title cannot be empty'
         }
       }
     },
-    description: DataTypes.STRING,
-    status: DataTypes.BOOLEAN,
+    description: {
+      type: DataTypes.STRING,
+      len: {
+        args: [1,50],
+        msg: 'Maximum 50 characters'
+      }
+    },
+    status: DataTypes.STRING,
     due_date: {
       type: DataTypes.DATE,
       validate: {
@@ -41,11 +51,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    hooks: {
-      beforeCreate: (instance => {
-        instance.status = false
-      })
-    },
     sequelize,
     modelName: 'Todo',
   });

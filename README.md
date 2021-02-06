@@ -22,8 +22,8 @@ _Request Body_
 {
   "title": "<name to get insert into>",
   "description": "<description to get insert into>",
-  "status": false,
-  "due_date": "<todo due date>"
+  "status": "<status to get insert into>",
+  "due_date": "<due date to get insert into>"
 }
 ```
 
@@ -40,7 +40,7 @@ _Response (201 - Created)_
 }
 ```
 
-_Response (400 - Bad Request)_
+_Response (500 - Bad Request)_
 ```
 {
   "message": "Internal server error"
@@ -270,6 +270,48 @@ _Response (200)_
 ```
 {
   "message": "todo success to delete"
+}
+```
+
+_Response (400 - Bad Request)_
+```
+{
+  "message": "Internal server error"
+}
+```
+
+_Response (404 - Not found)_
+```
+{
+  "message": "Error not found"
+}
+```
+
+### POST /googleoauth
+
+> POST login/register User
+
+_Request Header_
+```
+{
+  id_token
+}
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Request Params_
+```
+not needed
+```
+
+_Response (200)_
+```
+{
+  "access_token": "<access token>"
 }
 ```
 

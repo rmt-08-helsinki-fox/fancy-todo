@@ -3,7 +3,10 @@ const UserController =  require('../controllers/userController')
 
 router.post('/register', UserController.register)
 
-// router.post('/login', (req, res) => res.send("masuk"))
 router.post('/login', UserController.login)
+
+router.post('/login', UserController.login)
+
+router.post('/googleoauth', UserController.googleLogin)
 
 module.exports = router

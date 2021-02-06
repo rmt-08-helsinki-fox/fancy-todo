@@ -5,6 +5,9 @@ const app = express()
 const PORT = 3000
 
 const router = require('./routes/router')
+const cors = require('cors')
+
+app.use(cors())
 
 app.use(express.urlencoded({extended: false}))
 
