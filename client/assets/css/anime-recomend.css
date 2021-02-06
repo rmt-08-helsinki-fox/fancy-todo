@@ -1,0 +1,14 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+#anime-area {
+    height: 35%;
+    overflow: hidden;
+}
+
+#anime-image-cover img {
+    object-fit: cover;
+    object-position: center;
+}
