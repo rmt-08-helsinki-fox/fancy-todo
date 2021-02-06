@@ -1,6 +1,6 @@
 function errorHandler(err, req, res, next){
   console.log('masuk error handler')
-  console.log(err.name, 'ini err dalem error handler')
+  console.log(err, 'ini err dalem error handler')
   switch (err.name) {
     case 'SequelizeValidationError':
       console.log(err)

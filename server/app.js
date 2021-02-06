@@ -8,7 +8,7 @@ console.log(process.env.NODE_ENV)
 const cors = require('cors')
 const express = require('express')
 const app = express()
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 const router = require('./routes/index.js')
 
 app.use(cors())

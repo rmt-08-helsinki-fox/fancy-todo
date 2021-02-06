@@ -6,7 +6,7 @@ class WeatherController{
     let { city } = req.query
     axios({
       method: "get",
-      url: `http://api.weatherstack.com/current?access_key=${ACCESS_KEY}&query=${city}`,
+      url: `http://api.weatherstack.com/current?access_key=${ACCESS_KEY}&query=Jakarta`,
     })
     .then(response => {
       let { data } = response
