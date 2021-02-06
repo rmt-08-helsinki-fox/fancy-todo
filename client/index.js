@@ -82,6 +82,7 @@ const auth = () => {
     $("#btn-login").show();
     $("#btn-logout").hide();
     $("#btn-register").show();
+    $("#list-todo").empty();
   }
 };
 
