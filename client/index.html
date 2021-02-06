@@ -11,19 +11,20 @@
 </head>
 <body>
     <header>
-      <nav class="navbar navbar-expand-sm bg-light">
+      <nav class="navbar navbar-expand-sm sticky-top bg-light">
+        <a class="navbar-brand">
+          <img src="https://image.freepik.com/free-vector/letter-f-initial-icon-logo-template_23987-54.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+          Fancy ToDo
+        </a>
         <ul class="navbar-nav">
-            <a class="navbar-brand">
-              <img src="https://image.freepik.com/free-vector/letter-f-initial-icon-logo-template_23987-54.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
-              Fancy ToDo
-            </a>
-            <li class="nav-item" ><a id="add-to-do" class="nav-link">Add To Do</a></li>
-            <li class="nav-item" style="position: absolute; right:1em"> <a class="nav-link" id="logout" >Logout</a></li>
+            
+            <li class="nav-item" ><a href="" id="add-to-do" class="nav-link">Add To Do</a></li>
+            <li class="nav-item"> <a href="" class="nav-link" id="logout" >Logout</a></li>
         </ul>
       </nav>
     </header>
 
-    <div class="container-sm p-3 mt-5" id="login-container">
+    <div class="container-sm p-3" id="login-container">
       <h1>Fancy ToDo</h1>
       <h3>Login</h3>
       <form id="login-form">
@@ -34,16 +35,16 @@
           </div>
           <div class="mb-3">
             <label for="login-password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="login-password" placeholder="Minimum 6 character password">
+            <input type="password" class="form-control" id="login-password" placeholder="Your Password">
           </div>
           <button type="submit" class="btn btn-primary">Login</button>
           <a id="show-register-btn" class="btn btn-link">Don't have an account? Register Here</a>
-          <label for="OAuth" class="form-label">Or login with</label>
+          <label for="OAuth" class="form-label">Or login with:</label>
           <div class="g-signin2" data-onsuccess="onSignIn" id="OAuth"></div>
       </form>
     </div>
     
-    <div class="container-sm p-3 mt-5" id="register-container">
+    <div class="container-sm p-3" id="register-container">
       <h1>Fancy ToDo</h1>
       <h3>Register</h3>
       <form id="register-form"> 
@@ -73,7 +74,7 @@
           <input type="text" class="form-control" id="desc-add-to-do">
         </div>
         <div class="mb-3">
-          Status
+          Status: <br>
           <label for="done-add" class="form-label">Done</label>
           <input type="radio" id="done-add" name="statusCreate" value="done">
           <label for="notdone-add" class="form-label">Not Done</label>
@@ -100,7 +101,7 @@
           <input type="text" class="form-control" id="desc-edit-to-do">
         </div>
         <div class="mb-3">
-          Status
+          Status: <br>
           <label for="done-edit" class="form-label">Done</label>
           <input type="radio" id="done-edit" name="statusEdit" value="done">
           <label for="notdone-edit" class="form-label">Not Done</label>
@@ -115,7 +116,7 @@
       </form>
     </div>
 
-    <div class="card-deck mt-3" id="todo-list" style="margin: auto;"></div>
+    <div class="card-deck mt-4" id="todo-list" style="margin: auto;"></div>
     
     <footer>&copy; Fancy ToDo 2021</footer>
 

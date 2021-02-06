@@ -18,10 +18,14 @@ $(document).ready(function() {
 
         add();
     });
-    $("#add-to-do").on("click", () => {
+    $("#add-to-do").on("click", (e) => {
+        e.preventDefault();
+
         addToDo();
     })
-    $("#logout").on("click", () => {
+    $("#logout").on("click", (e) => {
+        e.preventDefault();
+
         logout();
     })
     $("#show-register-btn").on("click", () => {
@@ -93,7 +97,6 @@ function login(){
     .fail((xhr, text) => {
         $("#loginError").remove();
         $("#login-form").append(`<div class="alert alert-danger" id="loginError"></div>`);
-        // $("#loginError").attr("class", "alert alert-danger");
         xhr.responseJSON.errors.forEach(err => {
             $("#loginError").append(`${err}`);
         });
@@ -162,7 +165,7 @@ function findAllToDO(){
             })
         } else {
             $("#todo-list").append(`
-            <div class="container mt-3 p-3" style="color: white">
+            <div class="container mt-3 p-3">
                 <h3>Your to do list will be displayed here</h3>
                 <p>Start adding to do with the <b>Add To Do</b> link on Navigation Bar</p>
             </div>
@@ -184,9 +187,10 @@ function populateEdit(id) {
         $("#title-edit-to-do").val(todo.title);
         $("#desc-edit-to-do").val(todo.description);
         if(todo.status === "done"){
-            $("#done-edit").attr("checked", "true");
+            $("#done-edit").prop("checked", true);
         } else {
-            $("#notdone-edit").attr("checked", "true")
+            console.log("not done");
+            $("#notdone-edit").prop("checked", true)
         }
         $("#due-date-edit-to-do").val(todo.due_date.split("T")[0]);
         $("#edit-to-do-form").on("submit", (e) => {
@@ -304,7 +308,7 @@ function news(id) {
         <div id="news${id}">
             <h3>${news.title}</h3>
             <p>${news.abstract}</p>
-            <a href="${news.web_url}" class="btn btn-primary">Read More</a>
+            <a href="${news.web_url}" class="btn btn-primary" target="_blank">Read More</a>
         </div>
     `)
         $("#loadNews").remove();

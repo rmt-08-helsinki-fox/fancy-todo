@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isIn: {
           args: [['done', 'not done']],
-          msg: 'Input between done and not done'
+          msg: 'Input status between done and not done'
         },
         notNull: {
           args: true,
@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isAfter: {
           args: new Date().toDateString(),
-          msg: "Date have to be after today"
+          msg: "Date have to be at least today"
         },
         notNull: {
           args: true,

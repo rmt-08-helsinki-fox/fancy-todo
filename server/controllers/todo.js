@@ -35,15 +35,17 @@ class Controller {
     }
     static editTodo(req, res, next) {
         let { title, description, status, due_date } = req.body;
-        let editedtodo = { title, description, status, due_date };
+        let editedTodo = { title, description, status, due_date };
 
-        ToDo.update(editedtodo, {
+        if(!title || !description || !due_date) throw ({name: "customErr", status: 400, msg: "title, status and due_date cannot be empty"});
+        ToDo.update(editedTodo, {
             where: {
                 id: req.params.id
             },
             returning: true
         })
         .then(todo => {
+            console.log(todo);
             res.status(200).json({todo: todo[1][0]});
         })
         .catch(err => next(err));

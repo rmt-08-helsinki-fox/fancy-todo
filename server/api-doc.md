@@ -50,12 +50,12 @@
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input between done and not done" }`
+            **Content:** `{ error : "Input status between done and not done" }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Date have to be after today" }`
+            **Content:** `{ error : "Date have to be at least today" }`
 
             OR
 
@@ -264,12 +264,12 @@
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input between done and not done" }`
+            **Content:** `{ error : "Input status between done and not done" }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Date have to be after today" }`
+            **Content:** `{ error : "Date have to be at least today" }`
 
             OR
 
@@ -354,7 +354,7 @@
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input between done and not done" }`
+            **Content:** `{ error : "Input status between done and not done" }`
 
             OR
 
