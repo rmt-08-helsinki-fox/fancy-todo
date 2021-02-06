@@ -9,6 +9,7 @@ function auth() {
         $("#addtodo-container").hide()
         $("#edittodo-container").hide()
         $("#addtodo-button").hide()
+        $("#news-container").hide()
     } else {
 
         getTodos()
@@ -19,6 +20,7 @@ function auth() {
         $("#addtodo-container").hide()
         $("#edittodo-container").hide()
         $("#addtodo-button").show()
+        $("#news-container").hide()
 
 
     }
@@ -254,11 +256,11 @@ function editTodo(todoId, title, description, status, due_date) {
                 $("#edittodo-container").hide()
                 auth()
             })
-            .fail(error => {
+            .fail(xml => {
                 swal({
                     icon: 'error',
                     title: 'Oops...',
-                    text: "you have to fill all the required fields"
+                    text: xml.responseJSON.error.messages
                 })
             })
     })
@@ -294,7 +296,7 @@ function deleteTodo(todoId) {
 }
 
 function onSignIn(googleUser) {
-    
+
     let id_token = googleUser.getAuthResponse().id_token;
     console.log(id_token);
     $.ajax({
@@ -304,21 +306,22 @@ function onSignIn(googleUser) {
             id_token
         }
     })
-    .done(response => {
-        localStorage.setItem("accessToken", response.accessToken)
-        auth()
-    })
-    .catch(error => {
-        console.log(error)
-    })
-  }
+        .done(response => {
+            localStorage.setItem("accessToken", response.accessToken)
+            auth()
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
 
-  function signOut() {
+function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
-      console.log('User signed out.');
+        console.log('User signed out.');
+        localStorage.clear()
     });
-  }
+}
 
 
 
@@ -329,5 +332,48 @@ $(document).ready(function () {
     signin()
     signout()
     addTodo()
+
+    $("#todos-tab").on("click", e => {
+        e.preventDefault()
+        $("form").val("")
+        auth()
+    })
+
+    $("#news-tab").on("click", e => {
+        $.ajax({
+            url: baseUrl + "/todos/news",
+            method: "get",
+            headers: {
+                accessToken: localStorage.getItem("accessToken"),
+            }
+        })
+            .done(articles => {
+
+                $("#news-container").show()
+                $("#addtodo-button").hide()
+                $("#todos-table-container").hide()
+                articles.forEach(article => {
+                    $("#news-contents-container").prepend(
+                        `
+                        <div class="row" id="content">
+                        <div class="col-4" id="news-image-url">
+                            <img src="${article.urlToImage}" class="img-fluid" alt="image-url">
+                            
+                        </div>
+                        <div class="col-8" id="news-content">
+                            <h2>${article.title}</h2>
+                            <p>${article.description}</p>
+                            <a href="${article.url}" target="_blank">...baca lebih lanjut</h5>
+                        </div>
+                        </div>
+                        `
+                    )
+                })
+
+            })
+            .fail((xml, text) => {
+                console.log(xml.responseJSON.error.messages[0])
+            })
+    })
 
 });

@@ -5,11 +5,11 @@ class Controller {
     static async add(req, res, next) {
         try {
             const { title, description, status, due_date } = req.body
-            
+
             const newTodo = await Todo.create({
                 title, description, status, due_date, UserId: req.currentUser.id
             })
-            
+
             res.status(201).json(newTodo)
         } catch (error) {
             next(error)
@@ -36,7 +36,7 @@ class Controller {
             const todo = await Todo.findByPk(todoId)
             if (todo) {
                 res.status(200).json(todo)
-                
+
             } else {
                 throw {
                     name: 'Custom error',
@@ -53,7 +53,7 @@ class Controller {
 
     static async putTodo(req, res, next) {
         try {
-            
+
             const todoId = +req.params.id
             const { title, description, status, due_date } = req.body
             console.log(todoId, req.body, 'sdlfjlksdjflkaj');
@@ -79,7 +79,7 @@ class Controller {
             const todoId = +req.params.id
             let updatedTodo = {}
             const { status } = req.body
-            
+
 
             updatedTodo = await Todo.update({ status }, { where: { id: todoId }, returning: true })
 
@@ -115,16 +115,22 @@ class Controller {
                 }
             }
         } catch (error) {
+
+
             next(error)
         }
     }
 
-    static async getHeadLineNews(req, res, next){
+    static async getHeadLineNews(req, res, next) {
         try {
             const country = req.query.country || 'id'
-            const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=${country}&${process.env.NEWS_API_KEY}`)
-            res.status(200).json(response.data)
-        } catch (error){
+            const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=${country}&apikey=${process.env.NEWS_API_KEY}`)
+            const articles = response.data.articles.map(article => {
+                return { title: article.title, author:article.author, description:article.description, url:article.url, urlToImage:article.urlToImage, publishedAt:article.publishedAt }
+            })
+            res.status(200).json(articles)
+        } catch (error) {
+            
             next(error)
         }
     }
