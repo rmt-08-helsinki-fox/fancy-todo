@@ -7,6 +7,11 @@
     width: auto;
 }
 
+body{
+    
+      background-image: url("../resource/background1.png");
+          
+}
 .box-container {
     background: rgb(243, 9, 118);
     margin-top: 70px;

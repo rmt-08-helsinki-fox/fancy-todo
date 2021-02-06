@@ -8,6 +8,7 @@ Create fancy to do lover app, to-do app for lover man,and women to reach their f
 * JSON formatted response
 * Web Server response
 * Weather bit 3rd parties
+* Quotes 3rd parties
 ```
 
 # USAGE
@@ -20,6 +21,7 @@ Run `nodemon app.js  to start the server.
 ##Restful endpoints
 # URL
 ```
+Client URL : http://localhost:8083
 Server URL : http://localhost:3000
 ```
 
@@ -397,3 +399,125 @@ _Response (500)_
 }
 ```
 
+### POST/register
+
+>Create User
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```javascript
+{
+    "name": "<User's Name>",
+    "email": "<User's email>",
+    "password": "<User's password>"
+}
+```
+
+_Response(201)_
+```javascript
+{
+    "name": "sampah",
+    "email": "sampah@gmail.com",
+    "password": "123456"
+}
+```
+_Response(400- bad request)_
+```javascript
+{
+    "Error" :  "VALIDATION_ERROR"
+    "message": "Name required,Email required,Password required,Due date required, Invalid email format"
+}
+```
+
+
+_Response (500)_
+```javascript
+{
+  "Error": "UNKNOWN_ERROR",
+  "message": "Internal Server Error"
+}
+```
+
+### POST/login
+
+>Login User
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```javascript
+{
+   
+    "email": "<User's email>",
+    "password": "<User's password>"
+}
+```
+
+_Response(200)_
+```javascript
+{
+    "access_token": 
+}
+```
+_Response(400- bad request)_
+```javascript
+{
+    "Error" :  "VALIDATION_ERROR"
+    "message": "Name required,Email required,Password required,Due date required, Invalid email format"
+}
+```
+
+
+_Response (500)_
+```javascript
+{
+  "Error": "UNKNOWN_ERROR",
+  "message": "Error undescribable"
+}
+```
+
+
+
+### POST/loginGoogle
+
+Request Header
+
+```Not Needed```
+
+Request Body
+
+```javascript
+{
+    "id_token": "<your id_token>"
+}
+```
+
+_Response(200)
+```javascript
+{
+    "access_token": "<your access_token>"
+}
+```
+OR
+
+_Response(201)
+```javascript
+{
+    "access_token": "<your access_token>"
+}
+```
+
+_Response(401)
+```javascript
+{
+    "message":  "<Invalid Email/Password>" ,
+    
+}
+```
