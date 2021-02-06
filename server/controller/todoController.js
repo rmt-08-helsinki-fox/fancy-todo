@@ -26,7 +26,8 @@ class TodoController {
     Todo.findAll({
       where: {
         UserId: loggedUserId
-      }
+      },
+      order: [['id', 'DESC']]
     })
     .then(data => {
       console.log(data)

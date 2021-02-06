@@ -181,51 +181,135 @@ function getTodos() {
   })  
     .done((todos) => {
       console.log(todos);
-      $("#todo-list").empty(); //nanti ada doing-list, done-list
+      $("#todo-list").empty();
+      $("#doing-list").empty();
+      $("#done-list").empty();
+      
       todos.forEach((value) => {
         console.log(value);
         console.log(value.due_date.split('T')[0])
         let { id, title, description, due_date, status } = value;
-        //next 
-        $("#todo-list").append(`
-          <!--start per task / mau loop-->
-          <div class="card mb-3 bg-light shadow-sm" id="todo${value.id}">
-            <div class="card-body p-3">
-                    
-              <h5 id="title${value.id}"><!--taskname-->${value.title}</h5>
-              <p id="description${value.id}"><!--task desc-->${value.description}</p>
+        if (status === "todo") {
+          $("#todo-list").append(`
+            <!--start per task / mau loop-->
+            <div class="card mb-3 bg-light shadow-sm" id="todo${value.id}">
+              <div class="card-body p-3">
+                      
+                <h5 id="title${value.id}"><!--taskname-->${value.title}</h5>
+                <p id="description${value.id}"><!--task desc-->${value.description}</p>
 
-              <form  class="form-inline row g-3 justify-content-end" id="todo${value.id}" action="#" method="post">
-              <div class="col-sm-1">
-                <input type="text" readonly class="form-control form-control-sm mb-2" id="status${value.id}" value="${value.status}">
-              </div>
+                <form  class="form-inline row g-3 justify-content-end" id="todo${value.id}" action="#" method="post">
+                <div class="col-sm-1">
+                  <input type="text" readonly class="form-control form-control-sm mb-2" id="status${value.id}" value="${value.status}">
+                </div>
 
-              <div class="col-sm-2">
-                <input type="date" readonly class="form-control form-control-sm mb-2" id="due_date${value.id}" value="${value.due_date.split('T')[0]}" placeholder="Due Date">
-              </div>
+                <div class="col-sm-2">
+                  <input type="date" readonly class="form-control form-control-sm mb-2" id="due_date${value.id}" value="${value.due_date.split('T')[0]}" placeholder="Due Date">
+                </div>
 
-              <div class="col-auto">
-                <a onclick="getEditTodo(${id},'${title}','${description}','${due_date}','${status}')" id="edit-task-${value.id}" class="btn btn-outline-primary btn-sm"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                  </svg>
-                </a>
-              </div>
-
-              <div class="col-auto">
-                <a onclick="deleteTodo(${value.id})" id="del-task-${value.id}" class="btn btn-outline-danger btn-sm"> 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                <div class="col-auto">
+                  <a onclick="getEditTodo(${id},'${title}','${description}','${due_date}','${status}')" id="edit-task-${value.id}" class="btn btn-outline-primary btn-sm"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                      <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                      <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                     </svg>
-                </a>
+                  </a>
+                </div>
+
+                <div class="col-auto">
+                  <a onclick="deleteTodo(${value.id})" id="del-task-${value.id}" class="btn btn-outline-danger btn-sm"> 
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                      </svg>
+                  </a>
+                </div>
+
+                </form>
+
               </div>
-
-              </form>
-
             </div>
-          </div>
-        `);
+          `);
+        } else if (status == "doing") {
+          $("#doing-list").append(`
+            <!--start per task / mau loop-->
+            <div class="card mb-3 bg-light shadow-sm" id="todo${value.id}">
+              <div class="card-body p-3">
+                      
+                <h5 id="title${value.id}"><!--taskname-->${value.title}</h5>
+                <p id="description${value.id}"><!--task desc-->${value.description}</p>
+
+                <form  class="form-inline row g-3 justify-content-end" id="todo${value.id}" action="#" method="post">
+                <div class="col-sm-1">
+                  <input type="text" readonly class="form-control form-control-sm mb-2" id="status${value.id}" value="${value.status}">
+                </div>
+
+                <div class="col-sm-2">
+                  <input type="date" readonly class="form-control form-control-sm mb-2" id="due_date${value.id}" value="${value.due_date.split('T')[0]}" placeholder="Due Date">
+                </div>
+
+                <div class="col-auto">
+                  <a onclick="getEditTodo(${id},'${title}','${description}','${due_date}','${status}')" id="edit-task-${value.id}" class="btn btn-outline-primary btn-sm"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                      <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                      <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg>
+                  </a>
+                </div>
+
+                <div class="col-auto">
+                  <a onclick="deleteTodo(${value.id})" id="del-task-${value.id}" class="btn btn-outline-danger btn-sm"> 
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                      </svg>
+                  </a>
+                </div>
+
+                </form>
+
+              </div>
+            </div>
+          `);
+        } else if (status == "done") {
+          $("#done-list").append(`
+            <!--start per task / mau loop-->
+            <div class="card mb-3 bg-light shadow-sm" id="todo${value.id}">
+              <div class="card-body p-3">
+                      
+                <h5 id="title${value.id}"><!--taskname-->${value.title}</h5>
+                <p id="description${value.id}"><!--task desc-->${value.description}</p>
+
+                <form  class="form-inline row g-3 justify-content-end" id="todo${value.id}" action="#" method="post">
+                <div class="col-sm-1">
+                  <input type="text" readonly class="form-control form-control-sm mb-2" id="status${value.id}" value="${value.status}">
+                </div>
+
+                <div class="col-sm-2">
+                  <input type="date" readonly class="form-control form-control-sm mb-2" id="due_date${value.id}" value="${value.due_date.split('T')[0]}" placeholder="Due Date">
+                </div>
+
+                <div class="col-auto">
+                  <a onclick="getEditTodo(${id},'${title}','${description}','${due_date}','${status}')" id="edit-task-${value.id}" class="btn btn-outline-primary btn-sm"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                      <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                      <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg>
+                  </a>
+                </div>
+
+                <div class="col-auto">
+                  <a onclick="deleteTodo(${value.id})" id="del-task-${value.id}" class="btn btn-outline-danger btn-sm"> 
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                      </svg>
+                  </a>
+                </div>
+
+                </form>
+
+              </div>
+            </div>
+          `);
+        }
       });
     })
     .fail((xhr, text) => {
@@ -266,7 +350,7 @@ function getEditTodo(id, title, description, due_date, status) {
   </div>
   <div class="col-auto">
     <!-- <label class="sr-only" for="editTodoStatus">Preference</label> -->
-    <select class="form-select mb-2" id="editTodoStatus">
+    <select class="form-select mb-2" id="editTodoStatus${id}">
       ${option}
     </select>
   </div>
