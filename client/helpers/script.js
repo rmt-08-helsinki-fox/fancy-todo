@@ -1,5 +1,6 @@
 const baseUrl = "//localhost:3000"
 function auth() {
+
     if (!localStorage.getItem("accessToken")) {
         $("#navbar").hide()
         $("#header-container").show()
@@ -9,6 +10,8 @@ function auth() {
         $("#edittodo-container").hide()
         $("#addtodo-button").hide()
     } else {
+
+        getTodos()
         $("#navbar").show()
         $("#header-container").hide()
         $("#signin-container").hide()
@@ -16,9 +19,13 @@ function auth() {
         $("#addtodo-container").hide()
         $("#edittodo-container").hide()
         $("#addtodo-button").show()
-        getTodos()
+
+
     }
+
 }
+
+
 function createUser() {
     $("#register-form").on("submit", e => {
         e.preventDefault()
@@ -39,18 +46,20 @@ function createUser() {
                 $("#email-register").val("")
                 $("#name-register").val("")
             })
-            .fail((xml, text) => {
+            .fail(_ => {
+
                 swal({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'please insert email, name, and password correctly!',
-
+                    text: 'please insert email, name, and password correctly ya!',
                 })
             })
     })
 }
+
+
 function getTodos() {
-    $(".table tbody").empty()
+
     $.ajax({
         url: baseUrl + "/todos",
         method: "get",
@@ -59,23 +68,23 @@ function getTodos() {
         }
     })
         .done(todos => {
-            
+            $("tbody").empty()
             todos.forEach((e, index, array) => {
                 $(".table tbody").append(
                     `<tr>
-                            <td>${index + 1}</td>
-                            <td>${e.title}</td>
-                            <td>${e.description}</td>
-                            <td>${e.status}</td>
-                            <td>${e.due_date.split('T')[0]}</td>
-                            <td>${e.User.name}</td>
-                            <td>
-                                <div id="actions">
-                                    <i class="fa fa-edit" title="edit" onclick="editTodo('${e.id}','${e.title}','${e.description}', '${e.status}', '${e.due_date}')"></i>
-                                    <i class="fa fa-trash" title="delete" onclick="deleteTodo(${e.id})"></i>
-                                </div>
-                            </td>
-                        </tr>`
+                                <td>${index + 1}</td>
+                                <td>${e.title}</td>
+                                <td>${e.description}</td>
+                                <td>${e.status}</td>
+                                <td>${e.due_date.split('T')[0]}</td>
+                                <td>${e.User.name}</td>
+                                <td>
+                                    <div id="actions">
+                                        <i class="fa fa-edit" title="edit" onclick="editTodo('${e.id}','${e.title}','${e.description}', '${e.status}', '${e.due_date}')"></i>
+                                        <i class="fa fa-trash" title="delete" onclick="deleteTodo(${e.id})"></i>
+                                    </div>
+                                </td>
+                            </tr>`
                 )
             })
 
@@ -85,6 +94,7 @@ function getTodos() {
         })
 
 }
+
 
 function signin() {
     $("#signin-form").on("submit", (e) => {
@@ -103,15 +113,13 @@ function signin() {
             })
             .fail((xhr, text) => {
 
-                $(document).ready(function () {
+                swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Your email address or password is incorrect!',
 
-                    swal({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Your email address or password is incorrect!',
-
-                    })
                 })
+
 
             })
             .always(_ => {
@@ -161,43 +169,46 @@ function addTodo() {
             $("#addtodo-container").hide()
             $("#addtodo-button").show()
         })
-        $("#addtodo-form").on("submit", e => {
-            e.preventDefault()
-            const title = $("#title").val()
-            const description = $("#description").val()
-            const due_date = $("#due-date").val()
-            const status = "unfinished"
 
-            $.ajax({
-                url: baseUrl + "/todos/add",
-                method: "post",
-                data: {
-                    title, description, status, due_date
-                },
-                headers: {
-                    accessToken: localStorage.getItem("accessToken")
-                }
-            })
-                .done(newTodo => {
-                    $("#addtodo-container").hide(1000)
-                    $("#addtodo-button").show()
-                    auth()
-                })
-                .fail((xhr, text) => {
-                    $(document).ready(function () {
-                        swal({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'invalid input!',
-                        })
-                    })
-                })
-                .always(_ => {
-                    $("#title").val("")
-                    $("#description").val("")
-                    $("#due-date").val("")
-                })
+
+    })
+
+    $("#addtodo-form").on("submit", e => {
+        e.preventDefault()
+        const title = $("#title").val()
+        const description = $("#description").val()
+        const due_date = $("#due-date").val()
+        const status = "unfinished"
+
+        $.ajax({
+            url: baseUrl + "/todos/add",
+            method: "post",
+            data: {
+                title, description, status, due_date
+            },
+            headers: {
+                accessToken: localStorage.getItem("accessToken")
+            }
         })
+            .done(newTodo => {
+                $("#addtodo-container").hide()
+                $("#addtodo-button").show()
+                auth()
+            })
+            .fail((xhr, text) => {
+
+                swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'you have to fill all the required fields',
+                })
+
+            })
+            .always(_ => {
+                $("#title").val("")
+                $("#description").val("")
+                $("#due-date").val("")
+            })
     })
 }
 
@@ -212,21 +223,22 @@ function editTodo(todoId, title, description, status, due_date) {
     $("#edittodo-container").show()
     $("#title-edit").val(title)
     $("#description-edit").val(description)
-    if(status === "finished"){
+    if (status === "finished") {
         $("#finished").attr("selected")
     } else {
         $("#unfinished").attr("selected")
     }
     $("#status-edit").val(status)
     $("#due-date-edit").val(year + "-" + month + "-" + date)
+
     $("#edittodo-form").on("submit", e => {
         e.preventDefault()
-        
+
         const title = $("#title-edit").val()
         const description = $("#description-edit").val()
         const status = $("#status-edit").val()
         const due_date = $("#due-date-edit").val()
-        
+
         $.ajax(({
             url: baseUrl + `/todos/${todoId}`,
             method: "put",
@@ -238,34 +250,84 @@ function editTodo(todoId, title, description, status, due_date) {
             }
         }))
             .done(_ => {
+
                 $("#edittodo-container").hide()
                 auth()
             })
             .fail(error => {
-                console.log(error.responseJSON);
-                $(document).ready(function () {
-                    swal({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: error.responseJSON.error.messages
-                    })
+                swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "you have to fill all the required fields"
                 })
             })
-            
     })
 
+    $("#edittodo-cancel-button").on("click", e => {
+        e.preventDefault()
 
+        auth()
+    })
 }
+
+
 
 function deleteTodo(todoId) {
-    console.log(todoId);
+    $.ajax({
+        url: baseUrl + `/todos/${todoId}`,
+        method: 'delete',
+        headers: {
+            accessToken: localStorage.getItem("accessToken")
+        }
+    })
+        .done(_ => {
+            auth()
+        })
+        .fail(error => {
+
+            swal({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.responseJSON.error.messages
+            })
+        })
 }
 
+function onSignIn(googleUser) {
+    
+    let id_token = googleUser.getAuthResponse().id_token;
+    console.log(id_token);
+    $.ajax({
+        url: baseUrl + "/users/signinGoogle",
+        method: "post",
+        data: {
+            id_token
+        }
+    })
+    .done(response => {
+        localStorage.setItem("accessToken", response.accessToken)
+        auth()
+    })
+    .catch(error => {
+        console.log(error)
+    })
+  }
+
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+
+
+
 $(document).ready(function () {
+
     auth()
     launchRegister()
     signin()
     signout()
     addTodo()
-    
+
 });

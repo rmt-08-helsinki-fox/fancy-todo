@@ -7,6 +7,7 @@ const authenticate = function (req, res, next) {
         req.currentUser = currentUser
         next()
     } catch(error) {
+        console.log(error.name);
         next(error)
     }
 }

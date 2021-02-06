@@ -1,10 +1,37 @@
-#addtodo-container .col-5{
+#addtodo-container .col-2{
     margin-left : auto;
     margin-right: auto;
    
 }
-#edittodo-container .col-5{
+#edittodo-container .col-2{
     margin-left : auto;
     margin-right: auto;
    
 }
+
+#signin-container .col-2{
+    margin-left : auto;
+    margin-right: auto;
+   
+}
+
+#register-container .col-2{
+    margin-left : auto;
+    margin-right: auto;
+   
+}
+
+#header-container {
+    text-align: center;
+   
+}
+
+.g-signin2-container {
+    
+    padding-top: 20%;
+   
+}
+    
+
+
+
