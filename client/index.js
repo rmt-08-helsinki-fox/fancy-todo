@@ -25,6 +25,8 @@ $(document).ready(() => {
     $("#register-email").val("");
     $("#register-password").val("");
     $("#error-login").empty();
+    $("#error-register").empty();
+    $("#success-register").empty();
   });
 
   $("#btn-register").click((event) => {
@@ -32,6 +34,7 @@ $(document).ready(() => {
     $("#register-form").show();
     $("#login-email").val("");
     $("#login-password").val("");
+    $("#error-login").empty();
     $("#error-login").empty();
   });
 
@@ -48,7 +51,7 @@ $(document).ready(() => {
   $("#add-todo").click((event) => {
     event.preventDefault();
     $("#add-todo-area").show();
-
+    $("#error-add").empty();
     $("#submit-add-todo").click((event) => {
       const title = $("#add-title-todo").val();
       const description = $("#add-description-todo").val();
@@ -64,6 +67,7 @@ $(document).ready(() => {
   $("#cancel-add-todo").click((event) => {
     event.preventDefault();
     $("#add-todo-area").hide();
+    $("#error-add").empty();
   });
 });
 
@@ -95,7 +99,7 @@ const getTodos = () => {
     .done((response) => {
       $("#list-todo").empty();
       $("#homepage-message-succes").empty();
-
+      $("#homepage-message-error").empty();
       response.data.forEach((el) => {
         let status;
         if (!el.status) {
@@ -163,7 +167,8 @@ const getWeather = () => {
   `);
         })
         .fail((err) => {
-          console.log(err);
+          $("#homepage-message-error").empty();
+          $("#homepage-message-error").append(`<p>Internal Server Error</p>`);
         });
     });
   }
@@ -179,7 +184,6 @@ const handleRegister = (email, password, city) => {
       $("#success-register").text(`${respone.message}`);
     })
     .fail((err) => {
-      console.log(err);
       $("#error-register").text(err.responseJSON.errors[0]);
     })
     .always(() => {
@@ -220,13 +224,14 @@ const handleAdd = (title, description, due_date) => {
     })
     .fail((err) => {
       err.responseJSON.errors.forEach((el) => {
-        $("#homepage-message-error").empty();
-        $("#homepage-message-error").append(`<p>${el}</p>`);
+        $("#error-add").empty();
+        $("#error-add").append(`<p>${el}</p>`);
       });
     })
     .always(() => {
       $("#add-title-todo").val("");
       $("#add-description-todo").val("");
+      $("#add-due_date-todo").val("");
       setTimeout(function () {
         auth();
       }, 1000);
@@ -243,7 +248,8 @@ const handleDelete = (id) => {
       $("#homepage-message-succes").append("<p>Todo Deleted</p>");
     })
     .fail((err) => {
-      console.log(err);
+      $("#homepage-message-error").empty();
+      $("#homepage-message-error").append(`<p>Internal Server Error</p>`);
     })
     .always((_) => {
       setTimeout(function () {
@@ -276,8 +282,8 @@ const handleEdit = (id) => {
   $("#edit-todo-area").show();
 
   $(`#submit-edit-todo`).click((event) => {
-    $("#error-edit").empty();
     event.preventDefault();
+    $("#error-edit").empty();
     const title = $("#edit-title-todo").val();
     const description = $("#edit-description-todo").val();
     let due_date = $("#edit-due_date-todo").val();
@@ -293,6 +299,7 @@ const handleEdit = (id) => {
     })
       .done((response) => {
         $("#edit-todo-area").hide();
+        $("#error-edit").empty();
         $("#homepage-message-succes").append("<p>Todo's Updated</p>");
       })
       .fail((err) => {
@@ -301,6 +308,9 @@ const handleEdit = (id) => {
         });
       })
       .always((_) => {
+        $("#edit-title-todo").val("");
+        $("#edit-description-todo").val("");
+        $("#edit-due_date-todo").val("");
         setTimeout(function () {
           auth();
         }, 1000);
@@ -309,6 +319,7 @@ const handleEdit = (id) => {
 
   $("#cancel-edit-todo").click((event) => {
     event.preventDefault();
+    $("#error-edit").empty();
     $("#edit-todo-area").hide();
   });
 };
@@ -326,7 +337,8 @@ function onSignIn(googleUser) {
       auth();
     })
     .fail((err) => {
-      console.log(err);
+      $("#homepage-message-error").empty();
+      $("#homepage-message-error").append(`<p>Internal Server Error</p>`);
     });
 }
 
