@@ -457,6 +457,27 @@ const editTodoForm = (id) => {
     $("#register-btn").hide()
     $("#add-todo").hide()
     $("#my-todo").hide()
+
+    $.ajax({
+        url: base_url + "todos/" + id,
+        method: "GET",
+        headers: {
+            access_token: localStorage.getItem("access_token")
+        }
+    })
+        .done(todo => {
+            let dueDate = ""
+            for (let i = 0; i < 10; i++) {
+                dueDate += todo.due_date[i]
+            }
+            $("#edit-todo-title").val(todo.title)
+            $("#edit-todo-description").val(todo.description)
+            $("#edit-todo-status").val(todo.status)
+            $("#edit-todo-duedate").val(dueDate)
+        })
+        .fail((xhr, text) => {
+            console.log(xhr, text);
+        })
 }
 
 const editTodo = () => {
