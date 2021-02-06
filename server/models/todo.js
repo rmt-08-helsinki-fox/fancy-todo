@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
       validate : {
         isAfter : {
           args : moment().subtract(1, 'days').format('YYYY-MM-DD'),
-          msg : "min due date today"
+          msg : "Min due date today"
         },
         notEmpty : {
           args : true,

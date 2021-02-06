@@ -1,11 +1,12 @@
 const { Todo, Food } = require('../models');
 const axios = require('../helpers/axios');
+const Sequelize = require('sequelize');
 
 class TodoController{
 
     static index = async(req,res,next) => {
         try {
-            let todos = await Todo.findAll({ where : { UserId : +req.user.id }, include : 'Food' });
+            let todos = await Todo.findAll({ where : { UserId : +req.user.id }, order :[ ['status', 'ASC'], [ 'due_date','ASC' ]], include : 'Food' });
             res.status(200).json(todos);
         } catch (err) {
             next(err)
@@ -17,7 +18,7 @@ class TodoController{
             let todo = await Todo.create({title,description,status,due_date, UserId : req.user.id});
             let foodReq = await axios.get('/recipes/random');
             let food = foodReq.data.recipes[0];
-            await Food.create({foodName : food.title, description : food.summary, instruction : food.instructions, TodoId : todo.id})
+            await Food.create({foodName : food.title, description : food.summary, instruction : food.instructions, image : food.image, TodoId : todo.id})
             let recipe = await todo.getFood();
             todo.setDataValue('Food',recipe)
             return res.status(201).json(todo);
@@ -36,8 +37,7 @@ class TodoController{
     }
     static updateStatus = async(req,res,next) => {
         try {
-            let {status} = req.body;
-            let todo = await Todo.update({status},{ where : {id : +req.params.id}, returning : true, individualHooks : true});
+            let todo = await Todo.update({status : Sequelize.literal('NOT status')},{ where : {id : +req.params.id}, returning : true, individualHooks : true});
             res.status(200).json(todo[1][0]);
         } catch (err) {
             next(err)

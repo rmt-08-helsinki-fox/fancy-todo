@@ -10,4 +10,5 @@ route.put('/:id',Gate.todoResource,TodoController.update);
 route.patch('/:id',Gate.todoResource,TodoController.updateStatus);
 route.delete('/:id',Gate.todoResource,TodoController.destroy);
 
+
 module.exports = route

@@ -17,6 +17,9 @@ module.exports = {
       instruction: {
         type: Sequelize.TEXT
       },
+      image: {
+        type : Sequelize.STRING
+      },
       TodoId:{
         type : Sequelize.INTEGER,
         references : {
