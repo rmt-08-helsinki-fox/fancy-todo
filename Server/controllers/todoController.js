@@ -19,6 +19,7 @@ class todoController {
   }
 
   static getTodo(req, res) {
+    //whrere user.id = req.decoded.id
     TODO.findAll()
     .then(todo => {
       res.status(200).json(todo)
@@ -53,14 +54,18 @@ class todoController {
     }
 
     TODO.update(editTodo, {
-      where: {id: +req.params.id}
+      where: {
+        id: +req.params.id
+      },
+      returning: true
     })
     .then(todo => {
-      if(!editTodo) {
-        res.status(404).json({msg: "Todo Not found"})
-      } else {
-        res.status(200).json(editTodo)
-      }
+      console.log(todo, "<<< THIS IS TODO")
+      // if(!editTodo) {
+      //   res.status(404).json({msg: "Todo Not found"})
+      // } else {
+        res.status(200).json(todo)
+      // }
     })
     .catch(err => {
       res.status(500).json({msg: "Internal Server Error"})
@@ -70,14 +75,14 @@ class todoController {
     TODO.update({status: req.body.status}, {
       where: {
         id: +req.params.id
-      }
+      }, returning: true
     })
     .then(todo => {
-      if(!todo) {
-        res.status(404).json({msg: "Todo Status not found"})
-      } else {
+      // if(!todo) {
+      //   res.status(404).json({msg: "Todo Status not found"})
+      // } else {
         res.status(200).json(todo)
-      }
+      // }
     })
     .catch(err => {
       if(err.name === "SequelizeValidationError") {
@@ -88,7 +93,7 @@ class todoController {
     })
   }
   static deleteTodo(req, res) {
-    TODO.destroy({where:{id: +req.params.id}, returning: true})
+    TODO.destroy({where:{id: +req.params.id}})
     .then(todo => {
       if(!todo) {
         res.status(404).json({msg: "Error not found"})

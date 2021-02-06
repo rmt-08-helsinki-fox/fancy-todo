@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        isAfter: {
+        isAfter: { //custom validation compare date now
           args: new Date().toDateString(),
           msg: "Tanggal harus lebih dari hari ini"
         },

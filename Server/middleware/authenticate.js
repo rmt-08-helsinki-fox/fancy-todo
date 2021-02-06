@@ -5,7 +5,7 @@ const authenticate = function(req, res, next) {
     const token = req.headers.token;
     const decoded = jwt.verify(token, process.env.SECRET);
     req.decoded = decoded
-    console.log(decoded, "THIS IS DECODED")
+    // console.log(decoded, "THIS IS DECODED")
 
     next();
   } catch (err) {

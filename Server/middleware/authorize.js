@@ -9,7 +9,7 @@ const authorize = function(req, res, next) {
     }
   })
   .then(todo => {
-    console.log(todo, "THIS TO DO IS INSIDE AUTHORIZE")
+    // console.log(todo, "THIS TO DO IS INSIDE AUTHORIZE")
     if(!todo) {
       res.status(404).json({ msg: "User ID not found"})
     }

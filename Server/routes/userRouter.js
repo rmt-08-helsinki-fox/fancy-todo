@@ -4,5 +4,6 @@ const authenticate = require('../middleware/authenticate')
 
 router.post('/register', userController.register)
 router.post('/login', userController.login)
+router.post('/googleLogin', userController.oAuthLogins)
 
 module.exports = router;
