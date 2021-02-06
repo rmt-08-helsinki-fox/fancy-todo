@@ -157,6 +157,9 @@ function create () {
     }
   })
     .done((data) => {
+      $('#title').val('')
+      $('#description').val('')
+      $('#due_date').val('')
       getTodo()
       auth()
     })
@@ -204,7 +207,11 @@ function findTodo (id) {
       $('#edit_title').val(data.title)
       $('#edit_description').val(data.description)
       $('#edit_due_date').val(data.due_date.split("T")[0])
-      $('#edit_status').val(data.status)
+      if (data.status) {
+        $('#edit_status').prop('checked')
+      } else {
+        $('#edit_status').prop('check')
+      }
       $('#submitUpdate').data("id", data.id)
     })
     .fail((err) => {
