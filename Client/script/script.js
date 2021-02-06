@@ -2,27 +2,32 @@ let baseUrl = 'http://localhost:3000/'
 
 function authenticate() {
     if(!localStorage.getItem('accessToken')){
+        localStorage.removeItem('TodoId')
         $('#login-form').show()
-        $('#register-form').hide()
-        $('#login').show()
+        $('#form').show()
         $('#register').show()
+        $('#login').show()
+        $('#register-form').hide()
         $('#home').hide()
         $('#logout').hide()
         $('#edit-form').hide()
     }else{
-        $('#login').hide()
-        $('#register').hide()
-        $('#login-form').hide()
-        $('#register-form').hide()
+        localStorage.removeItem('TodoId')
         $('#home').show()
         $('#logout').show()
+        $('#login').hide()
+        $('#register').hide()
+        $('#form').hide()
         $('#edit-form').hide()
         getTodo()
     }
 }
 
 function logout() {
-    localStorage.removeItem('accessToken')
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+        console.log('User signed out.');
+    });
 }
 
 function toRegister() {
@@ -50,16 +55,29 @@ function getTodo() {
     .done(data => {
         $('#todo-list').empty()
         data.forEach(el => {
-            $('#todo-list').append(`
-                <tr>
+            if(el.status === true){
+                $('#todo-list').append(`
+                <tr  style="background-color: yellow; text-align: center">
                     <td>${el.title}</td>
                     <td>${el.description}</td>
                     <td>${moment(el.due_date).format('DD-MMMM-YYYY')}</td>
-                    <button>haii</button>
-                    <td><button onclick="check(${el.id})">Check</button></td>
-                    <td><button onclick="edit(${el.id})">Edit</button></td>
-                    <td><button onclick="del(${el.id})">delete</button></td>
+                    <td><button onclick="complete(${el.id})">Complete</button>
+                    <button onclick="unComplete(${el.id})">UnComplete</button>
+                    <button onclick="edit(${el.id})">Edit</button>
+                    <button onclick="del(${el.id})">delete</button></td>
                 </tr>`)
+            }else{
+                $('#todo-list').append(`
+                    <tr style="text-align: center">
+                        <td>${el.title}</td>
+                        <td>${el.description}</td>
+                        <td>${moment(el.due_date).format('DD-MMMM-YYYY')}</td>
+                        <td><button onclick="complete(${el.id})">Complete</button>
+                        <button onclick="unComplete(${el.id})">UnComplete</button>
+                        <button onclick="edit(${el.id})">Edit</button>
+                        <button onclick="del(${el.id})">delete</button></td>
+                    </tr>`)
+            }
         });
     })
     .fail((err, text) => {
@@ -67,7 +85,42 @@ function getTodo() {
     })
 }
 
-function check(id) {
+function onSignIn(googleUser) {
+    var id_token = googleUser.getAuthResponse().id_token
+  
+    $.ajax({
+        url: baseUrl + "users/googlelogin",
+        method: "POST",
+        data: {
+          googleToken : id_token
+        }
+    })
+    .done(res => {
+        localStorage.setItem("accessToken", res.accessToken);
+        authenticate()
+    })
+    .fail((xhr, text) => {
+        console.log(xhr, text);
+    })
+}
+
+function complete(id) {
+    let status = true
+    $.ajax({
+        url: baseUrl + `todos/${id}`,
+        method: 'PATCH',
+        headers: {accessToken: localStorage.getItem('accessToken')},
+        data: {id, status}
+    })
+    .done(() => {
+        getTodo()
+    })
+    .fail((err, txt) => {
+        console.log(err,txt)
+    })
+}
+
+function unComplete(id) {
     $.ajax({
         url: baseUrl + `todos/${id}`,
         method: 'PATCH',
@@ -90,19 +143,26 @@ function edit(id) {
         headers: {accessToken: localStorage.getItem('accessToken')},
     })
     .done(data => {
-        $("#edit-form").append(`
-        <legend>Edit Todo</legend>
-        <label>Title</label>
-        <input type="text" class="form-control" id="title-edit" value="${data.title}">
-        <label>Description</label>
-        <input type="text" class="form-control" id="desc-edit" value="${data.description}">
-        <label>Due Date</label><br>
-        <input type="date" id="date-edit" value="${moment(data.due_date).format('YYYY-MM-DD')}">
-        <input type="submit" value="SUBMIT">`)
-        $('#edit-form').show()
+        $('#edit-form').empty()
+        if(data.status === true){
+            alert(`You Can't Edit Checked ToDo`)
+            authenticate()
+        }else{
+            $("#edit-form").append(`
+            <legend class="text-center">EDIT TODO</legend>
+            <label>Title</label>
+            <input type="text" class="form-control" id="title-edit" value="${data.title}">
+            <label>Description</label>
+            <input type="text" class="form-control" id="desc-edit" value="${data.description}">
+            <label>Due Date</label><br>
+            <input type="date" id="date-edit" value="${moment(data.due_date).format('YYYY-MM-DD')}">
+            <input type="submit" value="submit">`)
+            $('#edit-form').show()
+            localStorage.setItem('TodoId', data.id)
+        }
     })
-    .fail(err => {
-        console.log(err)
+    .fail((err, txt) => {
+        console.log(err, txt)
     })
 }
 
@@ -172,11 +232,14 @@ $(document).ready(() => {
     //Log Out
     $('#logout').on('click', (e) => {
         e.preventDefault()
-        localStorage.removeItem('accessToken')
+        localStorage.clear()
+        logout()
         authenticate()
     })
 
+    //ADD Todo
     $('#add-form').on('submit', (e) => {
+        e.preventDefault()
         let title = $('#title-todo').val()
         let description = $('#desc-todo').val()
         let due_date = $('#date-todo').val()
@@ -187,22 +250,32 @@ $(document).ready(() => {
             data: {title, description, due_date}
         })
         .done(() => {
-            getTodo()
+            authenticate()
         })
         .fail((err, txt) => {
             console.log(err, txt)
         })
     })
 
+    //Edit Todo
     $('#edit-form').on('submit', (e) => {
+        e.preventDefault()
+        let id = localStorage.getItem('TodoId')
         let title = $("#title-edit").val()
         let description = $("#desc-edit").val()
         let due_date = $("#date-edit").val()
-        e.preventDefault()
-        // $.ajax({
-        //     url: baseUrl + '/todos',
-        //     get: '',
-        // })
+        $.ajax({
+            url: baseUrl + `todos/${id}`,
+            method: 'PUT',
+            headers: {accessToken: localStorage.getItem('accessToken')},
+            data: {id, title, description, due_date}
+        })
+        .done(() => {
+            authenticate()
+        })
+        .fail((err, txt) => {
+            console.log(err, txt)
+        })
     })
     
 })

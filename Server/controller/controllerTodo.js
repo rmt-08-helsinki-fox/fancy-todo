@@ -1,11 +1,13 @@
 const {Todo} = require('../models')
 const axios = require('axios')
-const moment = require('moment')
 
 class ControllerTodo {
   static listTodo(req, res, next){
     let UserId = req.headers.User.id
-    Todo.findAll({where: {UserId}})
+    Todo.findAll({
+      where: {UserId},
+      order: [['id', 'ASC']],
+    })
     .then(todo => {
       res.status(200).json(todo)
     })
@@ -52,13 +54,12 @@ class ControllerTodo {
   }
 
   static editTodo(req, res, next){
-    let id = +req.body.id
+    let id = req.body.id
     let UserId = req.headers.User.id
     let title = req.body.title || ''
     let description = req.body.description || ''
-    let status = req.body.status || ''
     let due_date = req.body.due_date || ''
-    let status = req.body.status || false
+    let status = false
     Todo.update({title, description, status, due_date}, {where: {id, UserId}, returning: true})
     .then(todo => {
       if(!todo[0]){
@@ -79,10 +80,12 @@ class ControllerTodo {
   static updateStatus(req ,res, next) {
     let id = +req.body.id
     let UserId = req.headers.User.id
-    let status = true
-    Todo.update({status}, {where: {id, UserId}, returning: true})
+    let status = req.body.status || false
+    Todo.update({status}, {
+      where: {id, UserId}, 
+      returning: true
+    })
     .then(todo => {
-      console.log(todo)
       if(!todo[0]){
         throw {
           name: "customError",

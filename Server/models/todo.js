@@ -53,6 +53,11 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate: (todo, options) => {
         todo.status = false
+      },
+      beforeUpdate: (todo, options) => {
+        if(!todo.status){
+          todo.status = false
+        }
       }
     },
     sequelize,
