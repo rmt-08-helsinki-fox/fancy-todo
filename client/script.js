@@ -137,8 +137,8 @@ function onSignIn(googleUser) {
     data: {id_token}
   })
     .done(response => {
-      localStorage.access_token = response.access_token
-      showTodoList()
+      localStorage.setItem("access_token", response.access_token)
+      checkAuth()
     })
     .fail(err => {
       console.log(err)
