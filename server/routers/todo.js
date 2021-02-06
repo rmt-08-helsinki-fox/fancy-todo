@@ -6,6 +6,7 @@ const authorize = require('../middlewares/authorize')
 router.use(authenticate)
 router.post('/', TodoController.postTodo)
 router.get('/', TodoController.getTodo)
+router.get('/user', TodoController.getTodoUser)
 
 router.get('/:id',authorize, TodoController.getTodoById)
 router.put('/:id',authorize, TodoController.updateTodo)

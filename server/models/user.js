@@ -31,7 +31,15 @@ module.exports = (sequelize, DataTypes) => {
         msg: 'Email has been used'
       }
     },
-    password: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      is: /^[0-9a-f]{64}$/i,
+      validate: {
+        notEmpty: {
+          msg: 'Please enter your password'
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',

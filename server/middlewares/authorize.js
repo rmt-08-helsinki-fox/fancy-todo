@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken')
 const { Todo } = require('../models')
 
 const authorize = function authorization(req, res, next) {

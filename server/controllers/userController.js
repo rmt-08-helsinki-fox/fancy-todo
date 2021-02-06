@@ -24,7 +24,7 @@ class UserController {
       const { email, password } = req.body
       let user = await User.findOne({
         where: {
-          email
+          email: email
         }
       })
       if (user) {
@@ -34,7 +34,7 @@ class UserController {
             id: user.id,
             email: email
           })
-          res.status(200).json({token})
+          res.status(200).json({token, id : user.id})
         } else {
           throw {name : 'CustomError', msg: 'Email or password is wrong', status: 400}
         }
@@ -42,6 +42,7 @@ class UserController {
         throw {name : 'CustomError', msg: 'Email or password is wrong', status: 400}
       }
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }
