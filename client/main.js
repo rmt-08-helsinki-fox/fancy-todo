@@ -16,6 +16,7 @@ function auth() {
     $("#update-todo-container").hide();
   } else {
     getTodos();
+    weather();
     $("#nav-logout").show();
     $("#add-todo").show();
     $("#weather").show();
@@ -41,6 +42,7 @@ function clickRegister() {
 function addTodoClick() {
   $("#add-todo").on("click", (e) => {
     e.preventDefault();
+    $("#error-container").remove();
     $("#add-todo-container").toggle(500);
     $("#update-todo-container").hide();
     $("#todo-list-container").show(500);
@@ -49,6 +51,7 @@ function addTodoClick() {
 }
 
 function cancleEdit() {
+  $("#error-container").remove();
   $("#update-todo-container").hide();
   $("#todo-list-container").slideDown();
 }
@@ -71,6 +74,7 @@ function login() {
     console.log(res);
     localStorage.setItem("token", res.accessToken);
     auth();
+    $("#error-container").remove();
   })
   .fail((xhr, text) => {
     const err = JSON.parse(xhr.responseText)
@@ -79,8 +83,6 @@ function login() {
     <div id="error-container" class="bg-danger text-white">
     <p>${err.errors}</p>
     </div>`)
-    console.log(JSON.parse(xhr.responseText));
-    console.log(xhr);
     console.log(xhr.responseJSON);
   })
   .always(_ => {
@@ -92,20 +94,30 @@ function login() {
 function register() {
   const email = $("#register-email").val();
   const password = $("#register-password").val();
-  console.log(email, password);
+  const city = $("#register-city").val();
+  console.log(email, password, city);
 
 
   $.ajax({
     url: `${url}users/register`,
     method: "POST",
-    data: { email, password }
+    data: { email, password, city }
   })
   .done((res) => {
     console.log(res);
     auth();
+    $("#error-container").remove();
+
   })
   .fail((xhr, text) => {
     console.log(xhr, text);
+    let err = xhr.responseJSON
+    console.log(err);
+    $("#error-container").remove();
+    $("#register-container").prepend(`
+    <div id="error-container" class="bg-danger text-white">
+    <p>${err.errors}</p>
+    </div>`)
   })
   .always(_ => {
     $("#register-form").trigger("reset")
@@ -131,9 +143,17 @@ function addTodo() {
     console.log(res);
     getTodos();
     $("#add-todo-container").hide("slow")
+    $("#error-container").remove();
   })
   .fail((xhr, text) => {
     console.log(xhr, text);
+    const err = xhr.responseJSON
+    console.log(err);
+    $("#error-container").remove();
+    $("#add-todo-container").prepend(`
+    <div id="error-container" class="bg-danger text-white">
+    <p>${err.errors}</p>
+    </div>`)
   })
   .always(_ => {
     $("#add-form").trigger("reset")
@@ -227,8 +247,8 @@ function update(todoId) {
         <textarea class="form-control" id="update-description" cols="10" rows="3">${todo.description}</textarea><br>
       </div>
     
-      <a href = "#" onClick = confirmEdit(${todo.id}) class="btn btn-success btn-sm mt-2"> save </a>
-      <a href = "#" onClick = cancleEdit() class="btn btn-danger btn-sm mt-2"> cancel </a>
+      <a href = "#" onClick = confirmEdit(${todo.id}) class="btn btn-success mt-2"> save </a>
+      <a href = "#" onClick = cancleEdit() class="btn btn-danger mt-2"> cancel </a>
     `)
     $("#update-todo-container").slideDown();
     $("#todo-list-container").hide();
@@ -259,13 +279,19 @@ function confirmEdit(todoId) {
   .done(todo => {
     console.log(todo);
     console.log('todo updated');
+    $("#error-container").remove();
     $("#update-todo-container").hide();
     getTodos();
     $("#todo-list-container").slideDown();
   })
   .fail((xhr, text) => {
     console.log(xhr, text);
-    console.log(xhr.responseText);
+    const err = xhr.responseJSON
+    $("#error-container").remove();
+    $("#update-todo-container").prepend(`
+    <div id="error-container" class="bg-danger text-white">
+    <p>${err.errors}</p>
+    </div>`)
   })
 }
 
@@ -403,7 +429,7 @@ function onSignIn(googleUser) {
                   alt="light-rain">
               </div>
 
-              <div class="col" style="margin-top: 3.5rem;">
+              <div class="col" style="margin-top: 2rem;">
                 <h3 class="">${weather_desc}</h3>
               </div>
 
@@ -440,6 +466,7 @@ function onSignIn(googleUser) {
 
 function logout() {
   localStorage.clear();
+  $("#error-container").remove();
   const auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut()
     .then(() => {
@@ -449,11 +476,10 @@ function logout() {
 }
 
 
-//* ================= Jquery =============================
+//* ================= Document Ready =============================
 
 $(document).ready( () => {
   auth();
-  // weather();
   clickRegister();
   addTodoClick();
 
@@ -479,6 +505,7 @@ $(document).ready( () => {
   })
   $("#btn-register-cancel").on("click", (e) => {
     e.preventDefault();
+    $("#error-container").remove();
     $("#login-container").show(500);
     $("#google-login").show(500);
     $("#register-container").hide();

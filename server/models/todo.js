@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const moment = require('moment');
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -32,8 +33,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       validate: { 
         isAfter: {
-          args: new Date().toString(),
-          msg: `Date must be greater than today`
+          args: moment(new Date()).subtract(1, 'days').toString(),
+          msg: `Date must be greater than yesterday`
         }
       }
     },

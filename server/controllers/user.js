@@ -1,19 +1,17 @@
 const { User } = require('../models');
 const { compare } = require('../helpers/bcrypt');
 const { genToken } = require('../helpers/jwt')
-const sendEmail = require('../helpers/mailgun');
 const {OAuth2Client} = require('google-auth-library');
 
 class UserController {
 
   static register(req, res, next) {
-    const { email, password } = req.body;
-    const newUser = { email, password };
+    const { email, password, city} = req.body;
+    const newUser = { email, password, city };
 
     User.create(newUser)
     .then((user) => {
       if (user) {
-        // sendEmail(user.email)
         res.status(201).json({
           success: 'Registration success',
           id: user.id,
