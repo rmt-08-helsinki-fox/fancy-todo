@@ -21,8 +21,11 @@ body {
   margin-top: 100px;
 }
 
+#section {
+  margin-top: 50px;
+}
 #section #newsCard {
-  width: 400px;
+  width: 250px;
 }
 
 #navbar {

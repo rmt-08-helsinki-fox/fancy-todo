@@ -14,7 +14,9 @@ function auth () {
     $('#newsCard').hide()
     $("#navbar").hide()
     $('#sectionUser').show()
+    $('h4').hide()
   } else {
+    $('h4').show()
     $("#navbar").show()
     $('#img-h8').hide()
     $('#login').hide()
@@ -113,7 +115,7 @@ function getTodo () {
               <div class="card-body">
                 <h5 class="card-title">${el.title}</h5>
                 <p class="card-text">${el.description}</p>
-                <input type="checkbox" checked="" id="status" onclick="changeStatus(${el.id}, 'unfinished')"> done todo
+                <input type="checkbox" checked="" id="status" onclick="changeStatus(${el.id})"> done todo
                 <p class="card-text">${el.due_date.split("T")[0]}</p>
                 <a href="#" class="btn btn-primary" onclick="findTodo(${el.id})">Change</a>
                 <a href="#" class="btn btn-danger" onclick="remove(${el.id})">Delete</a>
@@ -125,7 +127,7 @@ function getTodo () {
               <div class="card-body">
                 <h5 class="card-title">${el.title}</h5>
                 <p class="card-text">${el.description}</p>
-                <input type="checkbox" check="" id="status" onclick="changeStatus(${el.id}, 'unfinished')"> Waiting todo
+                <input type="checkbox" check="" id="status" onclick="changeStatus(${el.id})"> Waiting todo
                 <p class="card-text">${el.due_date.split("T")[0]}</p>
                 <a href="#" class="btn btn-primary" onclick="findTodo(${el.id})">Change</a>
                 <a href="#" class="btn btn-danger" onclick="remove(${el.id})">Delete</a>
@@ -203,7 +205,9 @@ function findTodo (id) {
     .done((data) => {
       console.log(data)
       $('#editTodo').show()
+      $('h4').hide()
       $('#todoList').hide()
+      $('#todoListFalse').hide()
       $('#create').hide()
       $('#logout').hide()
       $("#newsCard").hide()
@@ -261,12 +265,38 @@ function news () {
     }
   })
     .done((data) => {
+      console.log(data)
       $("#newsCard").empty()
       data.forEach(el => {
         $('#newsCard').append(
           `<div class="card-body">
             <img class="card-img-top" src="${el.urlToImage}" alt="Card image cap">
             <p class="card-text">${el.title}</p>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalLong${el.id}">
+              read some
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalLong${el.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">News</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">x</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    ${el.content} <br> or you can go to <br> ${el.url}
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>`
         )
       })
@@ -397,6 +427,8 @@ $('#logout').on('click', (event) => {
 $('#create').on('click', (event) => {
   event.preventDefault()
   $('#todoList').hide()
+  $('h4').hide()
+  $('#todoListFalse').hide()
   $('#logout').hide()
   $('#create').hide()
   $("#newsCard").hide()
@@ -408,13 +440,17 @@ $('#cancelCreate').on('click', (event) => {
   event.preventDefault()
   $("#newsCard").show()
   $('#todoList').show()
+  $('#todoListFalse').show()
+  $('h4').show()
   $('#logout').show()
   $('#create').show()
   $('#createTodo').hide()
 })
 $('#cancelEdit').on('click', (event) => {
   event.preventDefault()
+  $("h4").show()
   $("#newsCard").show()
+  $('#todoListFalse').show()
   $('#todoList').show()
   $('#logout').show()
   $('#create').show()
