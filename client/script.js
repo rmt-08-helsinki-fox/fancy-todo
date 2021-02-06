@@ -110,7 +110,7 @@ function getTodo () {
               <div class="card-body">
                 <h5 class="card-title">${el.title}</h5>
                 <p class="card-text">${el.description}</p>
-                <input type="checkbox" checked="" id="status-138" onclick="changeStatus(${el.id}, 'unfinished')"> done todo
+                <input type="checkbox" checked="" id="status" onclick="changeStatus(${el.id}, 'unfinished')"> done todo
                 <p class="card-text">${el.due_date.split("T")[0]}</p>
                 <a href="#" class="btn btn-primary" onclick="findTodo(${el.id})">Change</a>
                 <a href="#" class="btn btn-danger" onclick="remove(${el.id})">Delete</a>
@@ -122,7 +122,7 @@ function getTodo () {
               <div class="card-body">
                 <h5 class="card-title">${el.title}</h5>
                 <p class="card-text">${el.description}</p>
-                <input type="checkbox" check="" id="status-138" onclick="changeStatus(${el.id}, 'unfinished')"> Waiting todo
+                <input type="checkbox" check="" id="status" onclick="changeStatus(${el.id}, 'unfinished')"> Waiting todo
                 <p class="card-text">${el.due_date.split("T")[0]}</p>
                 <a href="#" class="btn btn-primary" onclick="findTodo(${el.id})">Change</a>
                 <a href="#" class="btn btn-danger" onclick="remove(${el.id})">Delete</a>
@@ -143,7 +143,6 @@ function create () {
   const description = $('#description').val()
   const due_date = $('#due_date').val()
   const status = $('#status').prop('checked')
-  console.log(title, description, due_date, status)
   $.ajax({
     url: server_url + '/todos',
     method: 'post',
@@ -252,7 +251,6 @@ function news () {
     }
   })
     .done((data) => {
-      console.log(data)
       $("#newsCard").empty()
       data.forEach(el => {
         $('#newsCard').append(
@@ -291,7 +289,43 @@ function onSignIn(googleUser) {
       console.log(err)
     })
 }
+// <input type="checkbox" value="1" name="checkMeOut" id="checkMeOut" checked="checked" />
+// $('#checkMeOut').prop('checked'); // true
 
+// if($('#checkMeOut').prop('checked')) {
+//   something when checked
+// } else {
+//   something else when not
+//}
+function changeStatus (id) {
+  let status 
+  if ($("#status").prop('checked')) {
+    status = true
+  } else {
+    status = false
+  }
+  console.log(status, '<<<<<<<<')
+  $.ajax({
+    url: server_url + '/todos/' + id,
+    method: 'patch',
+    data: {
+      status
+    },
+    headers: {
+      access_token: localStorage.access_token
+    }
+  })
+    .done((data) => {
+      getTodo()
+    })
+    .fail(err => {
+      console.log(err.responseText)
+    })
+    .always(() => {
+      console.log('change status running')
+
+    })
+}
 $(document).ready(() => {
   auth()
 })
@@ -301,7 +335,7 @@ $('#submitUpdate').on('click', (event) => {
   const title = $("#edit_title").val()
   const description= $("#edit_description").val()
   const due_date = $("#edit_due_date").val()
-  const status = $("#edit_status").val()
+  const status = $("#edit_status").prop('checked')
   console.log(id)
 
   $.ajax({
@@ -358,7 +392,7 @@ $('#create').on('click', (event) => {
   $("#newsCard").hide()
   $('#sectionUser').hide()
   $('#createTodo').show()
-  
+
 })
 $('#cancelCreate').on('click', (event) => {
   event.preventDefault()
@@ -384,4 +418,3 @@ $('#editTodo').on('submit', (event) => {
   event.preventDefault()
   update()
 })
-
