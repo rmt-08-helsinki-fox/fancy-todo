@@ -88,6 +88,10 @@ const signUp = () => {
 const signOut = () => {
   localStorage.clear()
   auth()
+  var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+  });
 }
 
 const getAllTodo = () => {
@@ -109,10 +113,16 @@ const getAllTodo = () => {
       } else {
         btnDone = `<button type="button" class="btn btn-warning" onClick="updateStatusTodo(${e.id},${e.status})">Undone</button>`
       }
+      let status
+      if (!e.status) {
+        status = 'Uncompleted'
+      } else {
+        status = 'Completed'
+      }
       $('#tBody').append(`<tr>
       <td>${e.title}</td>
       <td>${e.description}</td>
-      <td>${e.status}</td>
+      <td>${status}</td>
       <td>${e.due_date}</td>
       <td>
         ${btnDone}
