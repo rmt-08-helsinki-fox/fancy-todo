@@ -24,7 +24,15 @@ Request Body
   "description": "<some details related to title>",
   "status": "<notes for the related todo already done or not>",
   "due_date": "<todo deadline date>"
+},
+{
+  "title": "<todo title/name>",
+  "description": "<some details related to title>",
+  "status": "<notes for the related todo already done or not>",
+  "due_date": "<todo deadline date>"
+  "location": "<input your current location to get info about today weather>"
 }
+
 ```
 
 Response(201)
@@ -37,13 +45,32 @@ Response(201)
     "due_date": "2021-03-01T00:00:00.000Z",
     "updatedAt": "2021-02-01T13:42:20.022Z",
     "createdAt": "2021-02-01T13:42:20.022Z"
-}
+},
+
+[
+    {
+        "id": 57,
+        "title": "makan malam",
+        "description": "makan diluar(restoran)",
+        "status": "undone",
+        "due_date": "2021-03-01T00:00:00.000Z",
+        "user_id": 2,
+        "updatedAt": "2021-02-03T11:28:24.058Z",
+        "createdAt": "2021-02-03T11:28:24.058Z"
+    },
+    [
+        "Partly cloudy"
+    ]
+]
 ```
 
 Response(400)
 ```
 {
-    "message": "Validation error: Validation notEmpty on title failed"
+    "messages": [
+        "title cannot be empty",
+        "status cannot be empty"
+    ]
 }
 ```
 
@@ -98,6 +125,12 @@ Response(200)
     }
 ]
 ```
+Response(401)
+```
+{
+    "message": "Invalid Token"
+}
+```
 
 Response(500)
 ```
@@ -139,6 +172,14 @@ Response(200)
     "updatedAt": "2021-02-01T13:42:20.022Z"
 }
 ```
+
+Response(401)
+```
+{
+    "message": "Invalid Token"
+}
+```
+
 Response(404)
 ```
 {
@@ -192,7 +233,17 @@ Response(200)
 Response(400)
 ```
 {
-    "message": "Validation error: Validation notEmpty on status failed"
+    "messages": [
+        "title cannot be empty",
+        "status cannot be empty"
+    ]
+}
+```
+
+Response(401)
+```
+{
+    "message": "Invalid Token"
 }
 ```
 
@@ -250,6 +301,22 @@ Response(200)
 ]
 ```
 
+Response(400)
+```
+{
+    "messages": [
+        "status cannot be empty"
+    ]
+}
+```
+
+Response(401)
+```
+{
+    "message": "Invalid Token"
+}
+```
+
 Response(404)
 ```
 {
@@ -282,6 +349,13 @@ Response(200)
 ```
 {
     "message": "todo success to delete"
+}
+```
+
+Response(401)
+```
+{
+    "message": "Invalid Token"
 }
 ```
 

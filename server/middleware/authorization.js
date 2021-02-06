@@ -3,25 +3,26 @@ const { Todo, User } = require('../models/')
 function authorization(req, res, next) {
   // disini bisa terima req.userData atau token yang di decode
   // ada req.params.id
-  
-  let todoId = +req.params.id
-  
-  Todo.findByPk(todoId, {
-    include: [User]
+  let user_id = +req.params.id
+  console.log('ini dari authorization', user_id)
+  Todo.findAll ({
+    where: {
+      "user_id": user_id  
+    }
   })
   .then(todo => {
-    
     req.todo = todo
     // error todo tidak ditemukan pindah di authorized
-    if(!todo) throw new Error('error not found')
+    if(!todo) throw ({ name:'customError', message: 'error not found', })
     //proses authorization
-    if(req.todo.user_id === req.userData.id) {
+    if(todo) {
+      console.log('lewat authorization')
       next()
     }
     else {
       // error ketika tidak diauthorized
       // res.status(401).json({ message: 'Not Authorized'})
-      throw new Error('Not Authorized')
+      throw ({ name:'Authorization', message: 'Not Authorized', })
     }
   })
   .catch(err => {

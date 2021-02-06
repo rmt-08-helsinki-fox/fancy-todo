@@ -3,17 +3,19 @@ const ControllerTodo = require('../controllers/todo-controller')
 const authentication  = require('../middleware/authentication')
 const authorization = require('../middleware/authorization')
 
-router.post('/', authentication, ControllerTodo.postTodos)
-router.get('/', authentication,  ControllerTodo.showTodos)
+
+console.log('masuk routes')
+router.use(authentication)
+console.log('lewat authentication')
+router.get('/', ControllerTodo.showTodos)
+router.post('/', ControllerTodo.postTodos)
 
 
-router.get('/:id',authentication, authorization, ControllerTodo.showTodoById)
-
-router.put('/:id', authentication, authorization, ControllerTodo.putTodo)
-
-router.patch('/:id', authentication, authorization, ControllerTodo.patchTodo)
-
-router.delete('/:id', authentication, authorization, ControllerTodo.deleteTodo)
+// router.use('/:id', authorization)
+router.get('/:id', authorization, ControllerTodo.showTodoById)
+router.put('/:id', authorization, ControllerTodo.putTodo)
+router.patch('/:id', authorization, ControllerTodo.patchTodo)
+router.delete('/:id', authorization, ControllerTodo.deleteTodo)
 
 
 
