@@ -85,11 +85,9 @@ class TodoController {
   static async deleteTodos(req, res, next) {
     try {
       const id = +req.params.id;
-      let deleted = await Todo.destroy({ where: { id: id }, returning: true });
+      let deleted = await Todo.destroy({ where: { id: id } });
 
-      res
-        .status(200)
-        .json({ data: deleted, messsage: "todo succes to delete" });
+      res.status(200).json({ messsage: "Todo deleted" });
     } catch (err) {
       next({
         name: "customError",
