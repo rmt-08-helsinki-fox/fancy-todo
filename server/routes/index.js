@@ -5,6 +5,7 @@ const UserController = require("../controllers/userController");
 const errorHandler = require("../middlewares/errorHandler");
 
 router.use("/todos", todoRouter);
+router.get("/users", UserController.getUsers);
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
 router.post("/login-google", UserController.loginGoogle);

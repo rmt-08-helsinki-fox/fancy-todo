@@ -5,7 +5,8 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     static associate(models) {
-      Todo.belongsTo(models.User, { foreignKey: "userId" })
+      Todo.hasMany(models.UserTodo, { foreignKey: "todoId" })
+      Todo.belongsToMany(models.User, { through: models.UserTodo, foreignKey: "todoId" })
     }
   };
   Todo.init({
@@ -37,8 +38,7 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       }
-    },
-    userId: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'Todo',

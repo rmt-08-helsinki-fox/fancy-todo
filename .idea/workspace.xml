@@ -2,19 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4a405ead-6c83-4c9d-b056-1618e4128d07" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/client/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ef16b6ba-d0bf-4622-90ca-d5a588f89dbf.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ef16b6ba-d0bf-4622-90ca-d5a588f89dbf.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ef16b6ba-d0bf-4622-90ca-d5a588f89dbf/storage_v2/_src_/database/hacktiv8-fancy-todo.X6slFQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ef16b6ba-d0bf-4622-90ca-d5a588f89dbf/storage_v2/_src_/database/hacktiv8-fancy-todo.X6slFQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/script.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/controllers/todoController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/todoController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/controllers/userController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/userController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/helpers/anime.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/helpers/anime.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/middlewares/authorization.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middlewares/authorization.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/middlewares/errorHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middlewares/errorHandler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/migrations/20210201160130-add-column-to-todo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/migrations/20210201160332-add-fk-to-todo.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/models/todo.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/todo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/todo.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/todo.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +36,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DatabaseDriversLRU" value="postgresql" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -56,7 +56,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1612529484310</updated>
-      <workItem from="1612529485469" duration="36213000" />
+      <workItem from="1612529485469" duration="40439000" />
     </task>
     <servers />
   </component>

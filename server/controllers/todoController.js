@@ -1,11 +1,11 @@
-const { Todo } = require("../models");
+const { User, Todo, UserTodo } = require("../models");
 const Anime = require("../helpers/anime")
 
 module.exports = class TodoController {
 
   static async getTodos(req, res, next) {
     try {
-      const todos = await Todo.findAll({ order: [["createdAt", "DESC"]] })
+      const todos = await Todo.findAll({ order: [["createdAt", "DESC"]], include: [UserTodo,User] })
       res.status(200).json(todos)
     } catch (err) {
       next(err)
@@ -17,8 +17,9 @@ module.exports = class TodoController {
     try {
       let { title, description, status, due_date } = req.body;
       let userId = req.payload.id;
-      const createTodo = await Todo.create({ title, description, status, due_date, userId }, { returning: true })
-      res.status(201).json(createTodo)
+      const todo = await Todo.create({ title, description, status, due_date }, { returning: true })
+      await UserTodo.create({ userId, todoId: todo.id }, { returning: true })
+      res.status(201).json(todo)
     } catch (err) {
       next(err)
     }
@@ -26,7 +27,6 @@ module.exports = class TodoController {
 
   static async getTodo(req, res, next) {
     try {
-      console.log(req.params.id)
       let id = Number(req.params.id);
       const todo = await Todo.findOne({ where: { id } })
       if(!todo) { throw { name: "Not Found", message: "todo not found", status: 404 } }
@@ -52,9 +52,8 @@ module.exports = class TodoController {
     try {
       let { status } = req.body;
       let id = Number(req.params.id);
-      console.log(status, id)
       const patchedTodo = await Todo.update({ status }, { where: { id }, returning: true })
-      console.log(patchedTodo[1])
+
       if(!patchedTodo[0]) { throw { name: "Not Found", message: "todo not found", status: 404 } }
       res.status(200).json(patchedTodo[1][0])
     } catch (err) {

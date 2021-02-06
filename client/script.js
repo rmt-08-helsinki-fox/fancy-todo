@@ -228,6 +228,7 @@ function patchTodo(id, status) {
 
 
 function deleteTodo(todoId) {
+  console.log(todoId)
   $.ajax({
     url: baseUrl + `/todos/${todoId}`,
     method: "DELETE",
@@ -448,7 +449,7 @@ function register() {
     })
 }
 
-function getDashboard() {
+async function getDashboard() {
   $("#dashboard-area").show();
   getTodos();
   getUsers();
@@ -456,7 +457,22 @@ function getDashboard() {
 }
 
 function getUsers(){
-
+  $.ajax({
+    url: baseUrl + "/users",
+    method: "GET",
+    headers: { access_token: localStorage.access_token }
+  })
+    .done(response => {
+      $("#user-list").empty();
+      response.forEach(user => {
+        $("#user-list").append(`
+         <h5 class="card-title">${user.email}</h5>
+        `)
+      })
+    })
+    .fail(err => {
+      console.log(err)
+    })
 }
 
 function getAccount() {
