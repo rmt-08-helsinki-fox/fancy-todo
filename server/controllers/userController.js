@@ -51,6 +51,9 @@ class UserController {
   }
 
   static googleLogin(req, res, next) {
+    console.log('masuuk', CLIENT_ID);
+    
+    console.log(new OAuth2Client);
     const client = new OAuth2Client(CLIENT_ID);
     client.verifyIdToken({
       idToken: req.body.generateToken,
@@ -61,7 +64,7 @@ class UserController {
       console.log({payload});
     })
     .catch(err => {
-      console.log(err);
+      console.error({err})
     })
   }
 }

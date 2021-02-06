@@ -3,6 +3,7 @@ const { Todo } = require('../models')
 const authorize = function (req, res, next) {
   const userId = +req.currentUser.id
   const todoId = +req.params.id
+  console.log({userId, todoId});
   Todo.findByPk(todoId)
   .then(todo => {
     if(!todo) {

@@ -4,15 +4,18 @@ const APIKEY = process.env.APIKEY
 
 class TodoController {
   static addTodo(req, res, next) {
-    const { title, description, status, due_date, UserId } = req.body
+    // console.log(req.body);
+    const { title, description, status, due_date, } = req.body
     const dataTodo = { title, description, status, due_date, UserId: req.currentUser.id }
     Todo.create(dataTodo, {
       returning: true
     })
     .then(todo => {
+      // console.log(todo, 'masuuuk');
       res.status(201).json(todo)
     })
     .catch(err => {
+      console.log({err});
       next(err)
     })
   }
@@ -29,6 +32,7 @@ class TodoController {
       })
     })
     .then(axiosData => {
+      // console.log({axiosData, dataTodos});
       res.status(200).json({
         todos: dataTodos,
         dataAPI: axiosData.data.articles.map(el => ({
@@ -64,6 +68,7 @@ class TodoController {
     const todoId = +req.params.id
     const { title, description, status, due_date } = req.body
     const dataTodo = { title, description, status, due_date }
+    console.log({dataTodo});
     Todo.update(dataTodo, {
       where: {
         id: todoId
