@@ -149,6 +149,50 @@ _Response (500 - Internal Server Error)_
 ```
 
 
+### GET/todos/user
+> Get todos that belongs to user
+
+_Request Header_
+```
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1bmlxdWVAbWFpbC5jb20iLCJpYXQiOjE2MTIyNTk3MTd9.G7ONNL8lFw7_wXoI-ThrDs3sfPalzS68EMY"
+}
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Response (200 - OK)_
+```
+[
+    {
+        "id": 1,
+        "title": "challenges",
+        "description": "daily challenge",
+        "status": "uncompleted",
+        "due_date": "2021-02-02T00:00:00.000Z"
+        "events": ["Pancasila day"]
+    }
+]
+```
+
+_Response (400 - Not Found)_
+```
+{
+    "error": "Todo is not Found"
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+{
+    "error" : "Internal server error"    
+}
+```
+
+
 ### PUT/todos/:id
 > Update task by id
 
