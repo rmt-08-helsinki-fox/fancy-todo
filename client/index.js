@@ -1,10 +1,8 @@
 const baseURL = 'http://localhost:3000' 
 
 $(document).ready(() => { 
-  $('#reg-form').hide()
-  $('#navbar').hide()
-  $('#todos-table').hide() 
-  $('#add-todo-form').hide()
+  
+  authentication()
 
   $('#reg-button').click((event) => { 
     event.preventDefault() 
@@ -56,8 +54,7 @@ $(document).ready(() => {
 
   $('#log-out').click((event) => { 
     event.preventDefault() 
-    localStorage.removeItem('acces_token')
-    toLoginForm()
+    logOut()
   }) 
 
   $('#add-todo').click((event) => { 
@@ -90,8 +87,12 @@ $(document).ready(() => {
       $('#add-due-date').val('')
       $('#add-status').val('') 
     })
-  })
-  
+  }) 
+
+  $('#show-todos').click((event) => { 
+    event.preventDefault()
+    authentication()
+  }) 
 }) 
 
 function toLoginForm() { 
@@ -116,12 +117,14 @@ function authentication() {
         $('#log-form').hide() 
         $('#reg-form').hide() 
         $('#add-todo-form').hide()
+        $('#edit-todo-div').hide()
     } else { 
         $('#navbar').hide() 
         $('#todos-table').hide() 
         $('#log-form').show() 
         $('#reg-form').hide() 
         $('#add-todo-form').hide()
+        $('#edit-todo-div').hide()
     }
 } 
 
@@ -148,9 +151,9 @@ function getTodos() {
         <tr> 
           <td>${todos[i].title}</td>
           <td>${todos[i].description}</td>
-          <td>${todos[i].status}</td>
-          <td>${todos[i].due_date.split('T')[0]}</td> 
-          <td><button onclick="editTodoForm(${todos[i].id})">Edit</button>&nbsp;&nbsp;<button onclick="deleteTodo(${todos[i].id})">Delete</button>&nbsp;&nbsp;<button onclick="changeTodoStatus(${todos[i].status},${todos[i].id})">Mark as undone</button></td>
+          <td style="text-align: center;">${todos[i].status}</td>
+          <td style="text-align: center;">${todos[i].due_date.split('T')[0]}</td> 
+          <td><button type="button" onclick="editTodoForm(${todos[i].id})" class="btn btn-primary">Edit</button>&nbsp;&nbsp;<button type="button" onclick="deleteTodo(${todos[i].id})" class="btn btn-primary">Delete</button>&nbsp;&nbsp;<button type="button" onclick="changeTodoStatus(${todos[i].status},${todos[i].id})" class="btn btn-primary">Mark as undone</button></td>
         </tr> 
       `)
       } else {
@@ -158,9 +161,9 @@ function getTodos() {
         <tr> 
           <td>${todos[i].title}</td>
           <td>${todos[i].description}</td>
-          <td>${todos[i].status}</td>
-          <td>${todos[i].due_date.split('T')[0]}</td> 
-          <td><button onclick="editTodoForm(${todos[i].id})">Edit</button>&nbsp;&nbsp;<button onclick="deleteTodo(${todos[i].id})">Delete</button>&nbsp;&nbsp;<button onclick="changeTodoStatus(${todos[i].status},${todos[i].id})">Mark as Done</button></td>
+          <td style="text-align: center;">${todos[i].status}</td>
+          <td style="text-align: center;">${todos[i].due_date.split('T')[0]}</td> 
+          <td><button type="button" onclick="editTodoForm(${todos[i].id})" class="btn btn-primary">Edit</button>&nbsp;&nbsp;<button type="button" onclick="deleteTodo(${todos[i].id})" class="btn btn-primary">Delete</button>&nbsp;&nbsp;<button  type="button" onclick="changeTodoStatus(${todos[i].status},${todos[i].id})" class="btn btn-primary">Mark as Done</button></td>
         </tr> 
       `)
       }
@@ -189,7 +192,83 @@ function deleteTodo(id) {
 } 
 
 function editTodoForm(id) { 
-  console.log(id)
+  $.ajax({ 
+    url : `${baseURL}/todos/${id}`,
+    method : 'GET', 
+    headers : { 
+      token : localStorage.getItem('acces_token')
+    }
+  }) 
+  .done((todo) => { 
+    $('#todos-table').hide()
+    $('#edit-todo-div').show()
+    if (todo.status === false) { 
+      $('#edit-todo-form').append(` 
+        <div class="row">
+          <label for="edit-title" class="col-lg-3 col-form-label">Title</label>
+          <div class="col-lg-9">
+            <input type="text" class="form-control" id="edit-title" name="edit-title" value="${todo.title}"><br><br>
+          </div>  
+        </div>
+        <div class="row">
+          <label for="edit-description" class="col-lg-3 col-form-label">Description</label><br>
+          <div class="col-lg-9">
+            <input type="text" class="form-control" id="edit-description" name="edit-description" value="${todo.description}"><br><br>
+          </div>
+        </div> 
+        <div class="row">
+          <label for="edit-due-date" class="col-lg-3 col-form-label">Due Date</label><br>
+          <div class="col-lg-9">  
+            <input type="date" class="form-control" id="edit-due-date" name="edit-due-date" value="${todo.due_date.split('T')[0]}"><br><br> 
+          </div>        
+        </div> 
+        <div class="row">  
+          <label for="edit-status" class="col-lg-3 col-form-label">Status</label><br>
+          <div class="col-lg-9">
+          <input class="form-control" list="statusOptions" id="add-status">
+              <datalist id="statusOptions">
+                <option value="false" selected>false</option>
+                <option value="true">true</option>
+              </datalist><br><br>
+            </div>  
+          </div> 
+        <button class="btn btn-primary" onclick="editTodo(${todo.id},{title:$('#edit-title').val(),description:$('#edit-description').val(),status:$('#edit-status').val(),due_date:$('#edit-due-date').val()})">Save</button>
+    `)} else  { 
+      $('#edit-todo-form').append(` 
+      <div class="row">
+      <label for="edit-title" class="col-lg-3 col-form-label">Title</label>
+      <div class="col-lg-9">
+        <input type="text" class="form-control" id="edit-title" name="edit-title" value="${todo.title}"><br><br>
+      </div>  
+    </div>
+    <div class="row">
+      <label for="edit-description" class="col-lg-3 col-form-label">Description</label><br>
+      <div class="col-lg-9">
+        <input type="text" class="form-control" id="edit-description" name="edit-description" value="${todo.description}"><br><br>
+      </div>
+    </div> 
+    <div class="row">
+      <label for="edit-due-date" class="col-lg-3 col-form-label">Due Date</label><br>
+      <div class="col-lg-9">  
+        <input type="date" class="form-control" id="edit-due-date" name="edit-due-date" value="${todo.due_date.split('T')[0]}"><br><br> 
+      </div>        
+    </div> 
+    <div class="row">  
+      <label for="edit-status" class="col-lg-3 col-form-label">Status</label><br>
+      <div class="col-lg-9">
+      <input class="form-control" list="statusOptions" id="add-status">
+          <datalist id="statusOptions">
+            <option value="false" >false</option>
+            <option value="true" selected>true</option>
+          </datalist><br><br>
+        </div>  
+      </div> 
+    <button class="btn btn-primary" onclick="editTodo(${todo.id},{title:$('#edit-title').val(),description:$('#edit-description').val(),status:$('#edit-status').val(),due_date:$('#edit-due-date').val()})">Save</button>
+    `)}
+  }) 
+  .fail((err) => { 
+    console.log(err)
+  })
 }
 
 function changeTodoStatus(currStatus,id) { 
@@ -199,7 +278,6 @@ function changeTodoStatus(currStatus,id) {
   } else { 
     newStatus = true
   } 
-
   const update = { 
     status : newStatus
   } 
@@ -215,4 +293,49 @@ function changeTodoStatus(currStatus,id) {
   .fail((err) => { 
     console.log(err)
   })
+} 
+
+function editTodo(id,obj) { 
+  const {title,description,status,due_date} = obj
+  const updatedData = {title,description,status,due_date} 
+  // console.log(id)
+  // console.log(updatedData) 
+  $.ajax({ 
+    url : `${baseURL}/todos/${id}`,
+    method :"PUT",
+    headers : {token : localStorage.getItem('acces_token')}, 
+    data : updatedData
+  })
+  .done(() => { 
+    authentication()
+  }) 
+  .fail((err) => { 
+    console.log(err)
+  })
+}
+
+function onSignIn(googleUser) {
+  const id_token = googleUser.getAuthResponse().id_token
+  $.ajax({ 
+    url : `${baseURL}/user/googleLogin`,
+    method : 'POST',
+    data : {googleToken : id_token}
+  }) 
+  .done((response) => { 
+    console.log(response)
+    localStorage.setItem('acces_token',response.accesToken)
+    authentication()
+  }) 
+  .fail((err) => { 
+    console.log(err,'ini dari index.js di client kalo berhasil')
+  })
+} 
+
+function logOut() { 
+  localStorage.removeItem('acces_token')
+  var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    }) 
+  toLoginForm()
 }
