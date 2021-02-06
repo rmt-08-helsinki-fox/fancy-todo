@@ -78,7 +78,7 @@ USER_PASS = "buka pintu"
 
 ### Login
 
-- **URL** : `/user/login`
+- **URL** : `/users/login`
 - **Method** : `POST`
 - **Data Params** :
     ```
@@ -129,7 +129,7 @@ USER_PASS = "buka pintu"
 
 ### Login OAUTH
 
-- **URL** : `/user/google-login`
+- **URL** : `/users/google-login`
 - **Method** : `POST`
 - **Data Params** :
     ```
