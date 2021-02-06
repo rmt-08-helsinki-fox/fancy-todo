@@ -65,7 +65,7 @@ function getTodo() {
         data.forEach(el => {
             if(el.status === true){
                 $('#todo-list').append(`
-                <tr  style="background-color: yellow; text-align: center; font-weight: bold">
+                <tr  style="background-color: yellow; text-align: center; font-weight: bold;">
                     <td>${el.title}</td>
                     <td>${el.description}</td>
                     <td>${moment(el.due_date).format('DD-MMMM-YYYY')}</td>
@@ -76,7 +76,7 @@ function getTodo() {
                 </tr>`)
             }else{
                 $('#todo-list').append(`
-                    <tr style="text-align: center; font-weight: bold">
+                    <tr style="text-align: center; font-weight: bold;">
                         <td>${el.title}</td>
                         <td>${el.description}</td>
                         <td>${moment(el.due_date).format('DD-MMMM-YYYY')}</td>
