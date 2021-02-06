@@ -1,6 +1,7 @@
 const {Todo} = require('../models/index')
 
 const authorize = function (req,res,next) {
+    console.log('awang dari authorize')
     Todo.findOne({
         where: {id : +req.params.id}
     }).then(data => {

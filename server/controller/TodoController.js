@@ -48,6 +48,7 @@ class TodoController {
             returning: true
         })
             .then(todo => {
+                console.log('awang dari todo control')
                 if(todo[0] === 1){
                     res.status(200).json(todo[1])
                 }else{
