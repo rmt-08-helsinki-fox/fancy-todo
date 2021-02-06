@@ -15,9 +15,33 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Todo.init({
-    title: DataTypes.STRING,
-    description: DataTypes.STRING,
-    status: DataTypes.BOOLEAN,
+    title: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Please enter the title'
+        }
+      }
+    },
+    description: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Please enter the description'
+        }
+      }
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Please choose the status'
+        }
+      }
+    },
     due_date: {
       type: DataTypes.DATE,
       validate: {
@@ -25,10 +49,16 @@ module.exports = (sequelize, DataTypes) => {
           if (value < new Date().toISOString()) {
             throw new Error("Invalid date")
           }
+        },
+        notEmpty: {
+          args: true,
+          msg: 'Please enter the due date'
         }
       }
     },
-    UserId: DataTypes.INTEGER
+    UserId: {
+      type: DataTypes.INTEGER,
+    }
   }, {
     sequelize,
     modelName: 'Todo',

@@ -5,7 +5,7 @@ const authenticate = (req,res,next) => {
     const access_token = req.headers.access_token
     const decoded = jwt.verify(access_token, process.env.SECRET)
     req.decoded = decoded
-    // console.log(decoded);
+    console.log(decoded.id);
     next()
   } catch (err){
     res.status(401).json({

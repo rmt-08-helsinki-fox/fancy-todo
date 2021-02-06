@@ -1,8 +1,10 @@
-const { Todo } = require('../models');
+const { Todo,User } = require('../models');
 
 class TodoController{
 	static createTodo(req,res,next){
-		const { title,description,status,due_date,UserId } = req.body
+		const { title,description,status,due_date} = req.body
+		let UserId = req.decoded.id
+		console.log('masuk >>>>>>>>>>');
 		Todo
 			.create({
 				title,
@@ -21,8 +23,17 @@ class TodoController{
 			})
 	}
 	static getAllTodo(req,res,next){
+		let UserId = req.decoded.id
 		Todo
-			.findAll()
+			.findAll({
+				where: {
+					UserId
+				},
+				order: [
+					['id', 'ASC']
+				],
+				include: User
+			})
 			.then(todos => {
 				res.status(200).json(todos)
 			})
@@ -32,7 +43,6 @@ class TodoController{
 	}
 	static getTodoById(req,res,next){
 		const id = +req.params.id
-		// console.log(id);
 		Todo
 			.findOne({
 				where: {
@@ -40,11 +50,10 @@ class TodoController{
 				}
 			})
 			.then(todo => {
-				if (!todo) throw { msg: `there is no todo with id: ${id}` }
+				if (!todo) throw { name: 'notFound', msg: `there is no todo with id: ${id}` , status: 404}
 				res.status(200).json(todo)
 			})
 			.catch(err => {
-				// console.log('masuk sini >>>>>>>>>>>>>>>');
 				next(err)
 			})
 	}
@@ -64,7 +73,7 @@ class TodoController{
 				}
 			})
 			.then(todo => {
-				if (!todo[0]) throw { msg: `there is no todo with id: ${id}` }
+				if (!todo[0]) throw { name: 'notFound', msg: `there is no todo with id: ${id}` , status: 404}
 				console.log(todo[1]);
 				res.status(200).json(todo[1])
 			})
@@ -83,7 +92,7 @@ class TodoController{
 				returning: true
 			})
 			.then(todo => {
-				if (!todo[0]) throw {msg: `there is no todo with id: ${id}`}
+				if (!todo[0]) throw { name: 'notFound', msg: `there is no todo with id: ${id}` , status: 404}
 				// console.log(todo);
 				res.status(200).json(todo)
 			})
@@ -101,7 +110,7 @@ class TodoController{
 			})
 			.then(todo => {
 				const msg = 'todo has been deleted'
-				if (!todo) throw {msg: `there is no todo with id: ${id}`}
+				if (!todo) throw { name: 'notFound', msg: `there is no todo with id: ${id}` , status: 404}
 				res.status(200).json({ msg })
 			})
 			.catch(err => {

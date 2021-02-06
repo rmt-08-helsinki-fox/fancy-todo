@@ -6,15 +6,19 @@ const auth = () => {
     $("#sign-up-page").hide()
     $("#sign-in-page").show()
     $("#addTodo-page").hide()
+    $("#editTodo-page").hide()
     $("#todos-table").hide()
+    $("#addTodoBtn").hide()
 
   } else {
     $("#sign-out-navbar").show()
+    $("#addTodoBtn").show()
     $("#sign-in-navbar").hide()
     $("#sign-up-navbar").hide()
     $("#sign-up-page").hide()
     $("#sign-in-page").hide()
     $("#addTodo-page").hide()
+    $("#editTodo-page").hide()
     $("#todos-table").show()
     getAllTodo()
   }
@@ -37,7 +41,12 @@ const signIn = () => {
     auth()
   })
   .fail((xhr,text) => {
-    console.log(xhr, text);
+    $("#errorRegister").remove();
+    $("#sign-in-page").append(`<div id="errorRegister"class="alert alert-danger"></div>`);
+    xhr.responseJSON.forEach(err => {
+      $("#errorRegister").append(`<li>${err}</li>`);
+    })
+    // console.log(xhr, text);
   })
   .always(_ => {
     $('#signInEmail').val('')
@@ -62,7 +71,12 @@ const signUp = () => {
     auth()
   })
   .fail((xhr, text) => {
-    console.log(xhr, text);
+    $("#errorRegister").remove();
+    $("#sign-up-page").append(`<div id="errorRegister"class="alert alert-danger"></div>`);
+    xhr.responseJSON.forEach(err => {
+      $("#errorRegister").append(`<li>${err}</li>`);
+    })
+    console.log(xhr);
   })
   .always(_ => {
     $('#signUpEmail').val('')
@@ -85,23 +99,24 @@ const getAllTodo = () => {
   })
   .done(res => {
     $('#tBody').empty()
+    // console.log(res,'>>>>>>>>>>>>>>>');
     res.forEach(e => {
       let btnDone
       if (!e.status) {
-        btnDone = `<button type="button" class="btn btn-success" onClick="${updateStatusTodo(e.id,e.status)}">Done</button>`
+        console.log('masuk false >>>>');
+        btnDone = `<button type="button" class="btn btn-success" onClick="updateStatusTodo(${e.id},${e.status})">Done</button>`
       } else {
-        btnDone = `<button type="button" class="btn btn-success" onClick="${updateStatusTodo(e.id,e.status)}">Undone</button>`
+        btnDone = `<button type="button" class="btn btn-warning" onClick="updateStatusTodo(${e.id},${e.status})">Undone</button>`
       }
       $('#tBody').append(`<tr>
       <td>${e.title}</td>
       <td>${e.description}</td>
       <td>${e.status}</td>
       <td>${e.due_date}</td>
-      <td>${e.User}</td>
       <td>
-        <button type="button" class="btn btn-warning" onClick="${updateTodo(e.id)}">Edit</button> 
         ${btnDone}
-        <button type="button" class="btn btn-danger" onClick="${destroy(e.id)}">Delete</button>
+        <button type="button" class="btn btn-warning" onClick="updateBtn(${e.id})">Edit</button> 
+        <button type="button" class="btn btn-danger" onClick="destroy(${e.id})">Delete</button>
       </td>
     </tr>`)
     });
@@ -130,9 +145,9 @@ const getTodoById = (id) => {
     $('#tBody').empty()
     let btnDone
       if (!res.status) {
-        btnDone = `<button type="button" class="btn btn-success" onClick="${updateStatusTodo(res.id,res.status)}">Done</button>`
+        btnDone = `<button type="button" class="btn btn-success" onClick="updateStatusTodo(${res.id,res.status})">Done</button>`
       } else {
-        btnDone = `<button type="button" class="btn btn-success" onClick="${updateStatusTodo(res.id,res.status)}">Undone</button>`
+        btnDone = `<button type="button" class="btn btn-success" onClick="$updateStatusTodo(${res.id,res.status})">Undone</button>`
       }
       $('#tBody').append(`<tr>
       <td>${res.title}</td>
@@ -141,9 +156,9 @@ const getTodoById = (id) => {
       <td>${res.due_date}</td>
       <td>${res.User}</td>
       <td>
-        <button type="button" class="btn btn-warning" onClick="${updateTodo(res.id)}">Edit</button> 
         ${btnDone}
-        <button type="button" class="btn btn-danger" onClick="${destroy(res.id)}">Delete</button>
+        <button type="button" class="btn btn-warning" onClick="updateTodo(${res.id})">Edit</button> 
+        <button type="button" class="btn btn-danger" onClick="destroy(${res.id})">Delete</button>
       </td>
     </tr>`)
   })
@@ -169,17 +184,36 @@ const createTodo = () => {
     }
   })
   .done(res => {
+    $('#addTodoForm').trigger('reset')
     auth()
   })
   .fail((xhr,txt) => {
-    console.log(xhr,txt);
+    $("#errorRegister").remove();
+    $("#addTodo-page").append(`<div id="errorRegister"class="alert alert-danger"></div>`);
+    xhr.responseJSON.forEach(err => {
+      $("#errorRegister").append(`<li>${err}</li>`);
+    })
+    // console.log(xhr,txt);
   })
 }
 
+let updateTodoId
+const updateBtn = (id) => {
+  $("#sign-out-navbar").show()
+  $("#sign-in-navbar").hide()
+  $("#sign-up-navbar").hide()
+  $("#sign-up-page").hide()
+  $("#sign-in-page").hide()
+  $("#addTodo-page").hide()
+  $("#editTodo-page").show()
+  $("#todos-table").hide()
+  updateTodoId = id
+}
+
 const updateTodo = (id) => {
-  const title = $('#titleAdd').val()
-  const description = $('#titleAdd').val()
-  const due_date = $('#titleAdd').val()
+  const title = $('#titleEdit').val()
+  const description = $('#descriptionEdit').val()
+  const due_date = $('#due_dateEdit').val()
   const status = false
 
   $.ajax({
@@ -196,16 +230,22 @@ const updateTodo = (id) => {
     }
   })
   .done(res => {
+    $('#editTodoForm').trigger('reset')
     auth()
   })
   .fail((xhr,txt) => {
+    $("#errorRegister").remove();
+    $("#editTodo-page").append(`<div id="errorRegister"class="alert alert-danger"></div>`);
+    xhr.responseJSON.forEach(err => {
+      $("#errorRegister").append(`<li>${err}</li>`);
+    })
     console.log(xhr,txt);
   })
 }
 
 const updateStatusTodo = (id,status) => {
+  console.log(id, status, '>>>>>>>>>>>>>>>>>');
   status ? status = false : status = true
-
   $.ajax({
     url: baseUrl + `todos/${id}`,
     method: 'PATCH',
@@ -237,5 +277,29 @@ const destroy = id => {
   })
   .fail((xhr, txt) => {
     console.log(xhr,txt);
+  })
+}
+
+function onSignIn(googleUser) {
+  // var profile = googleUser.getBasicProfile();
+  // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  // console.log('Name: ' + profile.getName());
+  // console.log('Image URL: ' + profile.getImageUrl());
+  // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  var id_token = googleUser.getAuthResponse().id_token;
+  // console.log(id_token);
+  $.ajax({
+    url: baseUrl + 'googleLogin',
+    method: 'POST',
+    data: {
+      googleToken: id_token
+    }
+  })
+  .done(res => {
+    localStorage.setItem('access_token', res.access_token)
+    auth()
+  })
+  .fail(xhr => {
+    console.log(xhr);
   })
 }

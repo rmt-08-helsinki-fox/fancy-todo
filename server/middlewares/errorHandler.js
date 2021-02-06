@@ -1,9 +1,20 @@
 module.exports = (err,req,res,next) => {
-  console.log(err);
-  if (err.message === 'invalid date') res.status(400).json(err)
-  else if (err.msg){
-    res.status(404).json(err)
+  let errors = []
+  let status = 500
+  if (err.name === 'signInError') {
+    errors.push(err.msg)
+    status = err.status
+  } else if (err.name === 'SequelizeValidationError'){
+    err.errors.forEach(element => {
+      errors.push(element.message)
+    });
+    status = 400
+  } else if (err.name === 'notFound'){
+    errors.push(err.msg)
+    status = err.status
   } else {
-    res.status(500).json(err)
+    errors.push(`Internal Server Error`)
   }
+  
+  res.status(status).json(errors)
 }
