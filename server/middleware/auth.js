@@ -1,10 +1,10 @@
-const { checkToken } = require("./jwt");
+const { checkToken } = require("../helpers/jwt");
 const { User, Todo } = require("../models");
 
 async function authentication(req, res, next) {
 	try {
 		console.log(req.headers);
-		const decoded = checkToken(req.headers.accesstoken);
+		const decoded = checkToken(req.headers.access_token);
 		const data = await User.findOne({
 			where: {
 				email: decoded.email,
@@ -15,7 +15,6 @@ async function authentication(req, res, next) {
 			res.status(401).json({ msg: "Login First" });
 		} else {
 			req.user = data.dataValues;
-			// console.log(data.dataValues, "<<< Ini data");
 		}
 		next();
 	} catch (err) {
@@ -24,24 +23,18 @@ async function authentication(req, res, next) {
 }
 
 function authorization(req, res, next) {
-	// console.log(req, "<<<<< REQUEST");
-	// const id = req.url.split("").slice(1).join("");
-
 	Todo.findOne({
 		where: {
 			id: +req.params.id,
 		},
 	})
 		.then((data) => {
-			// console.log(data);
 			if (!data) {
 				res.status(404).json("Not Found");
-				// next({ msg: "Not Found" });
 			} else if (data.UserId === req.user.id) {
 				next();
 			} else {
 				res.status(401).json("Not Authorized");
-				// next({ msg: "Not Authorized" });
 			}
 		})
 		.catch((err) => {

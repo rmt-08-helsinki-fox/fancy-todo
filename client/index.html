@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id" content="432771014570-e2sjbftocjrppdn732enu9dh6pu6bv49.apps.googleusercontent.com">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="./style.css">
+  <title>Fancy Todo</title>
+</head>
+
+<body>
+  <div id="enter">
+    <div class="container">
+      <div class="row" >
+        
+        <div class="col"> 
+          <div class="h3 login"><b>Let's Logging In</b></div>
+          <div class="h3 register"><b>Registration Form:</b></div>
+          
+          <div class="success-handling"></div>
+          <div class="error-handling"></div>
+
+          <form>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="email" placeholder="name@example.com">
+              <label for="email">Email</label>
+            </div>
+            
+            <div class="form-floating mb-3">
+              <input type="password" class="form-control" id="password" placeholder="Password">
+              <label for="password">Password</label>
+            </div>
+            
+            <button type="submit" class="btn btn-outline-primary login" id="login-submit">Login <span class="fa fa-user"></span></button>
+            <button type="submit" class="btn btn-outline-success login" id="register-form">Register <span class="fa fa-cog"></span></button><br>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div> 
+            
+            <button type="submit" class="btn btn-outline-success register" id="register-submit">Submit <span class="fa fa-envelope"></span></button>
+            <button type="submit" class="btn btn-outline-danger register" id="login-form">Back <span class="fa fa-ban"></span></button>
+
+          </form>
+        </div>
+
+        <div class="col">
+          <div class="h1">
+            <img src="./img/logo.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <div id="add-todos">
+      <div class="row logout">
+        <div class="col-10">
+        </div>
+
+        <div class="col">
+          <button type="submit" class="btn btn-danger" id="logout">LOGOUT <span class="fa fa-ban fa-spin"></span></button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="h1">MY FANCY TODO</div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            
+            <button type="submit" class="btn btn-success mb-3" id="show">Show My Plan <span class="fa fa-cog fa-spin"></span></button>
+
+            <div class="add h3 mb-3"><b>Add Your Planning</b></div>
+            <div class="edit h3 mb-3"><b>Edit Your Planning:</b></div>
+            
+            <div class="success-handling"></div>
+
+            <form action="">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="title" placeholder="name@example.com">
+                <label for="title">Title</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="description" placeholder="name@example.com">
+                <label for="description">Description</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="date" class="form-control" id="due_date" placeholder="name@example.com">
+                <label for="due_date">Due Date</label>
+              </div>
+
+              <div id="pushBtn">
+                <button type="submit" class="btn btn-primary add" id="todos-add-submit">ADD <span class="fa fa-shopping-cart"></span></button>
+
+                <button type="submit" class="btn btn-danger add" id="cancel">CANCEL <span class="fa fa-ban"></span></button>
+              </div>        
+            </form>
+          </div>
+  
+          <div class="col">
+            <div id="list-todos">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  <script src="./index.js"></script>
+</body>
+</html>
