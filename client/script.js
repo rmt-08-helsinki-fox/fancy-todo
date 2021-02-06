@@ -124,7 +124,6 @@ $(document).ready(function() {
           headers: { access_token: localStorage.access_token }
         })
         .done(todo => {
-          console.log(todo)
           $("#member-list-area").empty();
           $(`#todo-container-body${tabId}`).empty().append(`
           <div class="container" id="member-container">

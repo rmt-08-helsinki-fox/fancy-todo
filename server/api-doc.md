@@ -179,7 +179,7 @@
 
 
 
-<h2>userlist</h2>
+<h2>add member</h2>
 
 * **ROUTE** <br>
   POST /todos/:id/members
