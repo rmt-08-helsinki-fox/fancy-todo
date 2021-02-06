@@ -121,17 +121,16 @@ class ControllerTodo {
     })
   }
 
-  static seeCalendar(req, res, next){
+  static seeHolidays(req, res, next){
     let year = new Date().getFullYear()
-    axios.get(`https://calendarific.com/api/v2/holidays?&api_key=${process.env.API_KEY}&country=id&year=${year}`)
-    .then(response => {
-      res.json(response.data.response.holidays)
+    axios.get(`https://calendarific.com/api/v2/holidays/?&api_key=${process.env.API_KEY}&country=id&year=${year}`)
+    .then(result => {
+      res.status(200).json(result.data.response.holidays)
     })
     .catch(err => {
       next(err)
     })
   }
-
 }
 
 

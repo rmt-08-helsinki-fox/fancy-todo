@@ -7,12 +7,14 @@ function authenticate() {
         $('#form').show()
         $('#register').show()
         $('#login').show()
+        $('#holiday-nav').hide()
         $('#register-form').hide()
         $('#home').hide()
         $('#logout').hide()
         $('#edit-form').hide()
     }else{
         localStorage.removeItem('TodoId')
+        $('#holiday-nav').show()
         $('#home').show()
         $('#logout').show()
         $('#login').hide()
@@ -21,6 +23,13 @@ function authenticate() {
         $('#edit-form').hide()
         getTodo()
     }
+}
+
+function home() {
+    $('#home').show()
+    $('#main').show()
+    $('#holiday').hide()
+    $('#edit-form').hide()
 }
 
 function logout() {
@@ -54,28 +63,29 @@ function getTodo() {
     })
     .done(data => {
         $('#todo-list').empty()
+        $('#holiday').hide()
         data.forEach(el => {
             if(el.status === true){
                 $('#todo-list').append(`
-                <tr  style="background-color: yellow; text-align: center">
+                <tr  style="background-color: yellow; text-align: center; font-weight: bold">
                     <td>${el.title}</td>
                     <td>${el.description}</td>
                     <td>${moment(el.due_date).format('DD-MMMM-YYYY')}</td>
-                    <td><button onclick="complete(${el.id})">Complete</button>
-                    <button onclick="unComplete(${el.id})">UnComplete</button>
-                    <button onclick="edit(${el.id})">Edit</button>
-                    <button onclick="del(${el.id})">delete</button></td>
+                    <td><button onclick="complete(${el.id})" class="btn btn-secondary">Complete</button>
+                    <button onclick="unComplete(${el.id})" class="btn btn-secondary">UnComplete</button>
+                    <button onclick="edit(${el.id})" class="btn btn-secondary">Edit</button>
+                    <button onclick="del(${el.id})" class="btn btn-secondary">Delete</button></td>
                 </tr>`)
             }else{
                 $('#todo-list').append(`
-                    <tr style="text-align: center">
+                    <tr style="text-align: center; font-weight: bold">
                         <td>${el.title}</td>
                         <td>${el.description}</td>
                         <td>${moment(el.due_date).format('DD-MMMM-YYYY')}</td>
-                        <td><button onclick="complete(${el.id})">Complete</button>
-                        <button onclick="unComplete(${el.id})">UnComplete</button>
-                        <button onclick="edit(${el.id})">Edit</button>
-                        <button onclick="del(${el.id})">delete</button></td>
+                        <td><button onclick="complete(${el.id})" class="btn btn-secondary">Complete</button>
+                        <button onclick="unComplete(${el.id})" class="btn btn-secondary">UnComplete</button>
+                        <button onclick="edit(${el.id})" class="btn btn-secondary">Edit</button>
+                        <button onclick="del(${el.id})" class="btn btn-secondary">Delete</button></td>
                     </tr>`)
             }
         });
@@ -156,7 +166,7 @@ function edit(id) {
             <input type="text" class="form-control" id="desc-edit" value="${data.description}">
             <label>Due Date</label><br>
             <input type="date" id="date-edit" value="${moment(data.due_date).format('YYYY-MM-DD')}">
-            <input type="submit" value="submit">`)
+            <input type="submit" value="EDIT" class="btn btn-primary">`)
             $('#edit-form').show()
             localStorage.setItem('TodoId', data.id)
         }
@@ -167,17 +177,20 @@ function edit(id) {
 }
 
 function del(id){
-    $.ajax({
-        url: baseUrl + `todos/${id}`,
-        method: 'DELETE',
-        headers: {accessToken: localStorage.getItem('accessToken')},
-    })
-    .done(() => {
-        getTodo()
-    })
-    .fail((err, txt) => {
-        console.log(err,txt)
-    })
+    let confirmate = confirm('Are You Sure Want Delete This Todo?')
+    if(confirmate){
+        $.ajax({
+            url: baseUrl + `todos/${id}`,
+            method: 'DELETE',
+            headers: {accessToken: localStorage.getItem('accessToken')},
+        })
+        .done(() => {
+            getTodo()
+        })
+        .fail((err, txt) => {
+            console.log(err,txt)
+        })
+    }
 }
 
 $(document).ready(() => {
@@ -198,7 +211,7 @@ $(document).ready(() => {
             getTodo()
         })
         .fail((err, text) => {
-            console.log(err, text)
+            alert(err.responseJSON.message)
         })
         .always(() => {
             $('#email-login').val('')
@@ -221,7 +234,7 @@ $(document).ready(() => {
             toLogin()
         })
         .fail((err, text) => {
-            console.log(err, text)
+            alert(err.responseJSON.message)
         })
         .always(() => {
             $('#email-register').val('')
@@ -253,7 +266,12 @@ $(document).ready(() => {
             authenticate()
         })
         .fail((err, txt) => {
-            console.log(err, txt)
+            alert(err.responseJSON.message.join(', '))
+        })
+        .always(() => {
+            $('#title-todo').val("")
+            $('#desc-todo').val("")
+            $('#date-todo').val("")
         })
     })
 
@@ -274,8 +292,37 @@ $(document).ready(() => {
             authenticate()
         })
         .fail((err, txt) => {
+            alert(err.responseJSON.message.join(', '))
+        })
+        .always(() => {
+            $('#title-todo').val("")
+            $('#desc-todo').val("")
+            $('#date-todo').val("")
+        })
+    })
+    // Holidays
+
+    $('#holiday-nav').on('click',(e) => {
+        $('#main').hide()
+        $('#holiday').show()
+        e.preventDefault()
+        $.ajax({
+            url: baseUrl + 'todos/seeHolidays',
+            method: 'GET',
+        })
+        .done(response => {
+            $('#holiday-list').empty()
+            response.forEach((el) => {
+                $('#holiday-list').append(`
+                <tr style="text-align: center; font-weight: bold; color: red">
+                    <td>${moment(el.date.iso).format('YYYY-MMMM-DD')}</td>
+                    <td>${el.name}</td>
+                </tr>`
+                )
+            })
+        })
+        .fail((err, txt) => {
             console.log(err, txt)
         })
     })
-    
 })

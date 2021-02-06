@@ -4,7 +4,7 @@ const ControllerTodo = require('../controller/controllerTodo')
 const authenticate = require('../middlewares/authenticate')
 const authorize = require('../middlewares/authorize')
 
-router.get('/calendar', ControllerTodo.seeCalendar)
+router.get('/seeHolidays', ControllerTodo.seeHolidays)
 
 router.use(authenticate)
 router.get('/', ControllerTodo.listTodo)

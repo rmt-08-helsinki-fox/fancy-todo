@@ -21,7 +21,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: {
         args: true,
-        msg: 'Email Invalid / Sudah Terpakai'
+        msg: 'Email Invalid / already Taken'
+      },
+      validate: {
+        isEmail: {
+          args: true,
+          msg: 'Email Invalid / already Taken'
+        }
       }
     },
     password: {
@@ -29,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           args: true,
-          msg: 'Password tidak boleh kosong'
+          msg: `Password Can't Be Empty`
         }
       }
     }

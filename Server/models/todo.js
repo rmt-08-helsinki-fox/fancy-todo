@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           args: true,
-          msg: 'Title Tidak Boleh Kosong'
+          msg: `Title Can't be Empty`
         }
       }
     },
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           args: true,
-          msg: 'Description Tidak Boleh Kosong'
+          msg: `Description Can't be Empty`
         }
       }
     },
@@ -43,8 +43,12 @@ module.exports = (sequelize, DataTypes) => {
           now.setDate(now.getDate() - 1)
           
           if(input <= now){
-            throw new Error('Input Tanggal Tidak boleh hari yang sudah lewat dari hari ini')
+            throw new Error('Date Input Can not be days that have passed from today')
           }
+        },
+        notEmpty: {
+          args: true,
+          msg: `Due Date Can't be Empty`
         }
       }
     },
