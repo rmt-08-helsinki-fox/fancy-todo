@@ -61,7 +61,7 @@ class todoController {
       const updated = await Todo.update(
         { status }, {where: { id }, returning: true}
       )
-      res.status(200).json(updated[1][0])
+      res.status(200).json(updated)
     } catch (err) {
       next(err)
     }

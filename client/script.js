@@ -6,6 +6,7 @@ function auth () {
     $('#img-h8').show()
     $('#register').hide()
     $('#todoList').hide()
+    $('#todoListFalse').hide()
     $('#createTodo').hide()
     $('#editTodo').hide()
     $('#create').hide()
@@ -23,6 +24,7 @@ function auth () {
     $('#logout').show()
     $('#create').show()
     $('#todoList').show()
+    $('#todoListFalse').show()
     $('#sectionUser').hide()
     getTodo()
     $('#newsCard').show()
@@ -103,6 +105,7 @@ function getTodo () {
   })
     .done((todo) => {
       $('#todoList').empty()
+      $('#todoListFalse').empty()
       todo.forEach(el => {
         if (el.status) {
           $('#todoList').append(
@@ -117,7 +120,7 @@ function getTodo () {
               </div>`
           )
         } else {
-          $('#todoList').append(
+          $('#todoListFalse').append(
             `<div class="form-control card" style="width: 18rem; background-color: #94b5c0">
               <div class="card-body">
                 <h5 class="card-title">${el.title}</h5>
@@ -424,4 +427,4 @@ $('#createTodo').on('submit', (event) => {
 $('#editTodo').on('submit', (event) => {
   event.preventDefault()
   update()
-})
+}) 
