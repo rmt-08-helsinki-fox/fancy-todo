@@ -14,8 +14,9 @@ class Controller {
       })
   }
 
-  static getAllTodos (req, res, next) {
-    Todo.findAll({ order: [['createdAt', 'ASC']],include: [{ model: User, attributes: ['id', 'email'] }]})
+  static getUserTodos (req, res, next) {
+    let UserId = req.headers.UserId
+    Todo.findAll({ where: { UserId: UserId }, order: [['createdAt', 'ASC']],include: [{ model: User, attributes: ['id', 'email'] }]})
       .then(todos => {
         res.status(200).json(todos)
       })

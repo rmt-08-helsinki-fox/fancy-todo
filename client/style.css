@@ -92,14 +92,13 @@ label {
   padding: 0px;
 }
 
-.status-img, .delete-img {
+.status-img, .delete-img, .edit-img {
   height: 47.95px;
 }
 
 .flex-container {
   width: 100%;
   margin: 0px;
-  margin-bottom: 15px;
   border-bottom: 5px solid black;
   border-radius: 2.5px;
   display: flex;
@@ -110,8 +109,16 @@ label {
   margin-bottom: 5px;
 }
 
-#home-btn, #user-btn, #delete-btn {
+#home-btn, #user-name, #delete-btn, #toEdit-btn {
   font-size: 30px;
   border: none;
   background-color: transparent;
+}
+
+.todo-desc {
+  font-size: 23px;
+}
+
+#quote-box {
+  margin-bottom: 15px;
 }
