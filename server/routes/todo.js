@@ -6,9 +6,9 @@ const authorize = require('../middlewares/authorization')
 
 router.use(authenticate)
 
-router.post('/', todoController.PostAddTodo) //token auth
+router.post('/', todoController.PostAddTodo) //token authenticate
 
-router.get('/', todoController.getTodo) //token auth
+router.get('/', todoController.getTodo) //token authenticate
 
 
 router.use('/:id',authorize)

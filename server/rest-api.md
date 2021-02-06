@@ -2,10 +2,12 @@
 
 ## Todo
 
-- /todo (get)
+- /todos (get)
 
 
-hanya user yang ter <i>authenticate</i> yang bisa mendapatkan semua list dari todo di DB dan random quotes
+hanya user yang ter <i>authenticate</i> yang bisa mendapatkan semua list dari todo di DB milik user ter <i>login</i> 
+
+akan megenerate random quotes
 
 **success response**
 200 status response OK
@@ -20,26 +22,28 @@ hanya user yang ter <i>authenticate</i> yang bisa mendapatkan semua list dari to
         "author": "Henry Ward Beecher",
         "length": 71
     },
-    {
-        "id": 1,
-        "title": "makana temen",
-        "description": "makan",
-        "status": false,
-        "due_date": "2021-02-05T00:00:00.000Z",
-        "UserId": 1,
-        "createdAt": "2021-02-01T06:36:14.789Z",
-        "updatedAt": "2021-02-02T11:24:19.432Z"
-    },
-    {
-        "id": 2,
-        "title": "mandi",
-        "description": "di kali",
-        "status": true,
-        "due_date": "2021-02-05T00:00:00.000Z",
-        "UserId": 1,
-        "createdAt": "2021-02-01T06:37:23.500Z",
-        "updatedAt": "2021-02-02T11:25:20.536Z"
-    },
+    [
+        {
+            "id": 1,
+            "title": "makan temen",
+            "description": "makan",
+            "status": false,
+            "due_date": "2021-02-05T00:00:00.000Z",
+            "UserId": 1,
+            "createdAt": "2021-02-01T06:36:14.789Z",
+            "updatedAt": "2021-02-02T11:24:19.432Z"
+        },
+        {
+            "id": 2,
+            "title": "mandi",
+            "description": "di kali",
+            "status": true,
+            "due_date": "2021-02-05T00:00:00.000Z",
+            "UserId": 1,
+            "createdAt": "2021-02-01T06:37:23.500Z",
+            "updatedAt": "2021-02-02T11:25:20.536Z"
+        },
+    ]
 ]
 ```
 **error responses**
@@ -54,7 +58,7 @@ hanya user yang ter <i>authenticate</i> yang bisa mendapatkan semua list dari to
 <br>
 <br>
 
-- /todo (post)
+- /todos (post)
 
 
 hanya user yang ter <i>authenticate</i> yang bisa create todo baru
@@ -75,27 +79,29 @@ required:
 
 input:
 ```javascript
-  id: given
-  title: "makan"
-  description: "makan nasi uduk"
-  due_date: 2021-01-31
-  createdAt: given
-  updatedAt: given
+  "id": "<given>"
+  "title": "<given>"
+  "description": "<given>"
+  "due_date": "<given>"
+  "createdAt": "<given>"
+  "updatedAt": "<given>"
 ```
 **error responses**
 
 validation error, 400 status code
 
 ```javascript
+"title cannot be empty!"
 "description cannot be empty!"
+"due date cannot be empty!"
 ```
 
 internal server error, 500 status code
 <br>
 
-- /todo/:id (get)
+- /todos/:id (get)
 
-hanya user yang ter <i>authenticate</i> dan ter <i>authorize</i> yang bisa mencari todo milik mereka sendiri
+hanya user yang ter <i>authenticate</i> dan ter <i>authorize</i> yang bisa mencari todo milik mereka sendiri (findone, untuk diedit)
 
 required:
 ```javascript
@@ -104,27 +110,16 @@ id=[integer]
 **success response**
 200 status code OK
 ```javascript
-[
-    {
- "_id": "1fFK-Xgvy5",
-        "tags": [
-            "friendship"
-        ],
-        "content": "There is no friendship, no love, like that of the parent for the child.",
-        "author": "Henry Ward Beecher",
-        "length": 71
-    },
-    {
-    "id": 2,
-    "title": "mandi",
-    "description": "pake sabun",
-    "status": true,
-    "due_date": "2021-02-02T00:00:00.000Z",
-    "createdAt": "2021-02-01T06:37:23.500Z",
-    "updatedAt": "2021-02-01T11:05:31.912Z"
-    }
-]
 
+{
+"id": 2,
+"title": "mandi",
+"description": "pake sabun",
+"status": true,
+"due_date": "2021-02-02T00:00:00.000Z",
+"createdAt": "2021-02-01T06:37:23.500Z",
+"updatedAt": "2021-02-01T11:05:31.912Z"
+}
 
 ```
 
@@ -161,7 +156,9 @@ required:
 validation error, 400 status code
 
 ```javascript
+"title cannot be empty!"
 "description cannot be empty!"
+"due date cannot be empty!"
 ```
 
 validation error, 404 status code
@@ -200,12 +197,6 @@ required:
 ```
 
 **error responses**
-
-validation error, 400 status code
-
-```javascript
-"description cannot be empty!"
-```
 
 validation error, 404 status code
 
@@ -249,7 +240,7 @@ menghapus 1 todo(row) di db
 
 ## user login dan register
 
-- /user/register
+- /user/register  (POST)
 
 required: 
 ```javascript
@@ -271,9 +262,6 @@ password akan automatis ter <i>hash</i>
 {
     "id": 4,
     "email": "new@mail.com",
-    "password": "$2a$10$Xns3I0AtP.GgdYSAbI0SIOCNfQDrjmb1VyzEQx/L8m.BN3WRkk0g.",
-    "updatedAt": "2021-02-01T16:05:47.950Z",
-    "createdAt": "2021-02-01T16:05:47.950Z"
 }
 ```
 **error responses**
@@ -283,11 +271,12 @@ password akan automatis ter <i>hash</i>
 validation error:
 ```javascript
 "email cannot be empty!"
+"Please enter at least 6 characters password"
 ```
 
 500 status code internal server error
 
-- /user/login
+- /user/login  (POST)
 
 
 required: 
@@ -318,5 +307,47 @@ jika password/email salah atau tidak diisi:
 ```
 
 
+
+- /user/googleLogin (POST)
+
+required: 
+```javascript
+google account
+```
+akan automatis google login dengan accouont google dari user
+
+password akan automatis ter <i>hash</i>
+
+**success response**
+
+jika belum memiliki account maka akan automatis dibuat account dan kemudian akan login
+
+201 status code created
+
+
+```javascript
+{
+    "id": 4,
+    "email": "new@mail.com",
+}
+```
+
+jika sudah memiliki account akan login
+
+200 status code ok
+
+user yang login akan memiliki token yang unik
+
+```javascript
+{
+    "token": "<token>"
+}
+```
+
+
+**error responses**
+
+
+500 status code internal server error
 
 

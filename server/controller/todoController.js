@@ -46,11 +46,9 @@ class todoController {
     }
 
     static findTodo(req, res, next) {
-        let todo;
         Todo.findByPk(+req.params.id)
         .then(todos => {
-            todo = todos
-            res.status(200).json(todo)
+            res.status(200).json(todos)
         })
         .catch(err=>{
             next(err)
@@ -67,7 +65,8 @@ class todoController {
         }
         let option = {
             where: {id: req.params.id},
-            returning: true}
+            returning: true
+        }
 
         Todo.update(updateTodo, option)
         .then(todo => {

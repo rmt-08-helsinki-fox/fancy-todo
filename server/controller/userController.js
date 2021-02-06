@@ -9,9 +9,14 @@ class userController {
 			email: req.body.email,
 			password: req.body.password
 		}
+		
 		User.create(newUser)
 		.then(user => {
-			res.status(201).json(user)
+			let newUser = {
+				id: user.id,
+				email: user.email
+			}
+			res.status(201).json(newUser)
 		})
 		.catch( err=> {
 			next(err)
