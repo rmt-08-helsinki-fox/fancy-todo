@@ -46,46 +46,30 @@ class userController {
     }
   }
   static async googleLogin(req, res, next) {
+    // console.log(req.body, 'google req.body')
+    // console.log(process.env.GOOGLE_CLIENT_ID, '<<<<<<< google api')
     try {
         const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-        // console.log(process.env.GOOGLE_CLIENT_ID)
         const ticket = await client.verifyIdToken({
-          idToken: req.body.googleToken,
+          idToken: req.body.google_token,
           audience: process.env.GOOGLE_CLIENT_ID,
         });
         const payload = ticket.getPayload();
-        
-        console.log(payload, '=============')
-      //   const email = payload.email;
-      //   const data = await User.findOne({ 
-      //     where: {
-      //       email
-      //     }
-      //   });
-      // if (data) {
-      //     const access_token = generateToken({
-      //       id: data.id,
-      //       email: data.email,
-      //     });
-      //     res.status(200).json({
-      //       access_token
-      //     });
-      // } else {
-      //   const createAcc = { 
-      //     email,
-      //     password: new Date().toLocaleDateString().toString(),
-      //   };
-      //   const account = await User.create(createAcc);
-      //   const access_token = generateToken({
-      //     id: account.id,
-      //     email: account.email,
-      //   });
-      //   res.status(201).json({
-      //     access_token
-      //   });
-      // }
+        let email = payload.email
+        let password = new Date().toString()
+        const find = await User.findOne({ where: { email }})
+      if (find) {
+        const access_token = generateToken({
+          id: find.id,
+          email: find.email,
+        });
+        res.status(200).json({ access_token });
+      } else {
+        const create = await User.create({ email, password })
+        const access_token = generateToken(create)
+        res.status(201).json({ access_token })
+      }
     } catch (err) {
-      console.log(err, 'dari controller google');
       next(err)
     }
   }

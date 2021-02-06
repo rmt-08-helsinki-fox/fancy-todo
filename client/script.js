@@ -5,14 +5,16 @@ function auth () {
     $('#login').show()
     $('#img-h8').show()
     $('#register').hide()
-    $('#newsCard').hide()
     $('#todoList').hide()
     $('#createTodo').hide()
     $('#editTodo').hide()
     $('#create').hide()
     $('#logout').hide()
     $('#newsCard').hide()
+    $("#navbar").hide()
+    $('#sectionUser').show()
   } else {
+    $("#navbar").show()
     $('#img-h8').hide()
     $('#login').hide()
     $('#register').hide()
@@ -20,22 +22,15 @@ function auth () {
     $('#createTodo').hide()
     $('#logout').show()
     $('#create').show()
-    $('#newsCard').show()
     $('#todoList').show()
+    $('#sectionUser').hide()
     getTodo()
     $('#newsCard').show()
     news()
   }
 }
 
-// <input type="checkbox" value="1" name="checkMeOut" id="checkMeOut" checked="checked" />
-// $('#checkMeOut').prop('checked'); // true
 
-// if($('#checkMeOut').prop('checked')) {
-//   something when checked
-// } else {
-//   something else when not
-//}
 
 function logout () {
   localStorage.clear()
@@ -48,16 +43,10 @@ function logout () {
 function regisToLogin () {
   $('#login').show()
   $('#register').hide()
-  // $('#newsCard').hide()
-  // $('todoList').hide()
-  // $('#navbar').hide()
 }
 function loginToRegis () {
   $('#login').hide()
   $('#register').show()
-  // $('#newsCard').hide()
-  // $('todoList').hide()
-  // $('#navbar').hide()
 }
 function login () {
   const email =  $('#emailLogin').val()
@@ -115,16 +104,31 @@ function getTodo () {
     .done((todo) => {
       $('#todoList').empty()
       todo.forEach(el => {
-        $('#todoList').append(
-          `<div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title">${el.title}</h5>
-              <p class="card-text">${el.description}</p>
-              <p class="card-text">${el.due_date}</p>
-              <a href="#" class="btn btn-primary" onclick="findTodo(${el.id})">Change</a>
-              <a href="#" class="btn btn-danger" onclick="remove(${el.id})">Delete</a>
-            </div>`
-        )
+        if (el.status) {
+          $('#todoList').append(
+            `<div class="form-control card" style="width: 18rem; background-color: #f9f871">
+              <div class="card-body">
+                <h5 class="card-title">${el.title}</h5>
+                <p class="card-text">${el.description}</p>
+                <input type="checkbox" checked="" id="status-138" onclick="changeStatus(${el.id}, 'unfinished')"> done todo
+                <p class="card-text">${el.due_date.split("T")[0]}</p>
+                <a href="#" class="btn btn-primary" onclick="findTodo(${el.id})">Change</a>
+                <a href="#" class="btn btn-danger" onclick="remove(${el.id})">Delete</a>
+              </div>`
+          )
+        } else {
+          $('#todoList').append(
+            `<div class="form-control card" style="width: 18rem; background-color: #94b5c0">
+              <div class="card-body">
+                <h5 class="card-title">${el.title}</h5>
+                <p class="card-text">${el.description}</p>
+                <input type="checkbox" check="" id="status-138" onclick="changeStatus(${el.id}, 'unfinished')"> Waiting todo
+                <p class="card-text">${el.due_date.split("T")[0]}</p>
+                <a href="#" class="btn btn-primary" onclick="findTodo(${el.id})">Change</a>
+                <a href="#" class="btn btn-danger" onclick="remove(${el.id})">Delete</a>
+              </div>`
+          )
+        }
       });
     })
     .fail((err) => {
@@ -138,7 +142,7 @@ function create () {
   const title = $('#title').val()
   const description = $('#description').val()
   const due_date = $('#due_date').val()
-  const status = $('#status').val()
+  const status = $('#status').prop('checked')
   console.log(title, description, due_date, status)
   $.ajax({
     url: server_url + '/todos',
@@ -193,13 +197,14 @@ function findTodo (id) {
   })
     .done((data) => {
       console.log(data)
+      $('#editTodo').show()
       $('#todoList').hide()
       $('#create').hide()
       $('#logout').hide()
-      $('#editTodo').show()
+      $("#newsCard").hide()
       $('#edit_title').val(data.title)
       $('#edit_description').val(data.description)
-      $('#edit_due_date').val(data.due_date)
+      $('#edit_due_date').val(data.due_date.split("T")[0])
       $('#edit_status').val(data.status)
       $('#submitUpdate').data("id", data.id)
     })
@@ -248,6 +253,7 @@ function news () {
   })
     .done((data) => {
       console.log(data)
+      $("#newsCard").empty()
       data.forEach(el => {
         $('#newsCard').append(
           `<div class="card-body">
@@ -259,31 +265,32 @@ function news () {
     })
     .fail(err => {
       console.log(err.responseText)
+      console.log('err.responseText')
     })
     .always(() => {
       console.log('news is running')
     })
 }
-// function onSignIn(googleUser) {
-//   var google_token = googleUser.getAuthResponse().id_token;
-//   // console.log(id_token);
-//   $.ajax({
-//     url: server_url + '/googleLogin',
-//     method: 'post',
-//     data: {
-//       google_token
-//     }
-//   })
-//     .done(data => {
-//       console.log(data);
-//       const token = data.access_token;
-//       localStorage.setItem("access_token", token);
-//       auth()
-//     })
-//     .fail(err => {
-//       console.log(err)
-//     })
-// }
+function onSignIn(googleUser) {
+  var google_token = googleUser.getAuthResponse().id_token;
+  // console.log(id_token);
+  $.ajax({
+    url: server_url + '/googleLogin',
+    method: 'post',
+    data: {
+      google_token
+    }
+  })
+    .done(data => {
+      console.log(data);
+      const token = data.access_token;
+      localStorage.setItem("access_token", token);
+      auth()
+    })
+    .fail(err => {
+      console.log(err)
+    })
+}
 
 $(document).ready(() => {
   auth()
@@ -348,10 +355,14 @@ $('#create').on('click', (event) => {
   $('#todoList').hide()
   $('#logout').hide()
   $('#create').hide()
+  $("#newsCard").hide()
+  $('#sectionUser').hide()
   $('#createTodo').show()
+  
 })
 $('#cancelCreate').on('click', (event) => {
   event.preventDefault()
+  $("#newsCard").show()
   $('#todoList').show()
   $('#logout').show()
   $('#create').show()
@@ -359,6 +370,7 @@ $('#cancelCreate').on('click', (event) => {
 })
 $('#cancelEdit').on('click', (event) => {
   event.preventDefault()
+  $("#newsCard").show()
   $('#todoList').show()
   $('#logout').show()
   $('#create').show()

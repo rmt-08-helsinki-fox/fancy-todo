@@ -6,8 +6,8 @@ class todoController {
       const UserId = req.user.id
       const read = await Todo.findAll({ where: { UserId } })
       if (read.length == 0){
-        next({
-          name: 'notDataYet'
+        res.status(200).json({
+          msg: 'Welcome, add your todo'
         })
       } else {
         res.status(200).json(read)
