@@ -274,3 +274,29 @@ _Response (200 - Created)_
     "access_token": <given access token by system>,
 }
 ```
+
+---
+### GET /todos/weather
+
+> Get weather from API
+
+_Request Header_
+```
+{
+  "access_token": "<your access token>"
+}
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Response (200)_
+```
+{
+    "weather": "Clouds",
+    "temp": 22.39,
+    "city": "Bandung"
+}
+```
