@@ -10,6 +10,8 @@
 
 - `POST /login`
 - `POST /register`
+
+- `GET /news`
 ----
 
 ### Create Todos
@@ -18,7 +20,7 @@
 _Request Header_
 ```json
   {
-    "access_token" : "application/json"
+    "access_token" : "<access_token code>"
   }
 ```
 _Request Params_
@@ -47,13 +49,20 @@ _Response (201)_
 _Response (400)_
 ```json
   {
-    "message": "Please input date with a day or next day"
+    "message": [
+      "You need to login",
+      "Title is required",
+      "Status is required",
+      "Due date must greater then today"
+    ]
   }
 ```
 _Response (500)_
 ```json
   {
-    "message": "Error in internal server"
+    "message": [
+      "Error in internal server"
+    ]
   }
 ```
 ---
@@ -64,7 +73,7 @@ _Response (500)_
 _Request Header_
 ```json
   {
-    "access_token" : "application/json"
+    "access_token" : "<access_token code>"
   }
 ```
 _Request Params_
@@ -103,7 +112,9 @@ _Response (200)_
 _Response (500)_
 ```json
   {
-    "message": "Error in internal server"
+    "message": [
+      "Error in internal server"
+    ]
   }
 ```
 ---
@@ -114,7 +125,7 @@ _Response (500)_
 _Request Header_
 ```json
   {
-    "access_token" : "application/json"
+    "access_token" : "<access_token code>"
   }
 ```
 _Request Params_
@@ -142,13 +153,18 @@ _Response (200)_
 _Response (404)_
 ```json
   {
-    "message": "Todos is undefined"
+    "message": [
+      "Todo not found",
+      "Your account is Unauthorized"
+    ]
   }
 ```
 _Response (500)_
 ```json
   {
-    "message": "Error in internal server"
+    "message": [
+      "Error in internal server"
+    ]
   }
 ```
 ---
@@ -159,7 +175,7 @@ _Response (500)_
 _Request Header_
 ```json
   {
-    "access_token" : "application/json"
+    "access_token" : "<access_token code>"
   }
 ```
 _Request Params_
@@ -193,13 +209,18 @@ _Response (200)_
 _Response (404)_
 ```json
   {
-    "message": "Todos is undefined"
+    "message": [
+      "Todo not found",
+      "Your account is Unauthorized"
+    ]
   }
 ```
 _Response (500)_
 ```json
   {
-    "message": "Error in internal server"
+    "message": [
+      "Error in internal server"
+    ]
   }
 ```
 ---
@@ -210,7 +231,7 @@ _Response (500)_
 _Request Header_
 ```json
   {
-    "access_token" : "application/json"
+    "access_token" : "<access_token code>"
   }
 ```
 _Request Params_
@@ -242,13 +263,18 @@ _Response (200)_
 _Response (404)_
 ```json
   {
-    "message": "Todos is undefined"
+    "message": [
+      "Todo not found",
+      "Your account is unauthorized"
+    ]
   }
 ```
 _Response (500)_
 ```json
   {
-    "message": "Error in internal server"
+    "message": [
+      "Error in internal server"
+    ]
   }
 ```
 ---
@@ -259,7 +285,7 @@ _Response (500)_
 _Request Header_
 ```json
   {
-    "access_token" : "application/json"
+    "access_token" : "<access_token code>"
   }
 ```
 _Request Params_
@@ -281,13 +307,18 @@ _Response (200)_
 _Response (404)_
 ```json
   {
-    "message": "Todos is undefined"
+    "message": [
+      "Todo not found",
+      "Your account is unathorized"
+    ]
   }
 ```
 _Response (500)_
 ```json
   {
-    "message": "Error in internal server"
+    "message": [
+      "Error in internal server"
+    ]
   }
 ```
 ---
@@ -317,10 +348,24 @@ _Response (201)_
     "email" : "user@user.com"
   }
 ```
+_Response (400)_
+```json
+  {
+    "message": [
+      "Input an email correctly",
+      "Email is required",
+      "Email is already register",
+      "Password minimum 6 characters",
+      "Password is required"
+    ]
+  }
+```
 _Response (500)_
 ```json
   {
-    "message": "Error in internal server"
+    "message": [
+      "Error in internal server"
+    ]
   }
 ```
 ---
@@ -352,12 +397,75 @@ _Response (200)_
 _Response (400)_
 ```json
   {
-    "msg" : "Email or Password is undefined"
+    "message" : [
+      "Email or Password is undefined"
+    ]
   }
 ```
 _Response (500)_
 ```json
   {
-    "message": "Error in internal server"
+    "message": [
+      "Error in internal server"
+    ]
   }
 ```
+
+### News
+> GET /todos
+
+_Request Header_
+```json
+  {
+    "access_token" : "<access_token code>"
+  }
+```
+_Request Params_
+```json
+  No needed
+```
+_Request Body_
+```json
+  No needed
+```
+_Response (200)_
+```json
+[
+  {
+    "source": {
+      "id": 1,
+      "name": "Kompas.com"
+    },
+    "author": "Aditya Maulana",
+    "title": "Cek Daftar Harga Honda PCX 160 dan Rival-rival Sekelasnya - Kompas.com - Otomotif Kompas.com",
+    "description": "<Description news>",
+    "url": "<url source website>",
+    "urlToImage": "<url source image>",
+    "publishedAt": "2021-02-06T05:22:00Z",
+    "content": "<core news with 250 characters>"
+  },
+  {
+    "source": {
+      "id": 2,
+      "name": "Kompas.com"
+    },
+    "author": "JPNN.com",
+    "title": "Ayu Ting Ting: Enggak Ada yang Menangis - JPNN.com",
+    "description": "<Description news>",
+    "url": "<url source website>",
+    "urlToImage": "<url source image>",
+    "publishedAt": "2021-02-06T05:12:00Z",
+    "content": "<core news with 250 characters>"
+  },
+  {...}
+]
+```
+_Response (500)_
+```json
+  {
+    "message": [
+      "Error in internal server"
+    ]
+  }
+```
+---

@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       validate: {
         notEmpty: {
-          msg: 'Description is required'
+          msg: 'Status is required'
         }
       }
     },

@@ -1,5 +1,5 @@
 module.exports = (err, req, res, next) => {
-  console.log(err, 'dari error handler ==========')
+  // console.log(err, 'dari error handler ==========')
   let message = []
 
   if (err.name == "SequelizeValidationError") {
@@ -30,14 +30,14 @@ module.exports = (err, req, res, next) => {
     message.push(msg)
     res.status(400).json({message})
   
-  } else if (err.name == "notDataYet") {
-    const msg = 'Please add your todo'
-    message.push(msg)
-    res.status(400).json({message})
-  
   } else if (err.name == "undefined") {
     const msg = 'Todo not found'
     message.push(msg)
-    res.status(400).json({message})
+    res.status(404).json({message})
+    
+  } else {
+    res.status(500).json({
+      message: 'Internal server error'
+    })
   }
 }
