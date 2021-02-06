@@ -1,21 +1,24 @@
 const base_url = "http://localhost:3000/"
+let targetedTodoId = 0
 
 function auth() {
   if (!localStorage.getItem("token")) {
     $("#main-page").hide()
     $("#edit-page").hide()
-    $("#login-page").show()
     $("#register-page").hide()
     $("#nav-logout").hide()
     $("#nav-register").show()
+    $("#homepage").show()
   } else {
     $("#main-page").show()
     $("#edit-page").hide()
-    $("#login-page").hide()
     $("#register-page").hide()
     $("#nav-logout").show()
     $("#nav-register").hide()
+    $("#homepage").hide()
+
     getTodo()
+    getNews()
   }
 }
 
@@ -27,7 +30,7 @@ $(document).ready(function () {
   })
   $("#nav-register-form").on('submit', e => {
     e.preventDefault()
-    $("#login-page").hide()
+    $("#homepage").hide()
     $("#register-page").show()
   })
   $("#register-form").on('submit', e => {
@@ -46,9 +49,31 @@ $(document).ready(function () {
     e.preventDefault()
     editPost()
   })
+  $("#navbar-logo").on('click', e => {
+    e.preventDefault()
+    auth()
+  })
 });
 
-
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  var id_token = googleUser.getAuthResponse().id_token;
+  $.ajax({
+    method: "POST",
+    url: base_url + "users/googlesignin",
+    data: {
+      token: id_token
+    }
+  })
+    .done(response => {
+      localStorage.setItem("token", response.token)
+      auth()
+    })
+    .fail(err => {
+      console.log(xhr)
+      console.log(textStatus)
+    })
+}
 
 function login() {
   const email = $("#login-email").val()
@@ -66,6 +91,7 @@ function login() {
       auth()
     })
     .fail((xhr, textStatus) => {
+      $("#error-message-login").text(xhr.responseJSON.errMsg)
       console.log(xhr)
       console.log(textStatus)
     })
@@ -74,8 +100,12 @@ function login() {
     })
 }
 
-function logout(){
+function logout() {
   localStorage.removeItem("token")
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
   auth()
 }
 
@@ -99,6 +129,7 @@ function register() {
       auth()
     })
     .fail((xhr, textStatus) => {
+      $("#error-message-register").text(xhr.responseJSON.errMsg[0])
       console.log(xhr)
       console.log(textStatus)
     })
@@ -149,7 +180,7 @@ function getTodo() {
               <td>${e.description}</td>
               <td>${e.status}</td>
               <td>${e.dueDate}</td>
-              <td><a class="btn btn-outline-primary" href="#" onclick="editTodo(${e.id})">Edit</a> | <a class="btn btn-outline-primary" href="#" onclick="updateStatus(${e.id})">Done!</a> | <a class="btn btn-outline-primary" href="#" onclick="deleteTodo(${e.id})">Delete</a></td>
+              <td><a class="btn btn-secondary" href="#" onclick="editTodo(${e.id})">Edit</a> | <a class="btn btn-success" href="#" onclick="updateStatus(${e.id})">Done!</a> | <a class="btn btn-danger" href="#" onclick="deleteTodo(${e.id})">Delete</a></td>
             </tr>
             `)
       })
@@ -168,6 +199,7 @@ function editTodo(todoId) {
     }
   })
     .done(response => {
+      targetedTodoId = response.id
       $("#edit-form").empty()
       $("#edit-form").append(`
           <div class="row">
@@ -200,8 +232,8 @@ function editPost() {
   const dueDate = $("#edit-dueDate").val()
   const description = $("#edit-description").val()
   $.ajax({
-    method: "POST",
-    url: base_url + "todos/" + todoId,
+    method: "PUT",
+    url: base_url + "todos/" + targetedTodoId,
     headers: {
       token: localStorage.getItem("token")
     },
@@ -212,6 +244,8 @@ function editPost() {
     }
   })
     .done(response => {
+      $("#main-page").show()
+      $("#edit-page").hide()
       auth()
     })
     .fail((xhr, textStatus) => {
@@ -257,4 +291,29 @@ function deleteTodo(todoId) {
     })
 }
 
-
+function getNews() {
+  $.ajax({
+    method: "GET",
+    url: base_url + "nyt",
+    headers: {
+      token: localStorage.getItem("token")
+    }
+  })
+    .done(data => {
+      $("#news-content").empty()
+      data.map(element => {
+        $('#news-content').append(`
+        <div class="card">
+          <img class="card-img-top img-fluid" src="${element.imageUrl}" alt="">
+          <div class="card-body card-news-content">
+            <h6 class="card-title">${element.title}</h6>
+            <a class="card-text btn btn-block btn-primary card-text-news" href="${element.url}" target="_blank">Read More</a>
+          </div>
+        </div>
+      `)
+      })
+    })
+    .fail((xhr, status) => {
+      console.log(xhr, status);
+    })
+}
