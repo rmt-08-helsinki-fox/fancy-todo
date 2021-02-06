@@ -14,7 +14,7 @@ const authorize = function (req, res, next) {
                         name: 'Custom error',
                         error: {
                             code: 401,
-                            message: 'user is not authorized'
+                            messages: ['user is not authorized']
                         }
                     }
                 }
@@ -23,7 +23,7 @@ const authorize = function (req, res, next) {
                     name: 'Custom error', 
                     error: {
                         code: 404,
-                        message: 'id was not found'
+                        messages: ['id was not found']
                     }
                 }
             }

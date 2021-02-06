@@ -4,9 +4,10 @@ const { getAccessToken } = require('../helpers/jwt')
 class UserController {
     static async signUp(req, res, next) {
         try {
-            const { email, password } = req.body
+            const { email, name, password } = req.body
             const newUser = await User.create({
                 email, 
+                name,
                 password
             })
             res.status(201).json(newUser)

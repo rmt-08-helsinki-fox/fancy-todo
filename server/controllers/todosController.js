@@ -1,14 +1,15 @@
-const { Todo } = require('../models')
+const { Todo, User } = require('../models')
 const axios = require('axios')
 
 class Controller {
     static async add(req, res, next) {
         try {
             const { title, description, status, due_date } = req.body
+            
             const newTodo = await Todo.create({
                 title, description, status, due_date, UserId: req.currentUser.id
             })
-
+            
             res.status(201).json(newTodo)
         } catch (error) {
             next(error)
@@ -18,8 +19,11 @@ class Controller {
     static async getTodos(req, res, next) {
         try {
             const todos = await Todo.findAll({
+                include: User,
                 order: [['id', 'ASC']]
             })
+
+            // console.log(todos[0].User);
             res.status(200).json(todos)
         } catch (error) {
             next(error)
@@ -38,7 +42,7 @@ class Controller {
                     name: 'Custom error',
                     error: {
                         code: 404,
-                        message: 'id was not found'
+                        messages: ['id was not found']
                     }
                 }
             }
@@ -49,10 +53,11 @@ class Controller {
 
     static async putTodo(req, res, next) {
         try {
+            
             const todoId = +req.params.id
             const { title, description, status, due_date } = req.body
+            console.log(todoId, req.body, 'sdlfjlksdjflkaj');
             const updatedTodo = await Todo.update({ title, description, status, due_date }, { where: { id: todoId }, returning: true })
-
             if (updatedTodo[0]) {
                 res.status(200).json(updatedTodo[1])
             } else {
@@ -60,7 +65,7 @@ class Controller {
                     name: 'Custom error',
                     error: {
                         code: 404,
-                        message: 'id was not found'
+                        messages: ['id was not found']
                     }
                 }
             }
@@ -85,7 +90,7 @@ class Controller {
                     name: 'Custom error',
                     error: {
                         code: 404,
-                        message: 'id was not found'
+                        messages: ['id was not found']
                     }
                 }
             }
@@ -105,7 +110,7 @@ class Controller {
                     name: 'Custom error',
                     error: {
                         code: 404,
-                        message: 'id was not found'
+                        messages: ['id was not found']
                     }
                 }
             }

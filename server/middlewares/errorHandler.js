@@ -15,11 +15,11 @@ module.exports = (error, req, res, next) => {
             break
         case 'Custom error':
             errorCode = error.error.code
-            errorMessage = error.error.message
+            errorMessage = error.error.messages
             res.status(errorCode).json({
                 error: {
                     code: errorCode,
-                    message: errorMessage
+                    messages: errorMessage
                 }
             })
             break
