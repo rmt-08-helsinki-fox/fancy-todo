@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="google-signin-client_id" content="692101303466-ur3omhkjn9afqtbsgvir7llcvt4bmt8a.apps.googleusercontent.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -12,26 +13,31 @@
   <nav class="navbar fixed-top navbar-expand-sm bg-dark navbar-dark">
     <ul class="navbar-nav">
       <li id="fancyTodoList" class="nav-item">
-        <b class="nav-link">Fancy Todo List</b>
+        <b class="nav-link"><img style="max-width: 10em; max-height: 2em;" src="./todoListLogo.png" alt=""> Fancy Todo List</b>
       </li>
       <li id="sign-in-navbar" class="nav-item">
-        <a id="navbarSignIn" class="nav-link" >Sign In</a>
+        <a id="navbarSignIn" class="nav-link" ><i class="fa fa-sign-in"></i> Sign In</a>
       </li>
       <li id="sign-up-navbar" class="nav-item">
-        <a id="navbarSignUp" class="nav-link"">Sign Up</a>
+        <a id="navbarSignUp" class="nav-link""><i class="fa fa-user"></i> Sign Up</a>
       </li>
       <li id="sign-up-navbar" class="nav-item">
         <a class="nav-link" id="addTodoBtn" >Add Todo</a>
       </li>
 
       <li id="sign-out-navbar" class="nav-item">
-        <a id="navbarSignOut" class="nav-link"">Sign Out</a>
+        <a id="navbarSignOut" class="nav-link""><i class="fa fa-sign-out"></i></i> Sign Out</a>
+      </li>
+      <li id="weatherNavbar" class="nav-item">
+        <a class="nav-link"><i class="fa fa-cloud" style="color:lightGrey;"></i> Weather: <span id="weatherInfo"></span></a>
       </li>
     </ul>
   </nav>
   <br><br><br>
 
   <div id="sign-in-page" style="max-width: 30em;" class="container">
+    <br>
+    <h1 style="text-align: center; max-width: 10em; max-height: 5em;"><img style="max-width: 10em; max-height: 2em;" src="./todoListLogo.png" alt=""> <b>Fancy Todo List</b></h1><br>
     <h2>Sign In</h2>
     <form id="signInForm">
       <div class="form-group">
@@ -48,6 +54,8 @@
   </div>
 
   <div id="sign-up-page" style="max-width: 30em;" class="container">
+    <br>
+    <h1 style="text-align: center; max-width: 10em; max-height: 5em;"><img style="max-width: 10em; max-height: 2em;" src="./todoListLogo.png" alt=""> <b>Fancy Todo List</b></h1><br>
     <h2>Sign Up</h2>
     <form id="signUpForm">
       <div class="form-group">

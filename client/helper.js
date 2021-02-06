@@ -9,7 +9,7 @@ const auth = () => {
     $("#editTodo-page").hide()
     $("#todos-table").hide()
     $("#addTodoBtn").hide()
-
+    getWeather()
   } else {
     $("#sign-out-navbar").show()
     $("#addTodoBtn").show()
@@ -20,6 +20,7 @@ const auth = () => {
     $("#addTodo-page").hide()
     $("#editTodo-page").hide()
     $("#todos-table").show()
+    getWeather()
     getAllTodo()
   }
 }
@@ -302,4 +303,21 @@ function onSignIn(googleUser) {
   .fail(xhr => {
     console.log(xhr);
   })
+  .always(_ => {
+    auth()
+  })
+}
+
+const getWeather = () => {
+  $.ajax({
+    url: baseUrl + 'getWeather',
+    method: 'GET'
+  })
+  .done(res => {
+    const {main,description} = res[0]
+    $("#weatherInfo").empty();
+    $("#weatherInfo").text(`${main} (${description})`);
+
+  })
+  .fail()
 }

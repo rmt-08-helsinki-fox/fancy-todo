@@ -254,3 +254,91 @@ _Response (500 - Internal Server Error)_
   "message": "Internal Server Error"
 }
 ```
+
+### POST /signIn
+
+> Sign In Account
+
+_Request Body_
+- data:
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+_Response (200)_
+```json
+{   
+    "id" : "<integer>",
+    "email": "<string>"
+}
+```
+_Response (500 - Internal Server Error)_
+```
+{
+  "message": "Internal Server Error"
+}
+```
+
+### POST /signUp
+
+> Create New Account
+
+_Request Body_
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+_Response (201)_ 
+
+-body:
+
+```json
+{
+  "msg" : "Sign Up success",
+  "id" : "<integer>",
+  "email": "<string>",
+}
+```
+_Response (500 - Internal Server Error)_
+```
+{
+  "message": "Internal Server Error"
+}
+```
+
+### POST /googleLogin
+
+> Login with OAuth Google 
+
+_Request Body_
+
+- data: 
+
+```json
+{
+  "id token": "<your token>"
+}
+```
+
+_Response (200)_
+- data :
+
+```json
+{
+  "id" : "integer",
+  "email" : "string"
+}
+```
+_Response (500 - Internal Server Error)_
+```
+{
+  "message": "Internal Server Error"
+}
+```

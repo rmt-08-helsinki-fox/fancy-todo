@@ -18,7 +18,6 @@ class UserController {
           msg: 'Sign Up success',
           id: user.id,
           email: user.email,
-          password: user.password
         })
       })
       .catch(err => {
@@ -69,8 +68,8 @@ class UserController {
       if (user) {
         // console.log('masuk IF >>>>>>>');
         const token = generateToken({
-          id:registeredUser.id,
-          email: registeredUser.email
+          id:user.id,
+          email: user.email
         })
         res.status(200).json({access_token:token})
       } else {
