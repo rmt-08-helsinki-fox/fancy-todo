@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Gothic A1', sans-serif;
+}
+
+#todoscard{
+    width: 200px;
+    height: 200px;
+    margin: 50px;
+    margin-top: 20px;
+    padding: 50px;
+    display: inline-block;
+    transition: all 1s;
+    text-align: center;
+    background-color: antiquewhite;
+}
