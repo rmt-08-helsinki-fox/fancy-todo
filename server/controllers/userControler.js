@@ -1,6 +1,7 @@
 const { User } = require('../models')
 const { comparePass } = require('../helpers/bcrypt')
 const { generateJwt } = require('../helpers/jwt')
+const {OAuth2Client} = require('google-auth-library');
 
 class Controller {
   static async register(req, res, next) {
@@ -14,7 +15,7 @@ class Controller {
       res.status(201).json(out)
     } catch (err) {
       if (!err.name) next(err)
-      next({status: 400, errors: err.errors})
+      next({name: err.name, errors: err.errors})
     }
   }
 
@@ -26,7 +27,7 @@ class Controller {
           email
         }
       })
-      if (!user || !comparePass(password,user.password)) throw ({ status: 401, msg: 'invalid email / password'})
+      if (!user || !comparePass(password,user.password)) throw ({ name: "Unauthorize", msg: 'invalid email / password'})
       let payload = {
         id : user.id,
         email : user.email
@@ -36,6 +37,48 @@ class Controller {
     } catch (err) {
       if (!err.msg) next(err)
       next(err)
+    }
+  }
+
+  static async oAuthLogin ( req, res, next ) {
+    try {
+      const client = new OAuth2Client(process.env.GOOGLE_CLIENT);
+      console.log(client);
+      let email = ""
+      let fullname = "" 
+      let password = "abcde" + String(Math.floor(Math.random() * 101010))
+      
+      const ticket = await client.verifyIdToken({
+        idToken: req.body.googleToken,
+        audience: process.env.GOOGLE_CLIENT
+      })
+
+      const payload = ticket.getPayload()
+      email = payload.email
+      fullname = payload.name
+          
+      const user = await User.findOne({
+        where: { email }
+      })
+      if (user) {
+        const payload = {
+          id: user.id,
+          email: user.email
+        }
+        const access_token = generateJwt(payload)
+        res.status(200).json( { access_token } )
+      } else {
+        const newUser = await User.create({name: fullname, email, password})
+        const payload = {
+          id: newUser.id,
+          email: newUser.email
+        }
+        const access_token = generateJwt(payload)
+        res.status(200).json( { access_token } )
+      }
+    } catch (err) {
+      console.log(err);
+      next(err);
     }
   }
 }

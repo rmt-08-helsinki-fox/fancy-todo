@@ -9,14 +9,14 @@ const authenticate = async (req, res, next) => {
         email: decoded.email
       }
     })
-    if (!user) throw ({status: 401}) 
+    if (!user) throw ({name: "ResourceNotFound"}) 
     req.userData = {
       userId: user.id,
       userEmail: user.email
     }
     next()
   } catch (err) {
-    next({status: 401})
+    next({name: "Unauthorize"})
   }
 }
 
@@ -25,8 +25,8 @@ const authorize = async (req, res, next) => {
     const {id} = req.params
     const {userId, userEmail} = req.userData
     const todo = await Todo.findByPk(id)
-    if (!todo) throw ({status: 404})
-    if (todo.UserId !== userId) throw ({status: 401})
+    if (!todo) throw ({name: "ResourceNotFound"})
+    if (todo.UserId !== userId) throw ({name: "Unauthorize"})
     next();
   } catch (err) {
     if (!err.status) next(err)

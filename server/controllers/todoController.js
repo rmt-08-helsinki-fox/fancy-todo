@@ -7,7 +7,7 @@ class Controller {
       let todoParams = {
         title: req.body.title,
         description: req.body.description,
-        status: req.body.status,
+        status: false,
         due_date: req.body.due_date,
         UserId: req.userData.userId
       }
@@ -16,23 +16,30 @@ class Controller {
       res.status(201).json(todoOutput)
     }
     catch(err) {
-      console.log(err, '---');
       if (!err.name) next(err)
-      next({status: 400, errors: err.errors})
+      next({name: err.name, errors: err.errors})
     }
   }
 
   static async getTodo(req, res, next) {
     try {
-      let todos = await Todo.findAll()
+      let todos = await Todo.findAll({
+        where: {
+          UserId: req.userData.userId
+        },
+        order: [
+          ['due_date', 'ASC']
+        ]
+      })
       todos = todos.map((todo) => {
         return todoOutputMaker(todo)
       })
       res.status(200).json(todos)
     }
     catch(err) {
+      console.log(err);
       if (!err.name) next(err)
-      next({status: 400, errors: err.errors})
+      next({name: err.name, errors: err.errors})
     }
   }
   
@@ -44,7 +51,7 @@ class Controller {
       res.status(200).json(todoOutput)
     } catch (err) {
       if (!err.name) next(err)
-      next({status: 400, errors: err.errors})
+      next({name: err.name, errors: err.errors})
     }
   }
   
@@ -65,11 +72,11 @@ class Controller {
       res.status(200).json(todoOutput)
     } catch (err) {
       if (!err.name) next(err)
-      next({status: 400, errors: err.errors})
+      next({name: err.name, errors: err.errors})
     }
   }
 
-  static async patchTodo(req, res, next) {
+  static async patchTodo(req, res, next) { //harus diupdate
     try {
       let { id } = req.params
       let { status } = req.body
@@ -82,7 +89,7 @@ class Controller {
     } 
     catch (err) {
       if (!err.name) next(err)
-      next({status: 400, errors: err.errors})
+      next({name: err.name, errors: err.errors})
     }
   }
 
@@ -96,7 +103,7 @@ class Controller {
     } 
     catch (err) {
       if (!err.name) next(err)
-      next({status: 400, errors: err.errors})
+      next({name: err.name, errors: err.errors})
     }
   }
 }

@@ -1,7 +1,9 @@
 const errorHandling = (err ,req, res, next) => {
-  let {status, msg, errors} = err
-  switch(status) {
-    case 400 :
+  let {status, msg, errors, name} = err
+  
+  switch(name) {
+    case "SequelizeUniqueConstraintError" :
+    case "SequelizeValidationError" :
       if (errors) {
         let messages = []
         errors.forEach(error => {
@@ -10,14 +12,14 @@ const errorHandling = (err ,req, res, next) => {
         res.status(400).json({ message: messages})
       }
       break;
-    case 401 :
-      res.status(401).json({message: !msg ? "User not Authorize" : msg })
+    case "Unauthorize" :
+      res.status(401).json({message: !msg ? ["User not Authorize"] : [msg] })
       break;
-    case 404 :
-      res.status(404).json({ message: "Data Not Found"})
+    case "ResourceNotFound" :
+      res.status(404).json({ message: ["Data Not Found"]})
       break;
     default: 
-    res.status(500).json({ message: "Internal Server Error"})
+    res.status(500).json({ message: ["Internal Server Error"]})
   }
 }
 

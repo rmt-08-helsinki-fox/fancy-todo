@@ -12,9 +12,10 @@ ___
 > Create new todo
 
 _Request Header_
-```
+```json
 {
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  "access_token": "<access_token>"
 }
 ```
 
@@ -40,9 +41,24 @@ _Response (201 - Created)_
 }
 ```
 
-_Response (500 - Internal Server Error)_
+_Response (400 - Bad Request)_
+```json
+{
+    "message": [
+        "<error.message>",
+        "<error.message>",
+        "<error.message>"
+    ]
+}
 ```
-"notNull Violation: Todo.title cannot be null"
+
+_Response (500 - Internal Server Error)_
+```json
+{
+    "message": [
+        "<error.message>"
+    ]
+}
 ```
 ---
 ### GET /todos
@@ -50,11 +66,11 @@ _Response (500 - Internal Server Error)_
 > Get all todos
 
 _Request Header_
-```
+```json
 {
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  "access_token": "<access_token>"
 }
-```
 
 _Request Body_
 ```
@@ -80,11 +96,25 @@ _Response (200 - OK)_
 ]
 ```
 
-_Response (500 - Internal Server Error)_
-```
+_Response (400 - Bad Request)_
+```json
 {
-  "Internal Server Error"
+    "message": [
+        "<error.message>",
+        "<error.message>",
+        "<error.message>"
+    ]
 }
+```
+
+_Response (500 - Internal Server Error)_
+```json
+{
+    "message": [
+        "<error.message>"
+    ]
+}
+```
 ```
 ___
 ### PUT /todos/:id
@@ -92,11 +122,11 @@ ___
 > Update a todo
 
 _Request Header_
-```
+```json
 {
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  "access_token": "<access_token>"
 }
-```
 
 _Request Body_
 ```json
@@ -120,9 +150,33 @@ _Response (200 - OK)_
 }
 ```
 
-_Response (500 - Internal Server Error)_
+_Response (400 - Bad Request)_
+```json
+{
+    "message": [
+        "<error.message>",
+        "<error.message>",
+        "<error.message>"
+    ]
+}
 ```
-"Internal Server Error"
+
+_Response (404 - Not Found)_
+```json
+{
+    "message": [
+        "<error.message>"
+    ]
+}
+```
+
+_Response (500 - Internal Server Error)_
+```json
+{
+    "message": [
+        "<error.message>"
+    ]
+}
 ```
 ---
 ### PATCH /todos/:id
@@ -130,11 +184,11 @@ _Response (500 - Internal Server Error)_
 > Update a todo status
 
 _Request Header_
-```
+```json
 {
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  "access_token": "<access_token>"
 }
-```
 
 _Request Body_
 ```json
@@ -154,9 +208,33 @@ _Response (200 - OK)_
 }
 ```
 
-_Response (500 - Internal Server Error)_
+_Response (400 - Bad Request)_
+```json
+{
+    "message": [
+        "<error.message>",
+        "<error.message>",
+        "<error.message>"
+    ]
+}
 ```
-"Internal Server Error"
+
+_Response (404 - Not Found)_
+```json
+{
+    "message": [
+        "<error.message>"
+    ]
+}
+```
+
+_Response (500 - Internal Server Error)_
+```json
+{
+    "message": [
+        "<error.message>"
+    ]
+}
 ```
 ---
 ### Delete /todos/:id
@@ -164,11 +242,11 @@ _Response (500 - Internal Server Error)_
 > Delete a todo
 
 _Request Header_
-```
+```json
 {
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  "access_token": "<access_token>"
 }
-```
 
 _Request Body_
 ```
@@ -193,11 +271,10 @@ _Response (500 - Internal Server Error)_
 > Register new User
 
 _Request Header_
-```
+```json
 {
   "Content-Type": "application/json"
 }
-```
 
 _Request Body_
 ```json
@@ -215,9 +292,24 @@ _Response (201 - Create)_
 }
 ```
 
-_Response (500 - Internal Server Error)_
+_Response (400 - Bad Request)_
+```json
+{
+    "message": [
+        "<error.message>",
+        "<error.message>",
+        "<error.message>"
+    ]
+}
 ```
-"Internal Server Error"
+
+_Response (500 - Internal Server Error)_
+```json
+{
+    "message": [
+        "<error.message>"
+    ]
+}
 ```
 ---
 
@@ -228,9 +320,7 @@ _Response (500 - Internal Server Error)_
 _Request Header_
 ```json
 {
-  "Content-Type": "application/json",
-  "access_token": "<access_token>"
-}
+  "Content-Type": "application/json"
 ```
 
 _Request Body_
@@ -248,11 +338,21 @@ _Response (200 - OK)_
 }
 ```
 
+_Response (401 - Unauthorize)_
+```json
+{
+    "message": [
+        "<error.message>"
+    ]
+}
+```
+
 _Response (500 - Internal Server Error)_
-```
-"Internal Server Error"
-```
-```
-"invalid email / password"
+```json
+{
+    "message": [
+        "<error.message>"
+    ]
+}
 ```
 ---
