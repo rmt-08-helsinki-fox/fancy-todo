@@ -2,8 +2,11 @@
 const {
   Model
 } = require('sequelize');
+
+const { hashPass } = require('../helpers/bcrypt')
+
 module.exports = (sequelize, DataTypes) => {
-  class Todo extends Model {
+  class User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,63 +14,58 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Todo.belongsTo(models.User, {
-        foreignKey: 'UserId', targetKey: 'id'
+      User.hasMany(models.Todo, {
+        foreignKey: 'UserId', sourceKey: 'id'
       })
     }
   };
-  Todo.init({
-    title: {
+  User.init({
+    email: {
       type: DataTypes.STRING,
+      unique: true,
       validate: {
         notEmpty: {
-          args: true,
-          msg: 'Title cannot be empty'
-        }
-      }
-    },
-    description: {
-      type: DataTypes.STRING,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Description cannot be empty'
-        }
-      }
-    },
-    status: {
-      type: DataTypes.BOOLEAN,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Status cannot be empty'
-        }
-      }
-    },
-    due_date: {
-      type: DataTypes.DATEONLY,
-      validate: {
-        isAfter: {
-          args: new Date().toISOString(),
-          msg: 'Due date must be after todays date'
+          msg: 'Please enter your email'
         },
-        isDate: {
+        isEmail: {
           args: true,
-          msg: "Due date must be in dd-mm-yyyy format"
+          msg: 'Invalid email format'
         }
       }
     },
-    UserId: {
-      type: DataTypes.INTEGER
+    password: {
+      type: DataTypes.STRING,
+      is: /^[0-9a-f]{64}$/i,
+      validate: {
+        notEmpty: {
+          msg: 'Please enter your password'
+        }
+      }
+    },
+    full_name: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Please enter your full name'
+        }
+      }
+    },
+    city: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Please enter your city'
+        }
+      }
     }
   }, {
     sequelize,
-    modelName: 'Todo',
+    modelName: 'User',
     hooks: {
       beforeCreate: (user, opt) => {
-        user.status = false
+        user.password = hashPass(user.password)
       }
     }
   });
-  return Todo;
+  return User;
 };
