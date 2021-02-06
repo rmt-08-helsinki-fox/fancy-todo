@@ -54,6 +54,7 @@ class TodoController {
   }
 
   static update(req, res, next) {
+    console.log('test => ', req.body);
     const { title, description, status, due_date } = req.body
     const id = +req.params.id
     Todo.update(

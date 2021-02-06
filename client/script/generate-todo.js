@@ -33,6 +33,24 @@ const doneTodo = (id) => {
   })
 }
 
+const yyyymmdd = (date) => {
+  const yyyy = new Date(date).getFullYear();
+  const mm = (String((new Date(date).getMonth() + 1)).length === 1 ? '0' : '') + (new Date(date).getMonth() + 1);
+  const dd = (String(new Date(date).getDate()).length === 1 ? '0' : '') + new Date(date).getDate();
+  
+  return `${yyyy}-${mm}-${dd}`
+  }
+
+const updateTodo = (dataUpdate) => {
+  localStorage.setItem('selectedEditTodo', JSON.stringify(dataUpdate))
+  console.log(yyyymmdd(dataUpdate.due_date));
+  $("#list-todo").hide();
+  $("#edit-container").show();
+  $("#edit-title").val(dataUpdate.title)
+  $("#edit-description").val(dataUpdate.description)
+  $("#edit-due_date").val(yyyymmdd(dataUpdate.due_date))
+}
+
 const generateListTodo = () => {
   $.ajax({
     url: "http://localhost:3001/todos",
@@ -61,9 +79,10 @@ const generateListTodo = () => {
                 <p style="margin: 0">
                   ${el.description}
                 </p>
-                <p>Due Date : ${el.due_date}</p>
+                <p>Due Date : ${yyyymmdd(el.due_date)}</p>
                 <div class="btn-hapus">
                   <button type="button" onclick="doneTodo(${el.id})" class="btn btn-info">Done</button>
+                  <button type="button" onclick='updateTodo(${JSON.stringify(el)})' class="btn btn-primary">Edit</button>
                   <button type="button" onclick="deleteTodo(${el.id})" class="btn btn-danger">Delete</button>
                 </div>
               </div>
@@ -92,7 +111,7 @@ const generateListTodo = () => {
                 <p style="margin: 0">
                   ${el.description}
                 </p>
-                <p>Due Date : ${el.due_date}</p>
+                <p>Due Date : ${yyyymmdd(el.due_date)}</p>
                 <div class="btn-hapus">
                   <button type="button" onclick="deleteTodo(${el.id})" class="btn btn-danger">Delete</button>
                 </div>

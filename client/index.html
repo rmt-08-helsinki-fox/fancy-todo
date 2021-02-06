@@ -12,7 +12,7 @@
       integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <title>Todo Watch Movie</title>
@@ -153,7 +153,7 @@
             Logout
           </button>
         </div>
-        <div id="list-card-todo" style="padding-bottom: 20px;"></div>
+        <div id="list-card-todo" style="padding-bottom: 20px"></div>
       </div>
 
       <div id="add-container">
@@ -208,6 +208,7 @@
                     <input
                       type="date"
                       class="form-control"
+                      min="new Date()"
                       id="add-due_date"
                       aria-describedby="due_date"
                     />
@@ -219,26 +220,94 @@
                   >
                     Add
                   </button>
-                  <button type="submit" class="btn btn-danger btn-cancel-add">Cancel</button>
+                  <button type="submit" class="btn btn-danger btn-cancel-add">
+                    Cancel
+                  </button>
                 </form>
               </div>
               <div id="tab2">
-                <div class="row" id="list-movie">
-                </div>
+                <div class="row" id="list-movie"></div>
                 <form id="form-add-search">
                   <div class="mb-3 col-3">
                     <label for="due_date" class="form-label">Due Date</label>
                     <input
                       type="date"
                       class="form-control"
+                      min="new Date()"
                       id="search-due_date"
                       aria-describedby="due_date"
                     />
                   </div>
-                  <button type="submit" id="btn-add-todo-search" class="btn btn-success">Add</button>
-                  <button type="submit" class="btn btn-danger btn-cancel-add">Cancel</button>
+                  <button
+                    type="submit"
+                    id="btn-add-todo-search"
+                    class="btn btn-success"
+                  >
+                    Add
+                  </button>
+                  <button type="submit" class="btn btn-danger btn-cancel-add">
+                    Cancel
+                  </button>
                 </form>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="edit-container">
+        <div class="card">
+          <h3 class="text-dark text-center" style="margin-top: 20px">
+            Edit Todo
+          </h3>
+          <div class="card-body">
+            <div
+              style="padding: 20px"
+            >
+              <form id="form-edit">
+                <div class="mb-3">
+                  <label for="title" class="form-label">Title</label>
+                  <input
+                    type="text"
+                    placeholder="type title of movie..."
+                    class="form-control"
+                    id="edit-title"
+                    aria-describedby="title"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="description" class="form-label"
+                    >Description</label
+                  >
+                  <input
+                    type="text"
+                    placeholder="type description..."
+                    class="form-control"
+                    id="edit-description"
+                    aria-describedby="description"
+                  />
+                </div>
+                <div class="mb-3 col-3">
+                  <label for="due_date" class="form-label">Due Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    min="new Date()"
+                    id="edit-due_date"
+                    aria-describedby="due_date"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  id="btn-edit-todo"
+                  class="btn btn-success"
+                >
+                  Edit
+                </button>
+                <button type="submit" class="btn btn-danger btn-cancel-add">
+                  Cancel
+                </button>
+              </form>
             </div>
           </div>
         </div>

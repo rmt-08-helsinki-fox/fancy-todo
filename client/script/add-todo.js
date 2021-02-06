@@ -10,12 +10,38 @@ $(document).ready(() => {
     $("#add-container").show();
   })
 
+  $("#btn-edit-todo").on("click", () => {
+    const title = $("#edit-title").val()
+    const description = $("#edit-description").val()
+    const due_date = $("#edit-due_date").val()
+    const data = JSON.parse(localStorage.getItem("selectedEditTodo"))
+    $.ajax({
+      url: 'http://localhost:3001/todos/' + data.id,
+      method: "PUT",
+      data: { title, description, due_date },
+      headers: { 
+        token: localStorage.getItem("access_token")
+       }
+    })
+    .done( res => {
+      console.log(res);
+      generateListTodo();
+      $("#edit-container").hide()
+      $("#list-todo").show()
+    })
+    .fail( err => {
+      console.log(err);
+    })
+    .always( _=> {
+      $("#form-edit").trigger("reset")
+    })
+  })
+
   $("#btn-add-todo-manual").on("click", (e) => {
     e.preventDefault()
     const title = $("#add-title").val()
     const description = $("#add-description").val()
     const due_date = $("#add-due_date").val()
-    console.log('test', title, description, due_date);
     $.ajax({
       url: 'http://localhost:3001/todos',
       method: "POST",

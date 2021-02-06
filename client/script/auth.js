@@ -3,12 +3,14 @@ const auth = () => {
     $("#page-title").show();
     $("#list-todo").show();
     $("#add-container").hide();
+    $("#edit-container").hide();
     $("#login-container").hide();
     $("#register-container").hide();
   } else {
     $("#page-title").hide();
     $("#list-todo").hide();
     $("#add-container").hide();
+    $("#edit-container").hide();
     $("#login-container").show();
     $("#register-container").hide();
   }
