@@ -6,19 +6,19 @@ function errorHandler(err, req, res, next) {
       break;
 
     case "Bad Request":
-      res.status(err.status).json({ errors: [err.message] })
+      res.status(err.status || 400).json({ errors: [err.message] })
       break;
 
     case "Unauthorized":
-      res.status(err.status).json({ errors: [err.message] })
+      res.status(err.status || 401).json({ errors: [err.message] })
       break;
 
     case "Forbidden":
-      res.status(err.status).json({ errors: [err.message] })
+      res.status(err.status || 403).json({ errors: [err.message] })
       break;
 
     case "Not Found":
-      res.status(err.status).json({ errors: [err.message] })
+      res.status(err.status || 404).json({ errors: [err.message] })
       break;
     
     default:

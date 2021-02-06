@@ -15,11 +15,15 @@ class Anime {
     this.synopsis = anime.synopsis
   }
 
-  static async getAnime() {
+  static async getAnime(req, res, next) {
     try {
-      let id = Math.ceil(Math.random()*10000)
+      let id = Math.ceil(Math.random()*9000)
       let response = await axios.get(`https://api.jikan.moe/v3/anime/${id}`)
-      if(response.data.score < 7) { throw { name: "Error" } }
+      let isUnderRating = (response.data.score < 7)
+      let isNotSerialTV = (response.data.type !== "TV")
+      let isBelow2000 = (response.data.aired.prop.to.year <= 2000)
+      if( isUnderRating || isNotSerialTV || isBelow2000 ) { throw { name: "Error" } }
+
       const genres = response.data.genres.map(genre => genre.name)
       const studios = response.data.producers.map(studio => studio.name)
       let anime = {
@@ -35,11 +39,12 @@ class Anime {
         aired: response.data.aired,
         synopsis: response.data.synopsis
       }
-      return new Anime(anime)
+      return res.status(200).json(new Anime(anime))
     } catch (err) {
       if(err.name === "Error") {
-        Anime.getAnime();
+        return Anime.getAnime(req, res, next)
       }
+      next(err)
     }
   }
 }

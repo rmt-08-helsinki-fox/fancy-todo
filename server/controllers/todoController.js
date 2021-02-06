@@ -5,23 +5,13 @@ module.exports = class TodoController {
 
   static async getTodos(req, res, next) {
     try {
-      const todos = await Todo.findAll()
+      const todos = await Todo.findAll({ order: [["createdAt", "DESC"]] })
       res.status(200).json(todos)
     } catch (err) {
       next(err)
     }
   }
 
-  //ini abaikan
-  // static async getTodos(req, res, next) {
-  //   try {
-  //     let anime = await Anime.getAnime();
-  //     await console.log(anime)
-  //     res.status(200).json(anime)
-  //   } catch (err) {
-  //     next(err)
-  //   }
-  // }
 
   static async addTodo(req, res, next) {
     try {
@@ -36,6 +26,7 @@ module.exports = class TodoController {
 
   static async getTodo(req, res, next) {
     try {
+      console.log(req.params.id)
       let id = Number(req.params.id);
       const todo = await Todo.findOne({ where: { id } })
       if(!todo) { throw { name: "Not Found", message: "todo not found", status: 404 } }
@@ -61,7 +52,9 @@ module.exports = class TodoController {
     try {
       let { status } = req.body;
       let id = Number(req.params.id);
+      console.log(status, id)
       const patchedTodo = await Todo.update({ status }, { where: { id }, returning: true })
+      console.log(patchedTodo[1])
       if(!patchedTodo[0]) { throw { name: "Not Found", message: "todo not found", status: 404 } }
       res.status(200).json(patchedTodo[1][0])
     } catch (err) {
@@ -71,6 +64,7 @@ module.exports = class TodoController {
 
   static async deleteTodo(req, res, next) {
     try {
+      console.log(req.params, "ini di controller")
       let id = Number(req.params.id);
       const deletedTodo = await Todo.destroy({ where: { id } })
       if(!deletedTodo) { throw { name: "Not Found", message: "todo not found", status: 404 } }

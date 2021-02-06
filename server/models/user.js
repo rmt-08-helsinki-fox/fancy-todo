@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
           if(!password.match(/[0-9]/g)){
             throw { name: "password error", message: "password must include numeric", status:400 }
           }
-        },
+        }
       }
     }
   }, {

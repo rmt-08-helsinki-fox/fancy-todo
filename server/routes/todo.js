@@ -3,16 +3,18 @@ const router = express.Router();
 const TodoController = require("../controllers/todoController");
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
+const Anime = require("../helpers/anime")
 
 router.use(authentication);
 router.get("/", TodoController.getTodos);
 router.post("/", TodoController.addTodo);
+router.get("/anime", Anime.getAnime);
 
-router.use(authorization);
-router.get("/:id", TodoController.getTodo);
-router.put("/:id", TodoController.putTodo);
-router.patch("/:id", TodoController.patchTodo);
-router.delete("/:id", TodoController.deleteTodo);
+
+router.get("/:id", authorization, TodoController.getTodo);
+router.put("/:id", authorization, TodoController.putTodo);
+router.patch("/:id", authorization, TodoController.patchTodo);
+router.delete("/:id", authorization, TodoController.deleteTodo);
 
 
 
