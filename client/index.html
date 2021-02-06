@@ -4,7 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+    <meta name="google-signin-client_id" content="620187964085-jrlpfo356q31halnmpplp6bd9r9oeg87.apps.googleusercontent.com">
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
@@ -84,6 +84,10 @@
                 <p class="text-center" style="margin: 0; margin-top: 10px">
                   don't have an account? <a href="#" id="register">register</a>
                 </p>
+                <p class="text-center">or</p>
+                <div class="d-flex justify-content-center">
+                  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                </div>
               </form>
             </div>
           </div>
@@ -313,7 +317,7 @@
         </div>
       </div>
     </div>
-
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

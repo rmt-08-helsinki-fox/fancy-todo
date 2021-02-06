@@ -84,4 +84,19 @@ $("#btn-logout").on("click", () => {
   auth()
 })
 
+function onSignIn(googleUser) {
+  var id_token = googleUser.getAuthResponse().id_token;
+  $.ajax({
+    url: 'http://localhost:3001/loginWithGoogle/' + id_token,
+    method: "POST"
+  })
+  .done( res => {
+    localStorage.setItem("access_token", res.access_token)
+    auth()
+  })
+  .fail( err => {
+    swal("Something Wrong", err.responseJSON.error, "error")
+  })
+}
+
 auth()
