@@ -1,5 +1,4 @@
 const { Todo } = require("../models")
-const axios = require("axios")
 
 class TodoController {
 
@@ -7,6 +6,8 @@ class TodoController {
     try {
       let { title, description, status, due_date, UserId } = req.body
       let input = { title, description, status, due_date, UserId }
+      input.UserId = req.decoded.id
+      input.status = input.status 
 
       const newTodo = await Todo.create(input, { returning: true })
 
@@ -39,8 +40,8 @@ class TodoController {
 
   static async updateTodo(req, res, next) {
     try {
-      let { title, description, status, due_date, UserId } = req.body
-      let input = { title, description, status, due_date, UserId }
+      let { title, description, status, due_date } = req.body
+      let input = { title, description, status, due_date }
       const id = req.params.id
 
       const data = await Todo.update(input, { where: { id }, returning: true })
@@ -85,25 +86,7 @@ class TodoController {
     }
   }
 
-  static async weather(req, res, next) {
-    const apiURL = `https://api.currentsapi.services/v1/latest-news?country=ID&apiKey=6cHyeWL2ZD3W4RK5yf1fnRFHWZV-5sUZosV2I0r4_f3tOB66`
-    axios
-      .get(apiURL)
-      .then(response => {
-        const news = response.data.news.slice(0, 3).map(el => {
-          return {
-            title: el.title,
-            published: el.published,
-            url: el.url,
-            image: el.image
-          }
-        })
-        res.status(200).json(news)
-      })
-      .catch(err => {
-        next(err)
-      })
-  }
+  
 
 }
 

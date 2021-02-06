@@ -18,7 +18,12 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
+        notNull: {
+          args: true,
+          msg: 'Email cannot be empty'
+        },
         notEmpty: {
           args: true,
           msg: 'Email cannot be empty'
@@ -35,10 +40,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         is: {
           args: /[A-Za-z\d]{8,}/,
           msg: 'Password must contain minimum 8 characters'
+        },
+        notNull: {
+          args: true,
+          msg: 'Password cannot be empty'
         },
         notEmpty: {
           args: true,
@@ -48,7 +58,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
+        notNull: {
+          args: true,
+          msg: 'Name cannot be empty'
+        },
         notEmpty: {
           args: true,
           msg: 'Name cannot be empty'

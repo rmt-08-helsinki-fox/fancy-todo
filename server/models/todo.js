@@ -17,17 +17,40 @@ module.exports = (sequelize, DataTypes) => {
   Todo.init({
     title: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
+        notNull: {
+          args: true,
+          msg: 'Title cannot be empty'
+        },
         notEmpty: {
           args: true,
           msg: 'Title cannot be empty'
         }
       }
     },
-    description: DataTypes.STRING,
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Description cannot be empty'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'Description cannot be empty'
+        }
+      }
+    },
     status: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
+        notNull: {
+          args: true,
+          msg: 'Status cannot be empty'
+        },
         notEmpty: {
           args: true,
           msg: 'Status cannot be empty'
@@ -36,24 +59,36 @@ module.exports = (sequelize, DataTypes) => {
     },
     due_date: {
       type: DataTypes.DATE,
+      allowNull: false,
       validate: {
         notEmpty: {
           args: true,
           msg: 'Due date cannot be empty'
         },
+        notNull: {
+          args: true,
+          msg: "Date cannot be empty"
+        },
         notPast(value) {
-          if (value.getDate() < (new Date().getDate())) {
-            throw new Error("Cannot insert todo from the past")
+          if (value) {
+            if (value.getDate() < (new Date().getDate())) {
+              throw new Error("Cannot insert todo from the past")
+            }
           }
         }
       }
     },
     UserId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
+        notNull: {
+          args: true,
+          msg: 'User Id cannot be empty'
+        },
         notEmpty: {
           args: true,
-          msg: 'UserId cannot be empty'
+          msg: 'User Id cannot be empty'
         }
       }
     }

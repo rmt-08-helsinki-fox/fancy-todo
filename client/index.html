@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <meta name="google-signin-client_id" content="669124168393-loiv81narsjln9ffoignjj6d0c8u81sv.apps.googleusercontent.com">
   <link rel="stylesheet" href="style.css">
   <title>Fancy Todo</title>
 </head>
@@ -26,6 +27,7 @@
         <input type="text" id="login-email" class="fadeIn second" name="email" placeholder="email">
         <input type="password" id="login-password" class="fadeIn second" name="password" placeholder="password">
         <input type="submit" class="fadeIn third" value="Log In">
+        <div class="g-signin2 text-center" data-onsuccess="onSignIn"></div>
       </form>
       
       <!-- Go to Register Page -->
@@ -71,348 +73,25 @@
     <div class="topright">
       <a href="#" role="button" id="btn-logout">Logout</a>
     </div>
+
+    <div class="topleft">
+      <div id="weather">
+
+      </div>
+    </div>
   
     <!-- TODOS -->
     <div class="wrapper" id="content-todos">
-
-      <div class="Content" id="todo-id">
-        <div class="fadeIn first">
-          <h2 class="active" id="todo-title-id">Register</h2>
-        </div>
-        <div class="fadeIn second info">
-          <p id="todo-description-id">Description</p>
-          <small id="todo-due_date-id">Due Date</small>
-        </div>
-        <button class="btn-status fadeIn third" id="todo-status-id" >Active</button>
-        <div id="formFooter">
-          <a class="underlineHover" href="#" role="button" id="btn-todo-edit-id">Edit</a>
-          <a class="underlineHover" href="#" role="button" id="btn-todo-delete-id">Delete</a>
-        </div>
-      </div>
-
-      <div class="Content" id="todo-id">
-        <div class="fadeIn first">
-          <h2 class="active" id="todo-title-id">Register</h2>
-        </div>
-        <div class="fadeIn second info">
-          <p id="todo-description-id">Description</p>
-          <small id="todo-due_date-id">Due Date</small>
-        </div>
-        <button class="btn-status fadeIn third" id="todo-status-id" >Active</button>
-        <div id="formFooter">
-          <a class="underlineHover" href="#" role="button" id="btn-todo-edit-id">Edit</a>
-          <a class="underlineHover" href="#" role="button" id="btn-todo-delete-id">Delete</a>
-        </div>
-      </div>
-  
-      <!-- ADD TODO -->
-
-      
-  
     </div>
+    
   </div>
 
   
   <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-  <!-- <script src="script.js"></script> -->
-  <script>
-    const base_url = "http://localhost:3100"
-
-    function auth() {
-      if (localStorage.access_token) {
-        showMain()
-        fetchAllTodos()
-      }
-      else {
-        showLogin()
-      }
-    }
-
-    function showRegister() {
-      console.log("Show Register");
-      $("#login-page").hide()
-      $("#register-page").show()
-      $("#main-page").hide()
-    }
-
-    function showLogin() {
-      console.log("Show Login");
-      $("#login-page").show()
-      $("#register-page").hide()
-      $("#main-page").hide()
-    }
-
-    function showMain() {
-      console.log("Show Main");
-      $("#login-page").hide()
-      $("#register-page").hide()
-      $("#main-page").show()
-
-    }
-
-    function login(em = "", pass = "") {
-      const email = em || $("#login-email").val()
-      const password = pass || $("#login-password").val()
-      $.ajax({
-        method: "POST",
-        url: base_url + "/login",
-        data: { email, password }
-      })
-      .done((response) => {
-        console.log(response, "<<THIS IS RESPONSE LOGIN");
-        localStorage.setItem("access_token", response.access_token)
-        auth()
-      })
-      .fail((hxr, text) => {
-        console.log(hxr);
-        console.log(text, "<<THIS IS ERROR LOGIN");
-      })
-      .always(_ => {
-        $("#form-login").trigger("reset")
-      })
-    }
-
-    function register() {
-      const name = $("#register-name").val()
-      const email = $("#register-email").val()
-      const password = $("#register-password").val()
-      $.ajax({
-        method: "POST",
-        url: base_url + "/register",
-        data: { name, email, password }
-      })
-      .done((response) => {
-        console.log(response, "<<THIS IS RESPONSE REGISTER");
-        login(email, password)
-      })
-      .fail((hxr, text) => {
-        console.log(hxr);
-        console.log(text, "<<THIS IS ERROR REGISTER");
-      })
-      .always(_ => {
-        $("#form-register").trigger("reset")
-      })
-    }
-
-    function logout() {
-      localStorage.removeItem("access_token")
-    }
-
-    function appendAddButton() {
-      const add_button = `
-    <div class="Content content-add" id="add-todo">
-      <button class="btn-status btn-add" >New Todo</button>
-    </div>
-    `
-      $("#content-todos").append(add_button)
-    }
-
-    function deleteTodo(id) {
-      $.ajax({
-        method: "DELETE",
-        url: base_url + "/todos/" + id,
-        headers: {
-          access_token: localStorage.getItem("access_token")
-        }
-      })
-      .done((response) => {
-        console.log(response, "<<THIS IS RESPONSE DELETE");
-        auth()
-      })
-      .fail((hxr, text) => {
-        console.log(hxr);
-        console.log(text, "<<THIS IS ERROR DELETE");
-      })
-    }
-
-    function setStatusTodo(id) {
-      getTodo(id)
-      .then(response => {
-        let newStatus = (response.status === "active") ? "done" : "active"
-        return $.ajax({
-          method: "PATCH",
-          url: base_url + "/todos/" + response.id,
-          headers: {
-            access_token: localStorage.getItem("access_token")
-          },
-          data: {
-            status: newStatus
-          }
-        })
-      })
-      .done((response) => {
-        console.log(response, "<<THIS IS RESPONSE PATCH");
-        auth()
-      })
-      .fail((hxr, text) => {
-        console.log(hxr);
-        console.log(text, "<<THIS IS ERROR PATCH");
-      })
-    }
-
-    function editTodo(id) {
-      auth()
-      getTodo(id)
-      .done(response => {
-        const due = new Date(response.due_date).toISOString().substr(0, 10);
-        console.log(due);
-        $(`#todo-${response.id}`).empty()
-        $(`#todo-${response.id}`).html(`
-        <div>
-          <h2 class="active">Edit Todo</h2>
-        </div>
-        
-        <form class="cancel-alert" id="form-edit">
-          <input type="text" id="edit-title" name="title" placeholder="title" value=${response.title}>
-          <input type="text" id="edit-description" name="description" placeholder="description" value=${response.description}>
-          <br>
-          <label class="form-check-label" for="">Status:</label>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="status" id="edit-status-active" value="active">
-            <label class="form-check-label" for="edit-status-active">active</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="status" id="edit-status-done" value="done">
-            <label class="form-check-label" for="edit-status-done">done</label>
-          </div>
-          <input type="date" id="edit-due_date" name="due_date" value=${due}>
-          <input type="submit" value="Submit">
-        </form>
-        
-        <div id="formFooter">
-          <a class="underlineHover" href="#" role="button" id="btn-edit-cancel">Cancel</a>
-        </div>
-        `)
-        if (response.status === "active") $(`#edit-status-active`).prop("checked", true)
-        else $(`#edit-status-done`).prop("checked", true)
-        
-        $("#btn-edit-cancel").on("click", (e) => {
-          e.preventDefault()
-          auth()
-        })
-        
-        $("#form-edit").on("submit", (e) => {
-          e.preventDefault()
-          putTodo(response.id)
-        })
-
-        console.log(response, "<<THIS IS RESPONSE POPULATE");
-      })
-      .fail((hxr, text) => {
-        console.log(hxr);
-        console.log(text, "<<THIS IS ERROR POPULATE");
-      })
-    }
-
-    function putTodo(id) {
-      const title = $("#edit-title").val()
-      const description = $("#edit-description").val()
-      const status = $('input[name=status]:checked', "#form-edit").val()
-      const due_date = $("#edit-due_date").val()
-      console.log(title, description, status, due_date);
-      $.ajax({
-        method: "PUT",
-        url: base_url + "/todos/" + id,
-        headers: {
-          access_token: localStorage.getItem("access_token")
-        },
-        data: { title, description, status, due_date }
-      })
-      .done((response) => {
-        console.log(response, "<<THIS IS RESPONSE PUT");
-        auth()
-      })
-      .fail((hxr, text) => {
-        console.log(hxr);
-        console.log(text, "<<THIS IS ERROR PUT");
-      })
-    }
-
-    function getTodo(id) {
-      return $.ajax({
-          method: "GET",
-          url: base_url + "/todos/" + id,
-          headers: {
-            access_token: localStorage.getItem("access_token")
-          }
-        })
-    }
-
-    function fetchAllTodos() {
-      $.ajax({
-        method: "GET",
-        url: base_url + "/todos",
-        headers: {
-          access_token: localStorage.getItem("access_token")
-        }
-      })
-      .done((response) => {
-        console.log(response, "<<THIS IS RESPONSE GET TODOS");
-        $("#content-todos").empty()
-        response.forEach(el => {
-          let due = new Date(el.due_date).toISOString().substr(0, 10)
-          $("#content-todos").append(`
-          <div class="Content" id="todo-${el.id}">
-            <div>
-              <h2 class="${el.status}" id="todo-title-${el.id}">${el.title}</h2>
-            </div>
-            <div class="info">
-              <p id="todo-description-${el.id}">${el.description}</p>
-              <small id="todo-due_date-${el.id}">${due}</small>
-            </div>
-            <button class="btn-status ${el.status}" id="todo-status-${el.id}" onclick="setStatusTodo(${el.id})">Status: ${el.status}</button>
-            <div id="formFooter">
-              <a class="underlineHover todo-anchor" href="#" role="button" id="btn-todo-edit-${el.id}" onclick="editTodo(${el.id})">Edit</a>
-              <a class="underlineHover todo-anchor" href="#" role="button" id="btn-todo-delete-${el.id}" onclick="deleteTodo(${el.id})">Delete</a>
-            </div>
-          </div>
-          `)
-        })
-        appendAddButton()
-      })
-      .fail((hxr, text) => {
-        console.log(hxr);
-        console.log(text, "<<THIS IS ERROR GET TODOS");
-      })
-    }
-    
-
-    $(document).ready(function(){
-      auth()
-
-      $("#btn-register").on("click", (e) => {
-        console.log("Click");
-        e.preventDefault()
-        showRegister()
-      })
-
-      $("#btn-login").on("click", (e) => {
-        console.log("Click");
-        e.preventDefault()
-        showLogin()
-      })
-
-      $("#btn-logout").on("click", (e) => {
-        console.log("Click");
-        e.preventDefault()
-        logout()
-        auth()
-      })
-
-      $("#form-login").on("submit", (e) => {
-        console.log("Submit");
-        e.preventDefault()
-        login()
-      })
-
-      $("#form-register").on("submit", (e) => {
-        console.log("Submit");
-        e.preventDefault()
-        register()
-      })
-    });
-  </script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="script.js"></script>
 </body>
 </html>

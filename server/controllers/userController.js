@@ -1,6 +1,7 @@
 const { User } = require("../models")
 const { compare } = require("../helpers/bcrypt")
 const { generateToken } = require("../helpers/jwt")
+const { OAuth2Client } = require("google-auth-library")
 
 class userController {
   static async login(req, res, next) {
@@ -38,6 +39,43 @@ class userController {
     } catch (err) {
       next(err)
     }
+  }
+
+  static async googleLogin(req, res, next) {
+    console.log("MASUK GLOG");
+    const { tokenGoogle } = req.body
+    try {
+      const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+      const ticket = await client.verifyIdToken({
+          idToken: tokenGoogle,
+          audience: process.env.GOOGLE_CLIENT_ID, 
+      });
+      const payload = ticket.getPayload();
+      const { name, email } = payload
+      console.log(payload);
+      console.log(email);
+      console.log(process.env.GENERATED_PASSWORD);
+      console.log();
+
+      let user = await User.findOne({ where: { email } })
+      if (!user) {
+        user = await User.create({ 
+          name,
+          email, 
+          password: process.env.GENERATED_PASSWORD
+        })
+      }
+
+      const access_token = generateToken({
+        id: user.id,
+        email: user.email,
+      })
+
+      res.status(200).json({ access_token })
+    } catch (err) {
+      next(err)
+    }
+
   }
 }
 

@@ -2,7 +2,7 @@
 /* BASIC */
 
 html {
-  background-color: #56baed;
+  background-color: #fff;
 }
 
 body {
@@ -51,6 +51,10 @@ h3 {
   padding: 20px;
 }
 
+#content-todos {
+  justify-content: start;
+}
+
 .formContent {
   -webkit-border-radius: 10px 10px 10px 10px;
   border-radius: 10px 10px 10px 10px;
@@ -94,7 +98,7 @@ h3 {
 }
 
 .topright {
-  position: absolute;
+  position: fixed;
   top: 8px;
   right: 16px;
   font-size: 18px;
@@ -219,6 +223,10 @@ a.todo-anchor {
   margin-right: 5px;
 }
 
+a.red {
+  color: #dd9292;
+}
+
 /* ANIMATIONS */
 
 /* Simple CSS3 Fade-in-down Animation */
@@ -313,14 +321,24 @@ a.todo-anchor {
   transition: width 0.2s;
 }
 
-.underlineHover:hover {
+.underlineHoverRed:after {
+  display: block;
+  left: 0;
+  bottom: -10px;
+  width: 0;
+  height: 2px;
+  background-color: #ed5656;
+  content: "";
+  transition: width 0.2s;
+}
+
+.underlineHover:hover, .underlineHoverRed:hover {
   color: #0d0d0d;
 }
 
-.underlineHover:hover:after{
+.underlineHover:hover:after, .underlineHoverRed:hover:after {
   width: 100%;
 }
-
 
 
 /* OTHERS */
