@@ -234,3 +234,30 @@ Response (500)
 {
   message: "Internal Server Error"
 }
+
+============================================================
+
+POST /users/loginGoogle
+- User login with Google Account
+
+Request Header
+no needed
+
+Request Body
+{
+  idToken: googleToken
+}
+
+Response (200)
+{
+  "id": 1,
+  "email": "<email to get insert into>",
+  "password": "<password to get insert into>",
+  "createdAt": "2020-03-20T07:15:12.149Z",
+  "updatedAt": "2020-03-20T07:15:12.149Z",
+}
+
+Response (500)
+{
+  message: "Internal Server Error"
+}
