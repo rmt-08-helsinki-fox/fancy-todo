@@ -3,11 +3,15 @@ if (process.env.NODE_ENV !== 'production'){
 }
 
 const express = require('express')
+const cors = require('cors')
 const routes = require('./routes/index')
 const errorHandlers = require('./helpers/errorHandlers')
 
 const app = express()
 const port = 3000
+
+// Cors
+app.use(cors())
 
 // Body Parser
 app.use(express.json())

@@ -1,6 +1,9 @@
 const { User, Todo } = require('../models/index')
 const { comparePass } = require('../helpers/bcrypt')
-const { generateToken } = require('../helpers/genToken')
+const generateToken = require('../helpers/genToken')
+const googleUsername = require('../helpers/googleUsername')
+const generateRandomPassword = require('../helpers/generateRandomPssword')
+const {OAuth2Client} = require('google-auth-library')
 
 class UserController {
   static showAllUsers(req, res, next){
@@ -84,6 +87,54 @@ class UserController {
       .catch(err => {
         next(err)
       })
+  }
+
+  static googleLogin(req, res, next){
+    const client = new OAuth2Client(process.env.CLIENT_ID)
+    let name = ''
+    let email = ''
+    let username = ''
+    const password = generateRandomPassword()
+
+    client.verifyIdToken({
+      idToken: req.body.googleToken,
+      audience: process.env.CLIENT_ID
+    })
+    .then(ticket => {
+      console.log('masuk ticket')
+      const payload = ticket.getPayload()
+      name = payload.name
+      email = payload.email
+      username = googleUsername(payload.email)
+
+      return User.findOne({ where: {email} })
+    })
+    .then(user => {
+      if (user){
+        const accessToken = generateToken({
+          id: user.id,
+          email: user.email
+        })
+        res.status(200).json({ accessToken })
+      }else {
+        return User.create({
+          name,
+          email,
+          username,
+          password
+        })
+      }
+    })
+    .then(userCreate => {
+      const accessToken = generateToken({
+        id: userCreate.id,
+        email: userCreate.email
+      })
+      res.status(201).json({ accessToken })
+    })
+    .catch(err => {
+      next(err)
+    })
   }
 }
 

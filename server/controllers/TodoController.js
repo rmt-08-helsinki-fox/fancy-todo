@@ -9,17 +9,17 @@ class TodoController {
     }
 
     Todo.findAll(option)
-      .then(todo => {
-        if(user.length === 0) throw {
-          name: "customError",
-          msg: "Data not found",
-          code: 404
-          }
-        res.status(200).json(todo)
-      })
-      .catch(err => {
-        next(err)
-      })
+    .then(todo => {
+      if(todo.length === 0) throw {
+        name: "customError",
+        msg: "Data not found",
+        code: 404
+        }
+      res.status(200).json(todo)
+    })
+    .catch(err => {
+      next(err)
+    })
   }
 
   static showTodoById(req, res, next){
@@ -41,9 +41,9 @@ class TodoController {
     const newTodo = {
       title: req.body.title,
       description: req.body.description,
-      status: req.body.status,
+      status: false,
       due_date: req.body.due_date,
-      is_private: req.body.is_private,
+      is_private: false,
       user_id: +req.user.id
     }
 
@@ -109,6 +109,12 @@ class TodoController {
   }
 
   static editTodoStatus(req, res, next){
+    if (req.body.status === true){
+      req.body.status = false
+    }else {
+      req.body.status = true
+    }
+    console.log(req.body.status)
     const newStatus = {
       status: req.body.status
     }

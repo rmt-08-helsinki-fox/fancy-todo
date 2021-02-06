@@ -9,7 +9,7 @@ const authorize = (req, res, next) => {
 
     Todo.findOne(option)
         .then(todo => {
-            if (todo.user_id === +req.user.id){
+            if (+todo.user_id === +req.user.id){
                 next()
             }else {
                 res.status(401).json({ msg: "Access not permitted" })
