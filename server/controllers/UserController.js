@@ -31,6 +31,7 @@ class UserController {
         console.log(req.body)
         let {email, password} = req.body
         let id
+        let name
         User.findOne({
             where:{
                 email: email
@@ -39,6 +40,7 @@ class UserController {
         .then((result)=>{
             if(result){
                 id = result.id
+                name = result.name
                 return bcrypt.compare(password, result.password)
             }else{
                 next({name: 'LOGIN_GAGAL'})
@@ -47,7 +49,7 @@ class UserController {
         .then((isPasswordMatched)=>{
             if(isPasswordMatched){
                 let token = jwt.sign({ id: id }, process.env.TOKEN_KEY);
-                res.status(200).json({token: token})
+                res.status(200).json({token: token, name: name})
             }else{
                 next({name: 'LOGIN_GAGAL'})
             }
@@ -95,7 +97,7 @@ class UserController {
             })
             if(checkUser){
                 let token = jwt.sign({ id: checkUser.id }, process.env.TOKEN_KEY);
-                res.status(200).json({token: token})
+                res.status(200).json({token: token, name: checkUser.name})
             }else{
                 // user does not exist
                 // create user
@@ -106,7 +108,7 @@ class UserController {
                 }
                 let userCreated = await User.create(newUser)
                 let token2 = jwt.sign({ id: userCreated.id }, process.env.TOKEN_KEY);
-                res.status(200).json({token: token2})
+                res.status(200).json({token: token2, name:userCreated.name})
             }
             
         }catch(err){
