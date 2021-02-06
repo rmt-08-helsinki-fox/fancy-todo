@@ -39,14 +39,15 @@
         $("#row-addTodo").hide()
         
       } else {
-        $("div").removeClass("modal-backdrop show") // HANDLE AFTER SUBMIT MODAL
         $("#row-login").hide()
         $("#row-register").hide()
         $("#nav-login").hide()
         $("#addTodo").hide()
         $("#nav-logout").show()
         $("#row-addTodo").show()
+        $('#halo-name').text(localStorage.user_name);
         getReadMyTodos()
+        getWeather()
       }
     }
     
@@ -64,11 +65,10 @@
       .done((response) => {
         localStorage.setItem("accessToken", response.accessToken)
         auth()
-        alert('yey')
       })
       .fail((xhr, text) => {
         console.log(xhr, text)
-        swalFail(xhr.responseJSON.error)
+        swalFail(xhr.responseJSON.errors)
       })
       .always(() => {
         $("#login-form").trigger("reset")
@@ -93,14 +93,48 @@
       })
       .fail((xhr, text) => {
         console.log(xhr, text)
-        swalFail(xhr.responseJSON.error)
+        swalFail(xhr.responseJSON.errors)
       })
       .always(() => {
         $("#register-form").trigger("reset")
       })
     }
     
-    
+    function getWeather() {
+      $.ajax({
+        url: base_url + "todos/weather",
+        method: "GET",
+        headers: {
+          token: localStorage.getItem("accessToken")
+        }
+      })
+      .done((dataWeather) => {
+        $("#weather").append(`
+          <div class="card p-2 mb-5">
+            <div class="d-flex">
+              <h6 class="flex-grow-1">${dataWeather.data[0].city_name}</h6>
+            </div>
+            <div class="d-flex flex-column temp mt-5 mb-3">
+              <h1 class="mb-0 font-weight-bold" id="heading"> ${dataWeather.data[0].temp}° C </h1> <span class="small grey">${dataWeather.data[0].weather.description}</span>
+            </div>
+            <div class="d-flex">
+              <div class="temp-details flex-grow-1">
+                <p class=""> <i class="fas fa-wind mr-2" aria-hidden="true"></i> <span> ${dataWeather.data[0].wind_spd} m/s </span> </p>
+                <p class=""> <i class="fa fa-tint mr-2" aria-hidden="true"></i> <span> ${dataWeather.data[0].rh}% </span> </p>
+              </div>
+              <div> <img src="https://www.weatherbit.io/static/img/icons/${dataWeather.data[0].weather.icon}.png"> </div>
+            </div>
+          </div>
+        `);
+        // $("#tbody-jadwal-sholat").empty()
+        
+      })
+      .fail((xhr, text) => {
+        console.log(xhr,text);
+      })
+
+    }
+
     function getReadMyTodos() {
       $.ajax({
         url: base_url + "todos/readMyTodos",
@@ -109,7 +143,7 @@
           token: localStorage.getItem("accessToken")
         }
       })
-      .done((todos) => {   
+      .done((todos) => {
         $("#todoList").empty()
         todos.forEach(el => {
           $("#todoList").append(`
@@ -175,7 +209,7 @@
       })
       .fail((xhr, text) => {
         console.log(xhr,text);
-        swalFail(xhr.responseJSON.error)
+        swalFail(xhr.responseJSON.errors)
       })
       
     }
@@ -201,6 +235,14 @@
         }
       })
       .done((todo) => {
+        let badge = "" 
+        if (todo.status) {
+          todo.status = "done"
+          badge = "badge-success"
+        } else {
+          todo.status = "undone"
+          badge = "badge-danger"
+        }
         $("#todoList").append(`
         <div class="input-group mb-3" id="todo-${todo.id}">
           <div class="card col">
@@ -211,7 +253,7 @@
                 <h3 class="card-title">${todo.title}</h3>
                 <h6 class="card-subtitle mb-2 text-muted">${todo.due_date}</h6>
                 <p class="card-text">${todo.description}</p>
-                <p class="card-text">${todo.status}</p>
+                <span class="badge badge-pill ${badge}">${todo.status}</span>
               </div>
             </div>
           </div>
@@ -222,7 +264,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Modal ${el.title}</h5>
+                <h5 class="modal-title">Modal ${todo.title}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -262,7 +304,7 @@
       })
       .fail((xhr, text) =>{
         console.log(xhr, text)
-        swalFail(xhr.responseJSON.error)
+        swalFail(xhr.responseJSON.errors)
       })
       .always(() => {
         $("#addTodo-form").trigger("reset")
@@ -289,11 +331,12 @@
         }
       })
       .done((response) => {
+        $(`#modal-todo-${id}`).modal('hide')
         console.log(response);
         auth()
       })
       .fail((xhr, text) => {
-        swalFail(xhr.responseJSON.error)
+        swalFail(xhr.responseJSON.errors)
       })
     }
     
@@ -314,7 +357,8 @@
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
-      }).then((result) => {
+      })
+      .then((result) => {
         if (result.isConfirmed) {
           $.ajax({
             url: base_url + "todos/" + Number(id),
@@ -330,40 +374,60 @@
               'Your file has been deleted.',
               'success'
               )
-            })
-            .fail((xhr, text) => {
-              console.log(xhr, text);
-              swalFail(xhr.responseJSON.error)
-            })
-          }
-        })
-      }
+          })
+          .fail((xhr, text) => {
+            console.log(xhr, text);
+            swalFail(xhr.responseJSON.errors)
+          })
+        }
+      })
+    }
       
-      
-      function logout() { // nav-logout
-        console.log("logout");
-        localStorage.clear()
+    function logout() { // nav-logout
+      localStorage.clear()
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function ( ) {
+        console.log('User signed out.');
+      });
+      auth()
+    }
+    
+    function navLogin() { // nav-logout
+      auth()
+    }
+    
+    function anchorRegister() {
+      $("#row-login").hide()
+      $("#row-register").show()
+    }
+    
+    function anchorLogin(){
+      auth()
+    }
+    
+    function addTodoForm() { // button Add Todo Form
+      $("#addTodo").slideDown()
+    }
+    
+    function cancleAdd(e) { // button Cancel add todo form
+      e.preventDefault()
+      $("#addTodo").slideUp()
+    }
+
+    function onSignIn(googleUser) {
+      var id_token = googleUser.getAuthResponse().id_token;
+      $.ajax({
+        url: base_url + 'users/googleLogin',
+        method: 'POST',
+        data : {
+          googleToken: id_token
+        }
+      })
+      .done((response) => {
+        localStorage.setItem("accessToken", response.accessToken)
         auth()
-      }
-      
-      function navLogin() { // nav-logout
-        auth()
-      }
-      
-      function anchorRegister() {
-        $("#row-login").hide()
-        $("#row-register").show()
-      }
-      
-      function anchorLogin(){
-        auth()
-      }
-      
-      function addTodoForm() { // button Add Todo Form
-        $("#addTodo").show()
-      }
-      
-      function cancleAdd(e) { // button Cancel add todo form
-        e.preventDefault()
-        $("#addTodo").hide()
-      }
+      })
+      .fail((err) => {
+        console.log(err);
+      })
+    }

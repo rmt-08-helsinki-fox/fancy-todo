@@ -1,0 +1,440 @@
+# Fancy - Todo Rest API Documentation
+This is api documentation for Rest API Fancy Todo.
+<br><br>
+
+## Endpoint List
+## 1. User (Authentication)
+---
+### Register
+> Create new User.
+- **URL** : `/users/register`
+- **Method** : `POST`
+- **Data Params** :
+    ```
+    email=string
+    password=string
+    ```
+
+    _Request Header_
+    ```
+    None
+    ```
+    
+    _Request Body_
+    ```json
+    {
+        "email": "<user>@mail.com",
+        "password": "<user-password>"
+    }
+    ```
+
+- **Success Response**
+
+    _Response(201 - Created)_
+    ```json
+    {
+        "id": "<get auto by system>",
+        "email": "<user>@mail.com"
+    }
+    ```
+
+- **Error Response**
+
+    _Response(400 - Bad Request)_
+    ```json
+    {
+        "error": [
+            "Email already registered"
+        ]
+    }
+    ```
+    
+    _Response(500 - Internal Server Error)_
+    ```json
+    {
+        "error": "Internal Server Error"
+    }
+    ```
+
+### Login
+> Login & get access token for client
+- **URL** : `/users/login`
+- **Method** : `POST`
+- **Data Params** :
+    ```
+    email=string
+    password=string
+    ```
+
+    _Request Header_
+    ```
+    None
+    ```
+    
+    _Request Body_
+    ```json
+    {
+        "email": "<user>@mail.com",
+        "password": "<user-password>"
+    }
+    ```
+
+- **Success Response**
+
+    _Response(200 - OK)_
+    ```json
+    {
+        "accessToken" : "<get-token-from-server>"
+    }
+    ```
+
+- **Error Response**
+
+    _Response(400 - Bad Request)_
+    ```json
+    {
+        "error": [
+            "Invalid email or password"
+        ]
+    }
+    ```
+    
+    _Response(500 - Internal Server Error)_
+    ```json
+    {
+        "error": "Internal Server Error"
+    }
+    ```
+<br>
+
+## 2. Task
+---
+### Create Task
+> Create new Task.
+
+input format :
+
+| key         | value                   |
+|-------------|-------------------------|
+| title       | req.body.title          |
+| description | req.body.description    |
+| due_date    | req.body.due_date       |
+| status    | req.body.status       |
+| userId      | req.decoded.id          |
+
+
+- **URL** : `/todos/create`
+- **Method** : `POST`
+- **Data Params** :
+    ```
+    title = string,
+    description = string
+    status = boolean,
+    due_date = date format YYYY-MM-DD
+    ```
+
+    _Request Header_
+    ```json
+    {
+        "token": "<your token>"
+    }
+    ```
+    
+    _Request Body_
+    ```json
+    {
+        "title": "<title todo>",
+        "description": "<description todo>",
+        "due_date": "YYYY-MM-DD",
+        "status": "<BOOLEAN>"
+    }
+    ```
+
+- **Success Response**
+
+    _Response(201 - Created)_
+    ```json
+    {
+        "id": "<given id by system>",
+        "title": "<title todo>",
+        "description": "<description todo>",
+        "due_date": "<due date todo>",
+        "userId": "<user id who create todo>",
+        "updatedAt": "2021-02-03T18:58:57.586Z",
+        "createdAt": "2021-02-03T18:58:57.586Z",
+        "status": false
+    }
+    ```
+
+- **Error Response**
+
+    _Response(400 - Bad Request)_
+    ```json
+    {
+        "error": [
+            "The Title field is required",
+            "The Status field is required",
+            "Date must be more than today"
+        ]
+    }
+    ```
+
+    _Response(401 - Unauthorized)_
+    ```json
+    {
+        "error": "Invalid Token"
+    }
+    ```
+    
+    _Response(500 - Internal Server Error)_
+    ```json
+    {
+        "error": "Internal Server Error"
+    }
+    ```
+<br>
+
+
+### Show All Todo
+> Show All todo.
+
+| key         | value                             |
+|-------------|-----------------------------------|
+| id          | auto increment primary key        |
+| title       | title task (string)               |
+| description | description task (string)         |
+| status      | status task (boolean)             |
+| due_date    | due date task (date)              |
+| createdAt   | time when data was created (date) |
+| updatedAt   | time when data was updated (date) |
+| userId      | foreign key of User.id            |
+
+
+- **URL** : `/todos`
+- **Method** : `GET`
+- **Data Params** :
+    ```
+    None
+    ```
+
+    _Request Header_
+    ```json
+    {
+        "token": "<your token>"
+    }
+    ```
+    
+    _Request Body_
+    ```
+    None
+    ```
+
+- **Success Response**
+
+    _Response(200 - OK)_
+    ```json
+    {
+        "id": "1",
+        "title": "<title todo 1>",
+        "description": "<description todo 1>",
+        "due_date": "<due date todo 1>",
+        "userId": "<user id who create todo 1>",
+        "updatedAt": "2021-02-03T18:58:57.586Z",
+        "createdAt": "2021-02-03T18:58:57.586Z",
+        "status": false
+    },
+    {
+        "id": "2",
+        "title": "<title todo 2>",
+        "description": "<description todo 2>",
+        "due_date": "<due date todo 2>",
+        "userId": "<user id who create todo 2>",
+        "updatedAt": "2021-02-03T18:58:57.586Z",
+        "createdAt": "2021-02-03T18:58:57.586Z",
+        "status": false
+    },
+    ```
+
+- **Error Response**
+
+    _Response(401 - Unauthorized)_
+    ```json
+    {
+        "error": "Invalid Token"
+    }
+    ```
+    
+    _Response(500 - Internal Server Error)_
+    ```json
+    {
+        "error": "Internal Server Error"
+    }
+    ```
+<br>
+
+### Show Todo By Id
+> Show All todo.
+
+| key         | value                             |
+|-------------|-----------------------------------|
+| id          | auto increment primary key        |
+| title       | title task (string)               |
+| description | description task (string)         |
+| status      | status task (boolean)             |
+| due_date    | due date task (date)              |
+| createdAt   | time when data was created (date) |
+| updatedAt   | time when data was updated (date) |
+| userId      | foreign key of User.id            |
+
+
+- **URL** : `/todos/:id`
+- **Method** : `GET`
+- **Data Params** :
+    ```
+    None
+    ```
+
+    _Request Header_
+    ```json
+    {
+        "token": "<your token>"
+    }
+    ```
+    
+    _Request Body_
+    ```
+    None
+    ```
+
+- **Success Response**
+
+    _Response(200 - OK)_
+    ```json
+    {
+        "id": "1",
+        "title": "<title todo 1>",
+        "description": "<description todo 1>",
+        "due_date": "<due date todo 1>",
+        "userId": "<user id who create todo 1>",
+        "updatedAt": "2021-02-03T18:58:57.586Z",
+        "createdAt": "2021-02-03T18:58:57.586Z",
+        "status": false
+    }
+    ```
+
+- **Error Response**
+
+    _Response(401 - Unauthorized)_
+    ```json
+    {
+        "error": "Invalid Token"
+    }
+    ```
+
+    _Response(403 - Forbidden)_
+    ```json
+    {
+        "error": "Access Denied!!"
+    }
+    ```
+
+    _Response(404 - Not Found)_
+    ```json
+    {
+        "error": "Task Not Found"
+    }
+    ```
+    
+    _Response(500 - Internal Server Error)_
+    ```json
+    {
+        "error": "Internal Server Error"
+    }
+    ```
+<br>
+
+### Update Task
+> Show All todo.
+
+- **URL** : `/todos/:id`
+- **Method** : `PUT`
+- **URL Params** : id=integer
+- **Data Params** :
+    ```
+    title=string (required)
+    description=string
+    due_date=string format YYYY-MM-DD (required)
+    ```
+
+    _Request Header_
+    ```json
+    {
+        "token": "<your token>"
+    }
+    ```
+    
+    _Request Body_
+    ```
+    "title": "<updated-title>",
+    "description": "<updated-description>",
+    "due_date": "<updated-due-date>"
+    ```
+
+- **Success Response**
+
+    _Response(200 - OK)_
+    ```json
+    {
+        "id": "1",
+        "title": "<title todo 1>",
+        "description": "<description todo 1>",
+        "due_date": "<due date todo 1>",
+        "userId": "<user id who create todo 1>",
+        "updatedAt": "2021-02-03T18:58:57.586Z",
+        "createdAt": "2021-02-03T18:58:57.586Z",
+        "status": false
+    }
+    ```
+
+- **Error Response**
+
+    _Response(401 - Unauthorized)_
+    ```json
+    {
+        "error": "Invalid Token"
+    }
+    ```
+
+    _Response(403 - Forbidden)_
+    ```json
+    {
+        "error": "Access Denied!!"
+    }
+    ```
+
+    _Response(400 - Bad Request)_
+    ```json
+    {
+        "errors": [
+            "The Title field is required",
+            "The Status field is required",
+            "Date must be more than today"
+        ]
+    }
+    ```
+
+    _Response(404 - Not Found)_
+    ```json
+    {
+        "error": "Task Not Found"
+    }
+    ```
+    
+    _Response(500 - Internal Server Error)_
+    ```json
+    {
+        "error": "Internal Server Error"
+    }
+    ```
+<br>
+

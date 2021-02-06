@@ -17,11 +17,12 @@ class TodosController {
       res.status(201).json(data)
     })
     .catch((err) => {
+      console.log(err);
       next(err)
     });
   }
   
-  static getTodos(req, res, next) {
+  static getTodos(req, res, next ) {
     Todo.findAll()
     .then((data) => {
       res.status(200).json(data)
@@ -123,11 +124,10 @@ class TodosController {
   }
 
   static weather(req, res, next) {
-    const city = req.query.city || 'Malang'
-    const lang = req.query.lang || 'id'
+    const city = req.query.city || 'Jakarta'
     axios({
       method: 'GET',
-      url: `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&lang=${lang}&key=${process.env.Weather_APIkey}`
+      url: `http://api.weatherbit.io/v2.0/current?city=${city}&key=${process.env.Weather_APIkey}`
     })
     .then((response) => {
       res.status(200).json(response.data)
@@ -136,6 +136,8 @@ class TodosController {
       next(err)
     })
   }
+
+
 }
 
 module.exports = TodosController

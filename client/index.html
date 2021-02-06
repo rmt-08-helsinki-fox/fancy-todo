@@ -5,6 +5,8 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- OAuth Google -->
+  <meta name="google-signin-client_id" content="154480493926-l6qlvutohmr8gkuoqdq6n5ajql4653pc.apps.googleusercontent.com">
   
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
@@ -54,6 +56,9 @@
               <button type="submit" class="btn btn-primary rounded-pill col">Login</button>
               <hr>
             </div>
+            <div class="text-center">
+              <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            </div>
             <div class="text-center mt-2">
               <a href="#" onclick="anchorRegister()">Create an Account!</a>
             </div>
@@ -91,8 +96,8 @@
     
     <div class="row pr-4 pl-4 pt-5 mx-auto" id="row-addTodo">
       <div class="col">
-        <h2>Hallo <span id="halo-name"></span></h2>
-        <div id="cuaca">
+        <h2>Hi <span id="halo-name"></span></h2>
+        <div id="weather">
           
         </div>
       </div>
@@ -146,7 +151,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
   <!-- sweetalert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.all.min.js"></script>
-  
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <!-- OAuth Google -->
   <script src="./assets/js/main.js"></script>
   
 </body>
