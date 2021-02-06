@@ -1,0 +1,12 @@
+const routes = require('express').Router()
+const TodoController = require('../controllers/todoController')
+const authenticate = require('../middlewares/authenticate')
+const authorize = require('../middlewares/authorize')
+routes.use(authenticate)
+routes.post('/', TodoController.add)
+routes.get('/', TodoController.getTodos)
+routes.get('/:id',authorize ,TodoController.getTodoById)
+routes.put('/:id', authorize,TodoController.edit)
+routes.patch('/:id',authorize ,TodoController.editStatus)
+routes.delete('/:id',authorize, TodoController.delete)
+module.exports = routes
