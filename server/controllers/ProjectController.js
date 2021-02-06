@@ -1,14 +1,22 @@
 const { Project, User, ProjectUser } = require('../models');
+const { Sequelize } = require("sequelize");
 
 class ProjectController{
 
     static index = async(req,res,next) => {
         try {
             let projects = await Project.findAll({
-                where : {
-                    UserId : +req.user.id
-                },
-                include : 'Users'
+                where : 
+                    Sequelize.or(
+                        { '$ProjectUsers.UserId$' : +req.user.id },
+                        { 'UserId' : +req.user.id}
+                    )  
+                ,
+                include : [
+                    'Users',
+                    'ProjectUsers'
+                ],
+                
             });
             res.status(200).json(projects);
         } catch (error) {

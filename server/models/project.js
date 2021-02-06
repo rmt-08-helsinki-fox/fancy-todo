@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Project.belongsToMany(models.User, { through : models.ProjectUser, as : 'Users' })
       Project.belongsTo(models.User, {as : 'Owner' , foreignKey : 'UserId'})
+      Project.hasMany(models.ProjectUser, { as : 'ProjectUsers' });
     }
   };
   Project.init({
