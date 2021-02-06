@@ -329,3 +329,198 @@ _Response (500 - Internal Server Error)_
   msg: "Internal Server Error"
 }
 ```
+
+### POST /login
+
+> Login with registered user
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+  "email": "<your posted email>",
+  "password": "<your posted password>",
+}
+```
+
+_Request Params_
+```
+not needed
+```
+
+_Response (200 - Ok)_
+```
+"<access_token sent by server>"
+```
+
+_Response (404 - Not Found)_
+```
+{
+  msg: "Data Not Found"
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+{
+  msg: "Internal Server Error"
+}
+```
+
+### POST /register
+
+> register new user data
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+  "email": "<your posted email>",
+  "password": "<your posted password>",
+}
+```
+
+_Request Params_
+```
+not needed
+```
+
+_Response (201 - Created)_
+```
+{
+  "id": "<id sent by server>"
+  "email": "<your posted email>",
+}
+```
+
+_Response (404 - Not Found)_
+```
+{
+  msg: "Data Not Found"
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+{
+  msg: "Internal Server Error"
+}
+```
+
+### GET /weather
+
+> get weather data
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Request Params_
+```
+not needed
+```
+
+_Response (200 - Ok)_
+```
+{
+    "request": {
+        "type": "City",
+        "query": "Jakarta, Indonesia",
+        "language": "en",
+        "unit": "m"
+    },
+    "location": {
+        "name": "Jakarta",
+        "country": "Indonesia",
+        "region": "Jakarta Raya",
+        "lat": "-6.215",
+        "lon": "106.845",
+        "timezone_id": "Asia/Jakarta",
+        "localtime": "2021-02-06 14:41",
+        "localtime_epoch": 1612622460,
+        "utc_offset": "7.0"
+    },
+    "current": {
+        "observation_time": "07:41 AM",
+        "temperature": 30,
+        "weather_code": 143,
+        "weather_icons": [
+            "https://assets.weatherstack.com/images/wsymbols01_png_64/wsymbol_0006_mist.png"
+        ],
+        "weather_descriptions": [
+            "Haze"
+        ],
+        "wind_speed": 15,
+        "wind_degree": 340,
+        "wind_dir": "NNW",
+        "pressure": 1007,
+        "precip": 1.2,
+        "humidity": 66,
+        "cloudcover": 50,
+        "feelslike": 34,
+        "uv_index": 6,
+        "visibility": 5,
+        "is_day": "yes"
+    }
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+{
+  msg: "Internal Server Error"
+}
+```
+### POST /login/google
+
+> Login with google account
+
+_Request Header_
+```
+not needed
+```
+
+_Request Body_
+```
+{
+  "id_token": "<id_token sent by google>",
+}
+```
+
+_Request Params_
+```
+not needed
+```
+
+_Response (200 - Ok)_
+```
+"<access_token sent by server>"
+```
+
+_Response (404 - Not Found)_
+```
+{
+  msg: "Data Not Found"
+}
+```
+
+_Response (500 - Internal Server Error)_
+```
+{
+  msg: "Internal Server Error"
+}
+```

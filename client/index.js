@@ -88,7 +88,7 @@ function login(event){
   })
   .fail(err => {
     console.log(err.responseJSON,  '<<< ini dalem login')
-    alert(err.responseJSON)
+    // alert(err.responseJSON)
   })
   .always(() => {
     $("#email").val('')
@@ -142,11 +142,11 @@ function register(event){
   .done(response => {
     console.log(response)
     checkAuth()
-    alert('User Created!')
+    // alert('User Created!')
   })
   .fail(err => {
     console.log(err)
-    alert(err.responseJSON)
+    // alert(err.responseJSON)
   })
   .always(() => {
     $('#email-register').val('')
@@ -193,11 +193,11 @@ function addTodo(event){
   })
   .done(response => {
     console.log(response)
-    alert('data added successfully')
+    // alert('data added successfully')
     checkAuth()
   })
   .fail(err => {
-    alert(err.responseJSON)
+    // alert(err.responseJSON)
     console.log(err)
   })
   .always(() => {
@@ -269,7 +269,7 @@ function deleteTodo(id){
     }
   })
   .done(todos => {
-    alert('Delete successful')
+    // alert('Delete successful')
     checkAuth()
   })
 }
@@ -305,11 +305,11 @@ function editTodo(id){
       }
     })
     .done(updatedTodo => {
-      alert('Update succesful')
+      // alert('Update succesful')
       checkAuth()
     })
     .fail(err => {
-      alert(err.responseJSON)
+      // alert(err.responseJSON)
       console.log(err)
     })
     .always(() => {
@@ -347,12 +347,12 @@ function patchTodo(id){
     })
     .done(updatedTodo => {
       console.log(updatedTodo)
-      alert('Status Updated Successfully')
+      // alert('Status Updated Successfully')
       checkAuth()
     })
     .fail(err => {
       console.log(err)
-      alert(err.responseJSON)
+      // alert(err.responseJSON)
     })
   })
 }
