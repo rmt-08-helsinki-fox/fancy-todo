@@ -3,24 +3,21 @@ const {User} = require('../models')
 
 const authenticate = function (req, res, next) {
     try {
-        // console.log(req.body)
+
         const token = req.headers.token
         const decoded = jwt.verify(token, process.env.SECRET)
-        // console.log(decoded)
         User.findOne({
             where : {
                 email : decoded.email
             }
         })
             .then(data => {
+                // console.log(data)
                 req.data = data
                 next()
             })
     } catch (err) {
-        res.status(401).json({
-            message :"Invalid Token"
-        })
+    next({name: "custom", msg: "Invalid Token", statusCode: 401})
     }
-
 }
 module.exports = authenticate
