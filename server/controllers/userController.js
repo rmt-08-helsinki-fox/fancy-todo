@@ -5,11 +5,10 @@ const { compare } = require("../helper/bcrypt");
 class UserController {
   static async register(req, res, next) {
     try {
-      const { email, password, city } = req.body;
+      const { email, password } = req.body;
       const user = await User.create({
         email,
         password,
-        city,
       });
 
       res.status(200).json({ message: "User created", user: user });
@@ -42,10 +41,9 @@ class UserController {
       const token = signToken({
         id: user.id,
         email: user.email,
-        city: user.city,
       });
 
-      res.status(200).json({ token });
+      res.status(200).json({ access_token: token });
     } catch (err) {
       next(err);
     }

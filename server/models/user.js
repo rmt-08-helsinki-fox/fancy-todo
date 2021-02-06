@@ -23,11 +23,27 @@ module.exports = (sequelize, DataTypes) => {
             args: true,
             msg: "Invalid email format",
           },
+          notEmpty: {
+            msg: "Please insert your email",
+          },
         },
-        unique: true,
+        unique: {
+          args: true,
+          msg: "Email already taken",
+        },
       },
-      password: DataTypes.STRING,
-      city: DataTypes.STRING,
+      password: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            msg: "Please insert your password",
+          },
+          is: {
+            args: /^(?=.*\d)(?=.*[a-z])[0-9a-z]{8,}$/,
+            msg: "Minimum password length is 8 characters and include number",
+          },
+        },
+      },
     },
     {
       sequelize,

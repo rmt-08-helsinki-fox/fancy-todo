@@ -2,115 +2,121 @@ const { Todo } = require("../models");
 const axios = require("axios").default;
 
 class TodoController {
-  static postTodos(req, res, next) {
-    const { title, description, status, due_date } = req.body;
-    Todo.create({
-      title,
-      description,
-      status,
-      due_date,
-      UserId: req.data.id,
-    })
-      .then((data) => {
-        res.status(201).json(data);
-      })
-      .catch((err) => {
-        next(err);
-      });
-  }
-
-  static getTodos(req, res, next) {
-    const apiKey = process.env.OpenWeatherAPI;
-    const cityName = req.data.city;
-
-    axios({
-      method: "get",
-      url: `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`,
-    })
-      .then((response) => {
-        let weatherData = response.data;
-        Todo.findAll({ where: { UserId: req.data.id } })
-          .then((data) => {
-            res.status(200).json({ data, weatherData });
-          })
-          .catch((err) => {
-            next(err);
-          });
-      })
-      .catch((err) => {
-        res.status(500).json(err);
-      });
-  }
-
-  static putTodos(req, res, next) {
-    const id = +req.params.id;
-    const { title, description, status, due_date } = req.body;
-
-    Todo.update(
-      {
+  static async postTodos(req, res, next) {
+    try {
+      const { title, description, status, due_date } = req.body;
+      let todo = await Todo.create({
         title,
         description,
         status,
         due_date,
-      },
-      { where: { id: id }, returning: true }
-    )
-      .then((data) => {
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        if (err.errors) {
-          next(err);
-        } else {
-          next({
-            name: "customError",
-            status: 500,
-            message: "Kesalahan server 500",
-          });
-        }
+        UserId: req.data.id,
       });
+      res.status(201).json({ data: todo });
+    } catch (err) {
+      next(err);
+    }
   }
 
-  static patchTodos(req, res) {
-    const id = +req.params.id;
-
-    const { status } = req.body;
-
-    Todo.update(
-      {
-        status,
-      },
-      { where: { id: id }, returning: true }
-    )
-      .then((data) => {
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        if (err.errors) {
-          next(err);
-        } else {
-          next({
-            name: "customError",
-            status: 500,
-            message: "Kesalahan server 500",
-          });
-        }
+  static async getTodos(req, res, next) {
+    try {
+      let todos = await Todo.findAll({
+        where: { UserId: req.data.id },
+        order: [["id", "ASC"]],
       });
+      res.status(200).json({ data: todos });
+    } catch (err) {
+      next(err);
+    }
   }
 
-  static deleteTodos(req, res) {
-    const id = +req.params.id;
+  static async putTodos(req, res, next) {
+    try {
+      const id = +req.params.id;
+      const { title, description, due_date } = req.body;
 
-    Todo.destroy({ where: { id: id }, returning: true })
-      .then((data) => {
-        res.status(200).json({ data: data, messsage: "todo succes to delete" });
-      })
-      .catch((err) => {
+      let updateTodo = await Todo.update(
+        {
+          title,
+          description,
+          due_date,
+        },
+        { where: { id: id }, returning: true }
+      );
+
+      res.status(200).json({ data: updateTodo });
+    } catch (err) {
+      console.log(err);
+      if (err.errors) {
+        next(err);
+      } else {
+        next({
+          name: "customError",
+          status: 500,
+          message: "Internal server errors",
+        });
+      }
+    }
+  }
+
+  static async patchTodos(req, res, next) {
+    try {
+      const id = +req.params.id;
+
+      let todoDone = await Todo.update(
+        { status: true },
+        { where: { id: id }, returning: true }
+      );
+
+      res.status(200).json({ data: todoDone });
+    } catch (err) {
+      if (err.errors) {
+        next(err);
+      } else {
         next({
           name: "customError",
           status: 500,
           message: "Kesalahan server 500",
         });
+      }
+    }
+  }
+
+  static async deleteTodos(req, res, next) {
+    try {
+      const id = +req.params.id;
+      let deleted = await Todo.destroy({ where: { id: id }, returning: true });
+
+      res
+        .status(200)
+        .json({ data: deleted, messsage: "todo succes to delete" });
+    } catch (err) {
+      next({
+        name: "customError",
+        status: 500,
+        message: "Kesalahan server 500",
+      });
+    }
+  }
+
+  static weatherStack(req, res, next) {
+    console.log(req.body);
+    const apiKey = process.env.WEATHER_API;
+    const latt = req.body.latitude;
+    const long = req.body.longitude;
+
+    axios
+      .get(
+        `http://api.weatherstack.com/current?access_key=${apiKey}&query=${latt},${long}`
+      )
+      .then((response) => {
+        let weatherLoc = response.data.location;
+        let weatherCurrent = response.data.current;
+
+        res.status(200).json({ weatherLoc, weatherCurrent });
+      })
+      .catch((err) => {
+        next(err);
       });
   }
 }

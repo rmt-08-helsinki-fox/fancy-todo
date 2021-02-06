@@ -10,6 +10,8 @@ router.get("/todos", TodoController.getTodos);
 
 router.post("/todos", TodoController.postTodos);
 
+router.post("/weather", TodoController.weatherStack);
+
 router.put("/todos/:id", authorization, TodoController.putTodos);
 
 router.patch("/todos/:id", authorization, TodoController.patchTodos);
