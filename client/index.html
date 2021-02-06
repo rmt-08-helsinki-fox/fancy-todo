@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="google-signin-client_id" content="69638797025-tg3t38rp8ciafgr8r7sn6hh4me45sde8.apps.googleusercontent.com">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <title>Document</title>
-    
+
 </head>
-<body>
+<body id="main-body">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -21,259 +23,209 @@
               <a class="nav-link active" aria-current="page" href="#" id="nav-register">Register</a>
               <a class="nav-link active" href="#" id="nav-login">Login</a>
               <a class="nav-link active" href="#" id="nav-task">Task List</a>
+              <a class="nav-link active" href="#" id="nav-weather">weather Today</a>
               <a class="nav-link active" href="#" id="nav-logout">Logout</a>
             </div>
           </div>
         </div>
-      </nav>
+    </nav>
 
       <!-- Regristration form -->
-      <div id="register-form">
-          <h1>Register</h1>
-          <form id="register">
-              <div class="mb-3">
-                <label for="formGroupExampleInput" class="form-label">Email</label>
-                <input type="email" class="form-control" id="register-email" placeholder="example@mail.com">
-              </div>
-              <div class="mb-3">
-                <label for="formGroupExampleInput2" class="form-label">Password</label>
-                <input type="text" class="form-control" id="register-password" placeholder="must contain 6 (six) or more characters">
-              </div>
-              <div>
-                <button type="submit" class="btn btn-outline-primary" id="register-submit">Submit</button>
-              </div>
-          </form>
-      </div>
-
-      <!-- Login form -->
-      <div id="login-form">
-        <h1>Login</h1>
-        <form id="login">
-            <div class="mb-3">
-              <label for="formGroupExampleInput" class="form-label">Email</label>
-              <input type="email" class="form-control" id="login-email" placeholder="example@mail.com">
-            </div>
-            <div class="mb-3">
-              <label for="formGroupExampleInput2" class="form-label">Password</label>
-              <input type="text" class="form-control" id="login-password" placeholder="must contain 6 (six) or more characters">
-            </div>
+    <div class="container-fluid mt-5 champered" id="register-form">
+      <div class="row pr-4 pl-4" id="row-register">
+        <div class="card mt-5 pl-0 pr-0 col-md-4 mx-auto">
+          <div class="card-header text-center">
+            Register
+          </div>
             <div>
-              <button type="submit" class="btn btn-outline-primary" id="login-submit">Submit</button>
+              <div class="card-body">
+                <form id="register">
+                  <div class="form-group">
+                    <label for="register-email" class="form-label">Email</label>
+                      <input type="email" class="form-control form-control rounded-pill" id="register-email" placeholder="example@mail.com">
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="register-password" class="form-label">Password</label>
+                      <input type="password" class="form-control form-control rounded-pill" id="register-password" placeholder="must contain 6 (six) or more characters">
+                      <input type="checkbox" class="password-revealer" onclick="revealPassword('register')"> Show Password
+                  </div>
+                  <div class="text-center btn-lg">
+                    <button type="submit" class="btn btn-primary rounded-pill" id="register-submit">Submit</button>
+                  </div>
+                </form>
             </div>
-        </form>
+        </div>
+      </div>
     </div>
+  </div>
+    
+      <!-- Login form -->
+      <div class="container-fluid mt-5" id="login-form">
+        <div class="row pr-4 pl-4" id="row-login">
+          <div class="card mt-5 pl-0 pr-0 col-md-4 mx-auto">
+            <div class="card-header text-center">
+              Login
+            </div>
+              <div>
+                <div class="card-body">
+                  <form id="login">
+                    <div class="form-group">
+                      <label for="login-email" class="form-label">Email</label>
+                        <input type="email" class="form-control form-control rounded-pill" id="login-email" placeholder="example@mail.com">
+                    </div>
+                    <div class="form-group mb-3">
+                      <label for="login-password" class="form-label">Password</label>
+                        <input type="password" class="form-control form-control rounded-pill" id="login-password" placeholder="must contain 6 (six) or more characters">
+                        <input type="checkbox" class="password-revealer" onclick="revealPassword('login')"> Show Password
+                    </div>
+                    <div class="text-center btn-lg">
+                      <button type="submit" class="btn btn-primary rounded-pill" id="login-submit">Submit</button>
+                    </div>
+                    <div class="justify-center">
+                      <p>login with google account</p>
+                      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                    </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Todo form -->
-    <div id="todo-form">
-        <h1>Input Task</h1>
-        <form id="todo">
-            <div class="mb-3">
-              <label for="formGroupExampleInput" class="form-label">Title</label>
-              <input type="email" class="form-control" id="todo-title" placeholder="cooking for dinner">
-            </div>
-            <div class="mb-3">
-              <label for="formGroupExampleInput2" class="form-label">Task description</label>
-              <input type="text" class="form-control" id="todo-description" placeholder="cook a meal for dinner tonight">
-            </div>
-            <div class="mb-3">
-                <label for="formGroupExampleInput2" class="form-label">Due Date</label>
-                <input type="date" class="form-control" id="date-todo">
-            </div>
+    <div class="container-fluid mt-5" id="todo-form">
+      <div class="row pr-4 pl-4" id="row-todo">
+        <div class="card mt-5 pl-0 pr-0 col-md-4 mx-auto">
+          <div class="card-header text-center">
+            todo
+          </div>
             <div>
-              <button type="submit" class="btn btn-outline-primary" id="login-submit">Submit</button>
+              <div class="card-body">
+                <form id="todo">
+                  <div class="form-group">
+                    <label for="todo-title" class="form-label">Title</label>
+                      <input type="text" class="form-control form-control rounded-pill" id="todo-title" placeholder="cooking for dinner">
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="todo-description" class="form-label">Description</label>
+                      <input type="text" class="form-control form-control rounded-pill" id="todo-description" placeholder="cook a meal for dinner tonight">
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="todo-status">Status</label>
+                    <br>
+                    <select name="status" id="todo-status">
+                        <option value="" selected>-- Options --</option>
+                        <option value="true">Done</option>
+                        <option value="false">Not Done</option>
+                      </select>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="todo-date" class="form-label">Due Date</label>
+                    <input type="date" class="form-control form-control rounded-pill" id="todo-date">
+                </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary rounded-pill" id="todo-submit">Submit</button>
+                  </div>
+                </form>
             </div>
-        </form>
+        </div>
+      </div>
     </div>
+  </div>
+
+    <!-- Todo form edit-->    
+    <div class="container-fluid mt-5" id="todo-form-edit">
+      <div class="row pr-4 pl-4" id="row-todo-edit">
+        <div class="card mt-5 pl-0 pr-0 col-md-4 mx-auto">
+          <div class="card-header text-center">
+            todo
+          </div>
+            <div>
+              <div class="card-body">
+                <form id="todo-edit">
+                  <div class="form-group">
+                    <label for="todo-title-edit" class="form-label">Title</label>
+                      <input type="text" class="form-control form-control rounded-pill" id="todo-title-edit" placeholder="cooking for dinner">
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="todo-description-edit" class="form-label">Description</label>
+                      <input type="text" class="form-control form-control rounded-pill" id="todo-description-edit" placeholder="cook a meal for dinner tonight">
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="todo-status-edit">Status</label>
+                    <br>
+                    <select name="status" id="todo-status-edit">
+                        <option value="" selected>-- Options --</option>
+                        <option value="true">Done</option>
+                        <option value="false">Not Done</option>
+                      </select>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="todo-date-edit" class="form-label">Due Date</label>
+                    <input type="date" class="form-control rounded-pill" id="todo-date-edit">
+                </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary rounded-pill" id="todo-submit-edit">Submit</button>
+                    <button type="button" class="btn btn btn-danger rounded-pill" id="todo-cancel-edit">Cancel</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <!-- todo table -->
-    <table class="table" id="todo-table">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Due Date</th>
-            <th colspan="3">Action</th>
-          </tr>
-        </thead>
-        </tbody>
-      </table>
+    <div class="card mt-5 pl-0 pr-0 col-md-11 mx-auto" id="todo-table-container">
+      <table class="table table-border border-primary" id="todo-table">
+          <thead id="table-head">
+            <tr>
+              <th>No</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Due Date</th>
+              <th colspan="3">Action</th>
+            </tr>
+          </thead>
+        </table>
+    </div>
 
-      
+    <!-- todo weather -->
+    <div class="container-fluid mt-5" id="weather-form">
+      <div class="row pr-4 pl-4" id="row-weather">
+        <div class="card mt-5 pl-0 pr-0 col-md-4 mx-auto">
+          <div class="card-header text-center">
+            Weather Location
+          </div>
+            <div>
+              <div class="card-body">
+                <form id="weather">
+                  <div class="form-group">
+                    <label for="weather-location" class="form-label">Location</label>
+                      <input type="text" class="form-control form-control rounded-pill" id="weather-location" placeholder="Bandung">
+                  </div>
+                  <div class="text-center btn-lg">
+                    <button type="submit" class="btn btn-primary rounded-pill" id="location-submit">Submit</button>
+                    <button type="button" class="btn btn-danger rounded-pill" id="location-cancel">Cancel</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- weather widget -->
+  <div class="row pr-5 pl-5 md-5" id="row-weather2">
+  </div>
+
+ 
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script>
-        const baseUser = "http://localhost:3000/users/";
-        const baseTodo = "http://localhost:3000/todos"
-
-        function authenticate(){
-            if (!localStorage.getItem("access_token")){
-                $("#regsiter-form").show();
-                $("#login-form").hide()
-                $("#todo-form").hide()
-                $("#todo-table").hide()
-                $("#nav-logout").hide()
-                $("#nav-task").hide()
-            } else {
-                $("#register-form").hide();
-                $("#login-form").hide()
-                $("#nav-login").hide()
-                $("#nav-register").hide()
-                $("#todo-form").show()
-                $("#todo-table").hide()
-                $("#nav-logout").show()
-                $("#nav-task").show()
-
-            }
-        }
-
-        function register(){
-            const email = $("#register-email").val();
-            const password = $("#register-password").val()
-            $.ajax({
-                url: baseUser + "register",
-                method: "POST",
-                data: {
-                    email,
-                    password
-                }
-            })
-                .done((response) => {
-                    console.log(response);
-                    $("p").remove(".error-message");
-                    $("p").remove(".success-message");
-                    $("#register").prepend(`<p class="success-message"><b style="color: green;">${response.msg}</b></p>`);
-                })
-                .fail ((xhr, text) => {
-                    let error = xhr.responseJSON.message[0]
-                    $("p").remove(".error-message");
-                    $("#register").prepend(`<p class="error-message"><b style="color: red;">${error}</b></p>`);
-                })
-                .always(() => {
-                    $("#register").trigger("reset");
-                })
-        }
-
-        function login(){
-            const email = $("#login-email").val();
-            const password = $("#login-password").val()
-            $.ajax({
-                url: baseUser + "login",
-                method: "POST",
-                data: {
-                    email,
-                    password
-                }
-            })
-                .done((response) => {
-                    localStorage.setItem("access_token", response.access_token)
-                    authenticate()
-                })
-                .fail ((xhr, text) => {
-                    let error = xhr.responseJSON.message[0]
-                    console.log(error);
-                    $("p").remove(".error-message");
-                    $("#login").prepend(`<p class="error-message"><b style="color: red;">${error}</b></p>`);
-                })
-                .always(() => {
-                    $("#login").trigger("reset");
-                })
-        }
-
-        function getTodo() {
-            $.ajax({
-                url: baseTodo,
-                method: "GET",
-                headers: {
-                    access_token: localStorage.getItem("access_token")
-                }
-            })
-                .done((todo) => {
-                    // $("#todo-table").empty();
-                    // $("#todo-table").append(
-                    //     `<thead>
-                    //     <tr>
-                    //         <th>No</th>
-                    //         <th>Title</th>
-                    //         <th>Description</th>
-                    //         <th>Status</th>
-                    //         <th>Due Date</th>
-                    //         <th>Action</th>
-                    //     </tr>
-                    //     </thead>
-                    //     <tbody>
-                    //         ${todo.forEach((element,ind) => {
-                    //             `<tr>
-                    //             <td>${ind+1}</td>
-                    //             <td>${element.title}</td>
-                    //             <td>${element.description}</td>
-                    //             <td>${element.status}</td>
-                    //             <td>${element.due_date}</td>
-                    //             <td><a class="navbar-brand" href="#" id="mark-done">Done</a></td>
-                    //             <td><a class="navbar-brand" href="#" id="mark-edit">Edit</a></td>
-                    //             <td><a class="navbar-brand" href="#" id="mark-delete">Delete</a></td>
-                    //             </tr>`
-                    //         })}
-                    //     </tbody>`
-                    // )
-                    todo.forEach((element, indeks) => {
-                        $("#todo-table").append(
-                            `<tr>
-                            <td>${indeks+1}</td>
-                            <td>${element.title}</td>
-                            <td>${element.description}</td>
-                            <td>${element.status}</td>
-                            <td>${element.due_date}</td>
-                            <td><a class="nav-link" href="#" id="mark-done">Done</a></td>
-                            <td><a class="nav-link" href="#" id="mark-edit">Edit</a></td>
-                            <td><a class="nav-link" href="#" id="mark-delete">Delete</a></td>
-                            </tr>`
-                        )
-                    });
-
-                })
-                .fail((xhr, text) => {
-                    console.log(error);
-                })
-                .always(() => {
-                    console.log("always");
-                })
-        }
-
-
-        $(document).ready(() => {
-            authenticate()
-            $("#nav-register").on("click", (e) => {
-                e.preventDefault()
-                $("#register-form").show();
-                $("#login-form").hide()
-            })
-            $("#nav-login").on("click", (e) => {
-                e.preventDefault()
-                $("#register-form").hide();
-                $("#login-form").show()
-            })
-            $("#register").on("submit", (e) => {
-                e.preventDefault()
-                register()
-            })
-            $("#login").on("submit", (e) => {
-                e.preventDefault()
-                login()
-            })
-            $("#nav-task").on("click", (e) => {
-                e.preventDefault();
-                $("#todo-table").show()
-                $("#todo-form").hide()
-                getTodo();
-            })
-            $("#nav-main").on("click", (e) => {
-                e.preventDefault();
-                $("#todo-table").hide()
-                $("#todo-form").show()
-            })
-        })
-    </script>
+    <script src="./script/script.js"></script>
+    <script src="./script/jquery.js"></script>
 </body>
 </html>

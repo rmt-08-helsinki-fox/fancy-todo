@@ -7,10 +7,10 @@ const authorize = require("../middlewares/authorization")
 router.use(authenticate)
 router.get("/", controller.getTodo)
 router.post("/", controller.postTodo)
+router.post("/weather/today", controller.getWeather)
 router.get("/:id",authorize , controller.getTodoId)
 router.put("/:id",authorize , controller.putTodoId)
 router.patch("/:id",authorize , controller.patchTodoId)
 router.delete("/:id",authorize , controller.deleteTodoId)
-router.get("/weather/today", controller.getWeather)
 
 module.exports = router;
