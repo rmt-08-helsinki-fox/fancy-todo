@@ -88,7 +88,6 @@ function logedIn () {
   $('.toLogout-btn').show()
   $('.login').hide()
   $('.regis').hide()
-  $('#name').hide()
   $('#main-page').show()
   $('#add-page').hide()
 }
@@ -292,9 +291,9 @@ function toEditTodo (id, title, desc, due_date) {
   $('#add-form').hide()
   $('#edit-form').show()
 
-  $('#add-title').val(title)
-  $('#add-desc').val(desc)
-  $('#add-due_date').val(due_date)
+  $('#edit-title').val(title)
+  $('#edit-desc').val(desc)
+  $('#edit-due_date').val(due_date)
 
   $('#edit-form').submit(event => {
     event.preventDefault()

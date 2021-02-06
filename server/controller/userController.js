@@ -27,10 +27,9 @@ class Controller {
             email: user.email
           }
           const access_token = generateToken(payload)
-          req.headers.access_token = access_token
           res.status(200).json({ email: user.email, access_token })
         } else {
-          throw ({ message: 'wrong username / password' })
+          throw ({ name: 404, message: 'wrong username / password' })
         }
       })
       .catch(err => {
@@ -42,7 +41,6 @@ class Controller {
     let email
     let statusCode
     const { id_token } = req.body
-    const {OAuth2Client} = require('google-auth-library');
     const client = new OAuth2Client(process.env.CLIENT_ID);
     client.verifyIdToken({
       idToken: id_token,
@@ -70,7 +68,7 @@ class Controller {
         }
         const access_token = generateToken(payload)
         req.headers.access_token = access_token
-        res.status(statusCode).json({ access_token, email: user.email })
+        res.status(statusCode).json({ email: user.email, access_token })
       })
       .catch(err => {
         console.log(err)

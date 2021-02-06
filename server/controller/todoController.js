@@ -30,7 +30,11 @@ class Controller {
     let id = req.params.id
     Todo.findOne({ where: { id: id }})
       .then(todo => {
-        res.status(200).json(todo)
+        if (todo) {
+          res.status(200).json(todo)
+        } else {
+          throw ({ name: 404, message: 'not found'})
+        }
       })
       .catch(err => {
         next(err)

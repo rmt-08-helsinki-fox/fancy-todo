@@ -32,7 +32,7 @@ async function authorize (req, res, next) {
         throw ({ name: 401 })
       }
     } else {
-      throw ({ name: 404 })
+      throw ({ name: 404, message: 'not found' })
     }
   } catch (err) {
     next(err)
