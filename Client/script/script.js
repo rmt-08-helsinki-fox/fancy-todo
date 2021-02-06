@@ -313,7 +313,7 @@ $(document).ready(() => {
             response.forEach((el) => {
                 $('#holiday-list').append(`
                 <tr style="text-align: center; font-weight: bold; color: red">
-                    <td>${moment(el.date.iso).format('YYYY-MMMM-DD')}</td>
+                    <td>${moment(el.date.iso).format('DD-MMMM-YYYY')}</td>
                     <td>${el.name}</td>
                 </tr>`
                 )
