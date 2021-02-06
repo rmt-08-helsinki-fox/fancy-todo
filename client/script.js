@@ -48,9 +48,10 @@ $("#login-user").click(function(event) {
     })
     .done(res=>{
         localStorage.setItem("accessToken", res.accessToken)
-        getTodo()
+        auth()
         $("#email").val("")
         $("#password").val("")
+        $("todo-card").empty()
     })
     .fail(err=>{
         console.log(err);
@@ -63,8 +64,18 @@ $("#login-user").click(function(event) {
 $("#logout").click(function(event) {
     event.preventDefault()
     localStorage.clear()
+    signOut()
+    $("#email").val("")
+    $("#password").val("")
     auth()
 })
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
 
 $("#register").click(function(event) {
     event.preventDefault()
@@ -101,7 +112,7 @@ function getTodo(params) {
         }
     })
     .done(res=>{
-        $("todo-card").empty()
+        $("#todo-card").empty()
         res.forEach(element => {
             $("#todo-card").append(`
             <div class="card" style="width: 18rem;">
@@ -109,7 +120,7 @@ function getTodo(params) {
                       <h5 class="card-title">${element.title}</h5>
                       <h6 class="card-subtitle mb-2 text-muted">${element.description}</h6>
                       <h7 class="card-subtitle mb-2 text-muted">Status :${element.status}</h6><br>
-                      <h7 class="card-subtitle mb-2 text-muted">Due date : :${element.due_date.slice(0,10)}</h6><br>
+                      <h7 class="card-subtitle mb-2 text-muted">Due date : :${element.due_date}</h6><br>
                       <a href="#" id="Edit" onclick="getId(${element.id},event)" class="card-link">Edit</a>
                       <a href="#" onclick="deletetodo(${element.id},event)" class="card-link">Delete</a>
                         </div>
@@ -136,19 +147,43 @@ $("#add-todo").click(function(event) {
     $("#add-page").show()
     $("#register-page").hide()
     $("#login-page").hide()
-    $("#main-page").hide()
+    $("#main-page").show()
     $("#home-page").hide()
     $("#todo-page").hide()
 })
 
+$("#add").click(function(event) {
+    event.preventDefault()
+    addTodo()
+})
+
+
 function addTodo(params) {
+    let title = $("#title").val()
+    let description = $("#description").val()
+    let status = $("#status").val()
+    let date = $("#date").val()
     $.ajax({
         method: "post",
         url : baseUrl+`/todos`,
         headers : {
             token : localStorage.accessToken
+        },
+        data:{
+            title,
+            description,
+            status,
+            date
         }
     })
+
+    .done(res=>{
+        auth()
+    })
+    .fail(err=>{
+        console.log(err);
+    })
+
 }
 
 function deletetodo(id, event) {
@@ -219,3 +254,25 @@ $("update").click(function(event) {
         console.log(err);
     })
 })
+
+
+function onSignIn(googleUser) {
+    // var profile = googleUser.getBasicProfile();
+    // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    // console.log('Name: ' + profile.getName());
+    // console.log('Image URL: ' + profile.getImageUrl());
+    // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    const id_token = googleUser.getAuthResponse().id_token
+    $.ajax({
+        method: 'post',
+        url: `${baseUrl}/users/login/google`,
+        data:{id_token}
+    })
+    .done(res=>{
+        localStorage.setItem("accessToken", res.accessToken)
+        auth()
+    })
+    .fail((xhr, status)=>{
+      console.log(xhr,status)
+    })
+  }

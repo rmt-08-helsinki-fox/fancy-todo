@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="782240532424-4j3ggb3i6ta0p6bbadvij9ln0h8bafom.apps.googleusercontent.com">
     <!-- UIkit CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.4/dist/css/uikit.min.css" />
@@ -32,6 +33,7 @@
                     </div>
                 </div>
                 <button type="submit" class="login-btn uk-button uk-button-primary" id="login-user">Login</button>
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
                 <a href="" id="to-register">Register</a>
             
             </form>            
@@ -108,8 +110,8 @@
     </section>
 
     <!-- Add Todo - PAGE -->
-    <section id="add-page">
-        <div class="center" id="coba">
+    <!-- <section id="add-page"> -->
+        <div class="center" id="add-page">
             <h1 style="margin-bottom: 3rem;" class="">Add Todo</h1>
             <form>
                 <div class="uk-margin">
@@ -145,7 +147,7 @@
             
             </form>            
         </div>
-    </section>
+    <!-- </section> -->
 
     <div class="center" id="edit">
         <h1 style="margin-bottom: 3rem;" class="">Edit Todo</h1>
@@ -188,6 +190,7 @@
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.4/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.4/dist/js/uikit-icons.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </body>
