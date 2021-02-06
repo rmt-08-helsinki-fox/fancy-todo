@@ -19,6 +19,9 @@ class TodoController {
     const topHeadlineNews = `https://newsapi.org/v2/top-headlines?country=id&apiKey=${process.env.apiKey}`
     let todoList
     Todo.findAll({
+      where: {
+        UserId: req.user.id
+      },
       order: [['id', 'ASC']], 
       attributes: {
         exclude: ['createdAt', 'updatedAt']
@@ -88,6 +91,7 @@ class TodoController {
   static editStatusTodo(req, res, next) {
     const id = +req.params.id
     const status = { status: req.body.status }
+    console.log(status)
     Todo.update(status, {
       where: {
         id
