@@ -59,7 +59,7 @@ $(document).ready(function() {
 
   $("#btn-get-add-todo").on("click", (event) => {
     event.preventDefault();
-    $("#anime-area").hide();
+    $("#anime-area").empty();
     $("#add-todo-area").show();
   })
 
@@ -86,11 +86,14 @@ $(document).ready(function() {
     event.preventDefault();
     if(event.target.id === "add-anime-to-todo") {
       addTodo("recommendation");
+
     } else if(event.target.id === "btn-close-add-anime") {
       $("#anime-area").empty().hide();
+
     } else if(event.target.id.match(/delete-btn*/g)) {
       const id = Number(event.target.id.split("_")[1])
       deleteTodo(id);
+
     } else if(event.target.id.match(/btn-edit-todo*/g)) {
       const id = Number(event.target.id.split("_")[1])
       updateTodo(id);
@@ -104,7 +107,7 @@ $(document).ready(function() {
         headers: { access_token: localStorage.access_token },
         data: { member_email }
       })
-        .done(response => {
+        .done(() => {
           authentication()
         })
         .fail(err => {
@@ -121,6 +124,7 @@ $(document).ready(function() {
           headers: { access_token: localStorage.access_token }
         })
         .done(todo => {
+          console.log(todo)
           $("#member-list-area").empty();
           $(`#todo-container-body${tabId}`).empty().append(`
           <div class="container" id="member-container">
@@ -131,10 +135,9 @@ $(document).ready(function() {
              </div>
           </div>
         `)
-          console.log(todo.UserTodos)
-          todo.UserTodos.forEach(user => {
+          todo.Users.forEach(user => {
             $("#member-list-area").append(`
-              <p>${user.member_email}</p>
+              <p>${user.email}</p>
             `)
           })
         })
@@ -187,7 +190,6 @@ $(document).ready(function() {
       } else {
         status = "complete"
       }
-      console.log(status)
       patchTodo(id, status)
     }
 
@@ -341,7 +343,7 @@ function getTodos() {
                         <a class="nav-link" id="todo-member-tab_${todo.id}">Member</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-info text-end" id="edit-status-btn_${todo.id}_${todo.status}">A</a>
+                        <a class="btn btn-info text-end" id="edit-status-btn_${todo.id}_${todo.status}">&#10004;</a>
                         <a class="btn btn-warning text-end" id="edit-btn_${todo.id}">Edit</a>
                         <a class="btn btn-danger text-end" id="delete-btn_${todo.id}">Delete</a>
                     </li>
@@ -410,7 +412,6 @@ function getAnime() {
 
 
 function deleteTodo(todoId) {
-  console.log(todoId)
   $.ajax({
       url: baseUrl + `/todos/${todoId}`,
       method: "DELETE",
@@ -453,6 +454,11 @@ function addTodo(from) {
     })
     .fail((err) => {
       console.log(err)
+    })
+    .always(() => {
+      $("#title-add-todo").text("");
+      $("#date-add-todo").text("");
+      $("#description-add-todo").text("");
     })
 }
 
@@ -567,7 +573,6 @@ function register() {
       $("#dashboard-area").hide();
     })
     .fail(errors => {
-      console.log(errors)
       $("#register-errors").empty();
       errors.responseJSON.errors.forEach(error => {
         $("#register-errors").prepend(`

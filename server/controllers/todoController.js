@@ -38,8 +38,7 @@ module.exports = class TodoController {
   static async getTodo(req, res, next) {
     try {
       let id = Number(req.params.id);
-      const todo = await Todo.findOne({ where: { id }, include: UserTodo })
-      console.log(todo)
+      const todo = await Todo.findOne({ where: { id }, include: User })
       if(!todo) { throw { name: "Not Found", message: "todo not found", status: 404 } }
       res.status(200).json(todo)
     } catch (err) {
@@ -74,7 +73,6 @@ module.exports = class TodoController {
 
   static async deleteTodo(req, res, next) {
     try {
-      console.log(req.params, "ini di controller")
       let id = Number(req.params.id);
       const deletedTodo = await Todo.destroy({ where: { id } })
       if(!deletedTodo) { throw { name: "Not Found", message: "todo not found", status: 404 } }
