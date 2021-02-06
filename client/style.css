@@ -82,13 +82,13 @@ main {
 h2 {
   text-transform: uppercase;
   font-weight: bold;
-  color: #080a6b;
+  color: black;
 }
 
 #login-btn,
 #registerUser-btn,
 #login-redirect-btn {
-  color: #080a6b;
+  color: blue;
   cursor: pointer;
   outline: none;
   overflow: hidden;
@@ -126,7 +126,7 @@ form {
 }
 
 h3 {
-  color: blue;
+  color: black;
   font-size: 1.5rem;
 }
 
@@ -174,7 +174,7 @@ p.card-due-date {
 
 p.card-text {
   margin-top: 20px;
-  color: rgb(115, 103, 221);
+  color: rgb(141, 141, 148);
 }
 
 .child-container {

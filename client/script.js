@@ -114,6 +114,10 @@ $('#login-btn').click((event) => {
       } else {
         $('#error-login').text(err.message)
       }
+
+      setTimeout(() => {
+        $('#error-login').empty()
+      }, 5000)
     })
     .always(() => {
       console.log('always')
