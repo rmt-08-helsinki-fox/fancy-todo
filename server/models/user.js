@@ -28,7 +28,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       unique: true
     },
-    password: DataTypes.STRING
+    password: {
+      type : DataTypes.STRING,
+      validate: {
+        len: [6,30]
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',

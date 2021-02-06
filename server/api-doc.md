@@ -2,28 +2,27 @@
 
 # FITUR TODO
 
-## 1. POST /todos
+# 1. POST /todos
 ```
 add todo data, Dimana setelah proses add app akan menampilkan referensi artikel yang didapat dari wikipedia
 ```
 
-### -- Request Header --
+- ## REQUEST HEADER
 
 ```js
-
     token = '<token>'
-
-
 ```
 
-### -- Request Body --
+- ## REQUEST BODY
 
-- title
-- description
-- status
-- due_date
+```js
+- title = 'Membuat landing page'
+- description = 'Buat sesuai arahan PM'
+- status = true
+- due_date = '2021-02-20'
+```
 
-### -- Response 201 --
+- ## RESPONSE 201
 
 ```js
 {
@@ -54,28 +53,28 @@ add todo data, Dimana setelah proses add app akan menampilkan referensi artikel 
 
 ```
 
-### -- Error Response --
+- ## ERROR RESPONSE
 
+```
 - 400 Validation error
 - 500 Internal Server Error
-
-
-## 2.GET /todos
+```
+# 2.GET /todos
 
 Menampilkan seluruh data todo
 
-### -- Request Header --
+- ## REQUEST HEADER
 
 ```js
 
     token = '<token>'
 
 ```
-### -- Request Body --
+- ## REQUEST BODY
 
 tidak dibutuhkan
 
-### -- Response 200 --
+- ## RESPONSE 200
 
 ```js
 
@@ -102,28 +101,27 @@ tidak dibutuhkan
 
 ```
 
-### -- Error Response --
-
+- ## ERROR RESPONSE
+```
 - 500 Internal Server Error
+```
 
-## 3. GET /todos/:id
+# 3. GET /todos/:id
 
 Menampilkan data todo berdasarkan id,
 :id digunakan sebagai params id yang akan ditampilkan.
 
-### -- Request Header --
+- ## REQUEST HEADER
 
 ```js
-
     token = '<token>'
-
 ```
 
-### -- Request Body --
+- ## REQUEST BODY
 
 tidak dibutuhkan
 
-### -- Response 200 --
+- ## RESPONSE 200
 
 ```js
 {
@@ -137,32 +135,30 @@ tidak dibutuhkan
 }
 ```
 
-### -- Error Response --
-
+- ## ERROR RESPONSE
+```
 - 404 error not found
 - 500 internal server error
-
-## 4. PUT /todos/:id
+```
+# 4. PUT /todos/:id
 
 Melakukan perubahan data todo berdasarkan id yang dipilih,
 :id digunakan sebagai params id mana yang akan diubah datanya.
 
-### -- Request Header --
+- ## REQUEST HEADER
 
 ```js
-
     token = '<token>'
-
 ```
 
-### -- Request Body --
-
-- title
-- description
-- status
-- due_date
-
-### -- Response 200 --
+- ## REQUEST BODY
+```js
+- title = 'Chelsea Fc'
+- description = 'Membuat team sepak bola'
+- status = 'true'
+- due_date = '2021-02-03'
+```
+- ## RESPONSE 200
 
 ```js
 {
@@ -176,30 +172,30 @@ Melakukan perubahan data todo berdasarkan id yang dipilih,
 }
 ```
 
-### -- Error Response --
+- ## ERROR RESPONSE
 
+```
 - 400 validation error
 - 404 error not found
 - 500 internal server error
+```
 
-## 5. PATCH /todos/:id
+# 5. PATCH /todos/:id
 
 Melakukan perubahan status todo berdasarkan id yang dipilih,
 :id digunakan sebagai params id mana yang akan diubah statusnya.
 
-### -- Request Header --
+- ## REQUEST HEADER
 
 ```js
-
     token = '<token>'
-
 ```
 
-### -- Request Body --
-
-- status
-
-### -- Response 200 --
+- ## REQUEST BODY
+```js
+- status = 'false'
+```
+- ## RESPONSE 200
 
 ```js
 {
@@ -213,30 +209,28 @@ Melakukan perubahan status todo berdasarkan id yang dipilih,
 }
 ```
 
-### -- Error Response --
-
+- ## ERROR RESPONSE
+```
 - 400 validation error
 - 404 error not found
 - 500 internal server error
-
-## 6. DELETE /todo/:id
+```
+# 6. DELETE /todo/:id
 
 menghapus data todo berdasarkan id yang dipilih.
 :id digunakan sebagai params data dengan id mana yang akan dihapus.
 
-### -- Request Header --
+- ## REQUEST HEADER
 
 ```js
-
     token = '<token>'
-
 ```
 
-### -- Request Body --
+- ## REQUEST BODY
 
 tidak dibutuhkan
 
-### -- Response 200 --
+- ## RESPONSE 200
 
 ```js
 {
@@ -244,29 +238,28 @@ tidak dibutuhkan
 }
 ```
 
-### -- Error Response --
-
+- ## ERROR RESPONSE
+```
 - 404 error not found
 - 500 internal server error
-
-
+```
 
 # FITUR USER
 
-## 1. POST /users/register
+# 1. POST /users/register
 
 register new user
 
-### -- Request Header --
+- ## REQUEST HEADER
 
 tidak dibutuhkan
 
-### -- Request Body --
-
-- email
-- password
-
-### -- Response 201 --
+- ## REQUEST BODY
+```
+- email = rizkicandra@ecampuz.com
+- password = <your password>
+```
+- ## RESPONSE 201
 
 ```js
 {
@@ -274,28 +267,28 @@ tidak dibutuhkan
     "id": 7,
     "email": "rizkicandra@ecampuz.com"
 }
-
 ```
 
-### -- Error Response --
-
+- ## ERROR RESPONSE
+```
 - 400 uniqe email
 - 500 internal server error
+```
 
-## 2. POST /users/login
+# 2. POST /users/login
 
 login user
 
-### -- Request Header --
+- ## REQUEST HEADER
 
 tidak dibutuhkan
 
-### -- Request Body --
+- ## REQUEST BODY
 
 - email
 - password
 
-### -- Response 200 --
+- ## RESPONSE 200
 
 ```js
 {
@@ -304,16 +297,38 @@ tidak dibutuhkan
 
 ```
 
-### -- Error Response --
-
+- ## ERROR RESPONSE
+```
 - 400 Invalid email or password
 - 500 internal server error
+```
 
+# 3. POST /users/googlelogin
 
+login menggunakan akun google
 
-## ERROR RESPONSE DETAIL
+- ## REQUEST HEADER
 
-### -- 404 Error not found --
+tidak dibutuhkan
+
+- ## REQUEST BODY
+
+id_token
+
+- ## RESPONSE 201
+```js
+    {
+        access_token: <accessToken>
+    }
+```
+- ## ERROR RESPONSE
+```
+- 500 internal server error
+```
+
+# ERROR RESPONSE DETAIL
+
+## 404 ERROR NOT FOUND
 
 ```js
 { 
@@ -321,8 +336,9 @@ tidak dibutuhkan
 }
 ```
 
-### -- 400 Unique data --
+## 400 BAD REQUEST
 
+ERROR FOR UNIQUE DATA :
 ```js
 {
     "message": [
@@ -331,7 +347,7 @@ tidak dibutuhkan
 }
 ```
 
-### -- 400 Invalid Email or Password --
+ERROR FOR INVALID EMAIL OR PASSWORD :
 
 ```js
 {
@@ -340,8 +356,7 @@ tidak dibutuhkan
     ]
 }
 ```
-
-### -- 400 validation error --
+ERROR VALIDATION :
 
 ```js
 { 
