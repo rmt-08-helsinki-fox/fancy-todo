@@ -81,8 +81,8 @@ function postLogin() {
 }
 
 function postRegister() {
-  const email = $("#emailLogin").val();
-  const password = $("#passwordLogin").val();
+  const email = $("#emailRegister").val();
+  const password = $("#passwordRegister").val();
   console.log(email, password);
   $.ajax({
     url: base_url + "user/register",
@@ -138,12 +138,21 @@ function postTodo() {
     })
     .fail((xhr, text) => {
       console.log(xhr, 'ini error nya broo');
-      swal({
-        title: "Error!",
-        text: xhr.responseJSON.errors.join(', '),
-        icon: "error",
-      })
-      console.log(xhr, text);
+      if(xhr.responseJSON.errors) {
+        swal({
+          title: "Error!",
+          text: xhr.responseJSON.errors.join(', '),
+          icon: "error",
+        })
+        console.log(xhr, text);
+      } else {
+        swal({
+          title: "Error!",
+          text: xhr.responseJSON.message,
+          icon: "error",
+        })
+      }
+        
     })
     .always((_) => {
       console.log("always from new todo form");
