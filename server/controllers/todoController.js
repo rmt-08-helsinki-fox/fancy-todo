@@ -26,6 +26,7 @@ class TodoController {
     }
 
     static getAll(req, res, next) {
+        // console.log('getalll');
         Todo.findAll()
             .then(function(todos) {
                 res.status(200).json(todos)
@@ -84,7 +85,7 @@ class TodoController {
 
     static editPatchById(req, res, next) {
         let id = +req.params.id
-        let { title, description, status, due_date} = req.body
+        let { title, description, status, due_date, user_id} = req.body
         Todo.update({status}, {
             where: {
                 id: id
