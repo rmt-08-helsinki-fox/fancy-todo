@@ -12,10 +12,11 @@ class ControllerTodo{
             console.log(data)
             res.status(201).json(data)
         })
-        // .catch(err =>{
-        //     res.status(500).json(err)
-        // })
-        next(err)
+        .catch(err =>{
+            console.log(err)
+            res.status(500).json(err)
+            // next(err)
+        })
     }
 
     static getTodo(req, res, next){
@@ -89,12 +90,11 @@ class ControllerTodo{
         Todo.destroy({
             where:{
                 id
-            },
-            
+            }  
         })
         .then(todo=>{
-            res.status(200).json(todo)
-            console.log(todo)
+            res.status(200).json({msg : 'delete success'})
+            // console.log(todo)
         })
         .catch(err=>{
             // res.status(500).json(err)

@@ -41,7 +41,10 @@ class ControllerUser{
                 email: user.email
             })
             
-            res.status(200).json({access_token})
+            res.status(200).json({
+                access_token,
+                email: user.email
+            })
         })
         .catch(err=>{
             err.name = err.msg
