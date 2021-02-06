@@ -8,9 +8,12 @@ function errorHandler(err, req, res, next) {
         message: 'Resource not Found' 
       })
       break
+    case !err.name:
+      res.status(400).json(err.errors.map((e) => e.message))
+      break
     case 'accessDenied':
       res.status(401).json({ 
-        message: 'Access Denied'
+        message: `You don't have access for this request`
       })
       break
     case 'internalServerError':
@@ -33,7 +36,7 @@ function errorHandler(err, req, res, next) {
       break
     default:
       res.status(500).json({
-        message: 'Internal Server Error'
+        message: 'Something went wrong'
       })
       break
   }
