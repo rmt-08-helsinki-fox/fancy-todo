@@ -33,12 +33,11 @@
               <a class="nav-link active" aria-current="page" href="#" onclick="getAllTodos()">All Todo</a>
             </li>
             <li id="add-todo" class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#" onclick="">Add Todo</a>
+              <a class="nav-link active" aria-current="page" href="#" onclick="addTodoPage()">Add Todo</a>
             </li>
           </ul>
-          <form class="d-flex">
-            <input id="search-box" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button id="search-btn" class="btn btn-outline-success" type="submit">Search</button>
+          <form id="logout-btn" class="d-flex">
+            <button id="search-btn" class="btn btn-outline-success" type="submit" onclick="logout()">Logout</button>
           </form>
         </div>
       </div>
@@ -50,23 +49,7 @@
       </button> -->
 
       <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
 
       <!-- login -->
@@ -92,6 +75,7 @@
                 </div>
                 <div class="form-group">
                   <input type="submit" value="Login" class="btn float-right login_btn">
+
                   <!-- Google Login -->
                 </div>
                 <div class="google">
@@ -147,7 +131,7 @@
     <!-- Register -->
 
     <!-- list Todos -->
-    <div class="container-todos">
+    <div id="all-todos" class="container-todos">
       <div style="display: flex; flex-direction: row;">
         <div id="pending-todos">
           <h1>Pending</h1>
@@ -169,43 +153,20 @@
             <h3>Add Todo</h3>
           </div>
           <div class="card-body">
-            <form id="Add-todo-form">
+            <form id="add-todo-form">
               <div class="input-group form-group">
-                <input id="title-register" type="text" class="form-control" placeholder="Title">
+                <input id="title-add" type="text" class="form-control" placeholder="Title">
               </div>
               <div class="input-group form-group">
-                <input id="password-register" type="password" class="form-control" placeholder="Description">
+                <input id="description-add" type="text" class="form-control" placeholder="Description">
               </div>
-              <div class="container">
-                <div class="row">
-                    <div id="date-input" class="col-sm-6">
-                        <div class="form-group">
-                            <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
-                                <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
-                                    <div id="logo-date-input" class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <script type="text/javascript">
-                        $(function () {
-                            $('#datetimepicker4').datetimepicker({
-                                format: 'L'
-                            });
-                        });
-                    </script>
-                </div>
-            </div>
+              <div class="input-group form-group">
+                <input id="due-date-add" type="date" class="form-control" placeholder="Due Date">
+              </div>
               <div class="form-group">
                 <input type="submit" value="Add Todo" class="btn float-right register_btn">
               </div>
             </form>
-          </div>
-          <div class="card-footer">
-            <div class="d-flex justify-content-center links">
-              Have an account?<a href="#" onclick="checkAccessToken()">Sign In</a>
-            </div>
           </div>
         </div>
       </div>
@@ -223,6 +184,7 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script>
       const baseUrl = "http://localhost:3500/"
+      // let userId;
       
       function checkAccessToken() {
         if (!localStorage.getItem("access_token")) {
@@ -230,12 +192,30 @@
           $("#register-page").hide()
           $("#search-box").hide()
           $("#search-btn").hide()
+          $("#add-todo-page").hide()
+          $("#all-todos").hide()
+          $("#add-todo").hide()
+          $("#get-all-todos").hide()
         } else {
           $("#login-page").hide()
           $("#register-page").hide()
           $("#search-box").show()
           $("#search-btn").show()
+          $("#add-todo-page").hide()
+          $("#all-todos").show()
+          $("#add-todo").show()
+          $("#get-all-todos").show()
           getAllTodos()
+
+          // validateToken()
+          //   .then((data) => {
+          //     userId = data;
+          //     getAllTodos()
+          //   })
+          //   .catch(() => {
+          //     // localstorage.delete
+          //     checkAccessToken();
+          //   })
         }
       }
 
@@ -246,6 +226,21 @@
           $("#search-btn").hide()
       }
 
+      // function validateToken() {
+      //   return new Promise((resolve, reject) => {
+      //     $.ajax({
+      //       url: baseUrl + 'token/validate'
+      //     })
+      //     .done((response) => {
+      //       // set Token lagi
+      //       return resolve(response.userId);
+      //     })
+      //     .fail((err) => {
+      //       return reject(err);
+      //     })
+      //   })
+      // }
+
       function loginLink() {
 
       }
@@ -253,8 +248,6 @@
       function login() {
         const email = $("#email-login").val()
         const password = $("#password-login").val()
-        const test = localStorage.getItem("access_token")
-        console.log(test, 'akses');
         $.ajax({
           url: baseUrl + "users/login",
           method: "POST",
@@ -263,8 +256,11 @@
             password
           }
         }).done(response => {
-          const token = response
+          const token = response.access_token
+          const userId = response.id
+          console.log(response);
           localStorage.setItem("access_token", token)
+          localStorage.setItem("userId", userId)
           checkAccessToken()
         }).fail((xhr, text) => {
           console.log(xhr, text);
@@ -309,22 +305,22 @@
           const getProgress = response.filter(element => !element.status)
           const todosDone = getDone.map((element) => `
             <div class="card">
-              <div class="card-body-doneTodos">
+              <div id="todo-done-id${element.id}" class="card-body-doneTodos">
                 <h5 class="card-title">Title<br><ul> ${element.title}</h5>
                 <p class="card-description">Description<br><ul> ${element.description}</p>
                 <a href="#" class="btn btn-primary edit-todo" name="${element.id}">Edit</a>
-                <a href="#" class="btn btn-primary delete-todo" name="${element.id}">Delete</a>
+                <a href="#" class="btn btn-primary delete-todo" onClick="removeTodoD(${element.id})">Delete</a>
                 </div>
             </div>
           `)
           const todosPending = getProgress.map((element) => `
             <div class="card">
-              <div class="card-body-pendingTodos">
+              <div id="todo-pending-id${element.id}" class="card-body-pendingTodos">
                 <h5 class="card-title">Title<br><ul> ${element.title}</h5>
                 <p class="card-description">Description<br><ul> ${element.description}</p>
                 <a href="#" class="btn btn-primary edit-todo" name="${element.id}">Edit</a>
-                <a href="#" class="btn btn-primary mark-done-todo" name="${element.id}">Mark as Done</a>
-                <a href="#" class="btn btn-primary delete-todo" name="${element.id}">Delete</a>
+                <a href="#" class="btn btn-primary mark-done-todo" onClick="markAsDone(${element.id})">Mark as Done</a>
+                <a href="#" class="btn btn-primary delete-todo" onClick="removeTodoP(${element.id})">Delete</a>
               </div>
             </div>
           `)  
@@ -335,6 +331,80 @@
           $("#list-todos-done").append(wrapDone)
           $("#list-todos-pending").empty()
           $("#list-todos-pending").append(wrapPending)
+          $("#all-todos").show()
+          $("#add-todo-page").hide()
+
+        }).fail((xhr, text) => {
+          console.log(xhr, text);
+        }).always((_) => {
+          console.log('always');
+        })
+      }
+      function addTodoPage() {
+        $("#login-page").hide()
+        $("#register-page").hide()
+        $("#search-box").show()
+        $("#search-btn").show()
+        $("#add-todo-page").show()
+        $("#all-todos").hide()
+      }
+      function addTodo(){
+        const title = $("#title-add").val()
+        const description = $("#description-add").val()
+        const status = false
+        const due_date = $("#due-date-add").val()
+        const access_token = localStorage.getItem("access_token")
+
+        $.ajax({
+          url: baseUrl + "todos/",
+          method: "POST",
+          data: {
+            title,
+            description,
+            status,
+            due_date
+          },
+          headers: {
+            access_token,
+          },
+        }).done(response => {
+          $("#add-todo-form").trigger("reset")
+          getAllTodos()
+        }).fail((xhr, text) => {
+          console.log(xhr, text);
+        }).always((_) => {
+          console.log('always');
+        })
+      }
+      
+      function removeTodoD(id) {
+        const access_token = localStorage.getItem("access_token")
+
+        $.ajax({
+          url: baseUrl + "todos/" + id,
+          method: "DELETE",
+          headers: {
+            access_token,
+          },
+        }).done(() => {
+          $(`#todo-done-id${id}`).remove()
+        }).fail((xhr, text) => {
+          console.log(xhr, text);
+        }).always((_) => {
+          console.log('always');
+        })
+      }
+      function removeTodoP(id) {
+        const access_token = localStorage.getItem("access_token")
+
+        $.ajax({
+          url: baseUrl + "todos/" + id,
+          method: "DELETE",
+          headers: {
+            access_token,
+          },
+        }).done(() => {
+          $(`#todo-pending-id${id}`).remove()
         }).fail((xhr, text) => {
           console.log(xhr, text);
         }).always((_) => {
@@ -342,13 +412,23 @@
         })
       }
 
-      function addTodo(){
+      function markAsDone(id) {
+        const access_token = localStorage.getItem("access_token")
 
+        $.ajax({
+          url: baseUrl + "todos/" + id,
+          method: "PATCH",
+          headers: {
+            access_token
+          }
+        }).done(() => {
+          getAllTodos()
+        }).fail((xhr, text) => {
+          console.log(xhr, text);
+        }).always((_) => {
+          console.log('always');
+        })
       }
-      
-
-
-
 
       $(document).ready(() => {
         checkAccessToken()
@@ -360,10 +440,33 @@
           e.preventDefault()
           register()
         })
+        $("#add-todo-form").on("submit", (e) => {
+          e.preventDefault()
+          addTodo()
+        })
+        $("#logout-btn").on("submit", (e) => {
+          e.preventDefault()
+
+        })
       })
 
+      function editTodo() {
 
-      // google signin//
+      }
+    
+      function logout(){
+        localStorage.clear()
+        var auth2 = gapi.auth2.getAuthInstance();
+
+        auth2.signOut()
+        .then(function () {
+            console.log('User signed out.');
+        });
+        checkAccessToken()
+
+      }
+
+      // google signin //
 
       function onSignIn(googleUser) {
         // var profile = googleUser.getBasicProfile();

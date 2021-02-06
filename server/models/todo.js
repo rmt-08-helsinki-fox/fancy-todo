@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
           let now = dateParsing()
           // console.log(value, 'value');
           // console.log(now, 'now');
-          if (value > now) {
+          if (value < now) {
             throw new Error('Input Tanggal tidak boleh melewati hari ini')
           }
         }

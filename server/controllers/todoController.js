@@ -2,13 +2,14 @@ const { Todo } = require('../models')
 
 class TodoController {
     static addTodo(req, res, next) {
-        let { title, description, status, due_date, user_id} = req.body
+        // console.log(req.decode, 'decode');
+        let { title, description, status, due_date } = req.body
         let obj = {
             title,
             description,
             status,
             due_date,
-            user_id
+            user_id: req.decode.id
         }
         Todo.create(obj)
             .then(function(newTodo) {
@@ -27,6 +28,7 @@ class TodoController {
 
     static getAll(req, res, next) {
         // console.log('getalll');
+        let userId = req.decode.id
         Todo.findAll()
             .then(function(todos) {
                 res.status(200).json(todos)
@@ -86,7 +88,9 @@ class TodoController {
     static editPatchById(req, res, next) {
         let id = +req.params.id
         let { title, description, status, due_date, user_id} = req.body
-        Todo.update({status}, {
+        Todo.update({
+            status: true
+        }, {
             where: {
                 id: id
             },

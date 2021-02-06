@@ -49,7 +49,7 @@ class UserController {
                 id: user.id,
                 email: user.email
             })
-            res.status(200).json(access_token)
+            res.status(200).json({access_token})
         }).catch(function(err) {
             next(err)
         })
