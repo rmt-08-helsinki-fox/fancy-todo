@@ -3,11 +3,12 @@ const { Todo } = require('../models')
 class TodoController {
 
   static add(req, res, next) {
-    const { title, description, due_date } = req.body
+    const { title, description, due_date, image } = req.body
     Todo.create({
       title: title,
       description: description,
       status: false,
+      image: image || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3RcPqetZMxRhAdfp6tD2lxDrIKTlewNHp4g&usqp=CAU',
       due_date: new Date(due_date),
       userId: req.user.id
     }, { returning: true })
@@ -20,7 +21,11 @@ class TodoController {
   }
 
   static showAll(req, res, next) {
-    Todo.findAll()
+    Todo.findAll({
+      where: {
+        userId: +req.user.id
+      }
+    })
     .then( data => {
       if (data.length !== 0) {
         res.status(200).json(data)
@@ -93,7 +98,7 @@ class TodoController {
       }
     })
     .catch( err => {
-      next({err)
+      next(err)
     })
   }
 

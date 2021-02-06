@@ -7,8 +7,7 @@ module.exports = (err, req, res, next) => {
     const errors = err.errors.map(error => error.message)
     res.status(400).json({ errors })
   }else if (err.error === "invalid email or password") {
-    const error = err.msg 
-		res.status(400).json({error})
+		res.status(err.code).json({error: err.error})
   } else if (err.error == "404 not found!") {
     res.status(404).json(err)
   } else if (err.error == 'Not Authorized') {
