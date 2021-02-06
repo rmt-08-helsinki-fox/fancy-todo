@@ -21,7 +21,7 @@ class UserController {
     const { email, password } = req.body
     User.findOne({
       where: {
-        email
+        email: email.toLowerCase()
       }
     })
       .then(data => {
