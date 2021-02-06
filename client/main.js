@@ -19,9 +19,11 @@ const Toast = Swal.mixin({
 function auth() {
     if (!localStorage.getItem("accessToken")) {
         $("#sign-out-button").hide()
+        $("#suprise-cat-button").hide()
         $("#main").load("./pages/sign-in/sign-in.html")
     } else {
         $("#sign-out-button").show()
+        $("#suprise-cat-button").show()
         $("#main").load("./pages/to-do/to-do.html")
         $("#to-dolist").show()
         readToDoList()

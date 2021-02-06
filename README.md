@@ -40,7 +40,7 @@ Relationship To Do & User:
 1. CRUD : create & read list todo => Authenticate
 2. UD: update & delete to do => Authorize
 
-## 8. 3rd API (Rocket) = ?
+## 8. 3rd API (Rocket) = The Cat API (DONE)
 
 Progress mentioned on Section Rocket Below
 
@@ -52,13 +52,8 @@ Using Google Oauth 2.0
 
 #### ROCKET
 
-1. (Status)
+1. Add Members to project : ?
 
-    > Add Members to project
+2. To Do in project CRUD by Added Members : ?
 
-2. (Status)
-
-    > To Do in project CRUD by Added Members
-
-3. (Status)
-    > 3rd PARTY API
+3. The Cat API : DONE
