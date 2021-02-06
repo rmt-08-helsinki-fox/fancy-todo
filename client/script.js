@@ -8,6 +8,8 @@ function authentic(){
     $("#homeButton").show()
     $("#todoList").show()
     $("#add-form").hide()
+    $("#update-form").hide()
+    $("#google-button").hide()
     findAllTodo()
   }
   else{ //kalau logout
@@ -17,6 +19,8 @@ function authentic(){
     $("#homeButton").hide()
     $("#todoList").hide()
     $("#add-form").hide()
+    $("#update-form").hide()
+    $("#google-button").show()
   }
 }
 
@@ -38,7 +42,9 @@ function register(){
     authentic()
   })
   .fail((err, text) => {
-    console.log(err, text);
+    let errorMsg = err.responseJSON.error
+    $(".errorClass").remove()
+    $("#regis-form").append(`<p class="errorClass"><b style="color: red;">${errorMsg}</b></p>`);
   })
 }
   
@@ -59,7 +65,9 @@ function login(){
     authentic()
   })
   .fail((err, text) => {
-    console.log(err, text);
+    let errorMsg = err.responseJSON.Error
+    $(".errorClass").remove()
+    $("#login-form").append(`<p class="errorClass"><b style="color: red;">${errorMsg}</b></p>`);
   })
   .always(()=> {
     $("#login-form").trigger("reset")
@@ -68,6 +76,12 @@ function login(){
 
 function logout(){
   localStorage.clear()
+  var auth2 = gapi.auth2.getAuthInstance();
+
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+  
   authentic()
 }
 
@@ -76,13 +90,6 @@ function addTodo(){
   const description = $("#description").val()
   const status = $("#status").val()
   const due_date = $("#due_date").val()
-
-  console.log({
-    title, 
-    description, 
-    status, 
-    due_date
-  });
 
   $.ajax({
     url: mainPort + "todos",
@@ -103,11 +110,15 @@ function addTodo(){
     findAllTodo()
   })
   .fail((err, text) => {
-    console.log(err, text);
+    let errorMsg = err.responseJSON.error
+    $(".errorClass").remove()
+    $("#add-form").append(`<p class="errorClass"><b style="color: red;">${errorMsg}</b></p>`);
   })
 }
 
 function findAllTodo(){
+  $("#update-form").hide()
+
   $.ajax({
     url: mainPort + "todos",
     method: "GET",
@@ -117,6 +128,15 @@ function findAllTodo(){
   })
   .done((todo) => {
     $("#tableAllTodo").empty()
+    $("#tableAllTodo").append(`
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Due Date</th>
+        <th colspan="3">Action</th>
+      </tr>
+    `)
     for(let i = 0; i < todo.dataTodo.length; i++){
       $("#tableAllTodo").append(`
       <tr id="rowTodo${todo.dataTodo[i].id}">
@@ -125,6 +145,7 @@ function findAllTodo(){
         <td>${todo.dataTodo[i].status}</td>
         <td>${todo.dataTodo[i].due_date}</td>
         <td><button type="button" onclick="updateStatus(${todo.dataTodo[i].id})">Change Status</button></td>
+        <td><button type="button" onclick="updateForm(${todo.dataTodo[i].id})">Update Todo</button></td>
         <td><button type="button" onclick="deleteTodo(${todo.dataTodo[i].id})">Delete</button></td>
       </tr>
       `)
@@ -161,6 +182,16 @@ function findOne(id){
   })
   .done((todo) => {
     $("#tableAllTodo").empty()
+    $(".errorClass").remove()
+    $("#tableAllTodo").append(`
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Due Date</th>
+        <th colspan="3">Action</th>
+      </tr>
+    `)
     $("#tableAllTodo").append(`
     <tr id="rowTodo${todo.id}">
       <td>${todo.title}</td>
@@ -168,12 +199,18 @@ function findOne(id){
       <td>${todo.status}</td>
       <td>${todo.due_date}</td>
       <td><button type="button" onclick="updateStatus(${todo.id})">Change Status</button></td>
+      <td><button type="button" onclick="updateForm(${todo.id})">Update Todo</button></td>
       <td><button type="button" onclick="deleteTodo(${todo.id})">Delete</button></td>
     </tr>
     `)
   })
   .fail((err, text) => {
-    console.log(err, text);
+    let errorMsg = err.responseJSON.Error
+    $(".errorClass").remove()
+    $("#form-find-one").append(`<p class="errorClass"><b style="color: red;">${errorMsg}</b></p>`);
+  })
+  .always(()=> {
+    $("#form-find-one").trigger("reset")
   })
 }
 
@@ -190,6 +227,81 @@ function updateStatus(id){
   })
   .fail((err, text) => {
     console.log(err, text);
+  })
+}
+
+function updateForm(id){
+  $("#update-form").show()
+  $("#todoList").hide()
+
+  let idUpdate
+  let titleUpdate
+  let descriptionUpdate
+  let statusUpdate
+  let due_dateUpdate
+  
+  $.ajax({
+    url: mainPort +"todos/" + id,
+    method: "GET",
+    headers: {
+      token: localStorage.getItem("token")
+    }
+  })
+  .done(data => {
+    idUpdate = data.id
+    $("#title-update").val(`${data.title}`)
+    $("#description-update").val(`${data.description}`)
+    $("#status-update").val(`${data.status}`)
+    $("#due_date-update").val(`${data.due_date}`)
+  })
+  .fail((err, text) => {
+    let errorMsg = err.responseJSON.error
+    $(".errorClass").remove()
+    $("#update-form").append(`<p class="errorClass"><b style="color: red;">${errorMsg}</b></p>`);
+  })
+
+  $("#update-form").on("submit", (e) => {
+    e.preventDefault()
+    $.ajax({
+      url: mainPort + "todos/" + idUpdate,
+      method: "PUT",
+      headers: {
+        token: localStorage.getItem("token")
+      },
+      data: {
+        title: $("#title-update").val(), 
+        description: $("#description-update").val(), 
+        status: $("#status-update").val(), 
+        due_date: $("#due_date-update").val()
+      }
+    })
+    .done(() => {
+      authentic()
+    })
+    .fail((err, text) => {
+      let errorMsg = err.responseJSON.error
+    $(".errorClass").remove()
+    $("#update-form").append(`<p class="errorClass"><b style="color: red;">${errorMsg}</b></p>`);
+    })
+  })
+}
+
+function onSignIn(googleUser) {
+  var id_token = googleUser.getAuthResponse().id_token
+  console.log("google login");
+  $.ajax({
+    url: mainPort + 'users/loginGoogle',
+    method: 'POST',
+    data: {
+      googleToken: id_token
+    }
+  })
+  .done(data => {
+    localStorage.setItem("token", data.token)
+    authentic()
+  })
+  .fail(err => {
+    console.log(err)
   })
 }
 
@@ -221,8 +333,10 @@ $(document).ready(() => {
 
   $("#findAll").on("click", (e) => {
     e.preventDefault()
+    $(".errorClass").remove()
     $("#todoList").show()
     $("#add-form").hide()
+    $("#update-form").hide()
     findAllTodo()
   })
 
@@ -238,6 +352,7 @@ $(document).ready(() => {
 
   $("#add").on("click", (e) => {
     e.preventDefault()
+    $(".errorClass").remove()
     $("#add-form").show()
     $("#todoList").hide()
   })
@@ -252,6 +367,20 @@ $(document).ready(() => {
     const id = $("#findTodoId").val()
     $("#todoList").show()
     $("#add-form").hide()
-    findOne(id)
+    $("#update-form").hide()
+    if(id){
+      findOne(id)
+    }
   })
+
+  // $("#update-form").on("submit", (e) => {
+  //   e.preventDefault()
+  // })
+
+  // $(".update").on("click", (e) => {
+  //   e.preventDefault()
+  //   $("#update-form").show()
+  //   $("#todoList").hide()
+  // })
+
 })

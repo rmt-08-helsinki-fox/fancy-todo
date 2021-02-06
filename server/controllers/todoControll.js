@@ -30,7 +30,8 @@ class TodoControll {
     Todo.findAll({
       where: {
         UserId: req.dataUser.id
-      }
+      },
+      order: [["id", "ASC"]]
     })
     .then(data => {
       dataTodo = data
