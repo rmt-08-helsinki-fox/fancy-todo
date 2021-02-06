@@ -3,7 +3,6 @@ let {comparePassword} = require('../helpers/bcript')
 const user = require('../models/user')
 const generateToken = require('../helpers/jwt')
 const {OAuth2Client} = require('google-auth-library');
-const e = require('express');
 
 
 
@@ -42,7 +41,8 @@ class userController {
                 res.status(200).json({token})
             })
             .catch(err => {
-                next(err)
+                console.log(err)
+                // next(err)
             })
     }
     static register(req,res,next) {
@@ -58,9 +58,9 @@ class userController {
                 res.status(201).json(show)
             })
             .catch(err => {
-                // console.log(err)
-                // res.status(500).json(err)
-                next(err)
+                console.log(err)
+                res.status(500).json(err)
+                // next(err)
             })
 
     }
@@ -92,7 +92,7 @@ class userController {
             })
 
     }
-    static 
+    // static 
 
 }
 module.exports = userController

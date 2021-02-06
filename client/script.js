@@ -158,8 +158,8 @@ function login () {
         }
     })
         .done(response => {
-            console.log(response)
-            console.log(response.accessToken)
+            // console.log(response)
+            // console.log(response.accessToken)
             localStorage.setItem("token",response.accessToken)
             auth()
             // $("#nav-login").show()
@@ -192,7 +192,7 @@ function createTodo() {
     })
         .done(res => {
             // console.log(`masuk create`)
-             console.log(res)
+            //  console.log(res)
              $('#list-todo').prepend(`
              <div class="card" style="width: 18rem;" id="todo-list-${res.id}">
                     <div class="card-body">
@@ -242,12 +242,12 @@ function getTodo() {
 
                 <div class="card" style="width: 18rem;" id="todo-list-${e.id}-edit">
                     <div class="card-body">
-                        <form id="form-edit-">
-                        <input type="text" id="edit-title" value="${e.title}">
-                        <input type="text" id="edit-description" value="${e.description}">
-                        <input class="form-control" id="edit=date" type="date" value="${e.due_date}" id="form-date">
-                        <button type="submit" id="edit-todo" oncl class="btn btn-primary">Edit</button>
-                        <button type="button" id="cancle-edit" class="btn btn-primary">Cancel</button> 
+                        <form id="form-edit-${e.id}">
+                        <input type="text" id="edit-title-${e.id}" value="${e.title}">
+                        <input type="text" id="edit-description-${e.id}" value="${e.description}">
+                        <input class="form-control" id="edit-date-${e.id}" type="date" value="${e.due_date}" id="form-date">
+                        <button type="submit" id="edit-todo-${e.id}" onclick="editPost(${e.id})" class="btn btn-primary">Edit</button>
+                        <button type="button" id="cancle-edit-${e.id}" onclick="auth()"class="btn btn-primary">Cancel</button> 
                         </form>
                     </div>
                 </div>
@@ -259,8 +259,32 @@ function getTodo() {
             console.log(xhr, text)
         })
 }
-
+// last
 function editPost(id) {
+    const title = $(`#edit-title-${id}`).val()
+    const description = $(`#edit-description-${id}`).val()
+    const due_date = $(`#edit-date-${id}`).val()
+    console.log(title,description,due_date)
+    $.ajax({
+        url: `${base_url}/todos/${id}`,
+        method: 'PATCH',
+        headers: {
+            token: localStorage.getItem("token")
+        },
+        data :{
+            title : $(`#edit-title-${id}`).val() ,
+            description : $(`#edit-description-${id}`).val() ,
+            due_date: $(`#edit-date-${id}`).val()
+        }
+    })
+        .done(response => {
+            console.log(`ini di post`)
+            console.log(response)
+            auth()
+        })
+        .fail((xhr, text) => {
+            console.log(xhr,text)
+        })
 
 }
 
@@ -281,8 +305,6 @@ function editGetTodo (id) {
             console.log(title)
             $(`#todo-list-${res.id}-edit`).show()
             $(`#todo-list-${res.id}`).hide()
-            
-
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
@@ -336,7 +358,9 @@ function remove (id) {
         method: "DELETE"
     })
         .done(response => {
+            console.log(`masuk sini`)
             $(`#todo-list-${id}`).remove()
+            
         })
         .fail((xhr, text) => {
             console.log(xhr, text)

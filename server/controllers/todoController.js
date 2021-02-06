@@ -10,12 +10,12 @@ class TodoController {
                 res.status(201).json(data)
             })
             .catch(err=> {
-                // if(err.name ==="SequelizeValidationError"){
-                //     res.status(400).json(err.errors[0].message)
-                // } else {
-                //     res.status(500).json({message: "Invalid request"})
-                // }
-                next(err)
+                if(err.name ==="SequelizeValidationError"){
+                    res.status(400).json(err.errors[0].message)
+                } else {
+                    res.status(500).json({message: "Invalid request"})
+                }
+                // next(err)
             })
     }
     static getTodo(req,res, next) {
@@ -24,8 +24,8 @@ class TodoController {
                 res.status(200).json(data)
             })
             .catch(err=> {
-                // res.status(500).json({message: "Invalid request"})
-                next(err)
+                res.status(500).json({message: "Invalid request"})
+                // next(err)
             })
     }
     static findOneTodo(req,res, next) {
@@ -44,11 +44,12 @@ class TodoController {
                 }
             })
             .catch(err=> {
-                // res.status(500).json({message: "Invalid request"})
-                next(err)
+                res.status(500).json({message: "Invalid request"})
+                // next(err)
             })
     }
     static editTodo(req,res, next) {
+        console.log(req)
         const id = +req.params.id
         const userId = +req.data.id
         const {title, description, status, due_date} = req.body
@@ -67,8 +68,8 @@ class TodoController {
                 }
             })
             .catch(err => {
-                // res.status(500).json({message: "Invalid request"})
-                next(err)
+                res.status(500).json({message: "Invalid request"})
+                // next(err)
             })
     }
     static editStatusTodo(req,res, next) {
@@ -95,12 +96,12 @@ class TodoController {
                 }
             })
             .catch(err => {
-                // if(err.name === "SequelizeValidationError") {
-                //     res.status(400).json(err.errors[0].message)
-                // } else {
-                //     res.status(500).json({message: "Invalid request"})
-                // }
-                next(err)
+                if(err.name === "SequelizeValidationError") {
+                    res.status(400).json(err.errors[0].message)
+                } else {
+                    res.status(500).json({message: "Invalid request"})
+                }
+                // next(err)
             })
     }
     static deleteTodo(req,res, next) {
@@ -114,14 +115,14 @@ class TodoController {
             .then(data => {
 
                 if(data === 0) {
-                    // res.status(404).json({message: "Invalid Data"})
-                    throw {name : "custom"}
+                    res.status(404).json({message: "Invalid Data"})
+                    throw {message: "invalid data", status: 400}
                 } else {
                     res.status(200).json({message : "todo success to delete"})
                 }
             })
             .catch(err => {
-                // res.status(500).json({message: "Invalid request"})
+                res.status(500).json({message: "Invalid request"})
                 next(err)
             })
     }
@@ -139,8 +140,8 @@ class TodoController {
             .catch(err => {
                 console.log(`gagalll`)
                 // console.log(err)
-                // res.status(500).json({message: "Invalid request"})
-                next(err)
+                res.status(500).json({message: "Invalid request"})
+                // next(err)
             })
     }
     static findOne (req,res, next) {
@@ -154,8 +155,8 @@ class TodoController {
                 res.status(200).json(data)
             })
             .catch(err => {
-                // res.status(500).json({message: "Invalid request"})
-                next(err)
+                res.status(500).json({message: "Invalid request"})
+                // next(err)
             })
     }
  

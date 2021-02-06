@@ -1,14 +1,15 @@
 const express = require('express')
 const router = express.Router()
 const Todo = require('../controllers/todoController')
+const authorize = require('../middleware/authorize')
 
-router.post('/', Todo.createTodo)
-router.get('/', Todo.getTodo)
-router.get('/:id', Todo.findOneTodo)
-router.put('/:id', Todo.editTodo)
-router.patch('/:id', Todo.editStatusTodo)
-router.delete('/:id', Todo.deleteTodo)
-router.get('/:id', Todo.findOne)
+router.post('/', Todo.createTodo) 
+router.get('/', Todo.getTodo) 
+router.get('/:id',  Todo.findOneTodo) //authorize
+router.put('/:id', Todo.editTodo) //authorize
+router.patch('/:id', Todo.editStatusTodo) //authorize
+router.delete('/:id', Todo.deleteTodo) //authorize
+router.get('/:id', Todo.findOne) //authorize
 
 
 
