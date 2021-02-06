@@ -201,7 +201,7 @@ function getTodos() {
               </div>
 
               <div class="col-sm-2">
-                <input type="date" class="form-control form-control-sm mb-2" id="due_date${value.id}" value="${value.due_date.split('T')[0]}" placeholder="Due Date">
+                <input type="date" readonly class="form-control form-control-sm mb-2" id="due_date${value.id}" value="${value.due_date.split('T')[0]}" placeholder="Due Date">
               </div>
 
               <div class="col-auto">
@@ -229,7 +229,6 @@ function getTodos() {
       });
     })
     .fail((xhr, text) => {
-      
       console.log(xhr, text)
     })
     .always((_) => {
@@ -239,37 +238,56 @@ function getTodos() {
 }
 
 function getEditTodo(id, title, description, due_date, status) {
+  let option;
+  if (status == 'todo') {
+    option = `
+      <option selected value="todo">Todo</option>
+      <option value="doing">Doing</option>
+      <option value="done">Done</option>`
+  } else if (status == 'doing') {
+    option = `
+      <option value="todo">Todo</option>
+      <option selected value="doing">Doing</option>
+      <option value="done">Done</option>`
+  } else if (status == 'done') {
+    option = `
+      <option value="todo">Todo</option>
+      <option value="doing">Doing</option>
+      <option selected value="done">Done</option>`
+  }
   $(`#todo${id}`).empty();
   $(`#todo${id}`).append(`
   <form  class="card-body p-3 form-inline row g-3 justify-content-center" id="editTodo">
   <div class="col-md-2">
-    <input type="text" value="${title}" class="form-control mb-2" id="editTodoTitle" placeholder="Edit Todo Title">
+    <input type="text" value="${title}" class="form-control mb-2" id="editTodoTitle${id}" placeholder="Edit Todo Title">
   </div>
   <div class="col-md-4">
-    <input type="text" value="${description}" class="form-control mb-2" id="editTodoDesc" placeholder="Description">
+    <input type="text" value="${description}" class="form-control mb-2" id="editTodoDesc${id}" placeholder="Description">
   </div>
   <div class="col-auto">
     <!-- <label class="sr-only" for="editTodoStatus">Preference</label> -->
     <select class="form-select mb-2" id="editTodoStatus">
-      <option selected value="todo">Todo</option>
-      <option value="doing">Doing</option>
-      <option value="done">Done</option>
+      ${option}
     </select>
   </div>
   <div class="col-md-3">
     <!-- <label class="sr-only" for="editTodoDate">Due Date</label> -->
-    <input type="date" value="${due_date.split('T')[0]}" class="form-control mb-2" id="editTodoDueDate" placeholder="Due Date">
+    <input type="date" value="${due_date.split('T')[0]}" class="form-control mb-2" id="editTodoDueDate${id}" placeholder="Due Date">
   </div>
 
-  <div class="col-auto">
-    <a onclick="postEditTodo()"
+  <div class="col-sm-2">
+    <a onclick="putTodo(${id})"
     id="editTodoButton" 
-    class="btn btn-outline-dark btn-md form-control mb-2">Edit</a>
+    class="btn btn-outline-primary btn-md form-control mb-2">Edit</a>
+  </div>
+  <div class="col-sm-2">
+    <a onclick="getTodos()"
+    id="cancelEditTodoButton" 
+    class="btn btn-outline-danger btn-md form-control mb-2">Cancel</a>
   </div>
 </form>
   `)
   .fail((xhr, text) => {
-      
     console.log(xhr, text)
   })
   .always((_) => {
@@ -277,23 +295,31 @@ function getEditTodo(id, title, description, due_date, status) {
   })
 }
 
-
-
-
-//nanti dulu cari tau cara 
-function putTodoById(id) {
+function putTodo(id) {
+  let title = $(`#editTodoTitle${id}`).val();
+  let description  = $(`#editTodoDesc${id}`).val();
+  let status = $(`#editTodoStatus${id}`).val();
+  let due_date = $(`#editTodoDueDate${id}`).val();
   $.ajax({
     url: base_url + "todos/" + id,
     method: "put",
     headers: {
       access_token: localStorage.getItem("access_token"),
     },
+    data: {
+      title, description, status, due_date
+    }
   })
   .done((_) => {
     getTodos();
   })
   .fail((xhr, text) => {
-    console.log(xhr, text)
+    swal({
+      title: "Error!",
+      text: xhr.responseJSON.errors.join(', '),
+      icon: "error",
+    })
+    console.log(xhr, text);
   })
 }
 
