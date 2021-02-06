@@ -1,33 +1,28 @@
 # FANCY TODO
+Fancy Todo App is an application to manage your todos. It performs standard CRUD actions based on RESTful concept.
+
+This app has : 
+* RESTful endpoint for asset's CRUD operation
+* JSON formatted response
+
+&nbsp;
+
+Tech Stack used to build this app :
+* Node JS
+* Express JS framework
+* PostgreSQL
+
+&nbsp;
+3rd party API used:
+* GMAIL API
+* GAuth
+
+
+
+&nbsp;
 # RESTful ENDPOINTS:
 ## TODO endpoints
-### **POST /todos/weather** 
-> Get current weather based on city input
-* **request body:**
-```
-{
-    "city": "Jakarta"
-}
-```
 
-* **Success response (200):**
-```
-[
-    {
-        "id": 721,
-        "main": "Haze",
-        "description": "haze",
-        "icon": "50d"
-    }
-]
-```
-* **Error response (500):**
-```
-{
-    message: "internal server error"
-}
-```
----
 ### **POST /todos** 
 > Insert new Todo
 * **request body:** 
@@ -205,6 +200,33 @@ not needed
 {
     msg: "error not found"
 }
+```
+* **Error response (500):**
+```
+{
+    message: "internal server error"
+}
+```
+---
+### **POST /todos/weather** 
+> Get current weather based on city input
+* **request body:**
+```
+{
+    "city": "Jakarta"
+}
+```
+
+* **Success response (200):**
+```
+[
+    {
+        "id": 721,
+        "main": "Haze",
+        "description": "haze",
+        "icon": "50d"
+    }
+]
 ```
 * **Error response (500):**
 ```

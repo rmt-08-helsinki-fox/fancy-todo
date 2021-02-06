@@ -1,28 +1,28 @@
 const { Todo }= require('../models/index.js');
 const axios = require("axios");
+const sendGmail = require('../helpers/send-gmail');
 
 class TodoController {
 
   static postTodos (req, res, next) {
     let { title, description, status, due_date } = req.body;
     let UserId = req.decoded.id;
+    console.log(req.decoded, 'ini dari req decoded')
+    let emailUser = req.decoded.email;
     Todo.create({title,description,status, due_date, UserId})
     .then((data)=> {
-      res.status(201).json(data);
+      console.log(emailUser, 'ini user email lhoo')
+      sendGmail(emailUser, data)
+      res.status(201).json(data)
     })
     .catch((err)=> {
       next(err);
-    //   console.log(err)
-    //   if (err.name === 'SequelizeValidationError') {
-    //     res.status(400).json(err.errors)
-    //   } else {
-    //     res.status(500).json({ message: 'internal server error' });
-    //   }
     })
   }
 
   static getTodos (req, res, next) {
     let loggedUserId = +req.decoded.id;
+    console.log('ini get todos', loggedUserId)
     Todo.findAll({
       where: {
         UserId: loggedUserId
@@ -39,7 +39,6 @@ class TodoController {
 
   static getTodoById (req, res, next) {
     let todoId = +req.params.id;
-
     Todo.findByPk(todoId)
     .then(data => {
       if (!data) {
