@@ -14,6 +14,7 @@ function authenticate() {
     $('#form-add-todo').hide();
     $('#btn-cancel-add-form').hide();
     $('#btn-add-todo').show();
+    fetchTodo()
   } else {
     $('#logout-navbar').hide();
     $('#home-navbar').hide();
@@ -99,8 +100,82 @@ function logout() {
   authenticate();
 }
 
-function addtodo() {
+function btnAddtodo() {
   $('#form-add-todo').show()
   $('#btn-cancel-add-form').show()
   $('#btn-add-todo').hide()
+}
+
+function addTodo(event) {
+  event.preventDefault();
+  const title = $('#title-todo').val()
+  const description = $('#desc-todo').val()
+  const due_date = $('#date-todo').val()
+  const access_token = localStorage.access_token
+
+  $.ajax({
+    url: baseUrl + 'todos',
+    method: 'POST',
+    data: {
+      title,
+      description,
+      due_date
+    },
+    headers: {
+      access_token
+    }
+  })
+    .done(response => {
+      authenticate()
+    })
+    .fail(err => {
+      console.log(err.responseJSON)
+    })
+    .always(_ => {
+      $('#title-todo').val('')
+      $('#desc-todo').val('')
+      $('#date-todo').val('')
+    })
+}
+
+function fetchTodo() {
+  const access_token = localStorage.access_token
+
+  $.ajax({
+    url: baseUrl + 'todos',
+    method: 'GET',
+    headers: {
+      access_token
+    }
+  })
+    .done(response => {
+      console.log(response)
+      $('#todos').empty();
+      response.forEach(todos => {
+        if(todos.status === false) {
+          $('#todos').append(`
+          <div class="card-block">
+            <h4 class="card-title">${todos.title}</h4>
+            <p>${todos.description}</p>
+            <a href="" class="btn btn-primary btn-sm">Edit</a>
+            <a href="" class="btn btn-primary btn-sm">Delete</a>
+            <a href="" class="btn btn-danger btn-sm">Not Done</a>
+          </div>
+          `)
+        } else {
+          $('#todos').append(`
+          <div class="card-block">
+            <h4 class="card-title">${todos.title}</h4>
+            <p>${todos.description}</p>
+            <a href="" class="btn btn-primary btn-sm">Edit</a>
+            <a href="" class="btn btn-primary btn-sm">Delete</a>
+            <a href="" class="btn btn-success btn-sm">Done</a>
+          </div>
+          `)
+        }
+      })
+    })
+    .fail(err => {
+      console.log(err.responseJSON)
+    })
 }
