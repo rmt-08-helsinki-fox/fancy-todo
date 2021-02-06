@@ -1,3 +1,69 @@
+**Register**
+----
+  
+
+* **URL**
+  
+  /register
+
+* **Method**
+
+  `POST`
+
+
+* **Request Body**
+    {
+      email: "<register email>",
+      password: "<register password>"
+    }
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                    email: "<register email>",
+                    password: "<register password>"
+                  }`
+
+* **Error Response:**
+
+  * **Code:** 500 <br />
+    **Content:** ``
+
+**Login**
+----
+  
+
+* **URL**
+  
+  /login
+
+* **Method**
+
+  `POST`
+
+
+* **Request Body**
+    {
+      email: "<register email>",
+      password: "<register password>"
+    }
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{
+                    email: "<register email>",
+                    password: "<register password>"
+                  }`
+
+* **Error Response:**
+
+  * **Code:** 500 <br />
+    **Content:** ``
+
+
+
 **Add Todo**
 ----
   return json data about todo that just added.
@@ -9,14 +75,6 @@
 * **Method**
 
   `POST`
-
-* **URL Params**
-
-
-
-* **Data Params**
-
-    None
 
 * **Request Body**
     {
@@ -63,18 +121,6 @@
 
   `GET`
 
-* **URL Params**
-
-
-
-* **Data Params**
-
-    None
-
-* **Request Body**
-
-    None
-
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -108,9 +154,7 @@
 
   `PUT`
 
-* **URL Params**
-
-  **Required:**
+* **Required:**
  
    `id=[integer]`
 
@@ -159,8 +203,6 @@
 * **Method**
 
   `PUT`
-
-* **URL Params**
 
   **Required:**
  
@@ -229,9 +271,8 @@
 
   `PATCH`
 
-* **URL Params**
 
-  **Required:**
+* **Required:**
  
    `id=[integer]`
 
@@ -293,7 +334,6 @@
 
   `DELETE`
 
-* **URL Params**
 
   **Required:**
  

@@ -11,10 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User)
     }
   };
   Todo.init({
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "title cannot be empty"
+        }
+      }
+    },
     description: DataTypes.STRING,
     status: {
       type: DataTypes.BOOLEAN,
@@ -29,13 +37,19 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isAfter: {
           args: (new Date()).toDateString(),
-          msg: "due_date cannot yesterday"
+          msg: "due_date cannot be yesterday"
         }
       }
+    },
+    UserId: {
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
     modelName: 'Todo',
   });
+  Todo.addHook('beforeCreate', (todo, opt) => {
+    todo.status = false
+  })
   return Todo;
 };
