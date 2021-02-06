@@ -59,9 +59,9 @@ function onSignIn(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
     $.ajax({
         url: baseUrl + '/googleLogIn',
-        method: 'post',
+        method: 'POST',
         data: {
-            googleToken: id_token
+            id_token
         }
     })
         .done(response => {
