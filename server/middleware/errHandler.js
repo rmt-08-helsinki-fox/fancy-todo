@@ -11,6 +11,8 @@ const errorHandler = (err, req, res, next) => {
     res.status(err.status).json({ error: err.message });
   } else if (err.name === "JsonWebTokenError") {
     res.status(401).json({ error: "Unauthorized" });
+  } else {
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
