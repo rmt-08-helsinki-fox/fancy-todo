@@ -19,9 +19,7 @@ class UserController {
         })
       })
       .catch(err => {
-        const message = err.errors.map(element => element.message)
-        const error = { name: err.name, statusCode: 400, msg: message}
-        next(error)
+        
       })
   }
   // User Login

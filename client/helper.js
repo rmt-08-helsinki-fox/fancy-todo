@@ -1,4 +1,4 @@
- const base_url = "http://localhost:3000/"
+const base_url = "http://localhost:3000/"
 function auth() {
   if(!localStorage.getItem("access_token")) {
     $("#login-container").show()
@@ -11,6 +11,9 @@ function auth() {
     $("#update-container").hide()
     $("#yourTodos").hide()
     $("#addTodos-nav").hide()
+    $("#yourProject").hide()
+    $("#available-project-container").hide()
+    $("#list-project-container").hide()
   } else {
     $("#login-container").hide()
     $("#register-container").hide()
@@ -18,11 +21,17 @@ function auth() {
     $("#nav-register").hide()
     $("#nav-logout").show()
     $("#add-todos-container").hide()
-    $("#list-todos-container").show()
-    getTodos()
+    $("#available-todos-container").show()
     $("#update-container").hide()
     $("#yourTodos").show()
     $("#addTodos-nav").show()
+    $("#yourProject").show()
+    getTodos()
+    $("#list-todos-container").show()
+    $("#available-project-container").hide()
+    getProject()
+    $("#list-project-container").show()
+    userProjectList()
   }
 }
 
@@ -37,7 +46,6 @@ function onSignIn(googleUser) {
     }
   })
     .done((response) => {
-      // console.log(response)
       localStorage.setItem("access_token", response.access_token)
       auth()
     })
@@ -64,10 +72,11 @@ function register() {
       )
     })
     .fail((xhr, status) => {
+      console.log(xhr)
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        html: xhr.responseJSON.error.join('<br/>'),
+        html: xhr.responseJSON.error.join('<br/>')
       })
     })
     .always(() => {
@@ -131,9 +140,9 @@ function getTodos() {
             <td>${value.due_date}</td>
             <td>${value.status ? 'Finished' : 'Pending'}</td>
             <td>
-              <a href="#" onclick="updateTodosStatus(${value.id},${value.status})">Update Status</a> |
-              <a href="#" onclick="updateTodos(${value.id})">Update Todos</a> |
-              <a class="w3-btn w3-green" href="#" onclick="hapus(${value.id})">Delete Todos</a>
+              <a class="btn btn-success"href="#" onclick="updateTodosStatus(${value.id},${value.status})">Update Status</a>
+              <a class="btn btn-primary" href="#" onclick="updateTodos(${value.id})">Update Todos</a> 
+              <a class="btn btn-danger" href="#" onclick="hapus(${value.id})">Delete Todos</a>
             </td>
           </tr>
         `)
@@ -166,6 +175,11 @@ function addTodos() {
     })
     .fail((xhr, status) => {
       console.log(xhr, status)
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: xhr.responseJSON.error.join('<br/>')
+      })
     })
     .always(() => {
       $("#add-todos-form").trigger("reset")
@@ -208,7 +222,9 @@ function updateTodosStatus(id,currentStatus) {
   })
     .done(response => {
       Swal.fire(
-        'Update Status Succes!',
+        'Good job!',
+        'Updated status succes',
+        'success'
       )
       auth()
     })
@@ -234,5 +250,105 @@ function hapus(id) {
     })
     .fail((err, status) => {
       console.log(err, status)
+    })
+}
+
+function getProject() {
+  $.ajax({
+    url: base_url + "todos/projectList",
+    method: "GET",
+    headers: {
+      access_token: localStorage.getItem("access_token")
+    }
+  })
+  .done(data => {
+    $("#tbody-id-project").empty()
+    data.forEach((value,i) => {
+      $("#tbody-id-project").append(`
+        <tr>
+          <td id="title-${i}">${value.title}</td>
+          <td id="url-${i}">${value.url}</td>
+          <td>
+            <a href="#" onclick="addProject(${i})">Add Project</a>
+          </td>
+        </tr>
+      `)
+    })
+  })
+  .fail((xhr, status) => {
+    console.log(xhr, status)
+  })
+}
+
+function addProject(id) {
+  const title = $(`#title-${id}`).text()
+  const url = $(`#url-${id}`).text()
+  $.ajax({
+    url: base_url + `todos/addProject`,
+    method: "POST",
+    data: {
+      title,
+      url
+    },
+    headers: {
+      access_token: localStorage.getItem("access_token")
+    }
+  })
+    .done(response => {
+      auth()
+    })
+    .fail((xhr,txt) => {
+      console.log(xhr,txt)
+    })
+}
+
+function userProjectList() {
+  $.ajax({
+    url: base_url + `todos/userProjectList`,
+    method: "GET",
+    headers: {
+      access_token: localStorage.getItem("access_token")
+    }
+  })
+    .done(dataProject => {
+      console.log(dataProject)
+      $("#tbody-project-user").empty()
+      dataProject.forEach((value,i) => {
+        $("#tbody-project-user").append(`
+          <tr>
+            <td id="id-${i}">${i+1}</td>
+            <td id="title-${i}">${value.title}</td>
+            <td id="url-${i}">${value.url}</td>
+            <td id="userId-">${value.User.email}</td>
+            <td align="center" >
+              <a class="btn btn-danger" onclick="deleteProject(${value.id})">Delete</a>
+            </td>
+          </tr>
+        `)
+      })
+    })
+    .fail((xhr, status) => {
+      console.log(xhr, status)
+    })
+}
+
+function deleteProject(id) {
+  $.ajax({
+    url: base_url + `todos/deleteProjectUser/${id}`,
+    method: "DELETE",
+    headers: {
+      access_token: localStorage.getItem("access_token")
+    }
+  })
+    .done(response => {
+      Swal.fire(
+        'Good job!',
+        'Succes deleted data',
+        'success'
+      )
+      userProjectList()
+    })
+    .fail((xhr, status) => {
+      console.log(xhr, status)
     })
 }

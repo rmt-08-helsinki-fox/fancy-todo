@@ -1,4 +1,4 @@
-const { Todo } = require('../models')
+const { Todo, Project, User } = require('../models')
 const axios = require('axios');
 
 class TodoController {
@@ -16,9 +16,7 @@ class TodoController {
           res.status(201).json(dataTodo)
       })
       .catch(err => {
-        const message = err.errors.map(element => element.message)
-        const error = { name: err.name, statusCode: 400, msg: message}
-        next(error)
+        next(err)
       })
   }
   // GET TODOS
@@ -38,7 +36,6 @@ class TodoController {
   // GET TODOS BY ID
   static getTodosById(req, res, next) {
     const id = +req.params.id
-    // Todo.findByPk(id)
     Todo.findOne({
       where: {
         id: id,
@@ -90,9 +87,7 @@ class TodoController {
         res.status(200).json(dataTodoUpdate[1][0])
       })
       .catch(err => {
-        const message = err.errors.map(element => element.message)
-        const error = { name: err.name, statusCode: 400, msg: message}
-        next(error)
+        next(err)
       }) 
   }
   // PATCH TODOS BY ID - UPDATE SELECTED ROWS
@@ -115,9 +110,7 @@ class TodoController {
       res.status(200).json(dataTodoUpdate[1][0])
     })
     .catch(err => {
-      const message = err.errors.map(element => element.message)
-      const error = { name: err.name, statusCode: 400, msg: message}
-      next(error)
+      next(err)
     })
   }
   static deleteTodos(req, res, next) {
@@ -137,42 +130,79 @@ class TodoController {
       next(err)
     })
   }
-  // read book from open library 3rd PARTY API
-  static searchBook(req, res) {
+  // READ PROJECT FROM api.creativecommons. -- 3rd PARTY API
+  static projectList(req,res,next) {
+    let tmp = []
     axios({
-      method: "get",
-      // url: `http://openlibrary.org/search/lists.json?q=book&limit=20&offset=0`
-      url: `https://openlibrary.org/works/OL45883W/Fantastic_Mr._FOX`
+      method: "GET",
+      url: `http://api.creativecommons.engineering/v1/images/`,
+      headers: {
+        Authorization: `Bearer DLBYIcfnKfolaXKcmMC8RIDCavc2hW`
+      } 
     })
       .then(response => {
-        let people = []
-        response.data.docs.forEach((element) => {
-          people.push(element.full_url.split('/')[2])
+        response.data.results.forEach(element => {
+          tmp.push({
+            title: element.title,
+            url: element.url
+          })
         })
-        // res.json({people})
-        return axios({
-          method: "get",
-          url: `http://openlibrary.org/people/${people[0]}/lists.json`
-        })
-      })
-      .then(response => {
-        let listId = []
-        response.data.entries.forEach((element) => {
-          listId.push(element.url.split('/')[4])
-        })
-        // res.json(listId)
-        return axios({
-          method: "get",
-          url: `https://openlibrary.org/works/${listId[0]}.json`
-        })
-      })
-      .then(response => {
-        res.json(response)
-      })
+        res.status(200).json(tmp)
+        
+      })  
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
+  // add project
+  static addProject(req, res, next) {
+    const objProject = {
+      title: req.body.title,
+      url: req.body.url,
+      UserId: req.decoded.id
+    }
+    Project.create(objProject)
+      .then(project => {
+        res.status(201).json(project)
+      })
+      .catch(err => {
+        const message = err.errors.map(element => element.message)
+        const error = { name: err.name, statusCode: 400, msg: message}
+        next(error)
+      })
+  }
+  // saved project List
+  static userProjectList(req, res, next) {
+    Project.findAll({
+      include: User
+    })
+      .then(project => {
+        res.status(200).json(project)
+      })
+      .catch(err => {
+        next(err)
+      })
+  }
+  // delete project
+  static deleteProjectUser(req, res, next) {
+    Project.destroy({
+      where: {
+        id: +req.params.id
+      }
+    })
+      .then(data => {
+        res.status(200).json({
+          'messages': 'todo succes to delete'
+        })
+      })
+      .catch(err => {
+        next(err)
+      })
+  }
+  // static inviteUser(req, res, next) {
+
+  // }
 }
+
 
 module.exports = TodoController

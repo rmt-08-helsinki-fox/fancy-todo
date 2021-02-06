@@ -9,14 +9,18 @@ List of available endpoints:
 ​
 - `POST /users/register`
 - `POST /users/login`
-- `POST /users/googleLoginp`
+- `POST /users/googleLogin`
 - `GET /todos/`
 - `POST /todos/`
 - `GET /todos/:id`
 - `PUT /todos/:id`
 - `PATCH /todos/:id`
 - `DELETE /todos/:id`
-- `GET /todos/searchBook/`
+- `GET /todos/projectList`
+- `POST /todos/addProject`
+- `GET /todos/userProjectList`
+- `DELETE /todos/deleteProjectUser/:id`
+
 
 ### POST /users/register`
 > Create New Account
@@ -80,6 +84,7 @@ Request:
 ```json
 {
   "email": "string",
+  "password": "string"
 }
 ```
 
@@ -113,7 +118,7 @@ Response:
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** `error html`
 
-### `POST /users/googleLoginp`
+### `POST /users/googleLogin`
 
 > Login with Google Account
 
@@ -282,7 +287,7 @@ Request:
 - data
 ```json
 {
-    "id": "<interger>",
+    "id": "<integer>",
     "UserId": "<your token id>"
 }
 ```
@@ -333,7 +338,11 @@ Request:
 ```json
 {
     "id": "<integer>",
-    "UserId": "<your token id>"
+    "UserId": "<your token id>",
+    "title": "<integer>",
+    "description": "<integer>",
+    "status": "<false>",
+    "due_date": "<date>"
 }
 ```
 
@@ -390,7 +399,8 @@ Request:
 ```json
 {
     "id": "<integer>",
-    "UserId": "<your token id>"
+    "UserId": "<your token id>",
+    "status": "<integer>"
 }
 ```
 
@@ -477,3 +487,214 @@ Response:
 
   * **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:** `error html`
+
+
+### `GET /todos/projectList`
+
+> Get project list from 3rd party api : api.creativecommons.engineering
+
+Request:
+
+- data:
+```json
+  url api: http://api.creativecommons.engineering/v1/images/
+  Authorization: Bearer DLBYIcfnKfolaXKcmMC8RIDCavc2hW
+```
+
+Response:
+
+- status: 200
+- data:
+```json
+[
+    {
+        "title": "<title>",
+        "url": "<url>"
+    },
+    ....
+]
+```
+* **Success Response:**
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+    [
+      {
+          "title": "File:Open book 01.svg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Open_book_01.svg"
+      },
+    ]
+    ````
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{
+      "error": [
+          "Not Authorized"
+      ]
+  }`
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `error html`
+
+### `POST /todos/addProject`
+
+> add project user
+
+Request: 
+
+- data:
+```json
+{
+  "title": "<string>",
+  "url": "<string>",
+  "UserId": "<integer>"
+}
+```
+
+Response:
+
+- status: 201
+- data:
+```json
+{
+  "title": "<string>",
+  "url": "<string>",
+  "UserId": "<integer",
+  "updatedAt": "<date>",
+  "createdAt": "<date>"
+}
+```
+
+* **Success Response**
+  * **Code:** 201 <br />
+    **Content:** 
+    {
+        "id": 4,
+        "title": "aaa",
+        "url": "aaa",
+        "UserId": 2,
+        "updatedAt": "2021-02-06T06:58:24.084Z",
+        "createdAt": "2021-02-06T06:58:24.084Z"
+    }
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{
+      "error": [
+          "Not Authorized"
+      ]
+  }`
+  OR
+  * **Code:** 400 Bad Request <br />
+    **Content:** {
+        "error": [
+            "title is required",
+            "url is required"
+        ]
+    }
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `error html`
+
+### `GET todos/userProjectList`
+> Get Project List of User
+
+Request:
+
+- data:
+```json
+{
+  "id": "id project include User"
+}
+```
+
+Response:
+
+- status: 200
+- data:
+```json
+[
+      {
+        "title": "<string>",
+        "url": "<string>",
+        "UserId": "integer",
+        "createdAt": "date",
+        "updatedAt": "date",
+        "User": {
+            "id": "<integer>",
+            "email": "<string>",
+            "password": "string encrypt hashing",
+            "createdAt": "<date>",
+            "updatedAt": "<date>"
+        }
+    },
+    ...
+]
+```
+* **Success Response**
+  * **Code:** 201 <br />
+    **Content:** 
+     [   
+      {
+        "id": 12,
+        "title": "kids",
+        "url": "https://live.staticflickr.com/96/260680590_622eea8dac.jpg",
+        "UserId": 1,
+        "createdAt": "2021-02-06T07:29:22.304Z",
+        "updatedAt": "2021-02-06T07:29:22.304Z",
+        "User": {
+            "id": 1,
+            "email": "test@mail.com",
+            "password": "$2a$10$TVPxEr/XBqR004Wn6bm3veE8/KnP4wPjza9R3E1nmVYp9hsUI9Syi",
+            "createdAt": "2021-02-06T06:34:20.946Z",
+            "updatedAt": "2021-02-06T06:34:20.946Z"
+        }
+      },
+    ]
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{
+      "error": [
+          "Not Authorized"
+      ]
+  }`
+
+### `DELETE /todos/deleteProjectUser`
+> Delete Project by User
+
+Request:
+
+- data:
+```json
+{
+  "id": "<integer>"
+}
+```
+
+Response:
+
+- status: 200
+-data:
+```json
+{
+    "messages": "todo succes to delete"
+}
+```
+
+* **Success Response**
+    * **Code:** 200 <br />
+    **Content:** {
+        "messages": "todo succes to delete"
+    }
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{
+      "error": [
+          "Not Authorized"
+      ]
+  }`
