@@ -4,11 +4,12 @@ const axios = require("axios").default;
 class TodoController {
   static async postTodos(req, res, next) {
     try {
-      const { title, description, status, due_date } = req.body;
+      console.log(req.data);
+      const { title, description, due_date } = req.body;
       let todo = await Todo.create({
         title,
         description,
-        status,
+        status: false,
         due_date,
         UserId: req.data.id,
       });
@@ -46,7 +47,6 @@ class TodoController {
 
       res.status(200).json({ data: updateTodo });
     } catch (err) {
-      console.log(err);
       if (err.errors) {
         next(err);
       } else {
@@ -100,7 +100,6 @@ class TodoController {
   }
 
   static weatherStack(req, res, next) {
-    console.log(req.body);
     const apiKey = process.env.WEATHER_API;
     const latt = req.body.latitude;
     const long = req.body.longitude;

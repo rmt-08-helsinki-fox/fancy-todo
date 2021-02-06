@@ -60,7 +60,7 @@ class UserController {
       const payload = ticket.getPayload();
       let email = payload.email;
 
-      const user = User.findOne({ where: { email: email } });
+      const user = await User.findOne({ where: { email: email } });
       if (user) {
         const access_token = signToken({
           id: user.id,
