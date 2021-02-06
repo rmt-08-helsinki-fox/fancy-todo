@@ -111,7 +111,7 @@ class TodoController {
         })
     }
 
-    static deleteTodo (req, res){
+    static deleteTodo (req, res, next){
         let id = +req.params.id
         TodoList.destroy({where : {id}, returning : true})
         .then(todo => {
@@ -126,7 +126,6 @@ class TodoController {
             next(err)
         })
     }
-
 }
 
 module.exports = TodoController;

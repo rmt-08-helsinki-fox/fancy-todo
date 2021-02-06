@@ -1,5 +1,5 @@
 # Fancy Todo
-My Assets App is an application to manage your assets. This app has : 
+Fancy Todo is the app to list your daily todo or anything that you would do. This app has : 
 * RESTful endpoint for asset's CRUD operation
 * JSON formatted response
 
@@ -269,7 +269,7 @@ _Respons (500 - internal server error)_
 
 
 # User
-My Assets App is an application to manage your assets. This app has : 
+this doc for User to login and register the app. This app has : 
 * RESTful endpoint for register and login
 * JSON formatted response
 
@@ -309,7 +309,36 @@ _Respons (500 - internal server error)_
 
 _Request Header_
 ```
-"acces_token" : "<your acces token>"
+"token" : "<your acces token>"
+```
+_Request Body_
+```
+{
+  "email" : "<your email registered>",
+  "password" : "<your password that match with email>"
+}
+```
+_Respons (200 - OK)_
+```
+{
+  "id": 3,
+  "email": "testerr@email.com",
+  "iat": 1612184659
+}
+```
+_Respons (500 - internal server error)_
+```
+{
+  "message" : "<error message>"
+}
+```
+
+## POST  /loginGoogle
+>Creat new asset
+
+_Request Header_
+```
+"token" : "<your acces token>"
 ```
 _Request Body_
 ```

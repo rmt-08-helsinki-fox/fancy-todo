@@ -1,3 +1,4 @@
+
 const base_url = "http://localhost:3000/"
       function authentic(){
         if(!localStorage.getItem("token")){ 
@@ -7,11 +8,11 @@ const base_url = "http://localhost:3000/"
           $("#login-fail").hide()
           $("#login-success").hide()
           $("#logout").hide()
-          $("#todoTitle").hide()
           $("#addTodo").hide()
           $("#login").hide()
           $("#container-create").hide()
           $("#container-edit").hide()
+          $("#home").hide()
           //register()    
         }else{
           $("#form-login").hide()
@@ -20,12 +21,12 @@ const base_url = "http://localhost:3000/"
           $("#login-fail").hide()
           $("#login-success").show()
           $("#logout").show()
-          $("#todoTitle").show()
           $("#addTodo").show()
           $("#login").hide()
           $("#register").hide()
           $("#container-create").hide()
           $("#container-edit").hide()
+          $("#table-todo").show()
           getTodo()
          
         }
@@ -79,7 +80,7 @@ const base_url = "http://localhost:3000/"
               <td>${response.data[i].due_date}</td>
               <td>${response.data[i].status}</td>
               <td>
-              <button type="button" class="btn btn-primary" id="btn-edit">Edit</button>
+              <button type="button" class="btn btn-primary" id="btn-edit" onclick="getById(${response.data[i].id})">Edit</button>
               <button type="button" class="btn btn-danger" id="btn-delete" onclick="Delete(${response.data[i].id})">Delete</button>
               </td>
             </tr>`
@@ -104,6 +105,10 @@ const base_url = "http://localhost:3000/"
 
       function logout(){
         localStorage.clear()
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+        console.log('User signed out.');
+        });
         authentic()
         $("#register").show()
         $("#login").show()
@@ -139,8 +144,6 @@ const base_url = "http://localhost:3000/"
         el.preventDefault()
         $("#container-create").show()
         $("#table-todo").hide()
-        $("#addTodo").hide()
-        $("#todoTitle").hide()
         $("#login-success").hide()
         $("#quotes").hide()
       })
@@ -154,20 +157,26 @@ const base_url = "http://localhost:3000/"
         $("#login-fail").hide()
         $("#login-success").hide()
         $("#logout").show()
-        $("#todoTitle").show()
         $("#addTodo").show()
         $("#login").hide()
         $("#register").hide()
         $("#container-create").hide()
         $("#quotes").show()
-        getTodo()
       })
 
       $("#home").on("click", (el) =>{
           el.preventDefault()
-          $("#quotes").show()
           authentic()
+          $("#quotes").show()
+          getTodo()
+          $("#table-todo").show()
           $("#login-success").hide()
+      })
+
+      $("#form-edit").on("submit", (el) =>{
+        el.preventDefault()
+        edit()
+        getTodo()
       })
 
 
@@ -222,6 +231,7 @@ const base_url = "http://localhost:3000/"
         })
         .done((response) => {
           console.log(response)
+          getTodo()
         })
         .fail((xhr, text) => {
           console.log(xhr, text)
@@ -254,14 +264,18 @@ const base_url = "http://localhost:3000/"
         })
       }
       
-      function edit (id) {
+      function edit () {
         const title = $("#edit-title").val()
         const description = $("#edit-desc").val()
         const due_date = $("#edit-dueDate").val()
         const status = $("#edit-status").val()
+        const id = $("#todoId").val()
         $.ajax({
-            url : base_url + `todos:${id}`,
+            url : base_url + `todos/${id}`,
             method : "PUT",
+            headers : {
+                token : localStorage.getItem("token")
+            },
             data : {
                 title,
                 description,
@@ -270,14 +284,72 @@ const base_url = "http://localhost:3000/"
             }
         })
         .done((response) => {
-            console.log(response)
-            authentic()
+            console.log(response, '<<<<<')
+            $("#container-edit").hide()
+            $("#table-todo").show()
+            getTodo()
         })
         .fail((xhr, text) => {
             console.log(xhr, text)
         })
         .always(() => {
-            console.log("updatedb gan")
+            console.log("updated gan")
+        })
+      }
+
+      function getById (id) {
+         
+        $.ajax({
+            url : base_url + `todos/${id}`,
+            method : "GET",
+            headers : {
+                token : localStorage.getItem("token")
+            }
+
+        })
+        .done((response) => {
+            console.log(response)
+            const date = response.due_date.split("T")[0]
+            //console.log(date)
+            $("#container-edit").show()
+            $("#edit-title").val(response.title)
+            $("#edit-desc").val(response.description)
+            $("#edit-dueDate").val(date)
+            $("#edit-status").val(response.status)
+            $("#addTodo").hide()
+            $("#table-todo").hide()
+            $("#todoTitle").hide()
+            $("#todoId").val(response.id)
+
+        })
+        .fail((xhr, txt) => {
+            console.log(xhr, txt)
+        })
+        .always(() => {
+        })
+      }
+
+      function onSignIn(googleUser) {
+        // var profile = googleUser.getBasicProfile();
+        // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        // console.log('Name: ' + profile.getName());
+        // console.log('Image URL: ' + profile.getImageUrl());
+        // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        var id_token = googleUser.getAuthResponse().id_token;
+        $.ajax({
+            url : base_url + "users/googleLogin",
+            method : "POST",
+            data : {
+                googleToken : id_token
+            }
+        })
+        .done((response) => {
+            console.log(response)
+            localStorage.setItem("token", response.token)
+            authentic()
+        })
+        .fail((xhr, txt) => {
+            console.log(xhr, txt)
         })
       }
 
