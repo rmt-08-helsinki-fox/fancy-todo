@@ -4,7 +4,8 @@ const axios = require('axios')
 class TodoController{
   static showTodo(req,res,next){
 //{where:{UserId: req.decoded.id}}
-    Todo.findAll()
+    Todo.findAll({where:{UserId: req.decoded.id},
+      order: [["id", "ASC"]]})
       .then(data => {
         res.status(200).json(data)
       })
@@ -25,13 +26,14 @@ class TodoController{
     })
       .then(data => {
         hasil = data
+        let komik = title.toLowerCase()
         return axios({
           method: 'get',
-          url: `https://www.cheapshark.com/api/1.0/games?title=batman&limit=10`
+          url: `https://superheroapi.com/api/${process.env.API_TOKEN}/search/${komik}`
         })
       })
       .then(game => {
-        res.status(200).json({hasil, game: game.data})
+        res.status(200).json({hasil, comic: game.data})
       })
       .catch(err => {
         next(err)
@@ -51,11 +53,11 @@ class TodoController{
   }
 
   static editTodo(req,res,next){
-    const {title,description,status,due_date} = req.body
+    const {title,description} = req.body
     const id = + req.params.id
-
+    console.log(id, title, description);
     Todo.update({
-      title, description, status, due_date
+      title, description
       }, {where:{id}, returning: true
     })
       .then(data => {
@@ -68,7 +70,7 @@ class TodoController{
   }
 
   static editStatus(req,res,next){
-    const {status} = req.body
+    const status = true
     const id = + req.params.id
     Todo.update({status}, 
       {where:{id}, returning:true
@@ -91,6 +93,25 @@ class TodoController{
         res.status(200).json({message: "todo success to delete"})
       })
       .catch(err => {
+        next(err)
+      })
+  }
+
+  static showComic(req,res,next){
+    const id = + req.params.id
+    
+    Todo.findByPk(id)
+      .then(data => {
+        let komik = data.title.toLowerCase()
+        return axios({
+          method: 'get',
+          url: `https://superheroapi.com/api/${process.env.API_TOKEN}/search/${komik}`
+        })
+      })
+      .then(comic => {
+        res.status(200).json({comic: comic.data})
+      })
+      .catch(err =>{
         next(err)
       })
   }

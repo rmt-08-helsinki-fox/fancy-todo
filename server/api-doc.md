@@ -79,7 +79,13 @@ Membuat data Todos
 * **Error message**
 
   * **Code:** 400 BAD REQUEST <br/>
-    **Content:** `{message: "title cannot be empty"}`
+    **Content:** 
+    ``` javascript
+    message: [
+      "title cannot be empty",
+    "description cannot be empty"
+    ]
+    ```
   
   OR
 
@@ -170,7 +176,13 @@ Merubah data Todos
 * **Error message**
 
   * **Code:** 400 Bad Request <br/>
-    **Content:** `{message: "title cannot be empty"}`
+    **Content:** 
+    ``` javascript
+    message: [
+      "title cannot be empty",
+      "description cannot be empty"
+    ]
+    ```
   
   OR
   * **Code:** 404 NOT FOUND <br/>
@@ -218,10 +230,6 @@ Merubah data Todos
 
 * **Error message**
 
-  * **Code:** 400 Bad Request <br/>
-    **Content:** `{message: "title cannot be empty"}`
-  
-  OR
   * **Code:** 404 NOT FOUND <br/>
     **Content:** `{message: "data not found"}`
 
@@ -365,3 +373,53 @@ Menghapus data Todos
       "password cannot be empty"
     ]
     ```
+  
+  OR
+
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br/>
+    **Content:** `{message: "Internal server error"}`
+----
+
+**Login Google**
+---
+
+* **URL**
+
+  /users/googleLogin
+
+* **Method**
+  
+  `POST`
+
+* **URL Params**
+  
+  none
+
+* **Data Params**
+  
+  none
+
+* **Request Body**
+
+  ```javascript
+  googleToken: id_token
+  ```
+
+* **Success Repone:**
+
+  * **Code:** 200 <br/>
+    **Content:** 
+    ```javascript
+    { access_token }
+    ```
+
+* **Error message**
+  * **Code:** 400 BAD REQUEST <br/>
+    **Content:** 
+    ```javascript
+    Error 400: invalid_request
+    ```
+    OR
+  * **Code:** 500 INTERNAL SERVER ERROR <br/>
+    **Content:** `{message: "Internal server error"}`
