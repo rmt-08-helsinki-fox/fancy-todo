@@ -10,7 +10,9 @@ This app has :
 Tech Stack used to build this app :
 * Node JS
 * Express JS framework
-* PostgreSQL
+* Jwt, bcrypt for auth
+* PostgreSQL, sequelize
+* for client side: jquery, ajax, bootstrap
 
 &nbsp;
 3rd party API used:
