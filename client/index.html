@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="798948627527-814bugbd59tou3phpjju52jedlp2r112.apps.googleusercontent.com">
     <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -29,13 +30,22 @@ background-position: top left;
         <div class="container-fluid">
           <a class="navbar-brand" href="#">  
             Fancy-Todo-App's</a>
-          <button class="btn btn-danger" id="logout-btn">Logout</button>
+          <!-- <button class="btn btn-danger" id="logout-btn">Logout</button> -->
+            <div>
+              <span class="mx-2" id="user-account"></span>
+              <button class="btn btn-outline-primary btn-register" id="">Register</button>
+              <button class="btn btn-outline-success btn-login" id="">Login</button>
+              <button class="btn btn-outline-danger btn-logout" id="">Logout</button>
+            </div>
         </div>
       </nav>
 
-    <!--Home-->
+    <!--Home before login-->
       <h3 class="home" style="text-align: center;">Welcome to My Fancy-Todo-App</h3>
 
+    <!--Home after login-->
+      <h3 id="home-after-login" style="text-align: left;">Halo Cuy</h3>
+      
 
     <!--Register-->
     <div class="container" id="register-form">
@@ -45,46 +55,50 @@ background-position: top left;
             <div class="form-group">
                 <label class="control-label col-sm-2" for="email"></label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="email" placeholder="Email" name="email" value="">
+                    <input type="text" class="form-control" id="email-regis" placeholder="Email" name="email" value="">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2" for="password"></label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="password" placeholder="Password" name="password"
+                    <input type="password" class="form-control" id="password-regis" placeholder="Password" name="password"
                         value="">
                 </div>
             </div><br>
-                    <button type="submit" value="save" class="btn btn-primary">Register</button>
-                    <button type="submit" class="btn btn-success">Have an Account</button>
-                    <!-- <a href="/login" class="btn btn-succes">Have an accout</a> -->
-                    <button type="button" class="btn btn-danger" onclick="history.back()">Cancel</button>
+                    <button type="submit" value="save" class="btn btn-primary" id="register-submit">Register</button>
+                    <!-- <button type="submit" class="btn btn-success">Have an Account</button> -->
+                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
             </div>
         </form>
     </div>
 
     <!--Login-->
     <div class="container" id="login-form">
-      <form id="form-login" method="">
+      <form method="">
         <h4 style="text-align: center;">Login</h4>
         <div class="mb-3">
-          <label for="login-label" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="login-label" aria-describedby="emailHelp">
+          <label for="login-email" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="login-email" aria-describedby="emailHelp" placeholder="jantol@mail.com">
         </div>
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+          <label for="login-password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="login-password" placeholder="your passowrd...">
+        </div><br>
+        <button type="submit" class="btn btn-primary" id="login-submit">Submit</button>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
       </form>
 
     </div>
     
 
     <!--Add Todo-->
+  <center>
     <div class="container" id="add-todo">
       
       <form class="row g-3">
+        <!-- <h5 style="text-align: center;">Add Todo</h5> -->
+
+        <button style="text-align: center;" class="btn btn-outline-primary" id="add-todo">Add Todo</button>
         <div class="col-md-6">
           <label for="title" class="form-label">Title</label>
           <input type="text" class="form-control" id="title">
@@ -95,15 +109,16 @@ background-position: top left;
         </div>
         <div class="col-12">
           <label for="description" class="form-label">Description</label>
-          <input type="text" class="form-control" id="description">
+          <input type="text" class="form-control" id="description" placeholder="your description...">
         </div>
       </form>
     </div>
-
+  </center>
 
     <!--List Todo-->
 
     <!--CDN jQuery-->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="./main.js"></script>
 </body>
