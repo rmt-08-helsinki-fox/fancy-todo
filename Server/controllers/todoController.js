@@ -19,8 +19,7 @@ class todoController {
   }
 
   static getTodo(req, res) {
-    //whrere user.id = req.decoded.id
-    TODO.findAll()
+    TODO.findAll({where: {userId: req.decoded.id}})
     .then(todo => {
       res.status(200).json(todo)
     })
