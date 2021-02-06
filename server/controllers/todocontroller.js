@@ -29,9 +29,9 @@ class TodoController {
     }
 
     static todoFindById(req, res, next) {
-        Todo.findByPk({
+        Todo.findAll({
             where: {
-                id : +req.params.id
+                UserId : req.decoded.id
             }
         })
         .then(data => {
