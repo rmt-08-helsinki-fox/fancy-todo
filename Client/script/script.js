@@ -26,10 +26,8 @@ function authenticate() {
 }
 
 function home() {
-    $('#home').show()
     $('#main').show()
-    $('#holiday').hide()
-    $('#edit-form').hide()
+    getTodo()
 }
 
 function logout() {
@@ -71,7 +69,7 @@ function getTodo() {
                     <td>${el.title}</td>
                     <td>${el.description}</td>
                     <td>${moment(el.due_date).format('DD-MMMM-YYYY')}</td>
-                    <td><button onclick="complete(${el.id})" class="btn btn-secondary">Complete</button>
+                    <td><button onclick="complete(${el.id})" class="btn btn-secondary">Completed</button>
                     <button onclick="unComplete(${el.id})" class="btn btn-secondary">UnComplete</button>
                     <button onclick="edit(${el.id})" class="btn btn-secondary">Edit</button>
                     <button onclick="del(${el.id})" class="btn btn-secondary">Delete</button></td>
