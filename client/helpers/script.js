@@ -48,12 +48,12 @@ function createUser() {
                 $("#email-register").val("")
                 $("#name-register").val("")
             })
-            .fail(_ => {
+            .fail((xml, test) => {
 
                 swal({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'please insert email, name, and password correctly ya!',
+                    text: xml.responseText
                 })
             })
     })
@@ -198,11 +198,11 @@ function addTodo() {
                 auth()
             })
             .fail((xhr, text) => {
-
+                console.log(xhr)
                 swal({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'you have to fill all the required fields',
+                    text: xhr.responseText,
                 })
 
             })
@@ -372,7 +372,11 @@ $(document).ready(function () {
 
             })
             .fail((xml, text) => {
-                console.log(xml.responseJSON.error.messages[0])
+                swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: xml.responseText
+                })
             })
     })
 

@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isLong: function (value){
           if(value.length < 6){
-            throw 'six characters are required make a password'
+            throw 'six characters are required to make a password'
           }
         }
       }
