@@ -12,6 +12,7 @@ function auth() {
     $("#login").hide()
     $("#form-add").show()
     $("#nav-logout").show()
+    $("#exchangeapi").show()
     exchangeRate()
     fetchTodos()
   } else {
@@ -19,6 +20,7 @@ function auth() {
     $("#login").show()
     $("#form-add").hide()
     $("#nav-logout").hide()
+    $("#exchangeapi").hide()
   }
 }
 
@@ -65,7 +67,7 @@ function register() {
 function login() {
   const email = $("#login-email").val()
   const password = $("#login-password").val()
-  console.log(email, password);
+  
   $.ajax({
     url: base_url + "login",
     method: "POST",
@@ -75,7 +77,7 @@ function login() {
     }
   })
     .done(response => {
-      console.log(response);
+      // console.log(response);
       localStorage.setItem("access_token", response.access_token)
       auth()
     })
@@ -96,7 +98,7 @@ function onSignIn(googleUser) {
   // console.log('Image URL: ' + profile.getImageUrl());
   // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
   var id_token = googleUser.getAuthResponse().id_token;
-  console.log(id_token);
+  // console.log(id_token);
 
   $.ajax({
     url: base_url+"googlelogin",
@@ -107,7 +109,7 @@ function onSignIn(googleUser) {
   })
   .done(response => {
     localStorage.setItem("access_token", response.access_token)
-    console.log(response);
+    // console.log(response);
     auth()
   })
   .fail(err => {
@@ -135,8 +137,9 @@ function exchangeRate() {
     }
   })
     .done(response => {
+      $("#exchangeapi").remove()
       $("#div-logout").prepend(`
-      <div class="">
+      <div id="exchangeapi">
         <p>1 Dollar Amerika Serikat sama dengan ${response} Rupiah Indonesia</p>
       </div>
       `)
@@ -205,7 +208,7 @@ $("#form-add-todo").submit((e) => {
     }
   })
     .done((response) => {
-      fetchTodos()
+      auth()
     })
     .fail((xhr, text) => {
       console.log(xhr, text);
