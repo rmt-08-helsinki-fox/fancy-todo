@@ -414,3 +414,38 @@ _Response (500 - Internal server error)_
 ```
 
 &nbsp;
+### GET /users/location
+
+> Get todos by id
+
+_Request Header_
+```
+{
+  "access_token": "<your access token>"
+}
+```
+_Request Body_
+```
+not needed
+```
+
+_Response (200)_
+```
+{
+    "wheater": {
+        "country_code": "ID",
+        "lon": 112.75083,
+        "timezone": "Asia/Jakarta",
+        "lat": -7.24917,
+        "alerts": [],
+        "city_name": "Surabaya",
+        "state_code": "08"
+    }
+}
+```
+_Response (400 - Bad Request)_
+```
+{
+    "message": "jwt must be provided"
+}
+```

@@ -1,4 +1,5 @@
 let base_url = "http://localhost:3000/"
+// ============= authentication ===========
     function aut () {
       if(!localStorage.getItem("access_token")) {
         $("#name").hide()
@@ -11,6 +12,8 @@ let base_url = "http://localhost:3000/"
         $("#form-add-todo").hide()
         $("#logout").hide()
         $("#register").show()
+        $("#cancle").hide()
+        $("#location").hide()
       } else {
         $("#name").show()
         $("#form-login").hide()
@@ -21,10 +24,15 @@ let base_url = "http://localhost:3000/"
         $("#todo-table").show()
         $("#form-add-todo").show()
         $("#logout").show()
+        $("#location").show()
         $("#register").hide()
+        $("#cancle").hide()
+        getLocation()
         getTodos()
       }
     }
+
+    // =========== login ===========
     function login() {
       const email = $("#login-email").val()
       const password = $("#login-password").val()
@@ -44,10 +52,11 @@ let base_url = "http://localhost:3000/"
           console.log(xhr, text)
         })
         .always(_ => {
-          $("#form-login").trigger("reset")
+          $("#isi-form-login").trigger("reset")
         })
     }
 
+    // ========== logout ==========
     function logout() {
       localStorage.clear()
       var auth2 = gapi.auth2.getAuthInstance();
@@ -57,6 +66,7 @@ let base_url = "http://localhost:3000/"
       aut()
     }
 
+    // ============= get Todo ===========
     function getTodos() {
       console.log(localStorage.getItem("access_token"))
       $.ajax({
@@ -90,6 +100,7 @@ let base_url = "http://localhost:3000/"
         })
     }
 
+    // ============= add todo ============
     function addTodo() {
       const title = $("#todo-title-add").val()
       const description = $("#todo-description-add").val()
@@ -119,6 +130,7 @@ let base_url = "http://localhost:3000/"
         })
     }
 
+    // ============ show register form ==============
     function showRegisterForm() {
         $("#form-login").hide()
         $("#form-register").show()
@@ -128,8 +140,12 @@ let base_url = "http://localhost:3000/"
         $("#logout").hide()
         $("#name").hide()
         $("#register").hide()
+        $("#google-button").hide()
+        $("#location").hide()
+        $("#cancle").show()
     }
 
+    // ============ register =============
     function register() {
       const email = $("#register-email").val()
       const password = $("#register-password").val()
@@ -149,8 +165,12 @@ let base_url = "http://localhost:3000/"
         .fail((xhr, text) => {
           console.log(xhr, text)
         })
+        .always(_ => {
+          $("#isi-form-register").trigger("reset")
+        })
     }
 
+    // ============ delete Todo =============
     function remove(id) {
       $.ajax({
         url: base_url + `todos/${id}`,
@@ -167,6 +187,7 @@ let base_url = "http://localhost:3000/"
         })
     }
 
+    // ========= edit ==============
     function getOneTodo(id) {
       $.ajax({
         url: base_url + `todos/${id}`,
@@ -176,8 +197,35 @@ let base_url = "http://localhost:3000/"
         }
       })
         .done(response => {
-          console.log(response)
-          $("#form-edit-todo").data('val', response.id)
+          // console.log(response)
+          $("#form-edit-todo").data('val', {
+            id: response.id,
+            title: response.title,
+            description: response.description,
+            status: response.status,
+            due_date: response.due_date
+          })
+          
+          let {title, description, status, due_date} = $('#form-edit-todo').data('val')
+          $("#input-form-edit-todo").empty()
+          $("#input-form-edit-todo").append(`
+          <label for="">Title</label><br>
+          <input type="text" id="todo-title-edit" value="${title}"><br>
+          `)
+          $("#input-form-edit-todo").append(`
+          <label for="">Description</label><br>
+          <input type="text" id="todo-description-edit" value="${description}"><br>
+          `)
+          $("#input-form-edit-todo").append(`
+          <label for="">Status</label><br>
+          <input type="text" id="todo-status-edit" value="${status}"><br>
+          `)
+          $("#input-form-edit-todo").append(`
+          <label for="">Due Date</label><br>
+          <input type="text" id="todo-due_date-edit" value="${due_date.slice(0, 10)}"><br>
+          <button type="submit" class="btn btn-primary mb-2">Edit</button>
+          `)
+          $("#cancle").show()
         })
         .fail((xhr, text) => {
           console.log(xhr, text)
@@ -194,6 +242,8 @@ let base_url = "http://localhost:3000/"
         $("#logout").hide()
         $("#name").hide()
         $("#register").hide()
+        $("#google-button").hide()
+        $("#location").hide()
     }
 
     function edit(id) {
@@ -241,6 +291,8 @@ let base_url = "http://localhost:3000/"
           console.log(xhr, text)
         })
     }
+
+    // ============= google Oauth =======
     function onSignIn(googleUser) {
       var id_token = googleUser.getAuthResponse().id_token
       $.ajax({
@@ -260,6 +312,33 @@ let base_url = "http://localhost:3000/"
         })
     }
 
+    // =========== get location 3rd party api ============
+    function getLocation() {
+      $.ajax({
+        url: base_url + "users/location",
+        method: "GET",
+        headers: {
+          token: localStorage.getItem("access_token")
+        }
+      })
+      .done(response => {
+        console.log(response)
+          $("#location").empty()
+          $("#location").append(`
+          <div class="card border-info mb-3" style="max-width: 18rem;">
+          <div class="card-header">Location</div>
+          <div class="card-body text-info">
+            <h5 class="card-title">Region: Indonesia</h5>
+            <p class="card-text">City: ${response.wheater.city_name}</p>
+            <p class="card-text">Latitude: ${response.wheater.lat}</p>
+            <p class="card-text">Longitude: ${response.wheater.lon}</p>
+          </div>
+          `)
+      })
+      .fail(err => {
+          console.log(err)
+      })
+    }
 
     $(document).ready(function(){
       aut()
@@ -289,7 +368,11 @@ let base_url = "http://localhost:3000/"
 
       $("#form-edit-todo").on("submit", (e) => {
         e.preventDefault()
-        let id = $('#form-edit-todo').data('val'); //
+        let {id} = $('#form-edit-todo').data('val'); //
         edit(id)
+      })
+      $("#cancle").on("click", (e) => {
+        e.preventDefault()
+        aut()
       })
     });

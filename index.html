@@ -6,6 +6,11 @@
   <meta name="google-signin-client_id" content="931519687590-iqhuudva8e6gn39iti1rkcjedicephpp.apps.googleusercontent.com">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
   <title>Document</title>
+  <style>
+    body {
+     background-color: rgb(153, 201, 218);
+    }
+  </style>
 </head>
 <body>
   <div id="name">
@@ -29,27 +34,32 @@
     <button class="btn btn-danger">LogOut</button>
   </div>
 
-  <!--show todo list-->
+  <!--show location 3rd party api-->
   <center>
-      <table class="table table-striped" id="todo-table">
-        <thead>
-          <tr>
-            <th scope="col">Id Todo</th>
-            <th scope="col">Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Status</th>
-            <th scope="col">Due Date</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="todo-list">
-        </tbody>
-      </table>
+    <div id="location">
+  
+    </div>
   </center>
+  <!--show todo list-->
+  <div class="text-center">
+    <table class="table table-striped" id="todo-table">
+      <thead>
+        <tr>
+          <th scope="col">Id Todo</th>
+          <th scope="col">Title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Status</th>
+          <th scope="col">Due Date</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="todo-list">
+      </tbody>
+    </table>
+  </div>
 
   <!--add todo-->
-  <div id="form-add-todo">
-    <center>
+  <div id="form-add-todo" class="text-center">
       <h1>Form Add Todo</h1>
       <form >
         <div class="form-group">
@@ -64,34 +74,21 @@
           <button type="submit" class="btn btn-primary mb-2" >Submit</button>
         </div>
       </form>
-    </center>
   </div>
 
   <!--form edit todo-->
-  <div id="form-edit-todo">
-    <center>
+  <div id="form-edit-todo" class="text-center">
       <h1>Form Edit Todo</h1>
       <form >
-        <div class="form-group">
-          <label for="">Title</label><br>
-          <input type="text" id="todo-title-edit"><br>
-          <label for="">Description</label><br>
-          <input type="text" id="todo-description-edit"><br>
-          <label for="">Status</label><br>
-          <input type="text" id="todo-status-edit"><br>
-          <label for="">Due Date</label><br>
-          <input type="text" id="todo-due_date-edit"><br>
-          <button type="submit" class="btn btn-primary mb-2">Edit</button>
+        <div class="form-group" id="input-form-edit-todo">
         </div>
       </form>
-    </center>
   </div>
 
   <!--login-->
-  <div id="form-login">
-    <center>
+  <div id="form-login" class="text-center">
       <h1>form Login</h1>
-      <form >
+      <form id="isi-form-login">
         <div class="form-group">
           <label for="">Email</label><br>
           <input type="text" id="login-email"><br>
@@ -100,21 +97,19 @@
           <button type="submit" class="btn btn-primary mb-2">Submit</button>
         </div>
       </form>
-    </center>
   </div>
 
   <!--Google Button-->
-  <div id="google-button">
-    <center>
-      <div class="g-signin2" data-onsuccess="onSignIn"></div>
-    </center>
-  </div>
+  <center>
+    <div id="google-button">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+  </center>
 
   <!--Register-->
-  <div id="form-register">
-    <center>
+  <div id="form-register" class="text-center">
       <h1>form Register</h1>
-      <form >
+      <form id="isi-form-register">
         <div class="form-group">
           <label for="">Email</label><br>
           <input type="text" id="register-email"><br>
@@ -125,7 +120,11 @@
           <button type="submit" class="btn btn-primary mb-2">Submit</button>
         </div>
       </form>
-    </center>
+  </div>
+
+  <!--cancle-->
+  <div id="cancle" class="text-center">
+    <button class="btn btn-danger">Cancle</button>
   </div>
 
   <script src="https://apis.google.com/js/platform.js" async defer></script>

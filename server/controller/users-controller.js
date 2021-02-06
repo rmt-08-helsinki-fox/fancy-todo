@@ -14,12 +14,8 @@ class UserController{
       location
     })
       .then(user => {
-        axios.get(`http://api.weatherbit.io/v2.0/alerts?city=${user.location}&country=ID&key=${process.env.API_KEY}`)
-        .then(wheater => {
-          res.status(201).json({
-            user,
-            wheater: wheater.data
-          })
+        res.status(201).json({
+          user
         })
       })
       .catch(err => {
@@ -36,12 +32,14 @@ class UserController{
       }
     })
       .then(user => {
+        console.log(user.location)
         if(!user) throw {name:'invalid email or password', msg: 'invalid email or password'}
         const checkPassword = comparePass(password, user.password)
         if(!checkPassword) throw {name:'invalid email or password', msg: 'invalid email or password'}
         const getToken = generateToken({
           id: user.id,
-          email: user.email
+          email: user.email,
+          location: user.location
         })
         res.status(200).json({getToken})
       })
@@ -66,28 +64,40 @@ class UserController{
       })
       .then(user => {
         if(user) {
-          const getToken = generateToken({
-            id: user.id,
-            email: user.email
-          })
-          res.status(200).json({getToken})
+          return user
         } else {
           return User.create({
             email,
             password: process.env.USER_PASSWORD_GOOGLE,
-            location: 'Jakarta'
+            location: 'Surabaya'
           })
         }
       })
       .then(registeredUser => {
         const getToken = generateToken({
           id: registeredUser.id,
-          email: registeredUser.email
+          email: registeredUser.email,
+          location: registeredUser.location
         })
         res.status(201).json({getToken})
       })
       .catch(err => {
         console.log(err)
+      })
+  }
+
+  // ============= get location (3rd party api) =========
+  static getWeather(req, res, next) {
+    console.log(req.decode)
+    axios.get(`http://api.weatherbit.io/v2.0/alerts?city=${req.decode.location}&country=ID&key=${process.env.API_KEY}`)
+        .then(wheater => {
+          res.status(200).json({
+            wheater:  wheater.data
+          })
+        })
+      .catch(err => {
+        console.log(err)
+        next(err)
       })
   }
 }

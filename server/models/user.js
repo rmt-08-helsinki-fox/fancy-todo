@@ -26,7 +26,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       unique: true
     },
-    password: DataTypes.STRING,
+    password:{
+      type:  DataTypes.STRING,
+      validate: {
+        len: {
+          args: 6,
+          msg: "Password minimal 6 characters"
+        }
+      }
+    },
     location: DataTypes.STRING
   }, {
     sequelize,

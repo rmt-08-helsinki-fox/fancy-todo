@@ -62,8 +62,7 @@ class TodosController {
       title: req.body.title,
       description: req.body.description,
       status: req.body.status,
-      due_date: req.body.due_date,
-      UserId: req.body.UserId
+      due_date: req.body.due_date
     }
     Todo.update(dataInput, {
       where:{

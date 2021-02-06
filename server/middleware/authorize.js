@@ -1,8 +1,7 @@
 const {User, Todo} = require('../models')
 
 const authorize = function (req, res, next) {
-  let idTodo = +req.params.id
-
+  const idTodo = +req.params.id
   const{ id } = req.decode
   User.findOne({
     where: {
@@ -25,13 +24,9 @@ const authorize = function (req, res, next) {
         msg: 'cannot acces'
       }
       next(err)
-      // res.status(401).json({
-      //   message: 'cannot acces'
-      // })
     }
   }) .catch(err => {
     next(err)
-    // res.status(500).json(err)
   })
 }
 

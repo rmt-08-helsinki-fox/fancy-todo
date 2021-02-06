@@ -12,7 +12,7 @@ module.exports = (err, req, res, next) => {
     })
   } else if(err.name === 'JsonWebTokenError') {
     res.status(400).json({
-      message: err.msg
+      message: err.message
     })
   } else if(err.name === 'cannot acces') {
     res.status(401).json({
