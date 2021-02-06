@@ -1,0 +1,12 @@
+.text-succes,
+.text-danger {
+  text-align: center;
+}
+
+.cardTodo {
+  background: linear-gradient(
+    to right top,
+    rgba(245, 238, 238, 0.356),
+    rgba(255, 255, 255, 0.212)
+  );
+}

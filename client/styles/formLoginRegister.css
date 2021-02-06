@@ -1,0 +1,17 @@
+.formLogRes {
+  height: 80vh;
+  margin-top: 100px;
+  width: 500px;
+  height: 450px;
+  background: linear-gradient(
+    to right top,
+    rgba(245, 238, 238, 0.357),
+    rgba(255, 255, 255, 0.104)
+  );
+}
+
+.headerForm {
+  text-align: center;
+  padding: 20px 0 20px 0;
+  border-bottom: 1px solid silver;
+}
