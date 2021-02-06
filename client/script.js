@@ -128,6 +128,8 @@ function findAllTodo(){
   })
   .done((todo) => {
     $("#tableAllTodo").empty()
+    $("#cuaca").empty()
+    
     $("#tableAllTodo").append(`
       <tr>
         <th>Title</th>
@@ -373,15 +375,5 @@ $(document).ready(() => {
       findOne(id)
     }
   })
-
-  // $("#update-form").on("submit", (e) => {
-  //   e.preventDefault()
-  // })
-
-  // $(".update").on("click", (e) => {
-  //   e.preventDefault()
-  //   $("#update-form").show()
-  //   $("#todoList").hide()
-  // })
 
 })
