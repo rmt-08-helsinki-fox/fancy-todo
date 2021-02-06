@@ -504,6 +504,7 @@ Not needed
 ### *Show headline news on current day*
 ### Request Body
 ``` 
+Required:
 {
     "id_token": <string>
 }  
