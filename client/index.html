@@ -123,9 +123,30 @@
   <div class="container" id="dashboard">
     <div class="text-center mt-5">
       <h1 style="font-family: lucida handwriting, sans-serif, arial;">Time flies so fast!</h1>
-      <h2 style="font-family: calligraphy, sans-serif, arial;">Check your todo list now!</h2>
+      <h3 style="font-family: calligraphy, sans-serif, arial;">Check your todo list now and get your weather widget!</h3>
     </div>
     <div id="digital-clock">00:00:00</div>
+    <div class="row" id="card-content-weather" style="margin-top: 250px; margin-bottom: 20px; margin-left: 377px;">
+      <div class="col-sm-4">
+        <div class="card mt-3 mx-3" style="width: 18rem;">
+          <div class="card-header">
+            <h5 class="card-title">Weather Widget</h5>
+          </div>
+          <div class="card-body">
+            <form action="" id="formCityAllWeathers" class="mt-10">
+              <div class="form-group">
+                <label for="inputCityAllWeathers">City Name</label>
+                <input type="text" class="form-control" id="inputCityAllWeathers" placeholder="Enter your city" name="city">
+              </div>
+              <button type="submit" class="btn btn-success" id="saveCityAllWeather">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- weather card -->
+    </div>
+    <div class="card card-weather" id="cardWeather-container" style="margin-top: 50px; margin-bottom: 10px; margin-left: 355px;"></div>
+
   </div>
 
   <!-- Container List Todo -->
@@ -303,6 +324,7 @@
   <!-- My script js -->
   <script src="./script/script.js"></script>
   <script src="./script/function.js"></script>
+  <script src="./script/helpers.js"></script>
 
 </body>
 </html>

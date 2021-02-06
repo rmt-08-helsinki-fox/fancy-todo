@@ -43,7 +43,6 @@ function showRegister() {
 }
 
 function showDashboard() {
-  console.log('DASHBOARD');
   localStorage.setItem('currentPage', 'dashboard')
   $('#login-container').hide()
   $('#register-container').hide()
@@ -80,7 +79,6 @@ function showDashboard() {
 }
 
 function showTodo() {
-  console.log('TODO LIST');
   localStorage.setItem('currentPage', 'viewListTodo')
   $("#login-container").hide()
   $("#register-container").hide()
@@ -200,6 +198,7 @@ function showTodoDone() {
   $("#login-container").hide()
   $("#register-container").hide()
   $("#dashboard").hide()
+  $('#buttonAddTodo').hide()
 
   $('#list-todo-container').show()
   $('#navigation-bar').show()
@@ -317,7 +316,6 @@ function onSignIn(googleUser) {
     }
   })
     .done(response => {
-      console.log(response);
       localStorage.setItem('token', response.accessToken)
       localStorage.setItem('currentPage', 'dashboard')
       checkPage()
@@ -366,7 +364,6 @@ function register() {
 }
 
 function getTodosUndone() {
-  console.log(`Get todos undone`);
   $.ajax({
     url: `${baseUrl}/todos?status=false`,
     method: 'GET',
@@ -375,19 +372,18 @@ function getTodosUndone() {
     }
   })
     .done(response => {
-      console.log(response);
       $('#buttonAllTodo').empty()
       $('#card-content').empty()
       response.forEach((value, index) => {
-        const date = convertDate(value.due_date)
+        const dueDateFormatted = convertDate(value.due_date)
         const dateToday = convertDate(new Date())
-        let status = '';
-        if (dateToday > date) {
-          status = `Due date has passed!`
-        } else if (dateToday == date) {
-          status = 'The due date is today!'
+        let ket = '';
+        if (dateToday > dueDateFormatted) {
+          ket = `Due date has passed!`
+        } else if (dateToday == dueDateFormatted) {
+          ket = 'The due date is today!'
         } else {
-          status = 'Safe'
+          ket = 'Safe!'
         }
 
         $('#card-content').append(`
@@ -403,7 +399,7 @@ function getTodosUndone() {
 
             <div class="card-body">
               <h5 class="card-title text-center">${value.title}</h5>
-              <h6 class="card-subtitle mb-2 text-muted text-center">Due date : ${date}</h6>
+              <h6 class="card-subtitle mb-2 text-muted text-center">Due date : ${dueDateFormatted}</h6>
               <br>
 
               <button type="button" class="btn btn-secondary btn-block" id="detailTodoButton" onclick="showDetailTodo('${value.id}', 'undone')"><i class="fa fa-file"></i> Detail</button>
@@ -415,7 +411,7 @@ function getTodosUndone() {
 
             <div class="card-footer">
               <div class="d-flex justify-content-center">
-                ${status}
+                ${ket}
               </div>
             </div>
           </div>
@@ -441,7 +437,16 @@ function getTodoDetail(id, status) {
     }
   })
     .done((response) => {
-      const date = convertDate(response.due_date)
+      const dueDateFormatted = convertDate(response.due_date)
+      const dateToday = convertDate(new Date())
+      let ket = '';
+      if (dateToday > dueDateFormatted) {
+        ket = `Due date has passed!`
+      } else if (dateToday == dueDateFormatted) {
+        ket = 'The due date is today!'
+      } else {
+        ket = 'Safe!'
+      }
 
       if (status == 'undone') {
         $('#buttonAllTodo').append(`
@@ -460,7 +465,7 @@ function getTodoDetail(id, status) {
   
               <div class="card-body">
                 <h5 class="card-title text-center">${response.title}</h5>
-                <h6 class="card-subtitle mb-2 text-muted text-center">${date}</h6>
+                <h6 class="card-subtitle mb-2 text-muted text-center">${dueDateFormatted}</h6>
                 <br>
                 
                 <p><b>Description</b><p>
@@ -471,6 +476,12 @@ function getTodoDetail(id, status) {
                 
                 <button type="button" class="btn btn-warning btn-block" id="editTodoButton${response.id}" data-toggle="modal"
                     data-target="#editModal"><i class="fas fa-edit"></i> Edit</button>
+              </div>
+
+              <div class="card-footer">
+                <div class="d-flex justify-content-center">
+                  ${ket}
+                </div>
               </div>
             </div>
           </div>
@@ -495,7 +506,7 @@ function getTodoDetail(id, status) {
   
               <div class="card-body">
                 <h5 class="card-title text-center">${response.title}</h5>
-                <h6 class="card-subtitle mb-2 text-muted text-center">${date}</h6>
+                <h6 class="card-subtitle mb-2 text-muted text-center">${dueDateFormatted}</h6>
                 <br>
                 
                 <p><b>Description</b><p>
@@ -712,37 +723,60 @@ function getWeatherInfo(id) {
 }
 
 
-/***************************************** */
-function convertDate(d) {
-  if (d) {
-      d = new Date(d);
-      return [d.getFullYear(), d.getMonth()+1, d.getDate()]
-          .map(el => el < 10 ? `0${el}` : `${el}`).join('-');
-  } else {
-      return d;
-  }
-}
-
-function clockUpdate() {
-  const date = new Date();
-  $('#digital-clock').css({'color': '#fff', 'text-shadow': '0 0 6px gray'});
-  let h = date.getHours(); // 0 - 23
-  let m = date.getMinutes(); // 0 - 59
-  let s = date.getSeconds(); // 0 - 59
-  let session = "AM";
-  
-  if(h == 0){
-      h = 12;
-  }
-  
-  if(h > 12){
-      h = h - 12;
-      session = "PM";
-  }
-  
-  h = (h < 10) ? "0" + h : h;
-  m = (m < 10) ? "0" + m : m;
-  s = (s < 10) ? "0" + s : s;
-
-  $('#digital-clock').text(`${convertDate(date)}\n` + h + ':' + m + ':' + s + ` ${session}`)
+function getAllWeathers() {
+  const city = $('#inputCityAllWeathers').val() || 'Jakarta'
+  console.log(city);
+  $.ajax({
+    url: `${baseUrl}/weathers/all`,
+    method: 'POST',
+    headers: {
+      token: localStorage.getItem('token')
+    },
+    data: {
+      city: city
+    }
+  })
+    .then(response => {
+      $('#cardWeather-container').empty()
+      $('#cardWeather-container').append(`
+      <div class="card-body">
+        <div class="weather-date-location">
+          <p class="text-gray"> <span class="weather-date">${convertDate(new Date())}</span> <span class="weather-location">${city}</span> </p>
+        </div>
+          
+        <div class="weather-data d-flex">
+          <div class="mr-auto">
+            <h4 class="display-3">${response.data[0].temp} <span class="symbol">°</span>C</h4>
+              <p> ${response.data[0].weather.description} </p>
+              <img src="https://www.weatherbit.io/static/img/icons/${response.data[0].weather.icon}.png" alt="" style="width: 90px; margin-left: 8rem;" >
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="d-flex weakly-weather justify-content-center" id="#cardBodyWeather">
+            <div class="weakly-weather-item" style="margin:15px;">
+              <p class="mb-0"> ${response.data[1].valid_date} </p>
+              <p class="mb-0"> <b> ${response.data[1].temp}°C </b> </p>
+              <img src="https://www.weatherbit.io/static/img/icons/${response.data[1].weather.icon}.png" alt="" style="width: 43px; margin-left: 8px;" >
+            </div>
+            <div class="weakly-weather-item" style="margin:15px;">
+              <p class="mb-1"> ${response.data[2].valid_date} </p>
+              <p class="mb-0"> <b> ${response.data[2].temp}°C </b> </p>
+              <img src="https://www.weatherbit.io/static/img/icons/${response.data[2].weather.icon}.png" alt="" style="width: 43px; margin-left: 8px;" >
+            </div>
+            <div class="weakly-weather-item" style="margin:15px;">
+              <p class="mb-1"> ${response.data[3].valid_date} </p>
+              <p class="mb-0"> <b> ${response.data[3].temp}°C </b> </p>
+              <img src="https://www.weatherbit.io/static/img/icons/${response.data[3].weather.icon}.png" alt="" style="width: 43px; margin-left: 8px;" >
+            </div>
+          </div>
+        </div>
+      `)
+    })
+    .catch((jqXHR, text) => {
+      console.log(jqXHR.responseJSON);
+    })
+    .always((_) => {
+      $('#formCityAllWeathers').trigger('reset');
+    })
 }

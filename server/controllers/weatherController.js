@@ -3,7 +3,6 @@ const axios = require('axios');
 const convertDate = require('../helpers/convertDate');
 
 class WeatherController {
-  
   static postForecastWeather(req, res, next) {
     const city = req.body.city;
 
@@ -36,6 +35,21 @@ class WeatherController {
           throw { name: 'Error400', msg: 'Sorry, weather prediction is not available yet', status: 400 };
         }
 
+      })
+      .catch(err => {
+        next(err);
+      })
+  }
+
+  static postWeathers(req, res, next) {
+    const city = req.body.city;
+
+    axios({
+      method: 'GET',
+      url: `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${process.env.WEATHER_APIKEY}`
+    })
+      .then(result => {
+        res.status(200).json({data: result.data.data});
       })
       .catch(err => {
         next(err);

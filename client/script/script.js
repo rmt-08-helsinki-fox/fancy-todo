@@ -43,4 +43,9 @@ $(document).ready(() => {
     createTodo()
   })
 
+  $('#saveCityAllWeather').click((e) => {
+    e.preventDefault()
+    getAllWeathers()
+  })
+
 })

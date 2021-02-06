@@ -593,12 +593,13 @@ input format :
   }
   ```
 
-### Get Weather Information
-> Get weather information by todo id
+### Weather Prediction Information on Due Date Todo
+> Get weather Prediction information on Due Date by todo id
 
 - **URL** : `/weathers/:id`
 - **Method** : `POST`
 - **URL Params** : `id=integer`
+- **Data Params** : `city=string (required)`
 
   _Request Header_
   ```
@@ -609,7 +610,9 @@ input format :
 
   _Request Body_
   ```
-
+  {
+    "city": "<your city>"
+  }
   ```
 
 - **Success Response**
@@ -707,3 +710,99 @@ input format :
   ```
 
 
+### Weather Information Widget
+> Get the weather prediction information for today and the next 3 days
+
+- **URL** : `/weathers/all`
+- **Method** : `POST`
+- **Data Params** : `city=string (required)`
+
+  _Request Header_
+  ```
+  {
+    "token": "<your access token>"
+  }
+  ```
+
+  _Request Body_
+  ```
+  {
+    "city": "<your city>"
+  }
+  ```
+
+- **Success Response**
+
+  _Response(200 - OK)_
+  ```
+  {
+    "data": [
+        {
+            "moonrise_ts": 1612546359,
+            "wind_cdir": "NW",
+            "rh": 67,
+            "pres": 1004.61,
+            "high_temp": 31.3,
+            "sunset_ts": 1612609999,
+            "ozone": 253.778,
+            "moon_phase": 0.330601,
+            "wind_gust_spd": 8.69531,
+            "snow_depth": 0,
+            "clouds": 87,
+            "ts": 1612544460,
+            "sunrise_ts": 1612565682,
+            "app_min_temp": 29.1,
+            "wind_spd": 4.48171,
+            "pop": 90,
+            "wind_cdir_full": "northwest",
+            "slp": 1007.89,
+            "moon_phase_lunation": 0.8,
+            "valid_date": "2021-02-06",
+            "app_max_temp": 34.4,
+            "vis": 14.0449,
+            "dewpt": 21.9,
+            "snow": 0,
+            "uv": 3.96428,
+            "weather": {
+                "icon": "t03d",
+                "code": 202,
+                "description": "Thunderstorm with heavy rain"
+            },
+            "wind_dir": 324,
+            "max_dhi": null,
+            "clouds_hi": 76,
+            "precip": 22.625,
+            "low_temp": 26.6,
+            "max_temp": 31.4,
+            "moonset_ts": 1612592072,
+            "datetime": "2021-02-06",
+            "temp": 28.8,
+            "min_temp": 26.8,
+            "clouds_mid": 0,
+            "clouds_low": 40
+        },
+        {
+          ...
+        },
+        {
+          ...
+        }
+    ]
+  }
+  ```
+
+- **Error Response**
+
+  _Response(401 - Unauthorized)_
+  ```
+  {
+    "errors": "Invalid Token"
+  }
+  ```
+
+  _Response(500 - Internal Server Error)_
+  ```
+  {
+    "errors": "Internal Server Error"
+  }
+  ```

@@ -6,6 +6,8 @@ const authorization = require('../middlewares/authorization');
 
 router.use(authentication);
 
+router.post('/all', WeatherController.postWeathers);
 router.post('/:id', authorization, WeatherController.postForecastWeather);
+
 
 module.exports = router;
