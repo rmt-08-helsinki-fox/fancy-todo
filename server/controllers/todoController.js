@@ -4,7 +4,6 @@ const axios = require("axios").default;
 class TodoController {
   static async postTodos(req, res, next) {
     try {
-      console.log(req.data);
       const { title, description, due_date } = req.body;
       let todo = await Todo.create({
         title,
