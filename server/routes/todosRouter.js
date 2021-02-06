@@ -8,6 +8,7 @@ router.use(authenticate)
 
 router.post("/", TodoController.addTodo)
 router.get("/", TodoController.viewTodo)
+router.get("/:id", TodoController.findTodo)
 router.put("/:id", authorize, TodoController.updateTodo)
 router.patch("/:id", authorize, TodoController.updateStatus)
 router.delete("/:id", authorize, TodoController.deleteTodo)

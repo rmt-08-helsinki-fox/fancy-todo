@@ -13,6 +13,7 @@ class Controller {
     }).then(todo => {
       res.status(201).json(todo)
     }).catch(err => {
+      console.log(err);
       next(err)
     })
   }
@@ -24,6 +25,19 @@ class Controller {
         next(err)
       })
   }
+  static findTodo(req, res, next) {
+    console.log(req.params.id);
+    let id = +req.params.id
+    Todo.findOne({
+      where: {
+        id
+      }
+    }).then(todo => {
+      res.status(200).json(todo)
+    }).catch(err => {
+      next(err)
+    })
+  }
   static updateTodo(req, res, next) {
     let id = +req.params.id
     let { title, description, status, due_date } = req.body
@@ -31,13 +45,12 @@ class Controller {
       where: {
         id
       },
-      returning: true
-    }).then(todo => {  
-
+        returning: true
+    }).then(todo => {
       if (todo[0] === 0) {
         throw ({ name: "customError", message: "Error not found" })
       }
-      res.status(200).json(todo[1][0])
+      res.status(201).json(todo[1][0])
     }).catch(err => {
       next(err)
     })
@@ -54,7 +67,7 @@ class Controller {
       if (todo[0] === 0) {
         throw ({ name: "customError", message: "Error not found" })
       }
-      res.status(200).json(todo[1][0])
+      res.status(201).json(todo[1][0])
     }).catch(err => {
       next(err)
     })

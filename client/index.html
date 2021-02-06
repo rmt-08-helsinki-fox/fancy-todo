@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ToDo List</title>
+
+  <!-- Font Icon -->
+  <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+
+  <!-- Main css -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- form add todo -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="formcss/style.css">
+
+  <!-- coba -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even){background-color: #f2f2f2}
+    
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    </style>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      
+      input[type=text], select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+      }
+      
+      label {
+        padding: 12px 12px 12px 0;
+        display: inline-block;
+      }
+      
+      input[type=submit] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float: right;
+      }
+      
+      input[type=submit]:hover {
+        background-color: #45a049;
+      }
+      
+      .container {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+      }
+      
+      .col-25 {
+        float: left;
+        width: 25%;
+        margin-top: 6px;
+      }
+      
+      .col-75 {
+        float: left;
+        width: 75%;
+        margin-top: 6px;
+      }
+      
+      /* Clear floats after the columns */
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+      
+      /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+      @media screen and (max-width: 600px) {
+        .col-25, .col-75, input[type=submit] {
+          width: 100%;
+          margin-top: 0;
+        }
+      }
+      </style>
+    <!-- button add todo -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+</head>
+<body>
+  <!--  navbar  -->
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+  <a class="navbar-brand" href="#" onclick="logout()">Logout</a>
+  </nav>
+
+    <div class="main">
+       <!-- Sing in  Form -->
+       <section class="sign-in">
+        <div class="signin-container">
+            <div class="signin-content">
+              <div class="signin-image">
+                <figure><img src="images/signin-image.jpg" alt="sing up image"></figure>
+                <a href="#" class="signup-image-link">Create an account</a>
+              </div>
+
+              <div class="signin-form">
+                <h2 class="form-title">Sign in</h2>
+                  <form method="POST" class="register-form" id="login-form">
+                    <div class="form-group">
+                      <label for="email"><i class="zmdi zmdi-email"></i></label>
+                      <input type="email" name="email" id="signin-email" placeholder="Your Email"/>
+                  </div>
+                    <div class="form-group">
+                        <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
+                        <input type="password" name="your_pass" id="signin-pass" placeholder="Password"/>
+                    </div>
+                   
+                    <div class="form-group form-button">
+                        <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                    </div>
+                  </form>
+                  <div class="social-login">
+                    <span class="social-label">Or login with</span>
+                    <ul class="socials">
+                        <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
+                    </ul>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- table -->
+      <section class="table-todos">  
+        <div class="w3-bar">
+          <button class="w3-button w3-right w3-blue">Add Todo</button>
+        </div>
+        <table class="table">
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>status</th>
+            <th>Action</th>
+          </tr>
+          <tr id="tr">
+            
+          </tr>
+          
+          
+        </table>
+      </section>
+
+      <!-- Sign up form -->
+      <section class="signup">
+          <div class="signup-container">
+              <div class="signup-content">
+                  <div class="signup-form">
+                      <h2 class="form-title">Sign up</h2>
+                      <form method="POST" class="register-form" id="register-form">
+                          <div class="form-group">
+                              <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                              <input type="text" name="name" id="name" placeholder="Your Name"/>
+                          </div>
+                          <div class="form-group">
+                              <label for="email"><i class="zmdi zmdi-email"></i></label>
+                              <input type="email" name="email" id="email" placeholder="Your Email"/>
+                          </div>
+                          <div class="form-group">
+                              <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                              <input type="password" name="pass" id="pass" placeholder="Password"/>
+                          </div>
+                          <div class="form-group form-button">
+                              <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                          </div>
+                      </form>
+                  </div>
+                  <div class="signup-image">
+                      <figure><img src="images/signup-image.jpg" alt="sing up image"></figure>
+                      <a href="#" class="signin-image-link">I am already member</a>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+     
+
+    </div>
+    <!-- add todo's form -->
+
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 text-center mb-5">
+            <h2 class="heading-section">Add Todo</h2>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="wrapper img" style="background-image: url(formimages/img.jpg);">
+              <div class="row">
+                <div class="col-md-9 col-lg-7">
+                  <div class="contact-wrap w-100 p-md-5 p-4">
+                    <h3 class="mb-4">Add your todo detail!</h3>
+                    <div id="form-message-warning" class="mb-4"></div> 
+                    <div id="form-message-success" class="mb-4">
+                      Your Todo was sent, thank you!
+                    </div>
+                    <form method="POST" id="contactForm" name="contactForm" class="contactForm">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <!-- <label class="label" for="name">Full Name</label> -->
+                            <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+                          </div>
+                        </div>
+                        <div class="col-md-6"> 
+                          <div class="form-group">
+                            <!-- <label class="label-status" for="status-todo">Status</label> -->
+                            <select id="status" name="status">
+                                  <option value="false" selected="">Not Finished</option>
+                                  <option value="true">Done</option>
+                                </select>
+  
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <!-- <label class="label-subject" for="subject">Subject</label> -->
+                            <input type="date" class="form-control" name="due_date" id="due_date" placeholder="Due Date">
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <!-- <label class="label" for="#">Message</label> -->
+                            <textarea name="description" class="form-control" id="description" cols="30" rows="4" placeholder="Description"></textarea>
+                          </div>
+                        </div>
+                        <!-- <div class="col-md-12"> -->
+                          <!-- <div class="form-group"> -->
+                            <!-- <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/> -->
+                            <input type="submit" value="Add To Do" class="btn btn-primary"  onclick="addTodo()">
+                            <!-- <div class="submitting"></div> -->
+                          <!-- </div> -->
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- update todo -->
+
+    <section class="update-section">
+      <div class="update-container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 text-center mb-5">
+            <h2 class="heading-section">update Todo</h2>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="wrapper img" style="background-image: url(formimages/img.jpg);">
+              <div class="row1">
+                <div class="col-md-9 col-lg-7">
+                  <div class="update-todo-form">
+                    <h3 class="mb-4">Update your todo !</h3>
+                    <div id="form-message-warning" class="mb-4"></div> 
+                    <div id="form-message-success" class="mb-4">
+                      Your Todo was sent, thank you!
+                    </div>
+                    <form method="POST" id="update-form" name="update-form" class="contactForm">
+                      <div class="row1">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="update-title" id="update-title" placeholder="Title">
+                          </div>
+                        </div>
+                        <div class="col-md-6"> 
+                          <div class="form-group">
+                            <select id="update-status" name="update-status">
+                                  <option value="false" selected="">Not Finished</option>
+                                  <option value="true">Done</option>
+                                </select>
+  
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <input type="date" class="form-control" name="update-due_date" id="update-due_date">
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <textarea name="update-description" class="form-control" id="update-description" cols="30" rows="4" placeholder="Description"></textarea>
+                          </div>
+                        </div>
+                            <input type="submit" value="Update To Do" class="btn btn-primary" >
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    
+      
+      
+    <!-- JS -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="script.js"></script>
+  <!-- form add todo -->
+  <!-- <script src="formjs/jquery.min.js"></script> -->
+  <!-- <script src="formjs/popper.js"></script> -->
+  <!-- <script src="formjs/bootstrap.min.js"></script> -->
+  <!-- <script src="formjs/jquery.validate.min.js"></script> -->
+  <!-- <script src="formjs/main.js"></script> -->
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
