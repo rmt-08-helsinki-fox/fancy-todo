@@ -27,14 +27,23 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
     },
-    password: DataTypes.STRING
+    password: {
+      type:DataTypes.STRING,
+      validate:{
+        len:{
+          args: [6],
+          msg: "Password must be more than 6 characters"
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',
     hooks : {
       beforeCreate: (user) => {
         user.password = hashPassword(user.password)
-      }
+      },
+
     }
   });
   return User;

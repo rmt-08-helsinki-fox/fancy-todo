@@ -70,9 +70,10 @@ class TodoController {
   }
 
   static edit(req, res, next) {
+    console.log(req.body);
     const {
       title,
-      descriiption,
+      description,
       status,
       due_date
     } = req.body
@@ -90,7 +91,7 @@ class TodoController {
         }
         return todo.update({
           title,
-          descriiption,
+          description,
           status,
           due_date
         }, {
@@ -110,13 +111,18 @@ class TodoController {
   }
 
   static editStatus(req, res, next) {
+    console.log(req.body);
     todo.findOne({
         where: {
           id: +req.params.id
         }
       })
       .then((data) => {
-        data.status = true
+        if(req.body.status == 'sudah'){
+          data.status = true
+        }else{
+          data.status = false
+        }
         return data.save()
       })
       .then((data) => {

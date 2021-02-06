@@ -42,10 +42,15 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       type:DataTypes.DATEONLY,
       validate: {
-        isAfter:{
-          args: new Date().toISOString(),
-          msg: "Input must be after today's date"
-        }  
+        dateNow(value) {
+          let input = new Date(value)
+          let now = new Date()
+          now.setDate(now.getDate() - 1)
+          
+          if(input <= now){
+            throw new Error('Date Input Can not be days that have passed from today')
+          }
+        }
       }
     }
   }, {        

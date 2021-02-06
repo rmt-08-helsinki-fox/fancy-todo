@@ -34,15 +34,14 @@ class UserController {
         if (!compare) throw {
           msg: 'invalid email or password'
         }
-        const acces_token = generateToken({
+        const access_token = generateToken({
           id: data.id,
           email: data.email
         })
         res.status(200).json({
-          acces_token
+          access_token
         })
       }).catch((err) => {
-        console.log(err);
         const error = err.msg || 'Internal server error'
         res.status(500).json({
           error
@@ -87,6 +86,7 @@ class UserController {
           email: user.email
         }
         let accessToken = generateToken(googleSign)
+        console.log(accessToken);
         return res.status(201).json({
           access_token: accessToken
         })
