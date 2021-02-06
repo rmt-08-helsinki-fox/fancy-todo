@@ -9,7 +9,7 @@ router.get('/', TodoController.getAll)
 router.get('/:id', authorize, TodoController.getById)
 router.put('/:id', authorize, TodoController.updateTodo)
 router.patch('/:id', authorize, TodoController.updateStatus)
-router.delete('/:id', authorize, TodoController.deleteTodo)
+router.delete('/:id', authorize, TodoController.destroyTodo)
 
 
 

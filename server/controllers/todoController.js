@@ -5,11 +5,11 @@ class TodoController{
         const { title, description, due_date } = req.body
         const UserId = req.decode.id
         let newTodo = {
-            title,
-            description,
-            due_date,
-            UserId
-        }
+              title,
+              description,
+              due_date,
+              UserId
+          }
 
         Todo.create(newTodo)
         .then(todo => {
@@ -49,6 +49,7 @@ class TodoController{
     }
 
     static updateTodo(req, res, next) {
+      console.log('Masuk update')
         const id = +req.params.id
         const { title, description, status, due_date } = req.body
         let updatedTodo = {
@@ -76,7 +77,7 @@ class TodoController{
 		static updateStatus(req ,res, next) {
 			const id = +req.params.id
       let newStat = req.body
-      
+      console.log('masuk sini ga')
       Todo.update(newStat, {
         where: {
           id
@@ -91,8 +92,9 @@ class TodoController{
       })
 		}
 
-		static deleteTodo(req, res, next) {
-			const id = +req.params.id
+		static destroyTodo(req, res, next) {
+      console.log('masuk sini ga')
+      const id = req.params.id
 
 			Todo.destroy({
 				where: {
