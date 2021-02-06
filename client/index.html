@@ -171,8 +171,36 @@
         </div>
       </div>
     </div>
-  </div>
     <!-- Add Todo -->
+    <!-- Update Todo -->
+    <div id="update-todo-page" class="container-update-todo">
+      <div class="d-flex justify-content-center h-100">
+        <div class="card">
+          <div class="card-header">
+            <h3>Edit Todo</h3>
+          </div>
+          <div class="card-body">
+            <form id="update-todo-form">
+              <div class="input-group form-group">
+                <input id="title-update" type="text" class="form-control" placeholder="Title">
+              </div>
+              <div class="input-group form-group">
+                <input id="description-update" type="text" class="form-control" placeholder="Description">
+              </div>
+              <div class="input-group form-group">
+                <input id="due-date-update" type="date" class="form-control" placeholder="Due Date">
+              </div>
+              <div class="form-group">
+                <input type="submit" value="Update" class="btn float-right register_btn">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Update Todo -->
+
+  </div>
 
     
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -193,6 +221,7 @@
           $("#search-box").hide()
           $("#search-btn").hide()
           $("#add-todo-page").hide()
+          $("#update-todo-page").hide()
           $("#all-todos").hide()
           $("#add-todo").hide()
           $("#get-all-todos").hide()
@@ -202,6 +231,7 @@
           $("#search-box").show()
           $("#search-btn").show()
           $("#add-todo-page").hide()
+          $("#update-todo-page").hide()
           $("#all-todos").show()
           $("#add-todo").show()
           $("#get-all-todos").show()
@@ -240,10 +270,6 @@
       //     })
       //   })
       // }
-
-      function loginLink() {
-
-      }
 
       function login() {
         const email = $("#email-login").val()
@@ -308,7 +334,7 @@
               <div id="todo-done-id${element.id}" class="card-body-doneTodos">
                 <h5 class="card-title">Title<br><ul> ${element.title}</h5>
                 <p class="card-description">Description<br><ul> ${element.description}</p>
-                <a href="#" class="btn btn-primary edit-todo" name="${element.id}">Edit</a>
+                <a href="#" class="btn btn-primary edit-todo" onClick="updateTodoPage(${element.id})">Edit</a>
                 <a href="#" class="btn btn-primary delete-todo" onClick="removeTodoD(${element.id})">Delete</a>
                 </div>
             </div>
@@ -318,7 +344,7 @@
               <div id="todo-pending-id${element.id}" class="card-body-pendingTodos">
                 <h5 class="card-title">Title<br><ul> ${element.title}</h5>
                 <p class="card-description">Description<br><ul> ${element.description}</p>
-                <a href="#" class="btn btn-primary edit-todo" name="${element.id}">Edit</a>
+                <a href="#" class="btn btn-primary edit-todo" onClick="updateTodoPage(${element.id})">Edit</a>
                 <a href="#" class="btn btn-primary mark-done-todo" onClick="markAsDone(${element.id})">Mark as Done</a>
                 <a href="#" class="btn btn-primary delete-todo" onClick="removeTodoP(${element.id})">Delete</a>
               </div>
@@ -340,6 +366,7 @@
           console.log('always');
         })
       }
+
       function addTodoPage() {
         $("#login-page").hide()
         $("#register-page").hide()
@@ -348,6 +375,7 @@
         $("#add-todo-page").show()
         $("#all-todos").hide()
       }
+
       function addTodo(){
         const title = $("#title-add").val()
         const description = $("#description-add").val()
@@ -450,8 +478,63 @@
         })
       })
 
-      function editTodo() {
+      function updateTodoPage(id) {
+        $("#login-page").hide()
+        $("#register-page").hide()
+        $("#search-box").show()
+        $("#search-btn").show()
+        $("#add-todo-page").hide()
+        $("#all-todos").hide()
+        $("#update-todo-page").show()
 
+        const access_token = localStorage.getItem("access_token")
+        let newTitle
+        let newDescription
+        let newDue_date
+        $.ajax({
+          url: baseUrl + "todos/" + id,
+          method: "GET",
+          headers: {
+            access_token,
+          },
+        }).done(response => {
+          
+          $("#title-update").val(response.title)
+          $("#description-update").val(response.description)
+          $("#due-date-update").val(response.due_date)
+        }).fail((xhr, text) => {
+          console.log(xhr, text);
+        }).always((_) => {
+          console.log('always');
+        })
+
+        $("#update-todo-form").on("submit", (e) => {
+          $.ajax({
+            url: baseUrl + "todos/" + id,
+            method: "PUT",
+            headers: {
+              access_token,
+            },
+            data: {
+              title: $("#title-update").val(),
+              description: $("#description-update").val(),
+              due_date: $("#due-date-update").val(),
+            }
+          }).done(() => {
+            checkAccessToken()
+          }).fail((xhr, text) => {
+            console.log(xhr, text);
+          }).always((_) => {
+            console.log('always');
+          })
+        })
+      }
+
+      function editTodo(id) {
+        
+
+        
+        
       }
     
       function logout(){
@@ -463,9 +546,11 @@
             console.log('User signed out.');
         });
         checkAccessToken()
-
       }
 
+      function editTodo(id) {
+        $("#all-todos").hide()
+      }
       // google signin //
 
       function onSignIn(googleUser) {
@@ -493,63 +578,6 @@
         })
 
       }
-      //===========//
-      // $.get('http://localhost:3500/todos/', (data, textStatus, jqXHR) => {  
-      //   $(document).ready(() => {
-      //     const getDone = data.filter(element => element.status)
-      //     const getProgress = data.filter(element => !element.status)
-      //     const todosDone = getDone.map((element) => `
-      //       <div class="card" style="width: 20rem;">
-      //         <div class="card-body">
-      //           <h5 class="card-title">${element.title}</h5>
-      //           <p class="card-description">${element.description}</p>
-      //           <a href="#" class="btn btn-primary edit-todo" name="${element.id}">Edit</a>
-      //           <a href="#" class="btn btn-primary delete-todo" name="${element.id}">Delete</a>
-      //           </div>
-      //       </div>
-      //     `)
-      //     const todosPending = getProgress.map((element) => `
-      //       <div class="card scale-up-center" style="width: 20rem;">
-      //         <div class="card-body">
-      //           <h5 class="card-title">${element.title}</h5>
-      //           <p class="card-description">${element.description}</p>
-      //           <a href="#" class="btn btn-primary edit-todo" name="${element.id}">Edit</a>
-      //           <a href="#" class="btn btn-primary mark-done-todo" name="${element.id}">Mark as Done</a>
-      //           <a href="#" class="btn btn-primary delete-todo" name="${element.id}">Delete</a>
-      //         </div>
-      //       </div>
-      //     `)  
-      //     const wrapDone = `<div> ${todosDone.join('\n')} </div>` 
-      //     const wrapPending = `<div> ${todosPending.join('\n')} </div>`
-
-      //     $("#list-todos-done").append(wrapDone)
-      //     $("#list-todos-pending").append(wrapPending)
-      //     $(".delete-todo").click((e) => {
-      //       e.preventDefault()
-      //       swal({
-      //         title: "Are you sure?",
-      //         text: "Once deleted, you will not be able to recover this Todo!",
-      //         icon: "warning",
-      //         buttons: true,
-      //         dangerMode: true,
-      //       })
-      //       .then((willDelete) => {
-      //         if (willDelete) {
-      //           swal("Conratulation! Your Todo has been deleted!", {
-      //             icon: "success",
-      //           });
-      //           console.log('remove:', e)
-      //           console.log('ajax ke http://localhost:3500/todos/', e.target.name)
-      //         } else {
-      //           swal("Your imaginary file is safe!");
-      //         }
-      //       });
-      //     })
-      //     $(".edit-todo").click((e) => {
-
-      //     })
-      //   })
-      // });
     </script>
   </body>
 </html>
