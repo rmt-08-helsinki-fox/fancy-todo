@@ -3,7 +3,7 @@
 ## RESTful endpoints
 
 ```
-Client URL:
+Client URL: http://localhost:8080
 Server URL: http://localhost:3000
 ```
 
@@ -311,7 +311,7 @@ _Response 200_
 _Response (404 - Not Found)_
 ```
 {
-    "message" : "error not found"
+    "message" : "data not found"
 }
 ```
 
@@ -412,69 +412,34 @@ _Response (500 - Internal Server Error)_
 
 _Request Header_
 ```
-{
-    "access_token": "<access token>"
-}
+not needed
 ```
 
 _Request Params_
+```
+not needed
+```
+
+_Request Body_
 ```
 {
     "query": "<choosen city>"
 }
 ```
 
-_Request Body_
-```
-not needed
-```
-
 _Response (200)_
 ```
 {
-    "request": {
-        "type": "City",
-        "query": "Surabaya, Indonesia",
-        "language": "en",
-        "unit": "m"
-    },
-    "location": {
-        "name": "Surabaya",
-        "country": "Indonesia",
-        "region": "East Java",
-        "lat": "-7.249",
-        "lon": "112.751",
-        "timezone_id": "Asia/Jakarta",
-        "localtime": "2021-02-02 19:46",
-        "localtime_epoch": 1612295160,
-        "utc_offset": "7.0"
-    },
-    "current": {
-        "observation_time": "12:46 PM",
-        "temperature": 27,
-        "weather_code": 356,
-        "weather_icons": [
-            "https://assets.weatherstack.com/images/wsymbols01_png_64/wsymbol_0010_heavy_rain_showers.png"
-        ],
-        "weather_descriptions": [
-            "Moderate or heavy rain shower"
-        ],
-        "wind_speed": 22,
-        "wind_degree": 296,
-        "wind_dir": "WNW",
-        "pressure": 1007,
-        "precip": 3.6,
-        "humidity": 81,
-        "cloudcover": 76,
-        "feelslike": 31,
-        "uv_index": 6,
-        "visibility": 7,
-        "is_day": "yes"
-    }
+    "city": "Jakarta",
+    "temperature": 30,
+    "icons": [
+        "https://assets.weatherstack.com/images/wsymbols01_png_64/wsymbol_0002_sunny_intervals.png"
+    ],
+    "description": "Partly cloudy"
 }
 ```
 
-_Response (404 - Not Found)_
+_Response (615)_
 ```
 {
     "message": {

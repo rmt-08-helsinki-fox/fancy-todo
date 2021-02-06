@@ -56,7 +56,7 @@ nav ul li a {
   padding: 20px;
 }
 
-#login-error, #register-error, #add-error {
+#login-error, #register-error, #add-error, #edit-error {
   color: red;
 }
 
@@ -66,12 +66,29 @@ nav ul li a {
 .todo { 
   width: 40%;
   background-color: #d6b0b1;
-  padding: 5px;
+  padding: 10px;
   border: 5px solid black;
   margin-bottom: 10px;
+  border-radius: 10px;
 }
 
 .title{
   font-size: 24px;
 }
 
+#weather-container {
+  border-radius: 10%;
+  background-color: #ece2e1;
+  margin-right: 5px;
+  position: relative;
+  background-color: #a3d2ca;
+  width: 15%;
+  float: right;
+}
+
+#weather-container img {
+  position: absolute;
+  right: 15px;
+  top: 20px;
+  border-radius: 30%;
+}

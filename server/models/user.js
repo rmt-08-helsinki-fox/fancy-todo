@@ -20,15 +20,23 @@ module.exports = (sequelize, DataTypes) => {
       validate:  {
         notEmpty: {
           msg: "Field email tidak boleh kosong!"
+        },
+        isEmail: {
+          msg: "Format email salah!"
         }
       },
-      unique: true
+      unique: true,
+      allowNull: false
     },
     password: {
       type: DataTypes.STRING,
       validate:  {
         notEmpty: {
           msg: "Field password tidak boleh kosong!"
+        },
+        min: {
+          args: 6,
+          msg: "Password harus terdiri dari 6 karakter atau lebih!"
         }
       }
     }
