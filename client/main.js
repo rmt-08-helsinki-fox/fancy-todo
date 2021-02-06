@@ -1,4 +1,94 @@
 const baseUrl = 'http://localhost:3000/'
+
+$(document).ready(() => {
+  auth()
+  $('#login-form').on('submit', (e) => {
+    e.preventDefault()
+    login()
+  })
+
+  $("#toRegister").click(() => {
+    $("#login-form").hide()
+    $("#register-form").show()
+  })
+
+  $("#toLogin").click(() => {
+    $("#login-form").show()
+    $("#register-form").hide()
+  })
+
+  $("#nav-logout").click(() => {
+
+    console.log('logout');
+    localStorage.removeItem(access_token)
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+
+  })
+})
+
+function auth() {
+  if (!localStorage.getItem("access_token")) {
+    $('#login-form').show()
+    $('#add-form').hide()
+    $('#todo-list').hide()
+    $('#register-form').hide()
+  } else {
+    $('#login-form').hide()
+    $('#add-form').show()
+    $('#todo-list').show()
+  }
+  getToDos()
+}
+
+//REGISTER
+function register() {
+  const email = $('#register-email').val()
+  const password = $('#register-password').val()
+  $.ajax({
+    url: baseUrl + 'users/register',
+    method: 'POST',
+    data: {
+      email,
+      password
+    }
+  })
+    .done((response) => {
+      console.log(response);
+    })
+    .fail((err) => {
+      console.log(err.message);
+    })
+}
+
+//LOGIN
+function login() {
+  const email = $('#email').val()
+  const password = $('#password').val()
+  $.ajax({
+    url: baseUrl + 'users/login',
+    method: 'POST',
+    data: {
+      email,
+      password
+    }
+  })
+    .done((response) => {
+      // console.log(response);
+      localStorage.setItem('access_token', response.access_token)
+      auth()
+    })
+    .fail((xhr, text) => {
+      console.log(xhr, text);
+    })
+    .always(_ => {
+      $('#login-form').trigger('reset')
+      // console.log('always')
+    })
+}
+
 function onSignIn(googleUser) {
   var id_token = googleUser.getAuthResponse().id_token;
   console.log(id_token);
@@ -11,59 +101,15 @@ function onSignIn(googleUser) {
     }
   })
     .done((response) => {
+      console.log(response);
       localStorage.setItem('access_token', response.access_token)
       auth()
-      // console.log(response);
     })
     .fail((err) => {
       console.log(err);
     })
 }
 
-function auth() {
-  if (!localStorage.getItem("access_token")) {
-    $('#login-form').show()
-    $('#add-form').hide()
-    $('#todo-list').hide()
-  } else {
-    $('#login-form').hide()
-    $('#add-form').show()
-    $('#todo-list').show()
-  }
-  getToDos()
-}
-
-function login() {
-  const email = $('#emailInput').val()
-  const password = $('#passwordInput').val()
-  $.ajax({
-    url: baseUrl + 'users/login',
-    method: 'POST',
-    data: {
-      email,
-      password
-    }
-  })
-    .done((response) => {
-      console.log(response);
-      localStorage.setItem('access_token', response.access_token)
-      auth()
-    })
-    .fail((xhr, text) => {
-      console.log(xhr, text);
-    })
-    .always(_ => {
-      $('#login-form').trigger('reset')
-      // console.log('always')
-    })
-}
-function logout() {
-  localStorage.clear()
-  var auth2 = gapi.auth2.getAuthInstance();
-  auth2.signOut().then(function () {
-    console.log('User signed out.');
-  });
-}
 
 function getToDos() {
   $.ajax({
@@ -77,7 +123,7 @@ function getToDos() {
       $('#todo-list').empty()
       todo.forEach(value => {
         $('#todo-list'), append(`
-            <div class="w-25 card" id="todo-${value.id}">
+            <div class="w-25 card" id="${value.id}">
               <div class="card-header">
                 Todo Title
               </div>
@@ -97,6 +143,7 @@ function getToDos() {
     })
 }
 
+
 function destroy(id) {
   $.ajax({
     url: baseUrl + 'todos/' + id,
@@ -113,10 +160,52 @@ function destroy(id) {
     })
 }
 
-$(document).ready(() => {
-  auth()
-  $('#login-form').on('submit', (e) => {
-    e.preventDefault()
-    login()
+function update(id) {
+  $.ajax({
+    url: baseUrl + 'todos/' + id,
+    method: 'PUT',
+    headers: {
+      access_token: localStorage.getItem('access_token')
+    }
   })
-})
+    .done((_) => {
+      getToDos()
+    })
+    .fail((err, text) => {
+      console.log(err, text);
+    })
+}
+
+function patch(id) {
+  $.ajax({
+    url: baseUrl + 'todos/' + id,
+    method: 'PATCH',
+    headers: {
+      access_token: localStorage.getItem('access_token')
+    }
+  })
+    .done((_) => {
+      getToDos()
+    })
+    .fail((err, text) => {
+      console.log(err, text);
+    })
+}
+
+function weatherAPI() {
+  $.ajax({
+    url: baseUrl + 'todos/weather',
+    method: 'get',
+    headers: {
+      access_token: localStorage.getItem('access_token')
+    }
+  })
+    .done((_) => {
+
+    })
+    .fail((err, text) => {
+      console.log(err, text);
+    })
+}
+
+

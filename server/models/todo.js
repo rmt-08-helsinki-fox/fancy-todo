@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         notEmpty: {
-          msg: 'title tidak boleh kosong'
+          msg: 'Title cannot be empty'
         }
       }
     },
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         notEmpty: {
-          msg: 'description tidak boleh kosong'
+          msg: 'Description cannot be empty'
         }
       }
     },
@@ -36,14 +36,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       validate: {
         dueDate(value) {
-          // console.log(value);
           if (value > new Date()) {
-            //masih besoknya
-            // console.log('benar');
           } else {
-            //lewat hari ini
             throw new Error('Due Date jangan lewat dari hari ini')
-            // console.log('salah');
           }
         }
       }
