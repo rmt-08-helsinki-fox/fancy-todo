@@ -10,7 +10,7 @@ const deleteTodo = (id) => {
     generateListTodo()
   })
   .fail( err => {
-    console.log(err);
+    swal("Something Wrong", err.responseJSON.error, "error")
   })
 }
 
@@ -29,7 +29,7 @@ const doneTodo = (id) => {
     generateListTodo()
   })
   .fail( err => {
-    console.log(err);
+    swal("Something Wrong", err.responseJSON.error, "error")
   })
 }
 
@@ -43,7 +43,6 @@ const yyyymmdd = (date) => {
 
 const updateTodo = (dataUpdate) => {
   localStorage.setItem('selectedEditTodo', JSON.stringify(dataUpdate))
-  console.log(yyyymmdd(dataUpdate.due_date));
   $("#list-todo").hide();
   $("#edit-container").show();
   $("#edit-title").val(dataUpdate.title)
@@ -122,7 +121,7 @@ const generateListTodo = () => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      swal("Something Wrong", err.responseJSON.error, "error")
     });
 };
 generateListTodo();

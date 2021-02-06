@@ -2,9 +2,14 @@ $(document).ready(() => {
   $(".btn-cancel-add").on("click", () => {
     $("#list-todo").show();
     $("#add-container").hide();
+    $("#tab2").hide();
+    $("#tab1").show();
+    $("#manual-menu").addClass("active");
+    $("#search-menu").removeClass("active");
   })
 
   $("#btn-add-todo").on("click", () => {
+    getMovies()
     $("#tab2").hide();
     $("#list-todo").hide();
     $("#add-container").show();
@@ -24,13 +29,12 @@ $(document).ready(() => {
        }
     })
     .done( res => {
-      console.log(res);
       generateListTodo();
       $("#edit-container").hide()
       $("#list-todo").show()
     })
     .fail( err => {
-      console.log(err);
+      swal("Something Wrong", err.responseJSON.error, "error")
     })
     .always( _=> {
       $("#form-edit").trigger("reset")
@@ -51,13 +55,12 @@ $(document).ready(() => {
        }
     })
     .done( res => {
-      console.log(res);
       generateListTodo();
       $("#add-container").hide()
       $("#list-todo").show()
     })
     .fail( err => {
-      console.log(err);
+      swal("Something Wrong", err.responseJSON.error, "error")
     })
     .always( _=> {
       $("#form-add-manual").trigger("reset")
@@ -80,13 +83,12 @@ $(document).ready(() => {
        }
     })
     .done( res => {
-      console.log(res);
       generateListTodo();
       $("#add-container").hide()
       $("#list-todo").show()
     })
     .fail( err => {
-      console.log(err);
+      swal("Something Wrong", err.responseJSON.error, "error")
     })
     .always( _=> {
       $("#form-add-manual").trigger("reset")
@@ -108,30 +110,29 @@ $(document).ready(() => {
         const data1item = `
         <div class="col">
           <div class="card" style="width: max-content">
-            <img src="${data.poster_path}" width="220px" height="330px" />
+            <img src="${data.poster_path}" width="220px" height="330px"  />
             <div class="card-desc">
               <b>${data.title}</b><br/>
-              "${data.overview.slice(0, 77) + "..."}"
+              "${data.overview.slice(0, 50) + "..."}"
             </div>
           </div>
         </div>
         `
         $("#list-movie").append(`
         <div class="col">
-          <div class="card" style="width: max-content;cursor: pointer" onclick='localStorage.setItem("selectedMovie", JSON.stringify(${dataStringify}));$("#list-movie").empty();'>
-            <img src="${data.poster_path}" width="220px" height="330px" />
+          <div class="card" style="width: max-content;cursor: pointer; border-radius: 20px" onclick='localStorage.setItem("selectedMovie", JSON.stringify(${dataStringify}));$("#list-movie").empty()'>
+            <img src="${data.poster_path}" width="220px" height="330px" style=" border-radius: 20px" />
             <div class="card-desc">
               <b>${data.title}</b><br/>
-              "${data.overview.slice(0, 77) + "..."}"
+              "${data.overview.slice(0, 50) + "..."}"
             </div>
           </div>
         </div>
         `)
       })
-      console.log(res);
     })
     .fail( err => {
-      console.log(err);
+      swal("Something Wrong", err.responseJSON.error, "error")
     })
   }
 
@@ -139,7 +140,6 @@ $(document).ready(() => {
 
   // menu tab controller
   $("#search-menu").on("click", () => {
-    getMovies()
     $("#manual-menu").removeClass("active");
     $("#search-menu").addClass("active");
     $("#tab1").hide();
