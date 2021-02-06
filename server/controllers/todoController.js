@@ -5,7 +5,6 @@ class Controller {
     let inputData = {
       title: req.body.title,
       description: req.body.description,
-      status: req.body.status,
       due_date: req.body.due_date,
       UserId: req.decoded.id
     }
@@ -25,7 +24,8 @@ class Controller {
       .findAll({
         where: {
           UserId: req.decoded.id
-        }
+        },
+        order: [['id', 'ASC']]
       })
       .then((data) => {
         res.status(200).json(data)
@@ -56,7 +56,6 @@ class Controller {
     let inputData = {
       title: req.body.title,
       description: req.body.description,
-      status: req.body.status,
       due_date: req.body.due_date
     }
     Todo
