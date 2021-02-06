@@ -387,7 +387,7 @@ function showWeather() {
       console.log(response, "<<THIS IS RESPONSE GET WEATHER");
       const { weather, temp } = response
       $("#weather").empty()
-      $("#weather").append(weather, temp)
+      $("#weather").append(`<div>${weather}</div><div>${temp} C</div>`)
     })
     .fail((hxr, text) => {
       console.log(hxr);
