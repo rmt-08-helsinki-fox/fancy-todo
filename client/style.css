@@ -1,0 +1,131 @@
+body{
+  background-image: url('./src/Background.jpg');
+  background-size: cover;
+}
+
+/* Navbar */
+.navbar{
+  background-color: #01c5c4;
+}
+.white{
+  color: white;
+}
+#username{
+  margin-right: 30px;
+  margin-top: 10px;
+}
+
+/* status */
+#status{
+  margin-top: 50px;
+}
+
+
+/* Card Todo */
+#list-todo, #done-todo{
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+#done, #active-todo{
+  min-width: 30rem;
+  max-width: 18rem;
+}
+
+/* homepage */
+#checkbox{
+  width: 30px;
+  height: 30px;
+}
+#home-page{
+  border-radius: 5px;
+  background-color: rgba(13, 43, 71, 0.3);;
+  margin-top: 50px;
+}
+
+/* Button and Icon */
+.btn_clear{
+  width: 100px;
+}
+
+#delete-icon{
+  color: red ;
+}
+#delete-icon:hover{
+  color: rgb(153, 10, 10) ;
+}
+.medium{
+  font-size: 35px;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Login Page */
+#login-form{
+  padding: 100px;
+}
+
+#img-login{
+  height: 640px;
+}
+#img-register{
+  height: 640px;
+}
+
+#header-login{
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* card login register */
+.card-login-register{
+  border-radius: 20px;
+  margin-bottom: 50px;
+}
+
+/* Form Add Edit */
+#add-form{
+  border-radius: 15px;
+  width: 50%;
+  background-color: rgba(13, 43, 71, 0.3);
+  padding: 50px;
+  margin: auto;
+}
+
+#edit-form{
+  border-radius: 15px;
+  width: 50%;
+  background-color: rgba(13, 43, 71, 0.3);
+  padding: 50px;
+  margin: auto;
+}
+
+.date-field{
+  width: 40%;
+}
+.title-field{
+  width: 58%;
+}
+.formAdd-edit-btn{
+  width: 50%;
+  height: 50px;
+}
+
+/* holidays */
+#holidays{
+  background-color: rgba(255, 255, 255, 0.8); 
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 50px;
+}
+
+/* Error handler */
+.error h5{
+  margin-top: 10px;
+  padding: 5px;
+  text-align: center;
+  background-color: rgba(252, 133, 133, 0.8);
+  border-radius: 5px;
+}

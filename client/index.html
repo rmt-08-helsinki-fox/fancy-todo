@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id" content="782240532424-4j3ggb3i6ta0p6bbadvij9ln0h8bafom.apps.googleusercontent.com">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <title>Fancy Todo</title>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div id="navbar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" id="home"><b>FANCY TODO</b></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#" id="toHolidays"><b>Holidays</b></a>
+            </li>
+          </ul>
+          <div id="username">
+            
+          </div>
+          <button id="logout-btn" class="btn btn-danger">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- status -->
+  <div id="status" class="container"></div>
+
+  <!-- Homepage -->
+  <div id="home-page" class="container d-flex justify-content-evenly">
+
+    <!-- list Todo -->
+    <div id="list-todo"></div>
+
+    <!-- List Done -->
+    <div id="done-todo"></div>
+  </div>
+  
+  <!-- Login Page -->
+  <div id="login" class="container">
+    <div class="card-login-register card mb-3 shadow"  style="overflow: hidden;">
+      <div class="row g-0">
+        <div id="login-form" class="col-md-6">
+          <form>
+            <h3 id="header-login">Login Fancy Todo</h3>
+            <div class="mb-3">
+              <label class="form-label">Email address</label>
+              <input type="email" class="form-control shadow-sm" id="login-email">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control shadow-sm" id="login-password">
+            </div>
+            <div class="d-grid gap-2 mb-3">
+              <button id="login-btn" type="submit" class="btn btn-primary">Login</button>
+            </div>
+            <div style="text-align: center;">
+              <p>Do not have any account? <a href="" id="to-reg-form">Register here</a></p>
+            </div>
+            <div style="text-align: center;">
+              <p>or try to login with:</p>
+            </div>
+            <div id="goole-login-btn" class="d-flex justify-content-center">
+              <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            </div>
+            
+          </form>
+        </div>
+        <div class="col-md-6">
+          <img id="img-login" src="./src/Login-pic.png" alt="...">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register form -->
+  <div id="register" class="container">
+    <div class="card-login-register card mb-3 shadow"  style="overflow: hidden;">
+      <div class="row g-0">
+        <div id="login-form" class="col-md-6">
+          <form>
+            <h3 id="header-login">Register Fancy Todo</h3>
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input type="text" class="form-control shadow-sm" id="register-username">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email address</label>
+              <input type="email" class="form-control shadow-sm" id="register-email">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control shadow-sm" id="register-password">
+            </div>
+            <div class="d-grid gap-2 mb-3">
+              <button type="submit" id="register-btn" class="btn btn-primary">Register</button>
+            </div>
+            <p>Already have an account? <a href="" id="to-log-form">Login here</a></p>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <img id="img-register" src="./src/register-pic.png" alt="...">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Form -->
+  <div id="add-form">
+    <form>
+      <h3 id="header-login">Add Todo</h3>
+      <div class="mb-3 d-flex justify-content-between">
+        <input type="text" class="title-field form-control shadow-sm" placeholder="Title" id="add-form-title">
+        <input type="date" class="date-field form-control shadow-sm" id="add-form-date">
+      </div>
+      <div class="mb-3">
+        <textarea class="form-control shadow-sm" cols="84" rows="8" placeholder="Todo detail here..." id="add-form-description"></textarea>
+      </div>
+      <div class="d-flex gap-2">
+        <button id="add-form-addBtn" type="submit" class="formAdd-edit-btn btn btn-primary">Add</button>
+        <button id="add-form-cancelBtn" class="formAdd-edit-btn btn btn-danger">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Edit Form -->
+  <div id="edit-form">
+    <form>
+      <h3 id="header-login">Edit Todo</h3>
+      <div class="mb-3 d-flex justify-content-between">
+        <input type="text" class="title-field form-control shadow-sm" placeholder="Title" id="edit-form-title">
+        <input type="date" class="date-field form-control shadow-sm" id="edit-form-date">
+      </div>
+      <div class="mb-3">
+        <textarea class="form-control shadow-sm" cols="84" rows="8" placeholder="Todo detail here..." id="edit-form-description"></textarea>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="formAdd-edit-btn btn btn-primary" id="editFormBtn">Edit</button>
+        <button class="formAdd-edit-btn btn btn-danger" id="editFormCancelBtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="container shadow" id="holidays">
+    <h3>Holidays</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Description</th>
+          <th scope="col">Date</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="./script/script.js"></script>
+  <script src="./script/login.js"></script>
+  <script src="./script/register.js"></script>
+  <script src="./script/todoList.js"></script>
+  <script src="./script/addTodo.js"></script>
+  <script src="./script/editTodo.js"></script>
+  <script src="./script/deleteTodo.js"></script>
+  <script src="./script/editStatus.js"></script>
+  <script src="./script/getUser.js"></script>
+  <script src="./script/bulkDelete.js"></script>
+  <script src="./script/holidays.js"></script>
+  <script src="./script/googleLogin.js"></script>
+</body>
+</html>
