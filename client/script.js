@@ -150,6 +150,11 @@ function findAllTodo(){
       </tr>
       `)
     }
+    $("#cuaca").append(`
+    <h4>
+    <label for="">Weather: ${todo.dataCuaca[0].main} (${todo.dataCuaca[0].description})</label>
+    </h4>
+    `)
   })
   .fail((err, text) => {
     console.log(err, text);
@@ -235,10 +240,6 @@ function updateForm(id){
   $("#todoList").hide()
 
   let idUpdate
-  let titleUpdate
-  let descriptionUpdate
-  let statusUpdate
-  let due_dateUpdate
   
   $.ajax({
     url: mainPort +"todos/" + id,

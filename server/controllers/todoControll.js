@@ -38,7 +38,7 @@ class TodoControll {
       return axios.get(`http://api.openweathermap.org/data/2.5/weather?q=Jakarta&APPID=6aa39f91b5429e15d47e5c9a7930e9bc`)
     })
     .then(dataCuaca => {
-      res.status(200).json({dataTodo, dataCuaca: dataCuaca.data})
+      res.status(200).json({dataTodo, dataCuaca: dataCuaca.data.weather})
     })
     .catch(err => {
       next(err);
