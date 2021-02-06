@@ -15,7 +15,7 @@ module.exports = class TodoController {
 
   static showTodos(req, res, next) {
     const UserId = req.decoded.id
-    Todo.findAll({ where: { UserId } })
+    Todo.findAll({ where: { UserId }, order: [["id", "asc"]] })
       .then(todos => {
         res.status(200).json(todos)
       })

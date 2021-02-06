@@ -25,6 +25,7 @@ $(document).ready(() => {
   $("#logOut").on("click", event => {
     event.preventDefault()
     localStorage.removeItem("access_token")
+    googleSignOut()
     auth()
   })
   $("#addTodoForm").on("submit", event => {
@@ -40,18 +41,22 @@ function auth() {
     $("#register").hide()
     $("#login").hide()
     $("#listTodo").hide()
-    $("#addTodoForm").hide()
-    $("#editTodoForm").hide()
+    $("#addTodo").hide()
+    $("#editTodo").hide()
+    $("#listHoliday").hide()
   } else {
     $("#todoData").empty()
+    $("#holidayData").empty()
     $("#navbar").show()
     $("#landing").hide()
     $("#register").hide()
     $("#login").hide()
     $("#listTodo").show()
-    $("#addTodoForm").hide()
-    $("#editTodoForm").hide()
+    $("#addTodo").hide()
+    $("#editTodo").hide()
+    $("#listHoliday").show()
     getTodos()
+    holidays()
   }
 }
 
@@ -61,8 +66,9 @@ function showAddTodo() {
   $("#register").hide()
   $("#login").hide()
   $("#listTodo").hide()
-  $("#addTodoForm").show()
-  $("#editTodoForm").hide()
+  $("#addTodo").show()
+  $("#editTodo").hide()
+  $("#listHoliday").hide()
   $("#addTitle").val("")
   $("#addDesc").val("")
   $("#addStatus").val("")
@@ -74,8 +80,9 @@ function showRegister() {
   $("#register").show()
   $("#login").hide()
   $("#listTodo").hide()
-  $("#addTodoForm").hide()
-  $("#editTodoForm").hide()
+  $("#addTodo").hide()
+  $("#editTodo").hide()
+  $("#listHoliday").hide()
   $("#loginLink").on("click", event => {
     event.preventDefault()
     showLogin()
@@ -83,18 +90,27 @@ function showRegister() {
 }
 
 function showLogin() {
-  $("#addTodoForm").hide()
+  $("#addTodo").hide()
   $("#landing").hide()
   $("#register").hide()
   $("#login").show()
   $("#listTodo").hide()
-  $("#editTodoForm").hide()
+  $("editTodo").hide()
+  $("#listHoliday").hide()
   $("#loginEmail").val("")
   $("#loginPassword").val("")
   $("#registerLink").on("click", event => {
     event.preventDefault()
     showRegister()
   })
+}
+
+function googleSignOut() {
+  var auth2 = gapi.auth2.getAuthInstance()
+  auth2.signOut()
+    .then(() => {
+      console.log("Userh signed out");
+    })
 }
 
 const baseUrl = "http://localhost:3000"
@@ -144,6 +160,24 @@ function register() {
     })
 }
 
+function onSignIn(googleUser) {
+  var id_token = googleUser.getAuthResponse().id_token
+  $.ajax({
+    url: baseUrl + `/users/googleLogin`,
+    method: "POST",
+    data: {
+      google_token: id_token,
+    },
+  })
+    .done((res) => {
+      localStorage.setItem("access_token", res.access_token)
+      auth()
+    })
+    .fail((xhr, txt) => {
+      console.log(xhr, txt)
+    })
+}
+
 function getTodos() {
   $("#todoData").empty()
   $.ajax({
@@ -160,9 +194,9 @@ function getTodos() {
           <td>${index + 1}</td>
           <td>${todo.title}</td>
           <td>${todo.description}</td>
-          <td>${todo.status} </a> <a href="#" onclick="showEditStatus(${todo.id})">Edit</a></td>
+          <td>${todo.status} <a href="#" onclick="showEditStatus(${todo.id})" class="btn btn-primary btn-sm">Edit</a></td>
           <td>${todo.due_date.toString().split('T')[0]}</td>
-          <td><a href="#" onclick="destroy(${todo.id})">Delete</a> <a href="#" onclick="showEdit(${todo.id})">Edit Data</a></td>
+          <td><a href="#" class="btn btn-primary btn-sm" onclick="destroy(${todo.id})">Delete</a> <a href="#" class="btn btn-primary btn-sm" onclick="showEdit(${todo.id})">Edit Data</a></td>
         </tr>
         `)
       })
@@ -234,8 +268,9 @@ function showEdit(id) {
       $("#register").hide()
       $("#login").hide()
       $("#listTodo").hide()
-      $("#addTodoForm").hide()
-      $("#editTodoForm").show()
+      $("#addTodo").hide()
+      $("#listHoliday").hide()
+      $("#editTodo").show()
       $("#editTitle").val(`${res.title}`)
       $("#editDesc").val(`${res.description}`)
       $("#editStatus").val(`${res.status}`)
@@ -298,10 +333,10 @@ function showEditStatus(id) {
           <option value="done">done</option>
           <option value="not done">not done</option>
           </select>
-          <button type="submit">Submit</button>
+          <button class="btn btn-primary-sm" type="submit">Submit</button>
           <form></td>
           <td>${todo.due_date.toString().split('T')[0]}</td>
-          <td><a href="#" onclick="destroy(${todo.id})">Delete</a> <a href="#" onclick="showEdit(${todo.id})">Edit Data</a></td>
+          <td><a href="#" class="btn btn-primary btn-sm" onclick="destroy(${todo.id})">Delete</a> <a href="#" class="btn btn-primary btn-sm" onclick="showEdit(${todo.id})">Edit Data</a></td>
         </tr>
         `)
         } else {
@@ -343,5 +378,29 @@ function editTodoStatus(id) {
     })
     .fail((xhr, txt) => {
       console.log(xhr, txt, "error todos");
+    })
+}
+
+function holidays() {
+  $.ajax({
+    url: baseUrl + "/holidays",
+    method: "GET",
+    headers: {
+      access_token: localStorage.getItem("access_token")
+    }
+  })
+    .done(res => {
+      res.forEach((holiday, index) => {
+        $("#holidayData").append(`
+      <tr>
+        <td>${index + 1}
+        <td>${holiday.name}</td>
+        <td>${holiday.date}</td>
+      </tr>
+      `)
+      })
+    })
+    .fail((xhr, txt) => {
+      console.log(xhr, txt);
     })
 }
