@@ -85,14 +85,28 @@ response:{
 ```json
 response : [
      {
-        "id": 5,
-        "title": "title",
-        "descriiption": "description",
-        "status": false,
-        "due_date": "2021-01-01",
-        "createdAt": "2021-02-01T15:18:44.808Z",
-        "updatedAt": "2021-02-01T15:18:44.808Z"
-    }
+    "quote": {
+        "_id": "<id>",
+        "tags": [
+            "<tag>"
+        ],
+        "content": "<content quote>",
+        "author": "<name author>",
+        "length": "integer"
+    },
+    "todos": [
+        {
+            "id": "<id>",
+            "title": "<titile>",
+            "description": "<description>",
+            "status": "boolean",
+            "due_date": "<date>",
+            "createdAt": "2021-02-06T06:51:47.331Z",
+            "updatedAt": "2021-02-06T09:42:33.821Z",
+            "UserId": "<user id>"
+        }
+    ]
+}
 ]
 ```
 
