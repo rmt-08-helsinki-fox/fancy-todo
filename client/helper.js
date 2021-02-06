@@ -198,6 +198,7 @@ function updateTodos(id) {
     }
   })
     .done((dataFindById) => {
+      $("#list-project-container").hide()
       $("#update-todos-form").find('input[name=todo_id]').val(id);
       $("#titleTodosUpdate").val(dataFindById.title)
       $("#descriptionTodosUpdate").val(dataFindById.description)
@@ -246,6 +247,11 @@ function hapus(id) {
     }
   })
     .done(() => {
+      Swal.fire(
+        'Good job!',
+        'Success deleting data',
+        'success'
+      )
       getTodos()
     })
     .fail((err, status) => {
@@ -318,7 +324,7 @@ function userProjectList() {
           <tr>
             <td id="id-${i}">${i+1}</td>
             <td id="title-${i}">${value.title}</td>
-            <td id="url-${i}">${value.url}</td>
+            <td id="url-${i}"><a href="${value.url}"></td></a>
             <td id="userId-">${value.User.email}</td>
             <td align="center" >
               <a class="btn btn-danger" onclick="deleteProject(${value.id})">Delete</a>

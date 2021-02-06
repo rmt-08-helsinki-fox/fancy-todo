@@ -86,7 +86,11 @@ $(document).ready(() => {
         }
     })
       .done(data => {
-        console.log(data)
+        Swal.fire(
+          'Good job!',
+          'Updated Succesfully',
+          'success'
+        )
         auth()
       })
       .fail((err, status) => {
