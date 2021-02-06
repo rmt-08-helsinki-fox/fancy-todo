@@ -192,9 +192,11 @@ const editTodo = (id)=>{
     .done((dataTodo)=>{
       let event = new Date(dataTodo.due_date);
       event = event.toISOString().slice(0,10)
+      console.log(dataTodo.title);
       $("#edittitle").val(dataTodo.title)
       $("#editduedate").val(event)
       $("#editdescription").val(dataTodo.description)
+      $("#editstatus").empty()
       if (dataTodo.status) {
         $("#editstatus").append(`
         <option value="true" selected>Completed</option>
