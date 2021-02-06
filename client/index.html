@@ -104,12 +104,38 @@
           <div class="col-sm-7" id="todos">
             <!-- Todos -->
             
-            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Edit page -->
+    <form id="form-edit-todo" class="mt-3">
+      <!-- title input -->
+      <div class="form-outline mb-3">
+        <input type="text" id="title-todo-edit" class="form-control" />
+        <label class="form-label">Title</label>
+      </div>
+    
+      <!-- description input -->
+      <div class="form-outline mb-3">
+        <textarea class="form-control" id="desc-todo-edit" rows="4"></textarea>
+        <label class="form-label">Description</label>
+      </div>
+
+      <!-- Date input -->
+      <div class="form-outline mb-3">
+        <input type="date" id="date-todo-edit" class="form-control">
+        <label class="form-label">Due Date</label>
+      </div>
+    
+      <!-- Submit button -->
+      <button type="submit" class="btn btn-primary btn-block mb-4" onclick="editTodos(event, id)">Done</button>
+    </form>
+
+    <!-- End of main page -->
   </div>
+
 
   <!-- Script -->
   <!-- Jquery -->

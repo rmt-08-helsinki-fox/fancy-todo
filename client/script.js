@@ -14,6 +14,7 @@ function authenticate() {
     $('#form-add-todo').hide();
     $('#btn-cancel-add-form').hide();
     $('#btn-add-todo').show();
+    $('#form-edit-todo').hide();
     fetchTodo()
   } else {
     $('#logout-navbar').hide();
@@ -157,9 +158,9 @@ function fetchTodo() {
             <h4 class="card-title">${todos.title}</h4>
             <p>${todos.description}</p>
             <p>${todos.due_date}</p>
-            <button href="" class="btn btn-primary btn-sm" onclick="editTodos(${todos.id})">Edit</button>
-            <button href="" class="btn btn-primary btn-sm" onclick="deleteTodos(${todos.id})">Delete</button>
-            <buttton href="" class="btn btn-danger btn-sm" onclick="statusTodos(${todos.id}, true)">Not Done</buttton>
+            <button type="button" class="btn btn-primary btn-sm" onclick="">Edit</button>
+            <button class="btn btn-primary btn-sm" onclick="deleteTodos(${todos.id})">Delete</button>
+            <buttton class="btn btn-danger btn-sm" onclick="statusTodos(${todos.id}, true)">Not Done</buttton>
           </div>
           `)
         } else {
@@ -168,9 +169,9 @@ function fetchTodo() {
             <h4 class="card-title">${todos.title}</h4>
             <p>${todos.description}</p>
             <p>${todos.due_date}</p>
-            <button href="" class="btn btn-primary btn-sm" onclick="editTodos(${todos.id})">Edit</button>
-            <button href="" class="btn btn-primary btn-sm" onclick="deleteTodos(${todos.id})">Delete</button>
-            <buttton href="" class="btn btn-success btn-sm" onclick="statusTodos(${todos.id}, false)">Done</buttton>
+            <button type="button" class="btn btn-primary btn-sm" onclick="">Edit</button>
+            <button class="btn btn-primary btn-sm" onclick="deleteTodos(${todos.id})">Delete</button>
+            <buttton class="btn btn-success btn-sm" onclick="statusTodos(${todos.id}, false)">Done</buttton>
           </div>
           `)
         }
@@ -181,13 +182,9 @@ function fetchTodo() {
     })
 }
 
-function editTodos(id) {
-
-}
-
 function statusTodos(id, status) {
   const access_token = localStorage.access_token
-
+  
   $.ajax({
     url: baseUrl + `todos/${id}`,
     method: 'PATCH',
@@ -217,11 +214,19 @@ function deleteTodos(id) {
       access_token
     }
   })
-    .done(response => {
-      console.log(response)
-      authenticate()
-    })
-    .fail(err => {
-      console.log(err.responseJSON)
-    })
+  .done(response => {
+    console.log(response)
+    authenticate()
+  })
+  .fail(err => {
+    console.log(err.responseJSON)
+  })
+}
+
+function btnEditTodos(id) {
+
+}
+
+function editTodos(event, id) {
+ 
 }
