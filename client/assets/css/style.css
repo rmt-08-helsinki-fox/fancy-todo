@@ -121,3 +121,13 @@ form .txt_field {
 #btn-login-area-group button {
     width: 10rem;
 }
+
+#member-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#add-member-area {
+    display: flex;
+    flex-direction: column;
+}

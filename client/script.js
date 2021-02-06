@@ -94,8 +94,91 @@ $(document).ready(function() {
     } else if(event.target.id.match(/btn-edit-todo*/g)) {
       const id = Number(event.target.id.split("_")[1])
       updateTodo(id);
+
+    } else if(event.target.id.match(/btn-add-member*/g)) {
+      const id = Number(event.target.id.split("_")[1])
+      const member_email = $("#member-email").val();
+      $.ajax({
+        url: baseUrl + '/todos/'+id+'/members',
+        method: "PATCH",
+        headers: { access_token: localStorage.access_token },
+        data: { todoId: id, member_email }
+      })
+        .done(response => {
+          authentication()
+        })
+        .fail(err => {
+          console.log(err)
+        })
+
+    } else if(event.target.id.match(/todo-member-tab*/g)) {
+      const tabId = event.target.id.split("_")[1]
+      $(`#${event.target.id}`).addClass('active');
+      $(`#todo-detail_${tabId}`).removeClass('active');
+        $.ajax({
+          url: baseUrl + "/todos/" + tabId,
+          method: "GET",
+          headers: { access_token: localStorage.access_token }
+        })
+        .done(todo => {
+          $("#member-list-area").empty();
+          $(`#todo-container-body${tabId}`).empty().append(`
+          <div class="container" id="member-container">
+            <div id="member-list-area"></div>
+            <div id="add-member-area">
+              <input type="email" id="member-email" placeholder="enter email">
+              <button type="submit" class="btn btn-primary" id="btn-add-member_${tabId}">add member</button>
+             </div>
+          </div>
+        `)
+          todo.UserTodos.forEach(user => {
+            $("#member-list-area").append(`
+              <p>${user.member_email}</p>
+            `)
+          })
+        })
+
+
+    } else if(event.target.id.match(/todo-detail*/g)) {
+      const tabId = event.target.id.split("_")[1]
+      $(`#todo-detail_${tabId}`).addClass('active');
+      $(`#todo-member-tab_${tabId}`).removeClass('active');
+      $.ajax({
+        url: baseUrl + "/todos/"+tabId,
+        method: "GET",
+        headers: { access_token: localStorage.access_token }
+      })
+        .done(todo => {
+          let bgColor;
+          if(todo.status === "incomplete") {
+            bgColor = "red";
+          } else {
+            bgColor = "green";
+          }
+          let dateTimeFormatted = new Date(todo.due_date).toUTCString()
+          dateTimeFormatted = dateTimeFormatted.slice(0, dateTimeFormatted.length-13)
+          $(`#todo-container-body${tabId}`).empty().append(`
+              <div class="card-body text-start">
+                  <h5 class="card-title">
+                        ${todo.title}
+                        <span
+                        style="background-color: ${bgColor}; border-radius: 3px; padding: 0 5px;"
+                        >${todo.status}</span>
+                  </h5>
+                  <p class="card-text">${todo.description}</p>
+                  <div class="text-end">
+                    <div class="text-start">
+                        <strong>Author:</strong> ${todo.Users[0].email} <strong>Due to:</strong> ${dateTimeFormatted}
+                    </div>
+                  </div>
+              </div>
+        `)
+        })
+        .fail(err => {
+          console.log(err)
+        })
+
     } else if(event.target.id.match(/edit-status-btn*/g)) {
-      console.log(event.target.id)
       const id = Number(event.target.id.split("_")[1])
       let status = event.target.id.split("_")[2]
       if(status === "complete") {
@@ -192,6 +275,17 @@ $(document).ready(function() {
   })
 })
 
+function getTodoMember(id) {
+  $.ajax({
+    url: baseUrl + "/todos/"+id,
+    method: "POST",
+    headers: { access_token: localStorage.access_token }
+  })
+}
+
+
+
+
 function updateTodo(id) {
   const title = $(`#title-edit-todo${id}`).val();
   const description = $(`#description-edit-todo${id}`).val();
@@ -266,10 +360,10 @@ function getTodos() {
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs justify-content-between">
                     <li class="nav-item">
-                        <h4 class="nav-link active" aria-current="true" id="todo-detail${todo.id}">Todo</h4>
+                        <h4 class="nav-link active" aria-current="true" id="todo-detail_${todo.id}">Todo</h4>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="todo-member${i}">Member</a>
+                        <a class="nav-link" id="todo-member-tab_${todo.id}">Member</a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-info text-end" id="edit-status-btn_${todo.id}_${todo.status}">A</a>
@@ -289,7 +383,7 @@ function getTodos() {
                   <p class="card-text">${todo.description}</p>
                   <div class="text-end">
                     <div class="text-start">
-                        Due to: ${dateTimeFormatted}
+                        <strong>Author:</strong> ${todo.Users[0].email} <strong>Due to:</strong> ${dateTimeFormatted}
                     </div>
                   </div>
               </div>
@@ -464,9 +558,9 @@ function getUsers(){
   })
     .done(response => {
       $("#user-list").empty();
-      response.forEach(user => {
+      response.forEach((user, i) => {
         $("#user-list").append(`
-         <h5 class="card-title">${user.email}</h5>
+         <h6 class="card-title">${i+1}. ${user.email}</h6>
         `)
       })
     })
@@ -476,7 +570,19 @@ function getUsers(){
 }
 
 function getAccount() {
-
+  $.ajax({
+    url: baseUrl + "/user",
+    method: "GET",
+    headers: { access_token: localStorage.access_token }
+  })
+    .done(user => {
+      $("#user-profile").empty().append(`
+        <p className="card-text">${user.email}</p>
+      `)
+    })
+    .fail(err => {
+      console.log(err)
+    })
 }
 
 

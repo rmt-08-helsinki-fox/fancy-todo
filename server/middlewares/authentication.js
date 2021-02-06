@@ -2,6 +2,7 @@ const { decodeToken } = require('../helpers/jwt');
 
 function authentication(req, res, next) {
     try {
+        console.log("this is ayth", 123)
         if(req.headers.access_token) {
             req.payload = decodeToken(req.headers.access_token, process.env.SECRET_KEY);
             next();

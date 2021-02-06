@@ -6,6 +6,15 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 module.exports = class UserController {
 
+  static async getUser(req, res, next) {
+    try {
+      const user = await User.findOne({ where: { email: req.payload.email } })
+      res.status(200).json(user)
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async getUsers(req, res, next) {
     try {
       const users = await User.findAll()

@@ -5,13 +5,33 @@ module.exports = class TodoController {
 
   static async getTodos(req, res, next) {
     try {
-      const todos = await Todo.findAll({ order: [["createdAt", "DESC"]], include: [UserTodo,User] })
+      const todos = await Todo.findAll({ order: [["createdAt", "DESC"]], include: [UserTodo, User] })
       res.status(200).json(todos)
     } catch (err) {
       next(err)
     }
   }
 
+  static async getMembers(req, res, next) {
+    try {
+      const rawUsers = await User.findAll()
+      const todoId = Number(req.params.id)
+      const users = rawUsers.map(user => user.email);
+      const todoMember = UserTodo.findAll({ where: { todoId } })
+      console.log(users, todoMember)
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async addMember(req, res, next) {
+    try {
+      const userTodo = await UserTodo.update({ member_email: req.body.member_email }, { where: { todoId: req.body.todoId } })
+      res.status(200).json({})
+    } catch (err) {
+      next(err);
+    }
+  }
 
   static async addTodo(req, res, next) {
     try {
@@ -28,7 +48,7 @@ module.exports = class TodoController {
   static async getTodo(req, res, next) {
     try {
       let id = Number(req.params.id);
-      const todo = await Todo.findOne({ where: { id } })
+      const todo = await Todo.findOne({ where: { id }, include: [User,UserTodo] })
       if(!todo) { throw { name: "Not Found", message: "todo not found", status: 404 } }
       res.status(200).json(todo)
     } catch (err) {

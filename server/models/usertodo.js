@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   UserTodo.init({
     userId: DataTypes.INTEGER,
-    todoId: DataTypes.INTEGER
+    todoId: DataTypes.INTEGER,
+    member_email: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'UserTodo',
