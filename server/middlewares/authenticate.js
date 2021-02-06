@@ -5,7 +5,6 @@ const authenticate = function (req, res, next) {
     const token = req.headers.token;
     const decoded = verify(token);
     req.decoded = decoded;
-
     next();
   } catch (err) {
     err.error = {

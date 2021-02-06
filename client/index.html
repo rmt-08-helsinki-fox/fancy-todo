@@ -31,6 +31,7 @@
     <div id="register" style="max-width: 400px; margin: 0 auto;">
       <form id="register-form">
         <h1 class="text-center my-5">Register Form</h1>
+        <p class="text-danger" id="registerError"></p>
         <div class="form-group">
           <label for="email">Email address</label>
           <input class="form-control form-control" type="email" name="email" id="registerEmail" placeholder="Enter email">
@@ -46,6 +47,7 @@
     <div id="login" style="max-width: 400px; margin: 0 auto;">
       <form id="login-form">
         <h1 class="text-center my-5">Login Form</h1>
+        <p class="text-danger" id="loginError"></p>
         <div class="form-group">
           <label for="email">Email address</label>
           <input class="form-control form-control" type="email" name="email" id="loginEmail" placeholder="Enter email">
@@ -63,6 +65,7 @@
       <div class="addTodo-search" style="display: grid; grid-template-columns: repeat(2, auto);">
         <form id="addTodo-form" style="padding-right: 50px; max-width: 300px;">
           <h1 class="text-center mt-3">Add Todo List</h1>
+          <p class="text-danger" id="addError"></p>
           <div class="form-group">
             <label for="title">Title</label>
             <input class="form-control form-control" type="text" name="title" id="title" placeholder="Enter title">
@@ -82,8 +85,9 @@
           <button class="btn btn-primary btn-block" type="submit">Add</button>
         </form>
         <div style="margin-top: 75px;">
+          <p class="text-danger" id="dictionaryError"></p>
           <div class="input-group">
-            <input class="form-control" type="text" placeholder="Search one word from dictionary..." id="word-search">
+            <input class="form-control" type="text" placeholder="Search one word from Oxford Dictionary (English only)..." id="word-search">
             <div class="input-group-append">
               <button class="btn btn-outline-primary" type="button" id="word-btn">Search</button>
             </div>

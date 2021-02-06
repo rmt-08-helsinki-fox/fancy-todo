@@ -36,10 +36,11 @@ function register() {
     }
   })
     .done(response => {
+      $("#registerError").text("");
       afterRegister();
     })
     .fail((xhr, text) => {
-      console.log(xhr, text);
+      $("#registerError").text(xhr.responseJSON.error);
     })
     .always(() => {
       $("#register-form").trigger('reset');
@@ -64,11 +65,12 @@ function login() {
     }
   })
     .done(response => {
+      $("#loginError").text("");
       localStorage.setItem('access_token', response.access_token);
       auth();
     })
     .fail((xhr, text) => {
-      console.log(xhr, text);
+      $("#loginError").text(xhr.responseJSON.error);
     })
     .always(() => {
       $("#login-form").trigger('reset');
@@ -161,6 +163,7 @@ function addTodo() {
     }
   })
     .done(value => {
+      $("#addError").text("");
       $('#todo').append(`
         <div class="card d-inline-block m-3" id="todo-${value.id}" style="width: 20rem;">
           <div class="card-body">
@@ -211,7 +214,7 @@ function addTodo() {
       `)
     })
     .fail((xhr, text) => {
-      console.log(xhr, text);
+      $("#addError").text(xhr.responseJSON.error);
     })
     .always(() => {
       $('#addTodo-form').trigger('reset');
@@ -254,7 +257,6 @@ function update(id) {
   })
     .done((response) => {
       auth();
-      console.log(response);
     })
     .fail((xhr, text) => {
       console.log(xhr, text);
@@ -275,10 +277,15 @@ function getDictionary() {
   })
     .done(response => {
       $("#word-search").val("");
+      console.log(response);
       $("#search-result").text(response.definition);
+      $("#dictionaryError").text('');
     })
     .fail(err => {
       console.log(err);
+      $("#word-search").val("");
+      $("#dictionaryError").text(err.responseJSON.error);
+      $("#search-result").text("")
     })
 }
 
@@ -304,6 +311,9 @@ function auth() {
 }
 
 function logout() {
+  $("#addError").text("");
+  $("#search-result").text("");
+  $("#dictionaryError").text("");
   localStorage.clear();
   $('#todo').empty();
   auth();
@@ -338,7 +348,6 @@ $(document).ready(() => {
   $("#register-form").on("submit", (e) => {
     e.preventDefault();
     register();
-    afterRegister();
   })
 
   $("#addTodo-form").on("submit", (e) => {

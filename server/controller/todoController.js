@@ -150,8 +150,10 @@ class todoController {
         });
         resp.on('end', () => {
           let parsed = JSON.parse(body);
-          if (!parsed.results) return res.status(404).json({ error: 'Kata yang anda cari tidak terdaftar!' })
-          res.status(200).json({ definition: parsed.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0] });
+          if (parsed.error) return res.status(404).json({ error: 'Kata yang anda cari tidak terdaftar!' })
+          const definition = parsed.results[0].lexicalEntries[0].entries[0].senses[0].definitions;
+          if (!definition) return res.status(404).json({ error: 'Kata yang anda cari tidak terdaftar!' })
+          res.status(200).json({ definition });
         });
       });
     } catch (err) {
