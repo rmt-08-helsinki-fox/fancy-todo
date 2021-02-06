@@ -1,5 +1,56 @@
 const base_url = 'http://localhost:3000'
 
+function fetchProject(){
+    $.ajax({
+        url : `${base_url}/projects`,
+        method: 'GET'
+    }).done(response => {
+        $("#project-container").html('');
+        for(let project of response){
+            $("#project-container").append(`
+            <div class="row justify-content-md-center h-100 mt-4">
+                <div class="col-md-9">
+                    <div class="card" style="border: none;">
+                        <div id="headingOne" class="card-header bg-white shadow-sm border-0">
+                            <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapse${project.id}" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-uppercase collapsible-link py-2">${project.name}</a>
+                                <span class="float-left">${project.Users.length || 0} Person</span>
+                            </h6>
+                        </div>
+                        <div id="collapse${project.id}" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse">
+                            <div class="card-body px-4">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td>Email</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="project${project.id}-members"></tbody>
+                                </table>
+                            </div>
+                            <div class="card-body px-4">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" data-id="${project.id}" class="btn btn-sm btn-primary invite-project"><i class="fa fa-user-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `);
+            $("#project-members").html('')
+            for(let user of project.Users){
+                $(`#project${project.id}-members`).append(`
+                    <tr>
+                        <td>${user.email}</td>
+                    </tr>
+                `)
+            }
+        }
+    }).fail(err => {
+        toastr.error(Array.isArray(err.responseJSON.msg) ? err.responseJSON.msg.join('<br />') : err.responseJSON.msg,"Oops");
+    }) 
+}
+
 function fetchTodo(){
     $.ajax({
         url : `${base_url}/todos`,
@@ -55,7 +106,7 @@ function fetchTodo(){
             </div>`)
         }
     }).fail(err => {
-        console.log(err)
+        toastr.error(Array.isArray(err.responseJSON.msg) ? err.responseJSON.msg.join('<br />') : err.responseJSON.msg,"Oops");
     })
 }
 
@@ -64,18 +115,19 @@ function mainApp(){
         $('#loginPage').fadeOut();
         $('#registerPage').fadeOut();
         $("#appPage").fadeIn();
+        $.ajaxSetup({
+            headers : {
+                access_token : localStorage.getItem("access_token")
+            }
+        });
         fetchTodo();
+        fetchProject();
     }
 }
 
 function login(access_token){
     localStorage.setItem("access_token",access_token);
     mainApp();
-    $.ajaxSetup({
-        headers : {
-            access_token : localStorage.getItem("access_token")
-        }
-    });
 }
 
 $(document).ready(function(){
@@ -238,5 +290,45 @@ $(document).on("click",".btn-delete",function(){
             toastr.error('Delete todo unsuccessfull','Error')
         });
     }
-   
 })
+
+$(document).on("submit","#addProject",function(e) {
+    e.preventDefault();
+    let data = $(this).serialize();
+    $.ajax({
+        method : "POST",
+        url: base_url + '/projects/',
+        data
+    }).done(response => {
+        fetchProject();
+        toastr.success('Create project successfully','Success');
+        $("#addProject").trigger('reset')
+        $("#addProjectModal").modal('hide');
+    }).fail(err => {
+        toastr.error('Create project unsuccessfull : '+ err.responseJSON.msg,'Error')
+    });
+})
+
+$(document).on("click",".invite-project",function(){
+    $("#inviteProject").find('input[name=project_id]').val($(this).data('id'));
+    $("#inviteProjectModal").modal('show')
+});
+
+$(document).on('submit','#inviteProject',function(e){
+    e.preventDefault();
+    let data = $(this).serialize();
+    let project_id = $("#inviteProject").find('input[name=project_id]').val();
+
+    $.ajax({
+        method : 'POST',
+        url : base_url + '/projects/' + project_id + '/invite',
+        data
+    }).done(response => {
+        fetchProject();
+        toastr.success('Invite project successfully','Success');
+        $("#inviteProject").trigger('reset')
+        $("#inviteProjectModal").modal('hide');
+    }).fail(err => {
+        toastr.error(Array.isArray(err.responseJSON.msg) ? err.responseJSON.msg.join('<br />') : err.responseJSON.msg,"Oops");
+    })
+});
