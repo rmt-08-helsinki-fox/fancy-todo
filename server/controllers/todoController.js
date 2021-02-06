@@ -33,7 +33,7 @@ class TodoController {
     try {
       const id = +req.params.id
       let todo = await Todo.findByPk(id)
-      let getHolidays = await axios.get(`https://calendarific.com/api/v2/holidays?api_key=eb44d4079e833ea34d1b75c332d28ef9e4ce8324d2ef9366ffc276ece8e1f386&country=ID&year=${getYear(todo.due_date)}`)
+      let getHolidays = await axios.get(`https://calendarific.com/api/v2/holidays?api_key=${process.env.api_key}&country=ID&year=${getYear(todo.due_date)}`)
       let holidays = getHolidays.data.response.holidays
       if (todo) {
         let events = []
