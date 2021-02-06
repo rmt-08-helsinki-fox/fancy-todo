@@ -1431,9 +1431,10 @@ false posixrules
     <database id="7" parent="1" name="hacktiv8-fancy-todo">
       <ObjectId>21229</ObjectId>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>3108</IntrospectionStateNumber>
-      <Relations>sequence|table|21323|21325|1
-sequence|table|21334|21336|1
+      <IntrospectionStateNumber>3200</IntrospectionStateNumber>
+      <Relations>sequence|table|21402|21404|1
+sequence|table|21413|21415|1
+sequence|table|21426|21428|1
 </Relations>
     </database>
     <database id="8" parent="1" name="hacktiv8-post">
@@ -1543,7 +1544,7 @@ UC/10
 </Acl>
       <StateNumber>286</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>3109</IntrospectionStateNumber>
+      <IntrospectionStateNumber>3201</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <extension id="31" parent="7" name="plpgsql">
@@ -1644,40 +1645,52 @@ UC/10
       <Type>index</Type>
     </access-method>
     <sequence id="43" parent="30" name="Todos_id_seq">
-      <ObjectId>21323</ObjectId>
+      <ObjectId>21402</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>3038</StateNumber>
+      <StateNumber>3193</StateNumber>
       <DataType>integer|0s</DataType>
     </sequence>
-    <sequence id="44" parent="30" name="Users_id_seq">
-      <ObjectId>21334</ObjectId>
+    <sequence id="44" parent="30" name="UserTodos_id_seq">
+      <ObjectId>21426</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>3040</StateNumber>
+      <StateNumber>3197</StateNumber>
       <DataType>integer|0s</DataType>
     </sequence>
-    <table id="45" parent="30" name="SequelizeMeta">
+    <sequence id="45" parent="30" name="Users_id_seq">
+      <ObjectId>21413</ObjectId>
+      <Owner>postgres</Owner>
+      <StateNumber>3195</StateNumber>
+      <DataType>integer|0s</DataType>
+    </sequence>
+    <table id="46" parent="30" name="SequelizeMeta">
       <ObjectId>21230</ObjectId>
       <Owner>postgres</Owner>
       <StateNumber>2918</StateNumber>
     </table>
-    <table id="46" parent="30" name="Todos">
-      <ObjectId>21325</ObjectId>
+    <table id="47" parent="30" name="Todos">
+      <ObjectId>21404</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>3044</StateNumber>
+      <StateNumber>3197</StateNumber>
     </table>
-    <table id="47" parent="30" name="Users">
-      <ObjectId>21336</ObjectId>
+    <table id="48" parent="30" name="UserTodos">
+      <ObjectId>21428</ObjectId>
+      <Outdated>1</Outdated>
       <Owner>postgres</Owner>
-      <StateNumber>3044</StateNumber>
+      <StateNumber>3197</StateNumber>
     </table>
-    <column id="48" parent="45" name="name">
+    <table id="49" parent="30" name="Users">
+      <ObjectId>21415</ObjectId>
+      <Owner>postgres</Owner>
+      <StateNumber>3197</StateNumber>
+    </table>
+    <column id="50" parent="46" name="name">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>2918</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="49" parent="45" name="SequelizeMeta_pkey">
+    <index id="51" parent="46" name="SequelizeMeta_pkey">
       <ObjectId>21233</ObjectId>
       <StateNumber>2918</StateNumber>
       <ColNames>name</ColNames>
@@ -1688,71 +1701,65 @@ UC/10
       <CollationNames>default</CollationNames>
       <ClassIds>3126</ClassIds>
     </index>
-    <key id="50" parent="45" name="SequelizeMeta_pkey">
+    <key id="52" parent="46" name="SequelizeMeta_pkey">
       <ObjectId>21234</ObjectId>
       <StateNumber>2918</StateNumber>
       <ColNames>name</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>SequelizeMeta_pkey</UnderlyingIndexName>
     </key>
-    <column id="51" parent="46" name="id">
+    <column id="53" parent="47" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3038</StateNumber>
+      <StateNumber>3193</StateNumber>
       <DefaultExpression>nextval(&apos;&quot;Todos_id_seq&quot;&apos;::regclass)</DefaultExpression>
       <TypeId>23</TypeId>
     </column>
-    <column id="52" parent="46" name="title">
+    <column id="54" parent="47" name="title">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3038</StateNumber>
+      <StateNumber>3193</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="53" parent="46" name="description">
+    <column id="55" parent="47" name="description">
       <Position>3</Position>
       <DataType>text|0s</DataType>
-      <StateNumber>3038</StateNumber>
+      <StateNumber>3193</StateNumber>
       <TypeId>25</TypeId>
     </column>
-    <column id="54" parent="46" name="status">
+    <column id="56" parent="47" name="status">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3038</StateNumber>
+      <StateNumber>3193</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="55" parent="46" name="due_date">
+    <column id="57" parent="47" name="due_date">
       <Position>5</Position>
       <DataType>timestamp with time zone|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3038</StateNumber>
+      <StateNumber>3193</StateNumber>
       <TypeId>1184</TypeId>
     </column>
-    <column id="56" parent="46" name="createdAt">
+    <column id="58" parent="47" name="createdAt">
       <Position>6</Position>
       <DataType>timestamp with time zone|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3038</StateNumber>
+      <StateNumber>3193</StateNumber>
       <TypeId>1184</TypeId>
     </column>
-    <column id="57" parent="46" name="updatedAt">
+    <column id="59" parent="47" name="updatedAt">
       <Position>7</Position>
       <DataType>timestamp with time zone|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3038</StateNumber>
+      <StateNumber>3193</StateNumber>
       <TypeId>1184</TypeId>
     </column>
-    <column id="58" parent="46" name="userId">
-      <Position>8</Position>
-      <DataType>integer|0s</DataType>
-      <StateNumber>3042</StateNumber>
-      <TypeId>23</TypeId>
-    </column>
-    <index id="59" parent="46" name="Todos_pkey">
-      <ObjectId>21332</ObjectId>
-      <StateNumber>3038</StateNumber>
+    <index id="60" parent="47" name="Todos_pkey">
+      <ObjectId>21411</ObjectId>
+      <StateNumber>3193</StateNumber>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
       <Primary>1</Primary>
@@ -1760,18 +1767,69 @@ UC/10
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <key id="60" parent="46" name="Todos_pkey">
-      <ObjectId>21333</ObjectId>
-      <StateNumber>3038</StateNumber>
+    <key id="61" parent="47" name="Todos_pkey">
+      <ObjectId>21412</ObjectId>
+      <StateNumber>3193</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>Todos_pkey</UnderlyingIndexName>
     </key>
-    <foreign-key id="61" parent="46" name="custom_fkey_userId">
-      <ObjectId>21347</ObjectId>
-      <StateNumber>3044</StateNumber>
+    <column id="62" parent="48" name="id">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>3197</StateNumber>
+      <DefaultExpression>nextval(&apos;&quot;UserTodos_id_seq&quot;&apos;::regclass)</DefaultExpression>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="63" parent="48" name="userId">
+      <Position>2</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>3197</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="64" parent="48" name="todoId">
+      <Position>3</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>3197</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="65" parent="48" name="createdAt">
+      <Position>4</Position>
+      <DataType>timestamp with time zone|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>3197</StateNumber>
+      <TypeId>1184</TypeId>
+    </column>
+    <column id="66" parent="48" name="updatedAt">
+      <Position>5</Position>
+      <DataType>timestamp with time zone|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>3197</StateNumber>
+      <TypeId>1184</TypeId>
+    </column>
+    <index id="67" parent="48" name="UserTodos_pkey">
+      <ObjectId>21432</ObjectId>
+      <StateNumber>3197</StateNumber>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>0</CollationIds>
+      <ClassIds>1978</ClassIds>
+    </index>
+    <key id="68" parent="48" name="UserTodos_pkey">
+      <ObjectId>21433</ObjectId>
+      <StateNumber>3197</StateNumber>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>UserTodos_pkey</UnderlyingIndexName>
+    </key>
+    <foreign-key id="69" parent="48" name="UserTodos_userId_fkey">
+      <ObjectId>21434</ObjectId>
+      <StateNumber>3197</StateNumber>
       <ColNames>userId</ColNames>
-      <RefTableId>21336</RefTableId>
+      <RefTableId>21415</RefTableId>
       <RefColPositions>1</RefColPositions>
       <RefTableName>Users</RefTableName>
       <RefKeyName>Users_pkey</RefKeyName>
@@ -1779,45 +1837,57 @@ UC/10
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
     </foreign-key>
-    <column id="62" parent="47" name="id">
+    <foreign-key id="70" parent="48" name="UserTodos_todoId_fkey">
+      <ObjectId>21439</ObjectId>
+      <StateNumber>3197</StateNumber>
+      <ColNames>todoId</ColNames>
+      <RefTableId>21404</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>Todos</RefTableName>
+      <RefKeyName>Todos_pkey</RefKeyName>
+      <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
+    </foreign-key>
+    <column id="71" parent="49" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3040</StateNumber>
+      <StateNumber>3195</StateNumber>
       <DefaultExpression>nextval(&apos;&quot;Users_id_seq&quot;&apos;::regclass)</DefaultExpression>
       <TypeId>23</TypeId>
     </column>
-    <column id="63" parent="47" name="email">
+    <column id="72" parent="49" name="email">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3040</StateNumber>
+      <StateNumber>3195</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="64" parent="47" name="password">
+    <column id="73" parent="49" name="password">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3040</StateNumber>
+      <StateNumber>3195</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="65" parent="47" name="createdAt">
+    <column id="74" parent="49" name="createdAt">
       <Position>4</Position>
       <DataType>timestamp with time zone|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3040</StateNumber>
+      <StateNumber>3195</StateNumber>
       <TypeId>1184</TypeId>
     </column>
-    <column id="66" parent="47" name="updatedAt">
+    <column id="75" parent="49" name="updatedAt">
       <Position>5</Position>
       <DataType>timestamp with time zone|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>3040</StateNumber>
+      <StateNumber>3195</StateNumber>
       <TypeId>1184</TypeId>
     </column>
-    <index id="67" parent="47" name="Users_pkey">
-      <ObjectId>21343</ObjectId>
-      <StateNumber>3040</StateNumber>
+    <index id="76" parent="49" name="Users_pkey">
+      <ObjectId>21422</ObjectId>
+      <StateNumber>3195</StateNumber>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
       <Primary>1</Primary>
@@ -1825,9 +1895,9 @@ UC/10
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="68" parent="47" name="Users_email_key">
-      <ObjectId>21345</ObjectId>
-      <StateNumber>3040</StateNumber>
+    <index id="77" parent="49" name="Users_email_key">
+      <ObjectId>21424</ObjectId>
+      <StateNumber>3195</StateNumber>
       <ColNames>email</ColNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
@@ -1835,16 +1905,16 @@ UC/10
       <CollationNames>default</CollationNames>
       <ClassIds>3126</ClassIds>
     </index>
-    <key id="69" parent="47" name="Users_pkey">
-      <ObjectId>21344</ObjectId>
-      <StateNumber>3040</StateNumber>
+    <key id="78" parent="49" name="Users_pkey">
+      <ObjectId>21423</ObjectId>
+      <StateNumber>3195</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>Users_pkey</UnderlyingIndexName>
     </key>
-    <key id="70" parent="47" name="Users_email_key">
-      <ObjectId>21346</ObjectId>
-      <StateNumber>3040</StateNumber>
+    <key id="79" parent="49" name="Users_email_key">
+      <ObjectId>21425</ObjectId>
+      <StateNumber>3195</StateNumber>
       <ColNames>email</ColNames>
       <UnderlyingIndexName>Users_email_key</UnderlyingIndexName>
     </key>

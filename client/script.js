@@ -59,7 +59,7 @@ $(document).ready(function() {
 
   $("#btn-get-add-todo").on("click", (event) => {
     event.preventDefault();
-    $("#anime-area").hide();
+    $("#anime-area").empty();
     $("#add-todo-area").show();
   })
 
@@ -86,16 +86,103 @@ $(document).ready(function() {
     event.preventDefault();
     if(event.target.id === "add-anime-to-todo") {
       addTodo("recommendation");
+
     } else if(event.target.id === "btn-close-add-anime") {
       $("#anime-area").empty().hide();
+
     } else if(event.target.id.match(/delete-btn*/g)) {
       const id = Number(event.target.id.split("_")[1])
       deleteTodo(id);
+
     } else if(event.target.id.match(/btn-edit-todo*/g)) {
       const id = Number(event.target.id.split("_")[1])
       updateTodo(id);
+
+    } else if(event.target.id.match(/btn-add-member*/g)) {
+      const id = Number(event.target.id.split("_")[1])
+      const member_email = $("#member-email").val();
+      $.ajax({
+        url: baseUrl + '/todos/'+id+'/members',
+        method: "POST",
+        headers: { access_token: localStorage.access_token },
+        data: { member_email }
+      })
+        .done(() => {
+          authentication()
+        })
+        .fail(err => {
+          console.log(err)
+        })
+
+    } else if(event.target.id.match(/todo-member-tab*/g)) {
+      const tabId = event.target.id.split("_")[1]
+      $(`#${event.target.id}`).addClass('active');
+      $(`#todo-detail_${tabId}`).removeClass('active');
+        $.ajax({
+          url: baseUrl + "/todos/" + tabId,
+          method: "GET",
+          headers: { access_token: localStorage.access_token }
+        })
+        .done(todo => {
+          console.log(todo)
+          $("#member-list-area").empty();
+          $(`#todo-container-body${tabId}`).empty().append(`
+          <div class="container" id="member-container">
+            <div id="member-list-area"></div>
+            <div id="add-member-area">
+              <input type="email" id="member-email" placeholder="enter email">
+              <button type="submit" class="btn btn-primary" id="btn-add-member_${tabId}">add member</button>
+             </div>
+          </div>
+        `)
+          todo.Users.forEach(user => {
+            $("#member-list-area").append(`
+              <p>${user.email}</p>
+            `)
+          })
+        })
+
+
+    } else if(event.target.id.match(/todo-detail*/g)) {
+      const tabId = event.target.id.split("_")[1]
+      $(`#todo-detail_${tabId}`).addClass('active');
+      $(`#todo-member-tab_${tabId}`).removeClass('active');
+      $.ajax({
+        url: baseUrl + "/todos/"+tabId,
+        method: "GET",
+        headers: { access_token: localStorage.access_token }
+      })
+        .done(todo => {
+          let bgColor;
+          if(todo.status === "incomplete") {
+            bgColor = "red";
+          } else {
+            bgColor = "green";
+          }
+          let dateTimeFormatted = new Date(todo.due_date).toUTCString()
+          dateTimeFormatted = dateTimeFormatted.slice(0, dateTimeFormatted.length-13)
+          $(`#todo-container-body${tabId}`).empty().append(`
+              <div class="card-body text-start">
+                  <h5 class="card-title">
+                        ${todo.title}
+                        <span
+                        style="background-color: ${bgColor}; border-radius: 3px; padding: 0 5px;"
+                        >${todo.status}</span>
+                  </h5>
+                  <p class="card-text">${todo.description}</p>
+                  <div class="text-end">
+                    <div class="text-start">
+                        <strong>Author:</strong> ${todo.Users[0].email} <strong>Due to:</strong> ${dateTimeFormatted}
+                    </div>
+                  </div>
+              </div>
+        `)
+        })
+        .fail(err => {
+          console.log(err)
+        })
+
     } else if(event.target.id.match(/edit-status-btn*/g)) {
-      console.log(event.target.id)
       const id = Number(event.target.id.split("_")[1])
       let status = event.target.id.split("_")[2]
       if(status === "complete") {
@@ -103,7 +190,6 @@ $(document).ready(function() {
       } else {
         status = "complete"
       }
-      console.log(status)
       patchTodo(id, status)
     }
 
@@ -192,6 +278,7 @@ $(document).ready(function() {
   })
 })
 
+
 function updateTodo(id) {
   const title = $(`#title-edit-todo${id}`).val();
   const description = $(`#description-edit-todo${id}`).val();
@@ -227,21 +314,6 @@ function patchTodo(id, status) {
 
 
 
-function deleteTodo(todoId) {
-  $.ajax({
-    url: baseUrl + `/todos/${todoId}`,
-    method: "DELETE",
-    headers: { access_token: localStorage.access_token }
-  })
-    .done(response => {
-      authentication();
-    })
-    .fail(err => {
-      console.log(err)
-    })
-}
-
-
 function getTodos() {
   $.ajax({
       url: baseUrl + "/todos",
@@ -265,13 +337,13 @@ function getTodos() {
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs justify-content-between">
                     <li class="nav-item">
-                        <h4 class="nav-link active" aria-current="true" id="todo-detail${todo.id}">Todo</h4>
+                        <h4 class="nav-link active" aria-current="true" id="todo-detail_${todo.id}">Todo</h4>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="todo-member${i}">Member</a>
+                        <a class="nav-link" id="todo-member-tab_${todo.id}">Member</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-info text-end" id="edit-status-btn_${todo.id}_${todo.status}">A</a>
+                        <a class="btn btn-info text-end" id="edit-status-btn_${todo.id}_${todo.status}">&#10004;</a>
                         <a class="btn btn-warning text-end" id="edit-btn_${todo.id}">Edit</a>
                         <a class="btn btn-danger text-end" id="delete-btn_${todo.id}">Delete</a>
                     </li>
@@ -288,7 +360,7 @@ function getTodos() {
                   <p class="card-text">${todo.description}</p>
                   <div class="text-end">
                     <div class="text-start">
-                        Due to: ${dateTimeFormatted}
+                        <strong>Author:</strong> ${todo.Users[0].email} <strong>Due to:</strong> ${dateTimeFormatted}
                     </div>
                   </div>
               </div>
@@ -302,171 +374,11 @@ function getTodos() {
     })
 }
 
-function onSignIn(googleUser) {
-  var id_token = googleUser.getAuthResponse().id_token;
-
-  $.ajax({
-      url: baseUrl + "/login-google",
-      method: "POST",
-      data: { id_token },
-    })
-    .done((response) => {
-      localStorage.setItem("access_token", response.access_token);
-      authentication();
-      $("#dashboard-area").show();
-    })
-    .fail((err) => {
-      $("div.center form .login-error-message").empty();
-      err.responseJSON.messages.forEach((errMessage) => {
-        $("div.center form .login-error-message").append(`
-            <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
-        `);
-      });
-    })
-}
-
-
-
-function signOut() {
-  const auth2 = gapi.auth2.getAuthInstance();
-  auth2.signOut().then(function () {
-    console.log('User signed out.');
-  });
-}
-
-function authentication() {
-  if(localStorage.access_token) {
-    $("#dashboard-area").show();
-    $("#login-area").hide();
-    $("#add-todo-area").hide();
-    $("#register-area").hide();
-    $("#navbar-login").hide();
-    $("#navbar-register").hide();
-    $("#navbar-logout").show();
-    getDashboard();
-    $("#anime-area").hide();
-  } else {
-    $("#navbar-login").show();
-    $("#navbar-register").show();
-    $("#navbar-logout").hide();
-    $("#add-todo-area").hide();
-    $("#dashboard").hide();
-    $("#register-area").hide();
-    $("#login-area").show();
-  }
-}
-
-
-
-
-
-
-
-function addTodo(from) {
-  let title, due_date, description;
-  if(from === "recommendation") {
-    const animeTitle = localStorage.anime_title;
-    const animeEpisode = localStorage.anime_episode;
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + 7);
-    title = `watch ${animeTitle}`
-    due_date = currentDate
-    description = `total of ${animeEpisode} episodes on ${animeTitle} to watch`
-  } else {
-    title = $("#title-add-todo").val();
-    due_date = $("#date-add-todo").val();
-    description = $("#description-add-todo").val();
-  }
-  $.ajax({
-    url: baseUrl + "/todos",
-    method: "POST",
-    headers: { access_token: localStorage.access_token },
-    data: { title, description, due_date }
-  })
-    .done(response => {
-      $("#add-todo-area").hide();
-      getTodos();
-    })
-    .fail((err) => {
-      console.log(err)
-    })
-}
-
-
-
-
-
-function login() {
-  const email = $("#login-email").val();
-  const password = $("#login-password").val();
-
-  $.ajax({
-    url: baseUrl + "/login",
-    method: "POST",
-    data: { email, password }
-  })
-    .done(response => {
-      localStorage.setItem("access_token", response.access_token)
-      getDashboard();
-      authentication();
-    })
-    .fail(errors => {
-      $("#login-errors").empty();
-      errors.responseJSON.errors.forEach(error => {
-        $("#login-errors").prepend(`
-            <p style="color: red;">${error}</p>
-        `)
-      })
-    })
-}
-
-
-
-function register() {
-  const email = $("#register-email").val();
-  const password = $("#register-password").val();
-
-  $.ajax({
-    url: baseUrl + "/register",
-    method: "POST",
-    data: { email, password }
-  })
-    .done(response => {
-      $("#login-area").show();
-      $("#add-todo-area").hide();
-      $("#register-area").hide();
-      $("#dashboard-area").hide();
-    })
-    .fail(errors => {
-      console.log(errors)
-      $("#register-errors").empty();
-      errors.responseJSON.errors.forEach(error => {
-        $("#register-errors").prepend(`
-            <p style="color: red; margin: -5px 0;">${error}</p>
-        `)
-      })
-    })
-}
-
-function getDashboard() {
-  $("#dashboard-area").show();
-  getTodos();
-  getUsers();
-  getAccount();
-}
-
-function getUsers(){
-
-}
-
-function getAccount() {
-
-}
 
 
 function getAnime() {
   $.ajax({
-    url: baseUrl + "/todos/anime",
+    url: baseUrl + "/anime",
     method: "GET",
     headers: { access_token: localStorage.access_token }
   })
@@ -496,4 +408,218 @@ function getAnime() {
     .fail(err => {
       console.log(err)
     })
+}
+
+
+function deleteTodo(todoId) {
+  $.ajax({
+      url: baseUrl + `/todos/${todoId}`,
+      method: "DELETE",
+      headers: { access_token: localStorage.access_token }
+    })
+    .done(response => {
+      authentication();
+    })
+    .fail(err => {
+      console.log(err)
+    })
+}
+
+
+
+function addTodo(from) {
+  let title, due_date, description;
+  if(from === "recommendation") {
+    const animeTitle = localStorage.anime_title;
+    const animeEpisode = localStorage.anime_episode;
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + 7);
+    title = `watch ${animeTitle}`
+    due_date = currentDate
+    description = `total of ${animeEpisode} episodes on ${animeTitle} to watch`
+  } else {
+    title = $("#title-add-todo").val();
+    due_date = $("#date-add-todo").val();
+    description = $("#description-add-todo").val();
+  }
+  $.ajax({
+      url: baseUrl + "/todos",
+      method: "POST",
+      headers: { access_token: localStorage.access_token },
+      data: { title, description, due_date }
+    })
+    .done(response => {
+      $("#add-todo-area").hide();
+      getTodos();
+    })
+    .fail((err) => {
+      console.log(err)
+    })
+    .always(() => {
+      $("#title-add-todo").text("");
+      $("#date-add-todo").text("");
+      $("#description-add-todo").text("");
+    })
+}
+
+
+
+async function getDashboard() {
+  try {
+    $("#dashboard-area").show();
+    getTodos();
+    getUsers();
+    getAccount();
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+
+function getTodoMember(id) {
+  $.ajax({
+    url: baseUrl + "/todos/"+id,
+    method: "POST",
+    headers: { access_token: localStorage.access_token }
+  })
+}
+
+
+
+function onSignIn(googleUser) {
+  const id_token = googleUser.getAuthResponse().id_token;
+
+  $.ajax({
+      url: baseUrl + "/login-google",
+      method: "POST",
+      data: { id_token },
+    })
+    .done((response) => {
+      localStorage.setItem("access_token", response.access_token);
+      authentication();
+      $("#dashboard-area").show();
+    })
+    .fail((err) => {
+      $("div.center form .login-error-message").empty();
+      err.responseJSON.messages.forEach((errMessage) => {
+        $("div.center form .login-error-message").append(`
+            <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
+        `);
+      });
+    })
+}
+
+function authentication() {
+  if(localStorage.access_token) {
+    $("#dashboard-area").show();
+    $("#login-area").hide();
+    $("#add-todo-area").hide();
+    $("#register-area").hide();
+    $("#navbar-login").hide();
+    $("#navbar-register").hide();
+    $("#navbar-logout").show();
+    getDashboard();
+    $("#anime-area").hide();
+  } else {
+    $("#navbar-login").show();
+    $("#navbar-register").show();
+    $("#navbar-logout").hide();
+    $("#add-todo-area").hide();
+    $("#dashboard").hide();
+    $("#register-area").hide();
+    $("#login-area").show();
+  }
+}
+
+
+function login() {
+  const email = $("#login-email").val();
+  const password = $("#login-password").val();
+
+  $.ajax({
+      url: baseUrl + "/login",
+      method: "POST",
+      data: { email, password }
+    })
+    .done(response => {
+      localStorage.setItem("access_token", response.access_token)
+      getDashboard();
+      authentication();
+    })
+    .fail(errors => {
+      $("#login-errors").empty();
+      errors.responseJSON.errors.forEach(error => {
+        $("#login-errors").prepend(`
+            <p style="color: red;">${error}</p>
+        `)
+      })
+    })
+}
+
+
+function register() {
+  const email = $("#register-email").val();
+  const password = $("#register-password").val();
+
+  $.ajax({
+      url: baseUrl + "/register",
+      method: "POST",
+      data: { email, password }
+    })
+    .done(response => {
+      $("#login-area").show();
+      $("#add-todo-area").hide();
+      $("#register-area").hide();
+      $("#dashboard-area").hide();
+    })
+    .fail(errors => {
+      $("#register-errors").empty();
+      errors.responseJSON.errors.forEach(error => {
+        $("#register-errors").prepend(`
+            <p style="color: red; margin: -5px 0;">${error}</p>
+        `)
+      })
+    })
+}
+
+function getUsers(){
+  $.ajax({
+      url: baseUrl + "/users",
+      method: "GET",
+      headers: { access_token: localStorage.access_token }
+    })
+    .done(response => {
+      $("#user-list").empty();
+      response.forEach((user, i) => {
+        $("#user-list").append(`
+         <h6 class="card-title">${i+1}. ${user.email}</h6>
+        `)
+      })
+    })
+    .fail(err => {
+      console.log(err)
+    })
+}
+
+function getAccount() {
+  $.ajax({
+      url: baseUrl + "/user",
+      method: "GET",
+      headers: { access_token: localStorage.access_token }
+    })
+    .done(user => {
+      $("#user-profile").empty().append(`
+        <p className="card-text">${user.email}</p>
+      `)
+    })
+    .fail(err => {
+      console.log(err)
+    })
+}
+
+function signOut() {
+  const auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
 }
