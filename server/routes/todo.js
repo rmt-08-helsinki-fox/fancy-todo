@@ -4,15 +4,16 @@ const TodoController = require("../controllers/todoController");
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
 
+
 router.use(authentication);
 router.get("/", TodoController.getTodos);
 router.post("/", TodoController.addTodo);
 
-router.use(authorization);
-router.get("/:id", TodoController.getTodo);
-router.put("/:id", TodoController.putTodo);
-router.patch("/:id", TodoController.patchTodo);
-router.delete("/:id", TodoController.deleteTodo);
+router.post("/:id/members", authorization, TodoController.addMember);
+router.get("/:id", authorization, TodoController.getTodo);
+router.put("/:id", authorization, TodoController.putTodo);
+router.patch("/:id", authorization, TodoController.patchTodo);
+router.delete("/:id", authorization, TodoController.deleteTodo);
 
 
 

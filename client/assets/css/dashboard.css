@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+#dashboard-area {
+    display: flex;
+    flex-direction: row;
+    background: rgba(198, 198, 198, 0.5);
+    border-radius: 10px;
+    justify-content: space-between;
+    height: 85vh;
+}
+
+#dashboard-area aside {
+    width: 30%;
+    margin: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+#dashboard-area section {
+    width: 70%;
+    margin: 1rem 2rem;
+    overflow: hidden;
+}
+
+#card-profile img {
+    border-radius: 50%;
+    width: 10rem;
+    height: 10rem;
+}
+
+#todo-parent-container {
+    height: 100%;
+    overflow: auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

@@ -6,7 +6,8 @@ const { hashPassword } = require("../helpers/bcrypt");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      User.hasMany(models.Todo, { foreignKey: "userId" })
+      User.hasMany(models.UserTodo, { foreignKey: "userId" })
+      User.belongsToMany(models.Todo, { through: models.UserTodo, foreignKey: "userId" })
     }
   };
   User.init({
@@ -42,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
           if(!password.match(/[0-9]/g)){
             throw { name: "password error", message: "password must include numeric", status:400 }
           }
-        },
+        }
       }
     }
   }, {
