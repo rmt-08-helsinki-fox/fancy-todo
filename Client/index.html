@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+
+  <title>Todo App</title>
+</head>
+<body>
+  <header>
+    <nav>
+        <a href="/"><img alt="Logo" src="https://illlustrations.co/static/44a0d27b8efde2cd4e512bc66e32a1fb/day22-owl.svg" height="70"></a>
+        <ul>
+            <li><a class="nav-link" href="#" id="nav-logout">Logout</a></li>
+            <li><a href="#">Login or Register here</a>
+                <ul>
+                    <li id=login-form>Login</li>
+                    <li id="register-form">Register</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <img alt="Todo" src="./freelancer.svg" style="width: 20%; height: 20%;">
+    <h1 id="title">Welcome to the <i>Fancy</i> <u>To-Do List</u> App</h1>
+    <p>Please login first or <mark>register</mark></p>
+    <br>
+    <!-- <p><a href="#"><i>&nbsp; &nbsp; Login &nbsp; &nbsp;</i></a><a href="#"><b>Register &rarr;</b></a></p> -->
+  </header>
+  <main>
+    <hr>
+    <!-- Form Login and Register-->
+        <section>
+          <div class="container" id="login-form">
+            <form>
+                <header>
+                    <h2>Login Form</h2>
+                </header>
+                <label for="email">Email:</label>
+                <input type="email" id="loginEmail" name="email" size="20" placeholder="john@example.com">
+                <label for="password">Password:</label>
+                <input type="password" id="loginPassword" name="password" size="20" placeholder="********">
+                <button type="submit">Login</button>
+            </form> &nbsp; &nbsp; &nbsp;
+            </div>
+			 &nbsp; &nbsp; &nbsp;
+			<div class="container" id="register-form">
+            <form>
+                <header>
+                    <h2>Register Form</h2>
+                </header>
+                <label for="email">Email:</label>
+                <input type="email" id="registerEmail" name="email" size="20" placeholder="john@example.com">
+                <label for="password">Password:</label>
+                <input type="password" id="registerPassword" name="password" size="20" placeholder="********">
+                <button type="submit">Register</button>
+            </form> &nbsp; &nbsp; &nbsp;
+            </div>
+
+            <div class="container" id="add-todo">
+            <form>
+              <header>
+                <aside>
+                  <h2>Add Todos</h2>
+              </header>
+              <label for="title">Todo Name:</label>
+              <input type="text" id="addTitle" name="title" size="20" placeholder="e.g: Drink Water">
+              <label for="description">Description:</label>
+              <input type="text" id="addDescription" name="description" size="20" placeholder="e.g: Drink at least 1L">
+              <label for="status">Status:</label>
+              <select id="addStatus">
+                  <option value="Not Started">Not Started</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+              </select>
+              <label for="due_date">Due Date:</label>
+              <input type="date" id="addDue" name="due_date" size="20">
+              <button type="submit">Submit</button>
+            </aside>
+          </form>
+        </div>
+        </section>
+    <!-- List Todos-->
+    <hr>
+    <section>
+      <header>
+          <h2>This is Your Todo List</h2>
+      </header>
+      <div class="todo-container" >
+          <div id="todo-list">
+      <!-- <aside>
+          <h3>Todos</h3>
+          <p>Todo Descriptions</p>
+      </aside>
+      <aside>
+          <h3>Todos</h3>
+          <p>Todo Descriptions</p><sup>tags</sup></p>
+      </aside>
+      <aside>
+          <h3>Todos</h3>
+          <p>Todo Descriptions</p><sup>tags1</sup><sup>tags2</sup>
+      </aside> -->
+      </div>
+    </div>
+  </section>
+  <hr>
+  <section>
+  </main>
+</body>
+</html>
