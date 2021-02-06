@@ -127,6 +127,57 @@ USER_PASS = "buka pintu"
 
 ---
 
+### Login OAUTH
+
+- **URL** : `/user/google-login`
+- **Method** : `POST`
+- **Data Params** :
+    ```
+    email=string
+    password=string
+    access_token=string
+    ```
+
+  _Request Header_
+  ```
+
+  ```
+
+  _Request Body_
+  ```
+  {
+    "email": "<user@gmail.com>",
+    "password": "<user-password>"
+  }
+  ```
+
+- **Success Response**
+
+  _Response(200 - OK)_
+  ```
+  {
+    "access_token": "<your access token>"
+  }
+  ```
+
+- **Error Response**
+  
+  _Response(400 - Bad Request)_
+  ```
+  {
+    "errors": "Invalid email or password"
+  }
+  ```
+
+  _Response(500 - Internal Server Error)_
+  ```
+  {
+    "errors": "Internal Server Error"
+  }
+  ```
+
+---
+
 ### List Todo task 
 
 - **URL** : `/todos`
