@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     auth();
     $('#registerNav').on('click', (e) => {
@@ -67,4 +66,8 @@ $(document).ready(function () {
             editTodo();
         }
     });
+    $('#form-add-member').on('submit', e => {
+        e.preventDefault();
+        addMember();
+    })
 });

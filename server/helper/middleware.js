@@ -1,5 +1,5 @@
 const { generateToken, verifyToken } = require('./jwt');
-const { User, Todo } = require('../models');
+const { User, Todo, Member } = require('../models');
 
 const mid = async (req, res, next) => {
     try {
@@ -27,8 +27,24 @@ const checkParamsId = async (req, res, next) => {
         const todo = await Todo.findByPk(id);
         if (!todo) throw 404;
         const user_id = req.decoded.id;
-        if (todo.user_id != user_id) throw 404;
-        next();
+        const member = await Member.findOne({
+            where: {
+                email: req.decoded.email
+            },
+            include: Todo
+        });
+        let isTodoMember = false;
+        if (member) {
+            member.Todos.forEach(e => {
+                if (id == e.id) isTodoMember = true;
+                req.member = e;
+            });
+        }
+        if (todo.user_id == user_id || isTodoMember) {
+            next();
+        } else {
+            throw 404
+        };
     } catch (err) {
         next(err);
     }
