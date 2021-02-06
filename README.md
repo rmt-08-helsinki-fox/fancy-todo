@@ -250,3 +250,27 @@ _Response (201 - Created)_
     "email": "<posted input>",
 }
 ```
+
+---
+### POST /googleLogin
+
+> Login User using google
+
+_Request Header_
+```
+{
+  "token" : "<given access token by system>"
+}
+```
+
+_Request Body_
+```
+not needed
+```
+
+_Response (200 - Created)_
+```
+{
+    "access_token": <given access token by system>,
+}
+```
