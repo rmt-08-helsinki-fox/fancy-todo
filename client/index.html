@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Client ID -->
+    <meta name="google-signin-client_id" content="1072175736037-su0juud2ko8e0sfbnhurqbn78609qojq.apps.googleusercontent.com">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <!-- Public CSS -->
+    <link rel="stylesheet" href="./public/css/style.css">
+
+    <title>Fancy Todo</title>
+</head>
+<body>
+    <nav id="nav" class="nav justify-content-center bg-primary p-2 position-relative">
+        <a class="nav-link text-light" id="homeNav" href="#">Home</a>
+        <a class="nav-link text-light" id="myTodosNav" href="#">My Todos</a>
+        <a class="nav-link text-light" id="logoutNav" href="#"><button class="btn-danger">Logout</button></a>
+    </nav>
+    
+    <main>
+        <!-- Register -->
+        <div id="registerPage"> 
+            <div class="row mt-4 justify-content-center">  
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="mt-4">Register Here</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-danger registerValidation"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col">
+                            <form id="formRegister">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="name" class="form-control" id="regName" autocomplete="off" name="name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="username" class="form-control" id="regUsername" autocomplete="off" name="username">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="regEmail" autocomplete="off">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="regPassword" autocomplete="off">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login -->
+        <div id="loginPage">
+            <div class="row mt-4 justify-content-center">  
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col">
+                            <h2 class="mt-4">Login to create your todos</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-danger loginValidation"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col">
+                            <form id="formLogin">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="logEmail">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="logPassword">
+                                </div>
+                                <div class="g-signin2" data-onsuccess="onSignIn"></div><br>
+                                <button type="submit" class="btn btn-primary">Login</button>
+                                <button type="button" id="btnRegister" class="btn btn-primary">Register</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Todos -->
+        <div id="myTodosPage">
+            <div class="container col-10">
+                <h1 class="text-center mt-4">My Todos</h1>
+                <div class="row mb-3">
+                    <div class="col">
+                        <button type="button" id="btn-add-todo" class="btn btn-primary" onclick="createButton()">Add Todo</button>
+                    </div>
+                </div>           
+                <table class="table" width=80%>
+                <thead>
+                    <tr>
+                        <th scope="col" width=5% class="center">No</th>
+                        <th scope="col" width=10% class="center">Title</th>
+                        <th scope="col" width=40% class="center">Description</th>
+                        <th scope="col" width=5% class="center">Status</th>
+                        <th scope="col" width=5% class="center">Private</th>
+                        <th scope="col" width=20% class="center">Due Date</th>
+                        <th scope="col" width=20% class="center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="myTodosTable">
+                    
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Home -->
+        <div id="homePage">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h2 class="mt-4 center">Welcome to Fancy Todo</h2>
+                        <p class="center">You can clone other todos if you want </p>
+                    </div>
+                </div>
+                <div class="row row-cols-1 row-cols-md-2 g-3 justify-content-center card-container" id="todosListHome">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Todo -->
+        <div class="row" id="createTodos">
+            <div class="col-4"></div>
+            <div class="col-4">
+              <h3 class="text-justify" style="margin-top: 10px; margin-bottom: 30px;">Add Todo</h3>
+              <form class="row g-2" id="addTodo">
+                <div class="form-floating mb-2">
+                Title <input type="text" class="form-control" id="todoTitle" placeholder="Title"/>
+                </div>
+                <div class="form-floating mb-2">
+                Description <input type="text" class="form-control" id="todoDesc" placeholder="Description"/>
+                </div>
+                <div class="form-floating mb-2">
+                  Due Date<input type="date" class="form-control" id="todoDueDate" />
+                </div>
+                <div class="col-6">
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-block btn-floating mb-2" id="btn-addTodo" >Add Todo</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-4"></div>
+          </div>
+    
+    </main>
+    <!-- Google OAuth -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <!-- Bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+    <!-- My Script -->
+    <script>
+        const baseUrl = "http://localhost:3000"
+        
+        function auth(){
+            if (!localStorage.getItem("access_token")){
+                $("#nav").hide()
+                $("#homePage").hide()
+                $("#myTodosPage").hide()
+                $("#loginPage").show()
+                $("#registerPage").hide()
+                $("#createTodos").hide()
+            }else {
+                $("#nav").show()
+                $("#homePage").show()
+                $("#myTodosPage").hide()
+                $("#loginPage").hide()
+                $("#registerPage").hide()
+                $("#createTodos").hide()
+                home()
+            }
+        }
+
+        function showRegister(){
+            $("#nav").hide()
+            $("#homePage").hide()
+            $("#myTodosPage").hide()
+            $("#loginPage").hide()
+            $("#registerPage").show()
+            $("#createTodos").hide()
+        }
+
+        function showMyTodos(){
+            $("#nav").show()
+            $("#homePage").hide()
+            $("#myTodosPage").show()
+            $("#loginPage").hide()
+            $("#registerPage").hide()
+            $("#createTodos").hide()
+            myTodos()
+        }
+
+        function createButton(id) {
+            $("#nav").show()
+            $("#homePage").hide()
+            $("#myTodosPage").hide()
+            $("#loginPage").hide()
+            $("#registerPage").hide()
+            $("#createTodos").show()
+        }
+
+        function onSignIn(googleUser) {
+            // var profile = googleUser.getBasicProfile();
+            // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            // console.log('Name: ' + profile.getName());
+            // console.log('Image URL: ' + profile.getImageUrl());
+            // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+            var id_token = googleUser.getAuthResponse().id_token;
+            $.ajax({
+                url: baseUrl + "/users/googleLogin",
+                method: "POST",
+                data: {
+                    googleToken: id_token
+                }
+            })
+            .done(response => {
+                localStorage.setItem('access_token', response.accessToken)
+                auth()
+            })
+            .fail(err => {
+                console.log(err)
+            })
+        }
+        
+        function login(){
+            const email = $("#logEmail").val();
+            const password = $("#logPassword").val();
+
+            $.ajax({
+                url: baseUrl + "/users/login",
+                method: "POST",
+                data: { email, password }
+            })
+            .done(response => {
+                localStorage.setItem('access_token', response.accessToken)
+                auth()
+            })
+            .fail((xhr, text) => {
+                console.log(xhr, text)
+            })
+            .always(_ => {
+                $("#formLogin").trigger('reset')
+            })
+        }
+
+        function register(event){
+            event.preventDefault()
+            let name = $('#regName').val()
+            let email = $('#regEmail').val()
+            let username = $('#regUsername').val()
+            let password = $('#regPassword').val()
+
+            $.ajax({
+                url: baseUrl + "/users/register",
+                method: 'POST',
+                data: {name, email, username, password}
+            })
+            .done(response => {
+                console.log('register succeed')
+                auth()
+            })
+            .fail(err => {
+                console.log(err)
+                alert(err.responseJSON)
+            })
+            .always(() => {
+                $('#regEmail').val('')
+                $('#regPassword').val('')
+            })
+        }
+
+        function home(){
+            $.ajax({
+                url: baseUrl + "/",
+                method: "GET",
+                headers: {
+                    token: localStorage.getItem('access_token')
+                }
+            })
+            .done(todos => { 
+                $("#todosListHome").empty()
+                todos.forEach(el => {
+                    $("#todosListHome").append(`
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">${el.title}</h5>
+                            <p class="card-text">${el.description}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">${formatDate(el.due_date)}</li>
+                        </ul>
+                        <div class="card-body">
+                            <button id="clone-todo" class="btn btn-primary" type="button" name="cloneTodo" onclick="cloneTodo(${el.id})">Clone this Todos</button>
+                        </div>
+                    </div>
+                    `)
+                })
+            })
+            .fail((xhr, text) => {
+                console.log(xhr, text)
+            })
+        }
+
+        function cloneTodo(id){
+            console.log(id)
+            $.ajax({
+                url: baseUrl + `/todos/add/${id}`,
+                method: 'POST',
+                headers: {
+                    token: localStorage.getItem('access_token')
+                }
+            })
+            .done(response => {
+                console.log('clone todo succeed')
+            })
+            .fail(err => {
+                console.log(err)
+            })
+        }
+
+        function myTodos(){
+            $.ajax({
+                url: baseUrl + "/todos/",
+                method: "GET",
+                headers: {
+                    token: localStorage.getItem('access_token')
+                }
+            })
+            .done(todos => { 
+                $("#myTodosTable").empty()
+                todos.forEach(el => {
+                    $("#myTodosTable").append(`
+                    <tr>
+                        <td class="center">${el.id}</td>
+                        <td class="center">${el.title}</td>
+                        <td>${el.description}</td>
+                        <td class="center">
+                            <input id="statusCheck" type="checkbox" name="status" ${statusAndPrivate(el.status)} onclick=${changeStatus(el.id, el.status)}>
+                        </td>
+                        <td class="center"><input type="checkbox" name="is_private" ${statusAndPrivate(el.is_private)}></td>
+                        <td class="center">2021-05-23</td>
+                        <td class="center">
+                            <button id="edit-button" class="btn btn-success" type="button" name="title" onclick="editButton(${el.id})">Edit</button>
+                            <button id="delete-button" class="btn btn-danger" type="button" name="title" onclick="deleteButton(${el.id})">Delete</button>
+                    
+                        </td>
+                    </tr>
+                    `)
+                })
+            })
+            .fail((xhr, text) => {
+                console.log(xhr, text)
+            })
+        }
+
+        function createTodo(){
+            const title = $("#todoTitle").val()
+            const description = $("#todoDesc").val()
+            const due_date = $("#todoDueDate").val()
+            
+            $.ajax({
+                url: baseUrl + `/todos/`,
+                method: 'POST',
+                headers: {
+                    token: localStorage.getItem('access_token')
+                },
+                data: {
+                    title,
+                    description,
+                    due_date
+                }
+            })
+            .done(response => {
+                showMyTodos()
+            })
+            .fail((xhr, text) => {
+                console.log(xhr)
+            })
+        }
+
+        function deleteButton(id) {
+            $.ajax({
+                url: baseUrl + `/todos/${id}`,
+                method: 'DELETE',
+                headers: {
+                    token: localStorage.getItem('access_token')
+                }
+            })
+            .done(response => {
+                myTodos()
+            })
+            .fail((xhr, text) => {
+                console.log(xhr)
+            })
+        }
+
+        function statusAndPrivate(value){
+            if (value === true){
+                return 'checked'
+            }else {
+                return ''
+            }
+        }
+
+        function changeStatus(id, status){
+            
+            console.log(id, status)
+            $.ajax({
+                method: 'PATCH',
+                url: baseUrl + `/todos/${id}`,
+                headers: {
+                    token: localStorage.getItem('access_token')
+                },
+                data: {
+                    status
+                }
+            })
+            .done(response => {
+                
+            })
+            .fail((xhr, text) => {
+                console.log(xhr, text)
+            })
+        }
+
+        $(document).ready(() => {
+            auth()
+
+            $("#formLogin").submit(function(e){
+                e.preventDefault()
+                login()
+            })
+            $("#logoutNav").click(function(){
+                localStorage.removeItem('access_token')
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                });
+                auth()
+            })
+            $("#btnRegister").click(function(){
+                showRegister()
+            })
+            $("#formRegister").submit(function(event){
+                register(event)
+            })
+            $("#homeNav").click(function(){
+                auth()
+            })
+            $("#myTodosNav").click(function(){
+                showMyTodos()
+            })
+            $("#delete-btn").click(function(){
+                deleteButton()
+            })
+            $("#createTodos").submit(function(e){
+                e.preventDefault()
+                createTodo()
+            })
+
+        });
+
+        function formatDate (date){
+            const d = new Date(date)
+            let month = '' + (d.getMonth() + 1)
+            let day = '' + d.getDate()
+            let year = d.getFullYear()
+
+            if (month.length < 2) 
+                month = '0' + month
+            if (day.length < 2) 
+                day = '0' + day
+
+            return [year, month, day].join('-')
+        };
+    </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 const { User, Todo } = require('../models/index')
 
 class TodoController {
-  static showTodoUser(req, res){
+  static showTodoUser(req, res, next){
     const option = {
       where: {
         user_id: +req.user.id
@@ -9,31 +9,41 @@ class TodoController {
     }
 
     Todo.findAll(option)
-      .then(todo => {
-        res.status(200).json(todo)
-      })
-      .catch(err => {
-        res.status(500).json(err)
-      })
+    .then(todo => {
+      if(todo.length === 0) throw {
+        name: "customError",
+        msg: "Data not found",
+        code: 404
+        }
+      res.status(200).json(todo)
+    })
+    .catch(err => {
+      next(err)
+    })
   }
 
-  static showTodoById(req, res){
+  static showTodoById(req, res, next){
     Todo.findByPk(+req.params.id)
       .then(todo => {
+        if(user === null) throw {
+          name: "customError",
+          msg: "Data is null",
+          code: 404
+          }
         res.status(200).json(todo)
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static createNewTodo(req, res){
+  static createNewTodo(req, res, next){
     const newTodo = {
       title: req.body.title,
       description: req.body.description,
-      status: req.body.status,
+      status: false,
       due_date: req.body.due_date,
-      is_private: req.body.is_private,
+      is_private: false,
       user_id: +req.user.id
     }
 
@@ -42,13 +52,11 @@ class TodoController {
         res.status(201).json(todo)
       })
       .catch(err => {
-        const error = err.errors[0].message || "Internal Server Error"
-
-        res.status(500).json({ error })
+        next(err)
       })
   }
 
-  static addTodoPublicById(req, res){
+  static addTodoPublicById(req, res, next){
     const option = {
       where: {
         id: +req.params.id
@@ -71,11 +79,11 @@ class TodoController {
         res.status(201).json(newCreate)
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static editTodo(req, res){
+  static editTodo(req, res, next){
     const newUpdate = {
       title: req.body.title,
       description: req.body.description,
@@ -96,11 +104,17 @@ class TodoController {
         res.status(200).json(todo[1][0])
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static editTodoStatus(req, res){
+  static editTodoStatus(req, res, next){
+    if (req.body.status === true){
+      req.body.status = false
+    }else {
+      req.body.status = true
+    }
+    console.log(req.body.status)
     const newStatus = {
       status: req.body.status
     }
@@ -117,11 +131,11 @@ class TodoController {
         res.status(200).json(todo[1][0])
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static editTodoPrivate(req, res){
+  static editTodoPrivate(req, res, next){
     const newUpdate = {
       is_private: req.body.is_private
     }
@@ -138,11 +152,11 @@ class TodoController {
         res.status(200).json(todo[1][0])
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 
-  static deleteTodo(req, res){
+  static deleteTodo(req, res, next){
     const option = {
       where: {
         id: +req.params.id
@@ -153,7 +167,7 @@ class TodoController {
         res.status(200).json({ msg: "Delete Success" })
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
 }

@@ -1,0 +1,51 @@
+#btnRegister {
+    float: right;
+}
+
+.editButton {
+    background-color: green;
+    color: honeydew;
+    padding: 5px 23px;
+    text-decoration: none;
+}
+
+.editButton:hover {
+    background-color: rgb(21, 163, 21);
+    color: honeydew;
+    text-decoration: none;
+}
+
+.deleteButton {
+    background-color: rgb(206, 7, 7);
+    color: honeydew;
+    padding: 5px 13px;
+    text-decoration: none;
+}
+
+.deleteButton:hover {
+    background-color: red;
+    color: honeydew;
+    padding: 5px 13px;
+    text-decoration: none;
+}
+
+.card {
+    margin: 20px;
+}
+
+.center {
+    text-align: center;
+}
+
+.card-body > a {
+    text-decoration: none;
+}
+
+.btn-clone {
+    padding: 7px;
+    border-radius: 7px;
+}
+
+th, td {
+    padding: 15px;
+}
