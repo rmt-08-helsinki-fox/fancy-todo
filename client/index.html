@@ -4,148 +4,151 @@
   <meta charset="UTF-8">
   <meta name="google-signin-client_id" content="354011553393-36os3nj8ukbs3pdvq37b7182amm4267v.apps.googleusercontent.com">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="style.css" />
   <title>New Fancy Todo</title>
 </head>
 <body>
   <div>
+
   <!-- Navbar -->
-  <div>
-    <nav class="navbar navbar-light bg-light justify-content-between shadow" id="navbar">
-      <a class="navbar-brand">Fancy to Remember</a>
-      <form class="form-inline">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" id="btn-logout">Logout</button>
+    <div>
+      <nav class="navbar navbar-light bg-light justify-content-between shadow" id="navbar">
+        <a class="navbar-brand" href="#" id='link-home' >Fancy to Remember</a>
+          <button class="btn btn-outline-primary" id='btn-addTodo'>Add Todo</button>
+        <form class="form-inline">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search Title" id="search-title"aria-label="Search" style="margin: 10px;">
+          <button class="btn btn-outline-info my-2 my-sm-0" type="submit" onclick="searchTitle()" style="margin: 10px;">Search</button>
+          <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" id="btn-logout" style="margin: 10px;">Logout</button>
+        </form>
+      </nav>
+    </div>
+
+  <!-- Add Todo -->
+    <div class="container" id="addTodo-page">
+      <div class="row mt-4 border rounded">
+        <form action="">
+          <div class="container position-sticky" >
+            <h2>ADD TODO</h2>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Title </label>
+          <input type="text" class="form-control" id="addTodo-Title" placeholder="Input Your Title of Todo">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" id="addTodo-Description" rows="3" placeholder="Input Your Description of Todo"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Status</label>
+          <input class="form-control" type="text" value="Not Done" id="addTodo-Status" aria-label="Disabled input example" disabled>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Date</label>
+          <input class="form-control" type="date" id="addTodo-Date">
+          <div class="form-text">Date must be greater or equal than today</div>
+        </div>
+        <input type="submit" class="btn btn-outline-success" id="btn-addTodo-Submit" value="Add Todo">`
+        <input type="submit" class="btn btn-outline-danger" id="btn-addTodo-Cancel" value="Cancel">`
       </form>
-    </nav>
+      </div>
+    </div>
+
+  <!-- Update Todo -->
+  <div class="container" id="updateTodo-page">
+    
   </div>
 
   <!-- Login -->
-  <div>
-    <div class="container" id="login-page"><!-- container -->
-      <section id="content"><!-- content -->
-        <form><!-- form -->
-          <h1>Login Form</h1>
-          <div>
-            <input type="text" placeholder="Email" required="" id="login-email" />
-          </div>
-          <div>
-            <input type="password" placeholder="Password" required="" id="login-password" />
-          </div>
-          <div>
-            <input type="submit" value="Log in" id="btn-login"/>
-            <a href="#">Lost your password?</a>
-            <a href="#!" id="link-register">Register</a>
-          </div>
-          <div>
-            <br>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
-          </div>
-        </form>
-      </section>
+    <div>
+      <div class="container" id="login-page"><!-- container -->
+        <section id="content"><!-- content -->
+          <form><!-- form -->
+            <h1>Login Form</h1>
+            <div>
+              <input type="text" placeholder="Email" required="" id="login-email" />
+            </div>
+            <div>
+              <input type="password" placeholder="Password" required="" id="login-password" />
+            </div>
+            <div>
+              <input type="submit" value="Log in" id="btn-login"/>
+              <a href="#">Lost your password?</a>
+              <a href="#!" id="link-register">Register</a>
+            </div>
+            <div>
+              <br>
+              <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            </div>
+          </form>
+        </section>
+      </div>
     </div>
-  </div>
 
   <!-- Register -->
-  <div>
-    <div class="container" id="register-page"><!-- container -->
-      <section id="content"><!-- content -->
-        <form><!-- form -->
-          <h1>Register Form</h1>
-          <div>
-            <input type="text" placeholder="Fullname" required="" id="regis-fullname" />
-          </div>
-          <div>
-            <input type="text" placeholder="Email" required="" id="regis-email" />
-          </div>
-          <div>
-            <input type="password" placeholder="Password" required="" id="regis-password" />
-          </div>
-          <div>
-            <input type="submit" value="Register" id="btn-register"/>
-              <a href="#!" id="link-login">Login</a>
-          </div>
-        </form>
-      </section>
+    <div>
+      <div class="container" id="register-page"><!-- container -->
+        <section id="content"><!-- content -->
+          <form><!-- form -->
+            <h1>Register Form</h1>
+            <div>
+              <input type="text" placeholder="Fullname" required="" id="regis-fullname" />
+            </div>
+            <div>
+              <input type="text" placeholder="Email" required="" id="regis-email" />
+            </div>
+            <div>
+              <input type="password" placeholder="Password" required="" id="regis-password" />
+            </div>
+            <div>
+              <input type="submit" value="Register" id="btn-register"/>
+                <a href="#!" id="link-login">Login</a>
+            </div>
+          </form>
+        </section>
+      </div>
     </div>
-  </div>
 
   <!--To do list-->
-  <div class="container" id="todolist-page">
-    <!-- 1 row = lebar 12 column -->
-    <!-- lebar 12
-    1 column lebar 3 = 4 kolom -->
+    <div class="container position-sticky" id="todolist-page">
+      <h2>Your Todos</h2>
+      <br>
+      <div class="row">
+        <!-- not done-->
+        <div class="col-7">
+          <div id="Todos-Not-Done">
+    
+          </div>
+        </div>
+        <!-- done-->
+        <div class="col-5">
+          <div id="Todos-Done">
+            
+          </div>
+      
+        </div>
+      </div>
+    </div>
 
-  <div class="row">
-    <div class="col-3">
-      <div class="card">
-          <img src="https://images.unsplash.com/photo-1589478489438-9a2091d9e2f1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-          class="card-img-top" 
-          height="250px" />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
+    <!-- Search Todo list-->
+    <div class="container position-sticky" id="result-search-page">
+      <h2>Your Todos</h2>
+      <br>
+      <div class="row">
+        <div class="col-7">
+          <div id="result-search-list">
+    
+          </div>      
         </div>
+      </div>
     </div>
-    <div class="col-3">
-      <div class="card">
-          <img src="https://images.unsplash.com/photo-1589478489438-9a2091d9e2f1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-          class="card-img-top" 
-          height="250px" />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-    </div>
-    <div class="col-3">
-      <div class="card">
-          <img src="https://images.unsplash.com/photo-1589478489438-9a2091d9e2f1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-          class="card-img-top" 
-          height="250px" />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-    </div>
-    <div class="col-3">
-      <div class="card">
-          <img src="https://images.unsplash.com/photo-1589478489438-9a2091d9e2f1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-          class="card-img-top" 
-          height="250px" />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-    </div>
-    <div class="col-3">
-      <div class="card">
-          <img src="https://images.unsplash.com/photo-1589478489438-9a2091d9e2f1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
-          class="card-img-top" 
-          height="250px" />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-    </div>
-  </div>
+
   </div>
 </body>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script src="./main.js"></script>
 </html> 

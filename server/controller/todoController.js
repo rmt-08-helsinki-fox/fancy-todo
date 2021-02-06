@@ -31,7 +31,7 @@ class TodoController {
   static getAllTodo (req, res, next) {
     let id = req.user.id
     Todo.findAll({where: {
-      UserId : id
+      UserId : id,
       }
     })
       .then(dataTodo => {
@@ -42,9 +42,14 @@ class TodoController {
       })
   }
 
-  static findOneTodo (req, res, next) {
+  static findTodo (req, res, next) {
     let UserId = req.user.id
-    let search = `%${req.query.title}%`
+    // let search = `%${req.query.title}%`
+    let search = `%${req.query}%`
+
+    console.log( UserId);
+
+    console.log( search );
 
     Todo.findAll({where: {
       title: {
@@ -54,10 +59,23 @@ class TodoController {
       }
     })
     .then(dataTodo => {
+      console.log(dataTodo, `>>>>>>>>>>>>>`);
         res.status(200).json(dataTodo)
       })
       .catch(err => {
-        console.log(err);
+        console.log(err, `<<<<<<<<<<`);
+        next(err)
+      })
+  }
+
+  static findOneTodo (req, res, next) {
+    let id = +req.params.id
+
+    Todo.findByPk(id)
+    .then(dataTodo => {
+        res.status(200).json(dataTodo)
+      })
+      .catch(err => {
         next(err)
       })
   }
@@ -68,7 +86,6 @@ class TodoController {
     let updateTodo = {
       title: req.body.title, 
       description: req.body.description,
-      status: req.body.status,
       due_date: req.body.due_date
     }
 
