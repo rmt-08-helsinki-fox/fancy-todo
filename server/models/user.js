@@ -3,10 +3,10 @@ const {
   Model
 } = require('sequelize');
 
-const { convert } = require('../helpers/bcrypt');
+const { createHash } = require('../helpers');
 
 module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
+  class User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -14,39 +14,56 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      user.hasMany(models.todos, { foreignKey: 'user_id' })
+      User.hasMany(models.Todo, { foreignKey: 'user_id' })
     }
   };
-  user.init({
+  User.init({
     email: {
       type: DataTypes.STRING,
       validate: {
-        isEmail: {
-          msg: `Invalid email format`
-        }
+        isEmail: { msg: `Invalid email format` }
       },
+      // somehow unique gak keterima
       unique: {
-        args: true,
-        msg: `User with ${user.email} already exist!`
+        msg: `User with ${User.email} already exist!`
       }
     },
     password: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: {
-          msg: `Password cannot be empty!`
+        validation (password) {
+          const errMsg = [
+            `Password cannot be empty`,
+            `Password must be at least 8 characters`,
+            `Password must contain at least one number one upper case and one symbol`
+          ];
+
+          const symbol = /^[A-Za-z0-9 ]+$/.test(password);
+          const number = /\d+/.test(password);
+          let upperCase = 0;
+
+          const arr = password.split('');
+          arr.forEach(el => {
+            if (isNaN(el)) if (el.toUpperCase() == el && el.toLowerCase() != el) upperCase++;
+          });
+
+          if (!password) throw new Error (errMsg[0]);
+          else if (password.length < 8) throw new Error (errMsg[1]);
+          else if (symbol) throw new Error (errMsg[2]);
+          else if (!number) throw new Error (errMsg[2]);
+          else if (!upperCase) throw new Error (errMsg[2]);
         }
       }
     }
   }, {
     hooks: {
       beforeCreate: (user, options) => {
-        let hash = convert(user.password);
+        let hash = createHash(user.password);
         user.password = hash;
       }
     },
     sequelize,
-    modelName: 'user',
+    modelName: 'User',
   });
-  return user;
+  return User;
 };

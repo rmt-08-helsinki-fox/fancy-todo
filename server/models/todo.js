@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class todos extends Model {
+  class Todo extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,32 +11,26 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      todos.belongsTo(models.user, { foreignKey: 'user_id' })
+      Todo.belongsTo(models.User, { foreignKey: 'user_id' });
     }
   };
-  todos.init({
+  Todo.init({
     title: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: {
-          msg: `Title cannot be empty!`
-        }
+        notEmpty: { msg: `Title cannot be empty!` }
       }
     },
     description: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: {
-          msg: `Desciption cannot be empty!`
-        }
+        notEmpty: { msg: `Desciption cannot be empty!` }
       }
     },
     status: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: {
-          msg: `Status cannot be empty`
-        }
+        notEmpty: { msg: `Status cannot be empty` }
       }
     },
     due_date: {
@@ -48,12 +42,10 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    user_id: {
-      type: DataTypes.INTEGER
-    }
+    user_id: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'todos',
+    modelName: 'Todo',
   });
-  return todos;
+  return Todo;
 };

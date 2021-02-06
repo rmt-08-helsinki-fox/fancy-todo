@@ -1,53 +1,35 @@
-const { user } = require('../models');
-const { checkPassword } = require('../helpers')
-const { checkPass } = require('../helpers/bcrypt');
-const { generateToken } = require('../helpers/jwt');
+const { OAuth2Client } = require('google-auth-library');
+const { User } = require('../models');
+const { checkHash, createToken } = require('../helpers');
 
 class UserController {
-  static register (req, res) {
+  static register (req, res, next) {
     console.log(`URL: ${req.originalUrl}`);
-    const check = checkPassword(req.body.password);
 
-    if (check) res.status(400).json({ check });
-    else {
-      user.create(req.body)
-        .then(() => {
-          res.status(201).json({
-            msg: `Welcome ${req.body.email}`
-          });
-        })
-        .catch(err => {
-          if (err.errors) {
-            const message = [];
-  
-            err.errors.forEach(el => {
-              message.push(el.message);
-            })
-  
-            res.status(400).json(message);
-          }
-          else res.status(500).json({ msg: "Internal Server Error" });
-        })
-    }
+    User.create(req.body)
+      .then(user => {
+        res.status(201).json({
+          data: { id: user.id, email: user.email }, msg: `Create account success`
+        });
+      })
+      .catch(err => next(err));
   };
-  
-  static login (req, res) {
+
+  static login (req, res, next) {
     console.log(`URL: ${req.originalUrl}`);
 
-    user.findOne({ where: { email: req.body.email } })
+    User.findOne({ where: { email: req.body.email } })
       .then(data => {
-        if (!data) throw { msg: `Invalid email or password` };
-      
-        const compare = checkPass(req.body.password, data.password);
-        if (!compare) throw { msg: `Invalid email or password` };
+        if (!data) throw (`Invalid email or password`);
 
-        const access_token = generateToken({ id: data.id, email: data.email });
-        res.status(200).json({ access_token });
+        const compare = checkHash(req.body.password, data.password);
+        if (!compare) throw (`Invalid email or password`);
+
+        const token = createToken({ id: data.id, email: data.email });
+        res.status(200).json({ token, msg: `Welcome ${data.email}` });
       })
-      .catch(err => {
-        const error = err.msg
-      })
-  };
+      .catch(err => next(err))
+  }
 };
 
 module.exports = UserController;

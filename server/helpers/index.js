@@ -1,22 +1,49 @@
-function checkPassword (password) {
-  const err = [`Password must contain at least one number one upper case and one symbol`, `Password must be at least 8 characters`];
-  const specialCharacter = /^[A-Za-z0-9 ]+$/;
-  const symbol = /^[A-Za-z0-9 ]+$/.test(password)
-  let number = /\d+/.test(password);
-  let countUpper = 0;
-  
-  password = password.split('');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-  password.forEach(el => {
-    if (isNaN(el)) if (el.toUpperCase() == el && el.toLowerCase() != el) countUpper++;
-  });
+const createHash = password => {
+  let salt = bcrypt.genSaltSync(10);
+  let hash = bcrypt.hashSync(password, salt);
 
-  if (password.length < 8) return err[1];
-  else if (!number) return err[0];
-  else if (!countUpper) return err[0];
-  else if (symbol) return err[0];
-  
-  return null;
+  return hash;
 };
 
-module.exports = { checkPassword };
+const checkHash = (password, hash) => {
+  const result = bcrypt.compareSync(password, hash);
+
+  return result;
+};
+
+const errorHandler = (err, req, res, next) => {
+  if (err.name == 'SequelizeValidationError' || err.name == 'SequelizeUniqueConstraintError') {
+    let msg = [];
+
+    err.errors.forEach(el => {
+      msg.push(el.message);
+    })
+
+    res.status(400).json({ msg, response: false })
+  } else if (err == 'Invalid email or password') res.status(401).json({ err, response: false });
+  else res.status(500).json({ msg: `Internal Server Error`, response: false });
+};
+
+const createToken = payload => {
+  return jwt.sign(payload, process.env.SECRET);
+};
+
+const checkToken = (token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    return decoded;
+  } catch {
+    return false;
+  }
+}
+
+module.exports = { 
+  createHash, 
+  checkHash, 
+  errorHandler, 
+  createToken,
+  checkToken
+};
