@@ -3,12 +3,14 @@ if (process.env.NODE_ENV !== 'production') {
 }
 const express = require("express")
 const router = require("./routes/index")
+const cors = require("cors")
 const errorhandler = require("./middlewares/errorhandler")
 
 const app = express()
 const PORT = 3000
 
-// app.use(express.json())
+app.use(cors())
+app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 app.use(router)

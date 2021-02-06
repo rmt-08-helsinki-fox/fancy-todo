@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       validate : {
         isBeforeDate(value) {
-          if (value > new Date()) {
+          if (value < new Date()) {
             throw new Error('Validation errors');
           }
         }
