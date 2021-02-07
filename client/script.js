@@ -1,5 +1,6 @@
 
 
+
 const base_url = 'http://localhost:4000/'
 
     function auth(email){
@@ -10,6 +11,7 @@ const base_url = 'http://localhost:4000/'
             $('#content').hide()
             $('#reg-form').hide()
             $('#login-form').show()
+            $('#editForm').hide()
         }else{
             const token = localStorage.getItem('access_token')
             // console.log(token)
@@ -19,6 +21,8 @@ const base_url = 'http://localhost:4000/'
             $('#login-form').hide()
             $('#reg-form').hide()
             $('#hi').append(email)
+            $('#editForm').hide()
+
             getTodo()
         }
     }
@@ -124,7 +128,19 @@ const base_url = 'http://localhost:4000/'
             }
         })
         .done(response=>{
-            console.log(response)
+            // console.log(response)
+            $('tbody').append(`
+            <tr id="tr${response.id}">
+                <td>${response.title}</td>
+                <td>${response.description}</td>
+                <td>${response.status}</td>
+                <td>${response.due_date}</td>
+                <td>
+                    <a href="#" onclick="dltTodo(${response.id})">Delete </a> || 
+                    <a href="#" onclick="showEditForm(${response.id})">Edit</a>
+                </td>
+            </tr>
+        `)
         })
         .fail((xhr, text)=>{
             console.log(xhr, text)
@@ -154,18 +170,18 @@ const base_url = 'http://localhost:4000/'
                 // console.log(title, description, status, due_date)
                 response.forEach(el=>{
                     $('tbody').append(`
-                        <tr>
+                        <tr id="tr${el.id}">
                             <td>${el.title}</td>
                             <td>${el.description}</td>
                             <td>${el.status}</td>
                             <td>${el.due_date}</td>
                             <td>
-                                <a href="#" onclick="dltTodo(${el.id})">Delete ${el.id}</a> || 
-                                <a href="">Edit</a>
+                                <a href="#" onclick="dltTodo(${el.id})">Delete</a> || 
+                                <a href="#" onclick="showEditForm(${el.id})">Edit</a>
                             </td>
                         </tr>
                     `)
-                    $('#del')
+                    
                 })
             }
         })
@@ -189,12 +205,49 @@ const base_url = 'http://localhost:4000/'
         .done(response=>{
             console.log(response)
             // auth()
+            $(`#tr${id}`).text('')
+        
+          
         })
         .fail((xhr, text)=>{
             console.log(xhr, text)
         })
         .always(_=>{
             console.log('always delete')
+        })
+    }
+
+    function showEditForm(id){
+        $(`#editForm`).show()
+        $('#addForm').hide()
+
+        $.ajax({
+            url: base_url + `todos/${id}`,
+            headers: {
+                token: localStorage.access_token
+            },
+            method: 'GET'
+        })
+        .done(response=>{
+            console.log(response,'<<<<<<<<<<<<<<<<<<<<<<<')
+            $('#titleEdit').val(`${response.title}`)
+            $('#descriptionEdit').val(`${response.description}`)
+            let tgl = new Date(response.due_date)
+            let moon = tgl.getMonth().length < 2 ? tgl.getMonth()=`0${tgl.getMonth()}` : tgl.getMonth()
+            let date = tgl.getDate().length < 2 ? tgl.getDate()=`0${tgl.getDate()}` : tgl.getDate()
+                tgl = `${tgl.getFullYear()}-${moon}+${1}-${date}`
+                // console.log(tgl,'<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>')
+                console.log(tgl, 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM')
+            $('#due_dateEdit').val(`${tgl}`)
+
+        })
+        .fail((xhr, text)=>{
+            console.log('xxxxxxxxxxxxxxxxxxxxx')
+            console.log(xhr, text)
+            console.log('xxxxxxxxxxxxxxxxxxxxx')
+        })
+        .always(_=>{
+            console.log('always getTodoById')
         })
     }
 

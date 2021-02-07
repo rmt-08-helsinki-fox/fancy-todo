@@ -99,7 +99,6 @@ class ControllerTodo{
         })
         .then(todo=>{
             res.status(200).json({msg : 'delete success'})
-            // console.log(todo)
         })
         .catch(err=>{
             // res.status(500).json(err)
