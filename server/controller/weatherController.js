@@ -2,7 +2,7 @@ const axios = require('axios')
 
 class WeatherContoller {
   static getWeather(req, res, next) {
-    const weather = `http://api.weatherstack.com/autocomplete?access_key=${process.env.WEATHER_API_KEY}&query=Makassar`
+    const weather = `http://api.weatherstack.com/current?access_key=${process.env.WEATHER_API_KEY}&query=Makassar`
 
     axios.get(weather)
       .then(response => {

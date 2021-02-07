@@ -47,7 +47,7 @@ Todo.init({
       },
       isAfter: {
         args: new Date().toString(),
-        msg: 'must be greater or equal than today'
+        msg: 'Date must be greater or equal than today'
       }
     }
   },

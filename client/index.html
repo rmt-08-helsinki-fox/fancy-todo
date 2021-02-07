@@ -4,9 +4,8 @@
   <meta charset="UTF-8">
   <meta name="google-signin-client_id" content="354011553393-36os3nj8ukbs3pdvq37b7182amm4267v.apps.googleusercontent.com">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="styleFormLogin.css" />
   <title>New Fancy Todo</title>
 </head>
 <body>
@@ -15,12 +14,12 @@
   <!-- Navbar -->
     <div>
       <nav class="navbar navbar-light bg-light justify-content-between shadow" id="navbar">
-        <a class="navbar-brand" href="#" id='link-home' >Fancy to Remember</a>
-          <button class="btn btn-outline-primary" id='btn-addTodo'>Add Todo</button>
+        <a class="navbar-brand" href="#" onclick="checkAuth()" >Fancy to Remember</a>  
+        <button class="btn btn-outline-primary" id='btn-addTodo'>Add Todo</button>
         <form class="form-inline">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search Title" id="search-title"aria-label="Search" style="margin: 10px;">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search by Title" id="search-title"aria-label="Search" style="margin: 10px;">
           <button class="btn btn-outline-info my-2 my-sm-0" type="submit" onclick="searchTitle()" style="margin: 10px;">Search</button>
-          <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" id="btn-logout" style="margin: 10px;">Logout</button>
+          <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" onclick="logOut()" style="margin: 10px;">Logout</button>
         </form>
       </nav>
     </div>
@@ -49,16 +48,15 @@
           <input class="form-control" type="date" id="addTodo-Date">
           <div class="form-text">Date must be greater or equal than today</div>
         </div>
-        <input type="submit" class="btn btn-outline-success" id="btn-addTodo-Submit" value="Add Todo">`
-        <input type="submit" class="btn btn-outline-danger" id="btn-addTodo-Cancel" value="Cancel">`
+        <input type="submit" class="btn btn-outline-success" onclick="addTodo()" value="Add Todo">`
+        <input type="submit" class="btn btn-outline-danger" onclick="checkAuth()" value="Cancel">`
       </form>
       </div>
     </div>
 
   <!-- Update Todo -->
-  <div class="container" id="updateTodo-page">
-    
-  </div>
+    <div class="container" id="updateTodo-page">   
+    </div>
 
   <!-- Login -->
     <div>
@@ -112,43 +110,52 @@
 
   <!--To do list-->
     <div class="container position-sticky" id="todolist-page">
-      <h2>Your Todos</h2>
+      <h1>Your Todos</h1>
       <br>
       <div class="row">
         <!-- not done-->
         <div class="col-7">
+          <center><h3>Todo's Not Done</h3></center>
           <div id="Todos-Not-Done">
     
           </div>
         </div>
         <!-- done-->
         <div class="col-5">
+          <center><h3>Todo's Done</h3></center>
           <div id="Todos-Done">
             
           </div>
-      
         </div>
       </div>
     </div>
 
     <!-- Search Todo list-->
-    <div class="container position-sticky" id="result-search-page">
-      <h2>Your Todos</h2>
+    <div class="container" id="result-search-page">
+      <h2> TODO SEARCH RESULTS : </h2>
       <br>
       <div class="row">
-        <div class="col-7">
+        <div class="col-5">
           <div id="result-search-list">
     
           </div>      
         </div>
       </div>
     </div>
-
   </div>
 </body>
+
+<!-- Sweet Alert 2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="sweetalert2.min.js"></script>
+<link rel="stylesheet" href="sweetalert2.min.css">
+<!-- Google API -->
 <script src="https://apis.google.com/js/platform.js" async defer></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+
 <script src="./main.js"></script>
 </html> 

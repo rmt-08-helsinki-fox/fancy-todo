@@ -44,12 +44,7 @@ class TodoController {
 
   static findTodo (req, res, next) {
     let UserId = req.user.id
-    // let search = `%${req.query.title}%`
-    let search = `%${req.query}%`
-
-    console.log( UserId);
-
-    console.log( search );
+    let search = `%${req.query.title}%`
 
     Todo.findAll({where: {
       title: {
@@ -59,11 +54,9 @@ class TodoController {
       }
     })
     .then(dataTodo => {
-      console.log(dataTodo, `>>>>>>>>>>>>>`);
         res.status(200).json(dataTodo)
       })
       .catch(err => {
-        console.log(err, `<<<<<<<<<<`);
         next(err)
       })
   }
