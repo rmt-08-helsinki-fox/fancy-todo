@@ -27,6 +27,12 @@
         *  **Optional:**
 
             `description=[string]`<br />
+    
+    * **Headers Params**
+
+         *  **Required:**
+
+            `token=<jwt token>`
 
     * **Success Response:**
 
@@ -45,27 +51,27 @@
     * **Error Response:**
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Title cannot be empty" }`
+            **Content:** `{ error : ["Title cannot be empty"] }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input status between done and not done" }`
+            **Content:** `{ error : ["Input status between done and not done"] }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Date have to be at least today" }`
+            **Content:** `{ error : ["Date have to be at least today"] }`
 
             OR
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Invalid Token" }`
+            **Content:** `{ error : ["Invalid Token"] }`
 
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
         
     * **Sample Call:**
 
@@ -106,6 +112,12 @@
 
         None
 
+    * **Headers Params**
+
+         *  **Required:**
+
+            `token=<jwt token>`
+
     * **Success Response:**
 
         * **Code:** 200 <br />
@@ -125,12 +137,12 @@
     * **Error Response:**         
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Invalid Token" }`
+            **Content:** `{ error : ["Invalid Token"] }`
 
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
 
     * **Sample Call:**
 
@@ -158,13 +170,19 @@
     
     *  **URL Params**
 
-    * **Required:**
+        * **Required:**
     
         `id=[integer]`
 
     * **Data Params**
 
         None
+
+    * **Headers Params**
+
+         *  **Required:**
+
+            `token=<jwt token>`
 
     * **Success Response:**
 
@@ -183,22 +201,22 @@
     * **Error Response:**
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Invalid Token" }`
+            **Content:** `{ error : ["Invalid Token"] }`
 
             OR
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Not authorized" }`
+            **Content:** `{ error : ["Not authorized"] }`
 
             OR
 
         * **Code:** 404 BAD REQUEST <br />
-            **Content:** `{ error : "error not found" }` 
+            **Content:** `{ error : ["error not found"] }` 
         
             OR
             
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
 
     * **Sample Call:**
 
@@ -242,6 +260,12 @@
 
             `description=[string]`<br />
 
+    * **Headers Params**
+
+         *  **Required:**
+
+            `token=<jwt token>`
+
     * **Success Response:**
 
         * **Code:** 200 <br />
@@ -259,37 +283,37 @@
     * **Error Response:**
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Title cannot be empty" }`
+            **Content:** `{ error : ["Title cannot be empty"] }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input status between done and not done" }`
+            **Content:** `{ error : ["Input status between done and not done"] }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Date have to be at least today" }`
+            **Content:** `{ error : ["Date have to be at least today"] }`
 
             OR
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Not authorized" }`
+            **Content:** `{ error : ["Not authorized"] }`
 
             OR
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Invalid Token" }`
+            **Content:** `{ error : ["Invalid Token"] }`
 
             OR
 
         * **Code:** 404 BAD REQUEST <br />
-            **Content:** `{ error : "error not found" }` 
+            **Content:** `{ error : ["error not found"] }` 
 
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
 
     * **Sample Call:**
 
@@ -332,6 +356,12 @@
         * **Required:**
             `status=[string]`<br />
 
+    * **Headers Params**
+
+         *  **Required:**
+
+            `token=<jwt token>`
+
     * **Success Response:**
 
         * **Code:** 200 <br />
@@ -349,27 +379,27 @@
     * **Error Response:**
 
         * **Code:** 404 BAD REQUEST <br />
-            **Content:** `{ error : "error not found" }` 
+            **Content:** `{ error : ["error not found"] }` 
         
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input status between done and not done" }`
+            **Content:** `{ error : ["Input status between done and not done"] }`
 
             OR
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Invalid Token" }`
+            **Content:** `{ error : ["Invalid Token"] }`
 
             OR
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Not authorized" }`
+            **Content:** `{ error : ["Not authorized"] }`
 
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
 
     * **Sample Call:**
 
@@ -408,6 +438,12 @@
 
         None
 
+    * **Headers Params**
+
+         *  **Required:**
+
+            `token=<jwt token>`
+
     * **Success Response:**
 
         * **Code:** 200 <br />
@@ -425,22 +461,22 @@
     * **Error Response:**
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Invalid Token" }`
+            **Content:** `{ error : ["Invalid Token"] }`
 
             OR
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Not authorized" }`
+            **Content:** `{ error : ["Not authorized"] }`
 
             OR
 
         * **Code:** 404 BAD REQUEST <br />
-            **Content:** `{ error : "error not found" }` 
+            **Content:** `{ error : ["error not found"] }` 
         
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
 
     * **Sample Call:**
 
@@ -491,22 +527,22 @@
     * **Error Response:**
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Input a valid email format" }`
+            **Content:** `{ error : ["Input a valid email format"] }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Email already taken" }`
+            **Content:** `{ error : ["Email already taken"] }`
 
             OR
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Minimum password is 6 character" }` 
+            **Content:** `{ error : ["Minimum password is 6 character"] }` 
         
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
 
     * **Sample Call:**
 
@@ -556,12 +592,12 @@
     * **Error Response:**
 
         * **Code:** 400 BAD REQUEST <br />
-            **Content:** `{ error : "Email or Password is wrong" }`
+            **Content:** `{ error : ["Email or Password is wrong"] }`
         
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
 
      * **Sample Call:**
 
@@ -595,6 +631,12 @@
 
         None
 
+    * **Headers Params**
+
+         *  **Required:**
+
+            `token=<jwt token>`
+
     * **Success Response:**
 
         * **Code:** 200 <br />
@@ -610,18 +652,18 @@
     * **Error Response:**
          
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Invalid Token" }`
+            **Content:** `{ error : ["Invalid Token"] }`
 
             OR
 
         * **Code:** 401 NOT AUTHORIZED <br />
-            **Content:** `{ error : "Not authorized" }`
+            **Content:** `{ error : ["Not authorized"] }`
 
       
             OR
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
         
     * **Sample Call:**
 
@@ -678,7 +720,7 @@
     * **Error Response:**
 
         * **Code:** 500 INTERNAL SERVER ERROR <br />
-            **Content:** `{ error : "Internal Server Error" }`
+            **Content:** `{ error : ["Internal Server Error"] }`
         
     * **Sample Call:**
 
