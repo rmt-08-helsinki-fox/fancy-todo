@@ -112,7 +112,12 @@ $('#login-btn').click((event) => {
       if (!err.message) {
         $('#error-login').text(err.join('<br>'))
       } else {
-        $('#error-login').text(err.message)
+        swal({
+          title: err.message,
+          text: "Please fill in your credentials to login",
+          icon: "error",
+          button: "OK",
+        })
       }
 
       setTimeout(() => {
@@ -320,6 +325,12 @@ $('#add-new-todo-btn').click((event) => {
     }
   })
     .done(response => {
+      swal({
+        title: "Success",
+        text: "New Task been added",
+        icon: "success",
+        button: "OK",
+      })
       showTodoList()
     })
     .fail(xhr => {
@@ -382,8 +393,13 @@ $('#edit-new-todo-btn').click(event => {
     }
   })
     .done(response => {
-        console.log(response)
-        showTodoList()
+      swal({
+        title: "Success",
+        text: "Task has been edited",
+        icon: "success",
+        button: "OK",
+      })
+      showTodoList()
     })
     .fail(err => {
       if (!err.message) {
@@ -414,19 +430,35 @@ const todoDone = (id, status) => {
 }
 
 const deleteToDo = id => {
-  $.ajax({
-    method: 'DELETE',
-    url: `${baseUrl}/todos/${id}`,
-    headers: {
-      access_key: localStorage.access_token
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this file!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      swal("Your file has been deleted!", {
+        icon: "success",
+      })
+      $.ajax({
+        method: 'DELETE',
+        url: `${baseUrl}/todos/${id}`,
+        headers: {
+          access_key: localStorage.access_token
+        }
+      })
+      .done(response => {
+        console.log(response)
+        showTodoList()
+      })
+      .fail(err => {
+        const errmessage = err.responseJSON.message
+        alert(errmessage)
+      })
+    } else {
+      checkAuth()
     }
-  })
-  .done(response => {
-    console.log(response)
-    showTodoList()
-  })
-  .fail(err => {
-    const errmessage = err.responseJSON.message
-    alert(errmessage)
   })
 }

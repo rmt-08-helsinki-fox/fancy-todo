@@ -8,9 +8,6 @@ function errorHandler(err, req, res, next) {
         message: 'Resource not Found' 
       })
       break
-    case !err.name:
-      res.status(400).json(err.errors.map((e) => e.message))
-      break
     case 'accessDenied':
       res.status(401).json({ 
         message: `You don't have access for this request`
