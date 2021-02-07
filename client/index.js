@@ -41,8 +41,8 @@ $(document).ready(() => {
           data : {email,password}
       }) 
       .done ((response) => { 
-          let acces_token = response.accesToken 
-          localStorage.setItem('acces_token',acces_token) 
+          let access_token = response.access_token 
+          localStorage.setItem('access_token',access_token) 
           $('#log-email').val('')
           $('#log-password').val('')
           authentication()
@@ -71,7 +71,7 @@ $(document).ready(() => {
     $.ajax({ 
       url : `${baseURL}/todos`,
       method :'POST',
-      headers : {token : localStorage.getItem('acces_token')},
+      headers : {access_token : localStorage.getItem('access_token')},
       data : {title,description,due_date,status}
     }) 
     .done((response) => { 
@@ -109,15 +109,17 @@ function toRegisterForm() {
     $('#reg-form').show()
 } 
 
-function authentication() { 
-    if(localStorage.acces_token) { 
+function authentication() {
+    if(localStorage.access_token) { 
         $('#navbar').show() 
         $('#todos-table').show() 
         getTodos()
         $('#log-form').hide() 
         $('#reg-form').hide() 
         $('#add-todo-form').hide()
-        $('#edit-todo-div').hide()
+        $('#edit-todo-div').hide() 
+        $('#weather-info').show() 
+        getWeather() 
     } else { 
         $('#navbar').hide() 
         $('#todos-table').hide() 
@@ -125,6 +127,7 @@ function authentication() {
         $('#reg-form').hide() 
         $('#add-todo-form').hide()
         $('#edit-todo-div').hide()
+        $('#weather-info').hide() 
     }
 } 
 
@@ -141,7 +144,7 @@ function getTodos() {
     url : `${baseURL}/todos`,
     method : 'GET',
     headers : { 
-      token : localStorage.getItem('acces_token')
+      access_token : localStorage.getItem('access_token')
     }
   }) 
   .done((todos) => {  
@@ -180,7 +183,7 @@ function deleteTodo(id) {
     url : `${baseURL}/todos/${id}`,
     method : 'DELETE',
     headers : { 
-      token : localStorage.getItem('acces_token')
+      access_token : localStorage.getItem('access_token')
     }
   }) 
   .done(() => { 
@@ -196,7 +199,7 @@ function editTodoForm(id) {
     url : `${baseURL}/todos/${id}`,
     method : 'GET', 
     headers : { 
-      token : localStorage.getItem('acces_token')
+      access_token : localStorage.getItem('access_token')
     }
   }) 
   .done((todo) => { 
@@ -225,45 +228,45 @@ function editTodoForm(id) {
         <div class="row">  
           <label for="edit-status" class="col-lg-3 col-form-label">Status</label><br>
           <div class="col-lg-9">
-          <input class="form-control" list="statusOptions" id="add-status">
+            <input class="form-control" list="statusOptions" id="add-status">
               <datalist id="statusOptions">
                 <option value="false" selected>false</option>
                 <option value="true">true</option>
               </datalist><br><br>
-            </div>  
-          </div> 
+          </div>  
+        </div> 
         <button class="btn btn-primary" onclick="editTodo(${todo.id},{title:$('#edit-title').val(),description:$('#edit-description').val(),status:$('#edit-status').val(),due_date:$('#edit-due-date').val()})">Save</button>
     `)} else  { 
       $('#edit-todo-form').append(` 
-      <div class="row">
-      <label for="edit-title" class="col-lg-3 col-form-label">Title</label>
-      <div class="col-lg-9">
-        <input type="text" class="form-control" id="edit-title" name="edit-title" value="${todo.title}"><br><br>
-      </div>  
-    </div>
-    <div class="row">
-      <label for="edit-description" class="col-lg-3 col-form-label">Description</label><br>
-      <div class="col-lg-9">
-        <input type="text" class="form-control" id="edit-description" name="edit-description" value="${todo.description}"><br><br>
-      </div>
-    </div> 
-    <div class="row">
-      <label for="edit-due-date" class="col-lg-3 col-form-label">Due Date</label><br>
-      <div class="col-lg-9">  
-        <input type="date" class="form-control" id="edit-due-date" name="edit-due-date" value="${todo.due_date.split('T')[0]}"><br><br> 
-      </div>        
-    </div> 
-    <div class="row">  
-      <label for="edit-status" class="col-lg-3 col-form-label">Status</label><br>
-      <div class="col-lg-9">
-      <input class="form-control" list="statusOptions" id="add-status">
-          <datalist id="statusOptions">
-            <option value="false" >false</option>
-            <option value="true" selected>true</option>
-          </datalist><br><br>
-        </div>  
-      </div> 
-    <button class="btn btn-primary" onclick="editTodo(${todo.id},{title:$('#edit-title').val(),description:$('#edit-description').val(),status:$('#edit-status').val(),due_date:$('#edit-due-date').val()})">Save</button>
+        <div class="row">
+          <label for="edit-title" class="col-lg-3 col-form-label">Title</label>
+            <div class="col-lg-9">
+              <input type="text" class="form-control" id="edit-title" name="edit-title" value="${todo.title}"><br><br>
+            </div>  
+        </div>
+        <div class="row">
+          <label for="edit-description" class="col-lg-3 col-form-label">Description</label><br>
+          <div class="col-lg-9">
+            <input type="text" class="form-control" id="edit-description" name="edit-description" value="${todo.description}"><br><br>
+          </div>
+        </div> 
+        <div class="row">
+          <label for="edit-due-date" class="col-lg-3 col-form-label">Due Date</label><br>
+          <div class="col-lg-9">  
+            <input type="date" class="form-control" id="edit-due-date" name="edit-due-date" value="${todo.due_date.split('T')[0]}"><br><br> 
+          </div>        
+        </div> 
+        <div class="row">  
+          <label for="edit-status" class="col-lg-3 col-form-label">Status</label><br>
+          <div class="col-lg-9">
+            <input class="form-control" list="statusOptions" id="add-status">
+              <datalist id="statusOptions">
+                <option value="false" >false</option>
+                <option value="true" selected>true</option>
+              </datalist><br><br>
+          </div>  
+        </div> 
+        <button class="btn btn-primary" onclick="editTodo(${todo.id},{title:$('#edit-title').val(),description:$('#edit-description').val(),status:$('#edit-status').val(),due_date:$('#edit-due-date').val()})">Save</button>
     `)}
   }) 
   .fail((err) => { 
@@ -284,7 +287,7 @@ function changeTodoStatus(currStatus,id) {
   $.ajax({ 
     url : `${baseURL}/todos/${id}`,
     method : 'PATCH',
-    headers : {token : localStorage.getItem('acces_token')},
+    headers : {access_token : localStorage.getItem('access_token')},
     data : update
   }) 
   .then(() => { 
@@ -303,7 +306,7 @@ function editTodo(id,obj) {
   $.ajax({ 
     url : `${baseURL}/todos/${id}`,
     method :"PUT",
-    headers : {token : localStorage.getItem('acces_token')}, 
+    headers : {access_token : localStorage.getItem('access_token')}, 
     data : updatedData
   })
   .done(() => { 
@@ -316,26 +319,53 @@ function editTodo(id,obj) {
 
 function onSignIn(googleUser) {
   const id_token = googleUser.getAuthResponse().id_token
+  console.log(id_token)
   $.ajax({ 
     url : `${baseURL}/user/googleLogin`,
     method : 'POST',
     data : {googleToken : id_token}
   }) 
   .done((response) => { 
-    console.log(response)
-    localStorage.setItem('acces_token',response.accesToken)
+    localStorage.setItem('access_token',response.access_token)
     authentication()
   }) 
   .fail((err) => { 
-    console.log(err,'ini dari index.js di client kalo berhasil')
+    console.log(err,'ini dari index.js di client kalo error')
   })
 } 
 
 function logOut() { 
-  localStorage.removeItem('acces_token')
+  localStorage.removeItem('access_token')
   var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
     }) 
   toLoginForm()
+} 
+
+function getWeather() { 
+  $.ajax({ 
+    url : `${baseURL}/weather`,
+    method : 'GET',
+    headers : { 
+      access_token : localStorage.getItem('access_token')
+    }
+  }) 
+  .done((response) => {  
+    let weatherAndTemperature = ``
+    let location = response[0].location 
+    let temperature = response[0].temperature
+    let time = response[0].time 
+    let locationAndTime = `${location} ${time}`
+    for (let i = 0 ; i < response[0].descriptions.length ; i ++) { 
+      weatherAndTemperature +=`${response[0].descriptions[i]}`
+    } 
+    weatherAndTemperature +=` ${temperature} °C`
+    $('#weather-and-temperature').text(weatherAndTemperature)
+    $('#location-and-time').text(locationAndTime)
+    console.log(response)
+  }) 
+  .fail((err) => { 
+    console.log(err)
+  })
 }

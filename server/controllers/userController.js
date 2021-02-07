@@ -44,11 +44,11 @@ class UserController {
             msg : 'Invalid email or password' 
           })
         } else { 
-          const accesToken = generateToken({ 
+          const access_token = generateToken({ 
             id : data.id,
             email : data.email
           }) 
-          res.status(200).json({accesToken})
+          res.status(200).json({access_token})
         }
       }
     }) 
@@ -60,7 +60,7 @@ class UserController {
   static googleLogin(req,res,next) { 
     let newMail 
     let newPass = process.env.PASS
-    let accesToken
+    let access_token
     const client = new OAuth2Client(process.env.CLIENT_ID) 
     client.verifyIdToken({ 
       idToken : req.body.googleToken,
@@ -77,11 +77,11 @@ class UserController {
     }) 
     .then((user) => { 
       if(user) { 
-        accesToken = generateToken({ 
+        access_token = generateToken({ 
           id : user.id,
           email : user.email
         }) 
-        res.status(200).json({accesToken}) 
+        res.status(200).json({access_token}) 
       } else {  
         return User.create({ 
           email : newMail,
@@ -91,11 +91,11 @@ class UserController {
     })  
     .then((regUser) => {  
       if (regUser) { 
-        accesToken = generateToken({ 
+        access_token = generateToken({ 
           id : regUser.id,
           email : regUser.email
         }) 
-        res.status(201).json({accesToken})
+        res.status(201).json({access_token})
       } 
     })
     .catch((err) => { 

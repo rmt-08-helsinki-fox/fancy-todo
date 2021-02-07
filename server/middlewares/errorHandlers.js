@@ -17,8 +17,10 @@ function errorHandlers (err,req,res,next) {
     } else if (err.name === 'LoginError') { 
         status = 400  
         arr.push(err.msg) 
-    } 
-    else { 
+    } else if (err.name === 'WeatherError') { 
+        status = err.status 
+        arr.push(err.message)
+    } else { 
         arr.push('Internal Server Error')
     }
     res.status(status).json(arr)
