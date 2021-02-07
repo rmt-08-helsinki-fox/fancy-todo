@@ -1,3 +1,5 @@
+
+
 const base_url = 'http://localhost:4000/'
 
     function auth(email){
@@ -17,6 +19,7 @@ const base_url = 'http://localhost:4000/'
             $('#login-form').hide()
             $('#reg-form').hide()
             $('#hi').append(email)
+            getTodo()
         }
     }
 
@@ -102,12 +105,15 @@ const base_url = 'http://localhost:4000/'
     function addTodo(){
        const title = $('#title').val()
        const description = $('#description').val()
-       const status = $('#status').val()
+    //    const status = $('#status').val()
        const due_date = $('#due_date').val()
-       const task = {title, description, status, due_date}
-    //    console.log('8888888888888888888888888888888888888')
-    //    console.log(localStorage.access_token)
-    //    console.log(data)
+       const task = {
+           title, 
+           description, 
+           status: false,
+           due_date
+        }
+   
    
         $.ajax({
             url: base_url + 'todos',
@@ -126,33 +132,72 @@ const base_url = 'http://localhost:4000/'
         })
         .always(_=>{
             console.log('always')
+            $('#title').val('')
+            $('#description').val('')
+            $('#due_date').val('')
         })
    
     }
 
-    function onSignIn(googleUser) {
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log(id_token)
+    function getTodo(){
         $.ajax({
-          url: `${base_url}google-login`,
-          method: "POST",
-          data: { id_token },
+            url: base_url + 'todos',
+            headers: {
+                token: localStorage.access_token
+            },
+            method: 'GET',
         })
-          .done((response) => {
-            localStorage.setItem("access_token", response.access_token);
-            auth();
-          })
-          .fail((xhr, text) => {
+        .done(response=>{
+            // console.log(response[0].title)
+            if(response[0]){
+                const {title, description, status, due_date} = response[0]
+                // console.log(title, description, status, due_date)
+                response.forEach(el=>{
+                    $('tbody').append(`
+                        <tr>
+                            <td>${el.title}</td>
+                            <td>${el.description}</td>
+                            <td>${el.status}</td>
+                            <td>${el.due_date}</td>
+                            <td>
+                                <a href="#" onclick="dltTodo(${el.id})">Delete ${el.id}</a> || 
+                                <a href="">Edit</a>
+                            </td>
+                        </tr>
+                    `)
+                    $('#del')
+                })
+            }
+        })
+        .fail((xhr, text)=>{
             console.log(xhr, text)
-          })
-          .always((_) => {
-          
-          });
-      }
-      
-    //   function signOut() {
-    //     var auth2 = gapi.auth2.getAuthInstance();
-    //     auth2.signOut().then(function () {
-    //       // console.log("User signed out.");
-    //     });
-    // }
+            // console.log(localStorage.access_token)
+        })
+        .always(_=>{
+            
+        })
+    }
+
+    function dltTodo(id){
+        $.ajax({
+            url: base_url + `todos/${id}`,
+            method: 'DELETE',
+            headers: {
+                token : localStorage.access_token
+            }
+        })
+        .done(response=>{
+            console.log(response)
+            // auth()
+        })
+        .fail((xhr, text)=>{
+            console.log(xhr, text)
+        })
+        .always(_=>{
+            console.log('always delete')
+        })
+    }
+
+
+
+  

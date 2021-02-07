@@ -20,8 +20,13 @@ class ControllerTodo{
     }
 
     static getTodo(req, res, next){
-        Todo.findAll()
+        Todo.findAll({
+            where: {
+                UserId : req.decoded.id
+            }
+        })
         .then(todos=>{
+            // console.log(req.decoded,'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
             res.status(200).json(todos)
         })
         .catch(err=>{
