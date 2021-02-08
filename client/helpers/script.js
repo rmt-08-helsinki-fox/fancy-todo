@@ -11,7 +11,6 @@ function auth() {
         $("#addtodo-button").hide()
         $("#news-container").hide()
     } else {
-
         getTodos()
         $("#navbar").show()
         $("#header-container").hide()
@@ -21,10 +20,7 @@ function auth() {
         $("#edittodo-container").hide()
         $("#addtodo-button").show()
         $("#news-container").hide()
-
-
     }
-
 }
 
 
