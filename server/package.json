@@ -4,8 +4,9 @@
   "description": "server fancy todo",
   "main": "app.js",
   "scripts": {
+    "dev": "NODE_ENV=development npx nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app"
+    "start": "node app.js"
   },
   "author": "Adityo Prabowo",
   "license": "ISC",
