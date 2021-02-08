@@ -1,4 +1,4 @@
-const base_url = "https://sul-fancy-todo.herokuapp.com/";
+const base_url = "https://sul-fancy-todo.herokuapp.com";
 
 // jQuery
 $(document).ready(() => {
