@@ -11,10 +11,6 @@ class TodoControll {
       UserId: req.dataUser.id
     }
 
-    if(newTodo.status === ""){
-      newTodo.status = "not done"
-    }
-
     Todo.create(newTodo)
     .then(data => {
       res.status(201).json(data)

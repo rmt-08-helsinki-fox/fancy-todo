@@ -88,7 +88,7 @@ function logout(){
 function addTodo(){
   const title = $("#title").val()
   const description = $("#description").val()
-  const status = $("#status").val()
+  const status = "not done"
   const due_date = $("#due_date").val()
 
   $.ajax({
