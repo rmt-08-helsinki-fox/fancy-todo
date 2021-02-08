@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:3000'
+const baseURL = 'https://fancy-todo-kemal-h8.herokuapp.com'
 
 function checkToken() {
   if (!localStorage.access_token) {
