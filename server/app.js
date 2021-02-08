@@ -1,6 +1,8 @@
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV === 'development') {
     require('dotenv').config()
 }
+//untuk tes di local
+//NODE_ENV=development npx nodemon app.js
 
 //hanya di development
 // require('dotenv').config()

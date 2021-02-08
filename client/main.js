@@ -1,4 +1,4 @@
-// const baseUrl = 'https://todo-fancy-dody.herokuapp.com/'
+// const baseUrl = 'https://todo-fancy-dody2.herokuapp.com/'
 const baseUrl = 'http://localhost:3000/'
 
 $(document).ready(() => {
