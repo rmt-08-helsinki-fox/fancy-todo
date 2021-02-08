@@ -113,7 +113,7 @@ function googleSignOut() {
     })
 }
 
-const baseUrl = "ec2-54-225-190-241.compute-1.amazonaws.com"
+const baseUrl = "https://fancy-todun.herokuapp.com"
 
 function login() {
   const email = $("#loginEmail").val()
