@@ -2,7 +2,6 @@ const baseUrl = "http://localhost:3000/"
 
 $(document).ready(() => {
     auth()
-
     $("#login-form").on("submit", (e) => {
         e.preventDefault()
         login()
@@ -13,20 +12,45 @@ $(document).ready(() => {
         register()
     })
 
-    $("logout-button").on("click", (e) => {
+    $("#logout-button").on("click", (e) => {
         e.preventDefault()
         logout()
     })
 
-    $("register-button").on("click", (e) => {
+    $("#register-button").on("click", (e) => {
         e.preventDefault()
         showRegisterForm()
     })
 
-    $("login-button").on("click", (e) => {
+    $("#login-button").on("click", (e) => {
         e.preventDefault()
         auth()
     })
+
+    $("#create-button").on("click"), (e) => {
+        e.preventDefault()
+        showCreateForm()
+    }
+
+    $("#create-form").on("submit"), (e) => {
+        e.preventDefault()
+        createTodo()
+    }
+
+    $("#delete-action").on("click", (e) => {
+        e.preventDefault()
+        deleteTodo()
+    })
+
+    $("#edit-action").on("click", (e) => {
+        e.preventDefault()
+        showEditForm()
+    })
+
+    $("#edit-form").on("submit"), (e) => {
+        e.preventDefault()
+        editTodo()
+    }
 })
 
 function onSignIn(googleUser) {
@@ -54,14 +78,18 @@ function onSignIn(googleUser) {
 }
 
 function auth() {
-    if (localStorage.getItem("access_token")) {
+    if (!localStorage.getItem("access_token")) {
         $("#login").show()
         $("#register").hide()
         $("#todolist").hide()
+        $("#create-form").hide()
+        $("#edit-form").hide()
     } else {
         $("#login").hide()
         $("#register").hide()
         $("#todolist").show()
+        $("#create-form").hide()
+        $("#edit-form").hide()
     }
 }
 
@@ -69,7 +97,26 @@ function showRegisterForm() {
     $("#register").show()
     $("#login").hide()
     $("#todolist").hide()
+    $("#create-form").hide()
+    $("#edit-form").hide()
 }
+
+function showCreateForm() {
+    $("#login").hide()
+    $("#register").hide()
+    $("#todolist").hide()
+    $("#create-form").show()
+    $("#edit-form").hide()
+}
+
+function showEditForm() {
+    $("#login").hide()
+    $("#register").hide()
+    $("#todolist").hide()
+    $("#create-form").hide()
+    $("#edit-form").show()
+}
+
 
 function login() {
     const email = $("#login-email").val()
@@ -84,11 +131,12 @@ function login() {
         }
     })
         .done(data => {
-            console.log(data)
+            console.log("ini di dataaa")
             localStorage.setItem("access_token", data.access_token)
             auth()
         })
         .fail((xhr, text) => {
+            console.log("testttttt")
             console.log(xhr, text)
         })
         .always(_ => {
@@ -99,7 +147,8 @@ function login() {
 
 function register() {
     const email = $('#register-email').val();
-    const password = $('#registe-password').val();
+    const password = $('#register-password').val();
+    console.log(email, password)
 
     $.ajax({
         url: baseURL + "/users/register",
@@ -110,15 +159,15 @@ function register() {
         }
     })
         .done((response) => {
-            $('#login-mail').val(email)
-            $('#login-password').val(password)
+            $('#register-mail').val(email)
+            $('#register-password').val(password)
             login()
         })
         .fail((xhr, text) => {
             console.log({ xhr, text });
         })
         .always(_ => {
-            $('#registe-email').val("")
+            $('#register-email').val("")
             $('#register-password').val("")
         })
 }
@@ -130,33 +179,21 @@ function logout() {
 
 function showTodoList() {
     $.ajax({
-        url: baseURL + "/todos",
+        url: baseUrl + "/todos/:id",
         method: "GET",
         headers: {
             access_token: localStorage.getItem('access_token')
         }
     })
         .done(response => {
+            console.log(response)
             response.forEach(el => {
-                $("#todolist").append(`
-                <div id="todotable"></div>
-                <table>
-                  <tr>
-                    <th>#</th>
-                    <th>To do List</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Due Date</th>
-                  </tr>
-                  <tr>
-                    <td>${el.id}</td>
-                    <td>${el.title}</td>
-                    <td>${el.description}</td>
-                    <td>${el.status}</td>
-                    <td>${el.due_date}</td>
-                  </tr>
-                </table>
-              </div>`)
+                $("#todotable").append(`
+                <td>${el.id}</td>
+            <td>${el.title}</td>
+            <td>${el.description}</td>
+            <td>${el.status}</td>
+            <td>${el.due_date}</td>`)
             })
             $("#todolist").show(500)
         })
@@ -166,7 +203,65 @@ function showTodoList() {
 
 }
 
+function createTodo() {
+    $.ajax({
+        url: baseUrl + "/todos/create",
+        method: "POST",
+        data: {
+            title,
+            description,
+            status,
+            due_date
+        }
+    })
+        .done(response => {
+            $('#title').val(title)
+            $('#description').val(description)
+            $('#due_date').val(due_date)
+            auth()
+        })
+        .fail((xhr, text) => {
+            console.log({ xhr, text })
+        })
+}
 
+function deleteTodo(id) {
+    $.ajax({
+        url: baseUrl + "todos/delete/" + id,
+        method: "DELETE",
+        headers: {
+            access_token: localStorage.getItem("access_token")
+        }
+    })
+        .done((_) => {
+            showTodoList()
+        })
+        .fail((xhr, text) => {
+            console.log({ xhr, text })
+        })
+}
+
+function editTodo(id) {
+    $.ajax({
+        url: baseUrl + "todos/edit/" + id,
+        method: "PUT",
+        data: {
+            title,
+            description,
+            status,
+            due_date,
+        }
+    })
+        .done((_) => {
+            $('#edit-title').val(title)
+            $('#edit-description').val(description)
+            $('#edit-due_date').val(due_date)
+            auth()
+        })
+        .fail((xhr, text) => {
+            console.log({ xhr, text })
+        })
+}
 
 
 

@@ -21,6 +21,7 @@ class UserController {
 
     static login(req, res, next) {
         const { email, password } = req.body
+        console.log(email, password, "ini di loginnnnnnn")
         User.findOne({
             where: {
                 email: email
@@ -49,6 +50,7 @@ class UserController {
                 res.status(200).json({ access_token })
             })
             .catch(err => {
+                console.log(err)
                 next(err)
             })
     }

@@ -8,7 +8,7 @@ const routes = require("./routes/index")
 const errorHandler = require("./middlewares/errorhandler")
 const cors = require("cors")
 
-app.use(cors)
+app.use(cors())
 
 app.use(express.urlencoded({ extended: true }))
 
