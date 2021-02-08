@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3000/'
+const baseUrl = 'https://fancy-todo-jefri-server.herokuapp.com/'
 
 $(document).ready(function() {
   authenticate()
@@ -214,7 +214,7 @@ function fetchTodo() {
             <h4 class="card-title">${todos.title}</h4>
             <p>${todos.description}</p>
             <p>${todos.due_date}</p>
-            <button type="button" class="btn btn-primary btn-sm" onclick="">Edit</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="btnEditTodos(${todos.id})">Edit</button>
             <button class="btn btn-primary btn-sm" onclick="deleteTodos(${todos.id})">Delete</button>
             <buttton class="btn btn-success btn-sm" onclick="statusTodos(${todos.id}, false)">Done</buttton>
           </div>
@@ -283,9 +283,39 @@ function deleteTodos(id) {
 }
 
 function btnEditTodos(id) {
-  
+  const access_token = localStorage.access_token
+
+  console.log(id);
+  $('#form-edit-todo').show()
+  $('#todos').hide()
+
+  $.ajax({
+    method: 'GET',
+    url: baseUrl + `todos/${id}`,
+    headers: {
+      access_token
+    }
+  })
+    .done(response => {
+      console.log(response)
+      $('#title-todo-edit').val(response.title)
+      $('#desc-todo-edit').val(response.description)
+      $('#date-todo-edit').val(response.due_date)
+    })
+    .fail(err => {
+      console.log(err);
+    })
 }
 
 function editTodos(event, id) {
- 
+ event.preventDefault();
+ const title = $('#title-todo-edit').val()
+ const description = $('#desc-todo-edit').val()
+ const due_date = $('#date-todo-edit').val()
+
+ console.log(id);
+//  $.ajax({
+//   method: 'PUT',
+//   url: baseUrl + `todos/${id}`
+//  })
 }
