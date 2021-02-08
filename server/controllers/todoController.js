@@ -39,8 +39,11 @@ class TodoController {
   static showByID(req, res, next) {
     const id = +req.params.id
 
-    Todo.findByPK(id)
+    Todo.findOne({
+      where: { id }
+    })
       .then(response => {
+        console.log(response);
         if (response) {
           res.status(200).json(response)
         } else {
@@ -50,6 +53,7 @@ class TodoController {
         }
       })
       .catch(err => {
+        console.log(err);
         next(err)
       })
   }
