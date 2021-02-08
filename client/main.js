@@ -103,13 +103,13 @@ function handleLogin(data) {
     data
   })
   .done(res => {
-    // console.log(res, '<<<<<');
+    console.log(res, '<<<<<');
     localStorage.setItem('access_token', res.access_token)
     formLogin.trigger('reset')
     auth()
   })
   .fail(err => {
-    console.log(err, `error login from ajax`);
+    console.log(err.responseText, `error login from ajax`);
   })
   .always(() => {
     $("#login-email").val('')

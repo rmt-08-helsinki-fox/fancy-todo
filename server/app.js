@@ -1,4 +1,6 @@
-require('dotenv').config()
+if(process.env.NODE_ENV === 'development') {
+    require('dotenv').config()
+}
 const errorHandler = require('./middlewares/errorHandler')
 const cors = require('cors')
 const express = require('express')
