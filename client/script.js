@@ -1,4 +1,4 @@
-const base_url = "http://localhost:3000/"
+const base_url = "https://todo-expert.herokuapp.com/"
 let targetedTodoId = 0
 
 function auth() {
