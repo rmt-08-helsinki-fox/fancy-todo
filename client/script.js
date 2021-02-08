@@ -113,7 +113,7 @@ function googleSignOut() {
     })
 }
 
-const baseUrl = "http://localhost:3000"
+const baseUrl = "ec2-54-225-190-241.compute-1.amazonaws.com"
 
 function login() {
   const email = $("#loginEmail").val()
