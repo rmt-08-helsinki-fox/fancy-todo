@@ -10,114 +10,212 @@
       integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
       crossorigin="anonymous"
     />
-  <!-- <link rel="stylesheet" href="/fancy-todo/client/style.css"> -->
-  
-  <!-- nav bar -->
+  <link rel="stylesheet" href="style.css">
   <title>Fancy Todo</title>
 </head>
 <body>
   <!-- nav bar -->
-  <div>
-    <ul class="nav">
-      <li class="nav-item">
-        <a class="nav-link disabled" id="title" aria-disabled="true">Fancy Todo</a>
-      </li>
-      <li class="nav-item">
-        <a onclick="registerLink()" class="nav-link" href="#" id="register-link">Register</a>
-      </li>
-      <li class="nav-item">
-        <a onclick="loginLink()" class="nav-link" href="#" id="login-link">Login</a>
-      </li>
-      <li class="nav-item">
-        <a onclick="logout()" class="nav-link" href="" id="logout-link">Logout</a>
-      </li>
-    </ul>
-  </div>
+  <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <div>
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link disabled" id="title" aria-disabled="true">Fancy Todo</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a onclick="registerLink()" class="nav-link" href="#" id="register-link">Register</a>
+        </li>
+        <li class="nav-item">
+          <a onclick="loginLink()" class="nav-link" href="#" id="login-link">Login</a>
+        </li> -->
+        <li class="nav-item">
+          <a onclick="logout()" class="nav-link" href="" id="logout-link">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <!-- nav bar -->
+
+  <!-- Notification for success / error event -->
+  <div id="alert" class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+    Your notification message here.
+  </div>
+  <!-- Notification for success / error event -->
   
-  <!-- Register -->
-  <div class="container" id="register-container">
+  <!-- Home Page -->
+  <div class="container" id="home-page">
     <div class="row">
-      <div>
-        <form action="" method="post" id="register">
-          <div>
-            <label for="">Full Name</label>
-            <input type="text" name="name" id="register-name">
+      <div class="col-md-5 mx-auto">
+        <!-- Login -->
+        <div id="first">
+          <div class="myform form ">
+            <div class="logo mb-3">
+              <div class="col-md-12 text-center">
+                <h1>Login</h1>
+              </div>
+            </div>
+            <form action="" method="post" name="login" id="login">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" name="email"  class="form-control" id="login-email" placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Password</label>
+                <input type="password" name="password" id="login-password"  class="form-control" placeholder="Enter Password">
+              </div>
+              <div class="col-md-12 text-center ">
+                <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Login</button>
+              </div>
+              <div class="col-md-12 ">
+                <div class="login-or">
+                    <hr class="hr-or">
+                    <span class="span-or">or</span>
+                </div>
+              </div>
+              <div class="col-md-12 mb-3">
+                <p class="text-center">
+                    <a href="javascript:void();" class="google btn mybtn"><i class="fa fa-google-plus">
+                    </i> Signup using Google
+                    </a>
+                </p>
+              </div>
+              <div class="form-group">
+                <p class="text-center">Don't have account? <a onclick="registerLink()" href="#" id="register-link">Register here</a></p>
+              </div>
+            </form>
           </div>
-          <div>
-            <label for="">Email</label>
-            <input type="email" name="email" id="register-email">
+        </div>
+        <!-- Login -->
+
+        <!-- Register -->
+        <div id="second">
+          <div class="myform form ">
+            <div class="logo mb-3">
+               <div class="col-md-12 text-center">
+                  <h1>Register</h1>
+               </div>
+            </div>
+            <form action="#" name="registration" id="register">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Full Name</label>
+                <input type="text"  name="firstname" class="form-control" id="register-name" aria-describedby="emailHelp" placeholder="Enter Firstname">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" name="email"  class="form-control" id="register-email" aria-describedby="emailHelp" placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Password</label>
+                <input type="password" name="password" id="register-password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+              </div>
+              <div class="col-md-12 text-center mb-3">
+                <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Get Started For Free</button>
+              </div>
+              <div class="col-md-12 ">
+                <div class="form-group">
+                    <p class="text-center"><a onclick="loginLink()" href="#" id="signin">Already have an account?</a></p>
+                </div>
+              </div>
+            </form>
           </div>
-          <div>
-            <label for="">Password</label>
-            <input type="password" name="password" id="register-password">
-          </div>
-          <button type="submit">Register</button>
-        </form>
+        </div>
+        <!-- Register -->
       </div>
     </div>
   </div>
-  <!-- Register -->
+  <!-- Home Page -->
 
-  <!-- Login -->
-  <div class="container" id="login-container">
-    <div class="row">
-      <div>
-        <form action="" method="post" id="login">
-          <div>
-            <label for="">Email</label>
-            <input type="email" name="email" id="login-email">
-          </div>
-          <div>
-            <label for="">Password</label>
-            <input type="password" name="password" id="login-password">
-          </div>
-          <button type="submit">login</button>
-          <div class="g-signin2" data-onsuccess="onSignIn"></div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <!-- Login -->
-
-  <!-- List Todo -->
-  <section id="todo-page">
-    <a onclick="linkAddTodo()" href="#">Add Todo</a>
-    <table>
-      <tr>
-        <th>Title</th>
+  <!-- <div class="container">
+    <div class="row col-md-6 col-md-offset-2 custyle">
+    <table class="table table-striped custab">
+      <thead>
+        <a href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Todo</a>
+        <tr>
+          <th>No</th>
+          <th>Title</th>
           <th>Description</th>
           <th>Status</th>
           <th>Due Date</th>
-          <tr>Action</tr>
+          <th class="text-center">Action</th>
+        </tr>
+      </thead>
+            <tr>
+                <td>1</td>
+                <td>News</td>
+                <td>News Cate</td>
+                <td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Blogs</td>
+                <td>Parent Blogs</td>
+                <td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
+            </tr>
+      </table>
+    </div>
+  </div> -->
+
+  <!-- List Todo -->
+  <section id="todo-page">
+    <a onclick="linkAddTodo()" href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Todo</a>
+    <table class="table table-striped" id="todo-pages">
+      <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Due Date</th>
+          <th class="text-center">Action</th>
       </tr>
     </table>
   </section>
   <!-- List Todo -->
 
   <!-- Add Todo -->
-  <section id="addTodo-page">
-    <form action="" id="addTodo">
-      <div>
-        <label for="">Title</label>
-        <input type="text" name="title" id="add-title">
+  <div id="addTodo-page" class="container">
+    <div class="row">
+      <div class="col-sm-12">
+          <!-- <legend>Mr. Sosa:</legend> -->
       </div>
-      <div>
-        <label for="">Description</label>
-        <input type="text" name="description" id="add-description">
-      </div>
-      <div>
-        <label for="">Status</label>
-        <input type="text" name="status" id="add-status">
-      </div>
-      <div>
-        <label for="">Due Date</label>
-        <input type="date" name="due_date" id="add-due_date">
-      </div>
-      <button type="submit">Submit</button>
-      <button id="cancel-add">Cancel</button>
-    </form>
-  </section>
+      <!-- panel preview -->
+      <div class="col-sm-5">
+        <h4>Add Todo:</h4>
+        <div class="panel panel-default">
+          <div class="panel-body form-horizontal payment-form">
+            <div class="form-group">
+              <label for="title" class="col-sm-3 control-label">Title</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="add-title" name="title">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description" class="col-sm-3 control-label">Description</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="add-description" name="description">
+              </div>
+            </div> 
+            <div class="form-group">
+              <label for="status" class="col-sm-3 control-label">Status</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="add-status" name="status">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="due_date" class="col-sm-3 control-label">Due-Date</label>
+              <div class="col-sm-9">
+                <input type="date" class="form-control" id="add-due_date" name="due_date">
+              </div>
+            </div>   
+            <div class="form-group" id="addTodo">
+              <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-default preview-add-button">
+                  <span class="glyphicon glyphicon-plus"></span> Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>   
+      </div> 
+    </div>
+  </div>
   <!-- Add Todo -->
 
   <!-- Edit Todo -->
@@ -146,7 +244,7 @@
   <!-- Edit Todo -->
 
   <!-- Edit Status Todo -->
-  <section id="editStatus-todo">
+  <section id="editStatus-page">
     <form action="" id="edit-status-todo">
       <div>
         <p>Edit Status</p>

@@ -1,4 +1,6 @@
-require('dotenv').config()
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config()
+}
 const { errorHandler } = require('./middleware/errorHandler')
 const router = require('./router/index')
 const express = require('express')

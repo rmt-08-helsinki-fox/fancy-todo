@@ -1,13 +1,13 @@
 const { User } = require('../models')
 const { comparePassword } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
+const { OAuth2Client } = require('google-auth-library')
 const CLIENT_ID = process.env.CLIENT_ID
 
 class UserController {
   static register(req, res, next) {
     const { name, email, password } = req.body
     const dataUser = { name, email, password }
-    console.log(req.body); //
     User.create(dataUser)
     .then(user => {
       res.status(200).json({
@@ -24,7 +24,6 @@ class UserController {
   static login(req, res, next) {
     const { email, password } = req.body
     const dataUser = { email, password }
-    console.log(req.body); //
     User.findOne({
       where: {
         email: dataUser.email
@@ -42,7 +41,6 @@ class UserController {
         id: user.id,
         email: user.email
       })
-      // console.log(accessToken, 'user controller'); //
       res.status(200).json({ accessToken })
     })
     .catch(err => {
@@ -51,21 +49,46 @@ class UserController {
   }
 
   static googleLogin(req, res, next) {
-    console.log('masuuk', CLIENT_ID);
-    
-    console.log(new OAuth2Client);
-    const client = new OAuth2Client(CLIENT_ID);
+    const idToken = req.body.idToken
+    const client = new OAuth2Client(process.env.CLIENT_ID)
+    let email
     client.verifyIdToken({
-      idToken: req.body.generateToken,
-      audience: CLIENT_ID
+      idToken,
+      audience: process.env.CLIENT_ID
     })
-    .then(tiket => {
-      const payload = tiket.getPayload()
-      console.log({payload});
-    })
-    .catch(err => {
-      console.error({err})
-    })
+      .then(ticket => {
+        const payload = ticket.getPayload()
+        email = payload.email
+        return User.findOne({ where: { email: email }})
+      })
+      .then(user => {
+        if (user) {
+          let payload = {
+            id: user.dataValues.id,
+            email: user.dataValues.email
+          }
+          const access_token = generateToken(payload)
+          req.headers.access_token = access_token
+          res.status(200).json({ access_token })
+        } else {
+          let password = process.env.PASSWORD_FILLER
+          return User.create({ email, password })
+        }
+      })
+      .then(user => {
+        if (user) {
+          let payload = {
+            id: user.id,
+            email: user.id
+          }
+          const access_token = generateToken(payload)
+          req.headers.access_token = access_token
+          res.status(201).json({ access_token })
+        }
+      })
+      .catch(err => {
+        next(err)
+      })
   }
 }
 
