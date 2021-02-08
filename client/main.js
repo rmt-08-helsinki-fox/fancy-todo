@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:3000/"
+const baseUrl = "https://fancy-todos-app1.herokuapp.com/"
 const btnRegister = $(".btn-register")
 const btnLogin = $(".btn-login")
 const btnLogout = $(".btn-logout")
