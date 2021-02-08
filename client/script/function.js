@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3000'
+const baseUrl = 'https://my-fancy-todo-server.herokuapp.com'
 
 function checkPage() {
   if (!localStorage.getItem('token')) {
