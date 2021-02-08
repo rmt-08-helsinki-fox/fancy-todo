@@ -1,4 +1,4 @@
-let baseUrl = 'http://localhost:3000/'
+let baseUrl = 'https://git.heroku.com/fancy-todo-project.git/'
 
 function authenticate() {
     if(!localStorage.getItem('accessToken')){
