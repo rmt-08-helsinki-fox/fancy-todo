@@ -128,6 +128,9 @@ let base_url = "https://fancy-todo-app01.herokuapp.com/"
           console.log('masuk fail<<<<<<<<<<<<<')
           console.log(xhr, text)
         })
+        .always(_ => {
+          $("#isi-form-add-todo").trigger("reset")
+        })
     }
 
     // ============ show register form ==============
