@@ -26,6 +26,7 @@ function renderLoginPage(invalidAuth = null) {
     $('#registerNav').show();
     $('#email').val('');
     $('#password').val('');
+    $('#add-member').hide();
 }
 
 function getQuotes() {
@@ -57,6 +58,7 @@ function renderTodoPage() {
     $('#loginNav').hide();
     $('#logoutNav').show();
     $('#todoPage').show();
+    $('#add-member').hide();
 
     $.ajax({
         url: 'http://localhost:3000/todos',
@@ -80,6 +82,7 @@ function renderTodoPage() {
                     <td class="d-flex">
                         <button type="button" data-id="${e.id}" class="btn btn-sm btn-warning edit-btn m-1">Edit</button>
                         <button type="button" data-id="${e.id}" class="btn btn-sm btn-danger delete-btn m-1">Delete</button>
+                        <button type="button" data-id="${e.id}" class="btn btn-sm btn-success add-member-btn m-1">Add Member</button>
                     </td>
                 </tr>`;
                 rows += row;
@@ -98,6 +101,10 @@ function renderTodoPage() {
                 e.preventDefault();
                 changeStatus(e.target.dataset.id, e.target.dataset.status)
             });
+            $('button.add-member-btn').on('click', e => {
+                e.preventDefault();
+                renderAddMemberPage(e.target.dataset.id);
+            })
         })
         .fail(err => {
             $('#404').show();
@@ -168,6 +175,7 @@ function renderAddTodoPage(err = null) {
     $('#registerNav').hide();
     $('#loginNav').hide();
     $('#logoutNav').show();
+    $('#add-member').hide();
 
     if (err) {
         err.forEach(e => {
@@ -250,6 +258,61 @@ function deleteTodo(id) {
         .fail(err => {
             console.log(err);
         })
+}
+
+function renderAddMemberPage(id) {
+    $('#todoPage').hide();
+    $('#loginPage').hide();
+    $('#registerPage').hide();
+    $('#crud-todo').hide();
+    $('#registerNav').hide();
+    $('#loginNav').hide();
+    $('#logoutNav').show();
+    $('#add-member').show();
+    $('#email-member').val('');
+    $('#validateEmailMember').hide();
+    $('#idTodoForMember').val(id);
+
+    $.ajax({
+        url: `http://localhost:3000/todos/${id}/members`,
+        method: 'GET',
+        headers: { token: localStorage.getItem('token') }
+    })
+        .done(data => {
+            let html = '';
+            const members = data.data.Members;
+            members.forEach((e, i) => {
+                let row = `<tr>
+                                <td>${i + 1}</td>
+                                <td>${e.email}</td>
+                            </tr>`;
+                html += row;
+            });
+            $('#members').html(html);
+        })
+        .fail(err => {
+            console.log(err);
+        })
+}
+
+function addMember() {
+    const idTodo = $('#idTodoForMember').val();
+    const email = $('#email-member').val();
+    $.ajax({
+        url: `http://localhost:3000/todos/${idTodo}/members/add`,
+        method: 'POST',
+        headers: { token: localStorage.getItem('token') },
+        data: { email }
+    })
+        .done(() => {
+            renderAddMemberPage(idTodo);
+        })
+        .fail(err => {
+            renderAddMemberPage(idTodo);
+            $('#validateEmailMember').text('Email belum terdaftar di aplikasi');
+            $('#validateEmailMember').show();
+            console.log(err);
+        });
 }
 
 function onSignIn(googleUser) {

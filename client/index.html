@@ -182,6 +182,47 @@
                 </div>
             </div>
         </div>
+
+        <div id="add-member">
+            <h1 class="text-center mt-5" id="title-add-members">Add Member</h1>
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="row justify-content-center">
+                        <div class="col-6">
+                            <form id="form-add-member">
+                                <input type="hidden" id="idTodoForMember">
+                                <div class="row mb-3">
+                                    <label for="title" class="col-sm-3 col-form-label">Email<sup
+                                            class="text-danger">*</sup></label>
+                                    <div class="col-sm">
+                                        <input type="email" class="form-control" id="email-member">
+                                        <small class="text-danger" id="validateEmailMember">messages</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <button type="submit" class="btn btn-primary">Add Members</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-6">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="members">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
 

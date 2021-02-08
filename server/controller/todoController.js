@@ -1,4 +1,5 @@
-const { Todo } = require('../models');
+const { Todo, Member, User, TodoMember } = require('../models');
+const { Op } = require('sequelize');
 
 class TodoController {
     static async addTodo(req, res, next) {
@@ -26,7 +27,20 @@ class TodoController {
                 },
                 order: [['due_date', 'ASC']]
             }
-            const todos = await Todo.findAll(opt);
+            let todos = await Todo.findAll(opt);
+            let isTodoMember = false;
+            const member = await Member.findOne({
+                where: {
+                    email: req.decoded.email
+                },
+                include: Todo
+            });
+            if (member) {
+                member.Todos.forEach(e => {
+                    isTodoMember = true;
+                    todos.push(e);
+                });
+            }
             if (todos.length === 0) throw 404;
             const msg = {
                 message: 'Success',
@@ -47,9 +61,26 @@ class TodoController {
                     user_id: req.decoded.id
                 }
             }
-            const todo = await Todo.findOne(opt);
+            let todo = await Todo.findOne(opt);
             if (!todo) {
-                throw 404;
+                let isTodoMember = false;
+                const member = await Member.findOne({
+                    where: {
+                        email: req.decoded.email
+                    },
+                    include: Todo
+                });
+                if (member) {
+                    member.Todos.forEach(e => {
+                        if (e.id == id) {
+                            todo = e;
+                            isTodoMember = true;
+                        }
+                    })
+                }
+                if (!isTodoMember) {
+                    throw 404;
+                }
             }
             const msg = {
                 message: 'Success',
@@ -74,8 +105,19 @@ class TodoController {
                 returning: true
             }
 
-            const todo = await Todo.update(dataUpdate, opt);
-            if (todo[1].length === 0) throw 404;
+            let todo = await Todo.update(dataUpdate, opt);
+            if (todo[1].length === 0) {
+                if (!req.member) {
+                    throw 404;
+                }
+                todo = await Todo.update(dataUpdate, {
+                    where: {
+                        id,
+                        user_id: req.member.user_id
+                    },
+                    returning: true
+                });
+            }
             const msg = {
                 message: 'Success',
                 data: todo,
@@ -88,7 +130,7 @@ class TodoController {
     }
     static async updateStatus(req, res, next) {
         try {
-            const id = req.params.id;
+            const id = req.params.id; // id sudah dilindungi middleware
             const { status } = req.body;
 
             const opt = {
@@ -99,14 +141,68 @@ class TodoController {
                 returning: true
             }
 
-            const todo = await Todo.update({ status }, opt);
-            if (todo[1].length === 0) throw 404;
+            let todo = await Todo.update({ status }, opt);
+            if (todo[1].length === 0) {
+                if (!req.member) { // member didapat dan dilindungi oleh middleware
+                    throw 404;
+                }
+                todo = await Todo.update({ status }, {
+                    where: {
+                        id,
+                        user_id: req.member.user_id //dilindungi middleware
+                    },
+                    returning: true
+                });
+            }
             const msg = {
                 message: 'Success',
                 data: todo[1][0],
                 response: true
             }
             res.status(200).json(msg);
+        } catch (err) {
+            next(err);
+        }
+    }
+    static async showMembers(req, res, next) {
+        try {
+            const id = req.params.id; // id sudah dilindungi middleware
+            const todo = await Todo.findOne({
+                where: { id },
+                include: Member
+            });
+            const msg = {
+                message: 'Success',
+                data: todo,
+                response: false
+            }
+            res.status(200).json(msg);
+        } catch (err) {
+            next(err);
+        }
+    }
+    static async addMember(req, res, next) {
+        try {
+            const id = req.params.id; // id sudah dilindungi middleware
+            const email = req.body.email;
+            const user = await User.findOne({
+                where: { email }
+            });
+            if (!user) throw 404;
+            let member = await Member.findOne({
+                where: { email }
+            });
+            if (!member) {
+                member = await Member.create({ email });
+            }
+            const todoMember = await TodoMember.create({
+                todo_id: id,
+                member_id: member.id
+            });
+            res.status(201).json({
+                message: 'Success',
+                response: true
+            });
         } catch (err) {
             next(err);
         }
@@ -120,8 +216,18 @@ class TodoController {
                     user_id: req.decoded.id
                 }
             }
-            const todo = await Todo.destroy(opt);
-            if (todo === 0) throw 404;
+            let todo = await Todo.destroy(opt);
+            if (todo === 0) {
+                if (!req.member) {
+                    throw 404;
+                }
+                todo = await Todo.destroy({
+                    where: {
+                        id,
+                        user_id: req.member.user_id
+                    }
+                });
+            }
             const msg = {
                 message: 'Success',
                 data: todo,
