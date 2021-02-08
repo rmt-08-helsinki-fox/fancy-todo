@@ -21,7 +21,7 @@ function errorHandling(err, req, res, next) {
             console.log('Not Authorized')
             res.status(403).json({message: "No Authorization"})
         } else {
-            console.log(err)
+            console.log(err, "error di 500")
             res.status(500).json({message: "Internal Server Error"})
         }
     }

@@ -98,7 +98,7 @@ _Response (200)_
         "duedate": "2021-02-02",
         "createdAt": "2021-02-01T09:36:26.829Z",
         "updatedAt": "2021-02-01T11:08:33.164Z",
-        "UserId": null
+        "UserId": 1
     },
     {
         "id": 4,
@@ -108,7 +108,7 @@ _Response (200)_
         "duedate": "2021-04-05",
         "createdAt": "2021-02-01T11:17:28.593Z",
         "updatedAt": "2021-02-01T11:17:28.593Z",
-        "UserId": null
+        "UserId": 1
     },
     {
         "id": 1,
@@ -118,7 +118,7 @@ _Response (200)_
         "duedate": "2021-02-02",
         "createdAt": "2021-02-01T09:17:28.868Z",
         "updatedAt": "2021-02-01T11:19:56.053Z",
-        "UserId": null
+        "UserId": 1
     }
 ]
 ```
@@ -157,7 +157,8 @@ _Response (200)_
         "title": "makan malam bersama anies",
         "description": "makan sate",
         "status": false,
-        "due_date": "2021-04-05"
+        "due_date": "2021-04-05",
+        "UserId" : 1
       
     }
 }
@@ -192,10 +193,6 @@ _Request Header_
 }
 ```
 
-{
-  access_token: token
-}
-```
 
 
 _Request Body_
@@ -224,7 +221,7 @@ before
             "duedate": "2022-02-02",
             "createdAt": "2021-02-01T09:17:28.868Z",
             "updatedAt": "2021-02-02T01:49:29.608Z",
-            "UserId": null
+            "UserId": 1
         }
     ]
 ]
@@ -243,7 +240,7 @@ after
             "duedate": "2021-05-02",
             "createdAt": "2021-02-01T09:17:28.868Z",
             "updatedAt": "2021-02-02T01:50:50.267Z",
-            "UserId": null
+            "UserId": 1
         }
     ]
 ]
@@ -312,7 +309,7 @@ before
             "duedate": "2022-02-02",
             "createdAt": "2021-02-01T09:17:28.868Z",
             "updatedAt": "2021-02-02T01:49:29.608Z",
-            "UserId": null
+            "UserId": 1
         }
     ]
 ]
@@ -331,7 +328,7 @@ after
             "duedate": "2021-05-02",
             "createdAt": "2021-02-01T09:17:28.868Z",
             "updatedAt": "2021-02-02T01:50:50.267Z",
-            "UserId": null
+            "UserId": 1
         }
     ]
 ]

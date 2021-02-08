@@ -48,7 +48,7 @@ class UserController {
             email: data.email,
           };
           const access_token = generateToken(payload);
-          // console.log(access_token)
+          console.log(access_token)
           res.status(200).json({
             access_token,
           });

@@ -1,4 +1,4 @@
-let baseUrl = "http://localhost:3000";
+let baseUrl = "https://fancytodo-2aaa6.web.app/";
 
 let toDoId = null;
 

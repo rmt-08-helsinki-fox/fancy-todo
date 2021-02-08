@@ -9,7 +9,10 @@
 
 body{
     
-      background-image: url("../resource/background1.png");
+      background-image: url("../resource/background2.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 100%;
           
 }
 .box-container {
