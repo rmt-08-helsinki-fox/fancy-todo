@@ -1,4 +1,3 @@
-
 const base_url = 'http://localhost:3000/'
 
 function auth() {
@@ -71,7 +70,8 @@ function getWeather(){
           <div class="card " style="height:220px; margin-right:250px;"> 
           <img class="" src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1559286899/weatherbg.jpg" alt="Card image cap">
               <div class="card-img-overlay" style="height:110px;">
-                  <h3 class="card-title text-white m-b-0 dl">${response.location.name},${response.location.region},${response.location.country}</h3> <small class="card-text text-white font-light"></small>
+                  <h3 class="card-title text-white m-b-0 dl">${response.location.name},${response.location.region},
+                  ${response.location.country}</h3> <small class="card-text text-white font-light"></small>
               </div>
               <div class="card-body weather-small" style="background-color:#eee;">
                   <div class="row">
@@ -79,7 +79,8 @@ function getWeather(){
                           <div class="d-flex">
                               <div class="display-6 text-info"><i class="mdi mdi-weather-pouring"></i></div>
                               <div class="m-l-20">
-                                  <h1 class="font-light text-info m-b-0">${response.currenct.temperature}<sup>0</sup></h1> <small>${response.currenct.weather_descriptions[0]}</small>
+                                  <h1 class="font-light text-info m-b-0">${response.currenct.temperature}
+                                  <sup>0</sup></h1> <small>${response.currenct.weather_descriptions[0]}</small>
                               </div>
                           </div>
                       </div>

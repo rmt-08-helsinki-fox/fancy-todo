@@ -1,11 +1,11 @@
-if(process.env.NODE_ENV !== "production"){
+if(process.env.NODE_ENV === "development"){
     require('dotenv').config()
 }
 
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const port = 3000
+const PORT = process.env.PORT || 3000
 
 const router = require('./routes/index')
 const errorHandler = require('./middleware/errorHandler')
@@ -17,4 +17,4 @@ app.use(router)
 
 app.use(errorHandler)
 
-app.listen(port,()=>{ console.log(`App Running on Port ${port}`) })
+app.listen(PORT,()=>{ console.log(`App Running on Port ${PORT}`) })
