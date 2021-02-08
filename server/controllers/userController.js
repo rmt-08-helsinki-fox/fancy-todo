@@ -100,7 +100,7 @@ class UserController {
         }
 
         const access_token = generateToken(payload)
-
+        
         res.status(200).json({ access_token })
       })
       .catch(err => {
