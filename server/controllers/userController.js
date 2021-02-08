@@ -1,7 +1,7 @@
 const { User } = require('../models')
 const { checkPassword } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
-const { Oauth2Client } = require('google-auth-library')
+const { OAuth2Client } = require('google-auth-library')
 
 class UserController {
   static register(req, res, next) {
@@ -68,7 +68,7 @@ class UserController {
 
   static loginGoogle(req, res, next) {
     const id_token = req.body.id_token
-    const client = new Oauth2Client(process.env.GOOGLE_CLIENT_ID)
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
     let email = ""
 
     client.verifyIdToken({

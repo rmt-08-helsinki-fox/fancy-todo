@@ -108,8 +108,33 @@ function login(event) {
     })
 }
 
+function onSignIn(googleUser) {
+  var id_token = googleUser.getAuthResponse().id_token;
+  console.log(id_token);
+  $.ajax({
+    url: baseUrl + 'googleLogin',
+    method: "POST",
+    data: {
+      id_token: id_token
+    }
+  })
+  .done(response => {
+    console.log(response);
+    localStorage.setItem('access_token', response.access_token)
+    authenticate()
+  })
+  .fail(err => {
+    console.log(err);
+  })
+}
+
+
 function logout() {
   localStorage.clear();
+  const auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
   authenticate();
 }
 
@@ -228,25 +253,37 @@ function statusTodos(id, status) {
 function deleteTodos(id) {
   const access_token = localStorage.access_token
   
-  $.ajax({
-    url: baseUrl + `todos/${id}`,
-    method: 'DELETE',
-    headers: {
-      access_token
+  Swal.fire({
+    icon: 'warning',
+    title: 'Do you want to delete todos?',
+    showDenyButton: true,
+    confirmButtonText: `Back`,
+    denyButtonText: `Delete`,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire('Todos not deleted', '', 'info')
+    } else if (result.isDenied) {
+      $.ajax({
+        url: baseUrl + `todos/${id}`,
+        method: 'DELETE',
+        headers: {
+          access_token
+        }
+      })
+      .done(response => {
+        Swal.fire(response.message, '', 'success')
+        authenticate()
+      })
+      .fail(err => {
+        const errors = err.responseJSON.message
+        Swal.fire(errors)
+      })
     }
-  })
-  .done(response => {
-    console.log(response)
-    authenticate()
-  })
-  .fail(err => {
-    const errors = err.responseJSON.message
-    Swal.fire(errors)
   })
 }
 
 function btnEditTodos(id) {
-
+  
 }
 
 function editTodos(event, id) {
