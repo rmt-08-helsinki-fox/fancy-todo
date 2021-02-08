@@ -336,57 +336,75 @@ Response (400)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### POST/google-sign-in
+### GET/googlelogin
 
 >Google Sign IN User
 
 _Request Header_
 ```
-not needed
-```
-
-_Request Body_
-```
 {
-   
-    "id_token": "id_token";
+    "token":  "id_token"
 }
 ```
 
 _Response(200)_
 ```
-Google's Payload
+{
+    token: token
+}
 ```
-
-
 
 _Response (500)_
 ```
 {
-  "Error": "UNKNOWN_ERROR",
-  "message": "Error undescribable"
+  "message": "Internal server error"
 }
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### GET/charity
 
 >Get charity List

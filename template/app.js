@@ -1,4 +1,3 @@
-
 let baseUrl = 'http://localhost:3000'
 
 let user_name
@@ -21,7 +20,9 @@ function defaultLogout(){
     $("#registerForm").hide()
     $("#profile").hide()
     $("#todoSegment").hide()
+    $("#brewery").hide()
     $("#todos").empty()
+
     $("#loginError").hide()
     $("#registerError").hide()
     $("#addTodoForm").hide()
@@ -35,12 +36,15 @@ function homepage(){
     $("#registerForm").hide()
     $("#profileMessage").text(`Welcome, ${user_name}`)
     $("#profile").show()
+    $("#toHome").hide()
+    $("#toBrewery").show()
     getTodos()
     $("#addTodoForm").hide()
     $("#addTodoError").hide()
     $("#editTodoForm").hide()
     $("#editTodoError").hide()
     $("#todoSegment").show()
+    $("#brewery").hide()
 
     $("#cancelEditTodo").click((e)=>{
         e.preventDefault()
@@ -133,7 +137,9 @@ function login(email, password){
     .done((result)=>{
         // console.log(result)
         localStorage.setItem('token', result.token)
-        Auth()
+        user_name = result.name
+        homepage()
+        // Auth()
     })
     .fail((xhr, err)=>{
         $("#loginErrorMessage").text(xhr.responseJSON?xhr.responseJSON.message:'No Connection')
@@ -145,6 +151,11 @@ function logout(){
     localStorage.removeItem('token')
     user_name = ''
     email = ''
+
+    $("#loginEmail").val('')
+    $("#loginPassword").val('')
+
+    signOut()
     defaultLogout()
 }
 
@@ -328,3 +339,122 @@ $("#editTodo").click((e)=>{
         console.log(xhr.responseJSON.message)
     })
 })
+
+
+
+
+
+// BREWERY
+
+$("#toHome").click(()=>{
+    homepage()
+})
+
+$("#toBrewery").click(()=>{
+    // homepage()
+    $("#toHome").show()
+    $("#toBrewery").hide()
+    $("#todoSegment").hide()
+    $("#brewery").show()
+
+    $("#breweryList").empty()
+
+    $.ajax({
+        url: baseUrl+'/brewery/list',
+        method: 'GET'
+    })
+    .done((result)=>{
+        console.log(result)
+        result.forEach(el => {
+            $("#breweryList").append(`
+            <div class="ui card">
+                <div class="content">
+                    <div class="header">${el.name}</div>
+                </div>
+                <div class="content">
+                    <h4 class="ui sub header">Activity</h4>
+                    <div class="ui small feed">
+                    <div class="event">
+                        <div class="content">
+                        <div class="summary">
+                            <a>Country</a> ${el.country}
+                        </div>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="content">
+                        <div class="summary">
+                            <a>State</a> ${el.state}
+                        </div>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="content">
+                        <div class="summary">
+                            <a>Website</a> ${el.website_url}
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="extra content">
+                    <button class="ui button primary disabled">Add To Favorites</button>
+                    <div class="right floated author">
+                        <img class="ui avatar image" src="https://semantic-ui.com/images/avatar/small/matt.jpg">
+                    </div>
+                </div>
+                
+            </div>
+            `)
+        })
+    })
+    .fail((err)=>{
+        console.log(err)
+    })
+})
+
+
+
+
+
+
+
+
+// GOOGLE OAUTH
+
+function onSignIn(googleUser) {
+    // var profile = googleUser.getBasicProfile();
+    // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    // console.log('Name: ' + profile.getName());
+    // console.log('Image URL: ' + profile.getImageUrl());
+    // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+    var id_token = googleUser.getAuthResponse().id_token;
+    // console.log(id_token)
+
+    $.ajax({
+        url: baseUrl+'/googlelogin',
+        method: 'GET',
+        headers: {
+            token: id_token
+        }
+    })
+    .done((result)=>{
+        // auto login
+        // console.log('login google berhasil')
+        // console.log(result.token)
+        localStorage.setItem('token',result.token)
+        user_name = result.name
+        homepage()
+    })
+    .fail((err)=>{
+        console.log(err)
+    })
+}
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
