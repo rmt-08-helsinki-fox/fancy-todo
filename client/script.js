@@ -1,4 +1,4 @@
-const baseUrl = 'https://fancytodo-sjt-server.herokuapp.com/'
+const baseUrl = 'https://fancytodo-sjt-server.herokuapp.com'
 let todoList
 let topNews
 
