@@ -11,12 +11,7 @@ const db = {}
 let sequelize
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], {
-    dialect: "postgres",
-    dialectOptions: {
-      "ssl": {
-        "rejectUnauthorized": false
-      }
-    }
+    dialect: "postgres"
   })
 } else {
   sequelize = new Sequelize(
