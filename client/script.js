@@ -74,7 +74,6 @@ function getTodo() {
       token: localStorage.getItem("accessToken")
     }
   }).done(response => {
-    // console.log(response);
     $("#tr").empty()
     response.forEach(el => {
       
