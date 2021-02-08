@@ -3,11 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="google-signin-client_id" content="1096386163112-dcetqnf8gjrovbst5ue3jguv6ak5t21k.apps.googleusercontent.com">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Todo Application</title>
+    <link rel="shortcut icon" href="#">
 </head>
 
 <body>
@@ -43,10 +45,10 @@
                     <div class="mb-3">
                         <label for="inputPassword" class="form-label">Password</label>
                         <input type="password" class="form-control" id="inputPassword">
-                    </div>
+                    </div class="justify-content-center">
                         <button type="submit" class="col-12 mb-3 btn btn-primary" id="btn-sign-in">Sign In</button>
                         <p class="text-center">or</p>
-                        <p class="text-center"><a href="">LOGIN GOOGLE</a></p>
+                        <div class="g-signin2" data-onsuccess="onSignIn" id="signInGoogle"></div>
                     </form>
                     <div class="justify-content-center" >
                         <form class="form-select" id="option-sign-up">
@@ -82,6 +84,7 @@
                         <form class="form-select" id="option-sign-in">
                             <p class="text-center" id="ask-acc">Have account? <a href="" id="menu-sign-in">Sign In</a></p>
                         </form>
+                        <div class="g-signin2" data-onsuccess="onSignIn" id="signInGoogle"></div>
                     </div>
             </div>
         </div>
@@ -118,7 +121,7 @@
                     </form>
                 </div>
                 <!--END: NEW TODO-->
-                <h2></h2>
+                <h2 id="no-todo"></h2>
                 <br>
                 <table class="table table-hover" align="center" id="todo-table">
                     <thead>
@@ -140,7 +143,7 @@
         </div>
     </div>
     <!--END: TODOS-->
-
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>

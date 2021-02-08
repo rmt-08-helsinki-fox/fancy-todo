@@ -1,4 +1,27 @@
 const baseUrl = "http://localhost:3000"
+
+function onSignIn(googleUser) {
+  var id_token = googleUser.getAuthResponse().id_token
+  $.ajax({
+    url: `${baseUrl}/users/googleSignIn`,
+    method: "POST",
+    data: {
+      googleToken: id_token
+    }
+  })
+  .done(response => {
+    localStorage.setItem("access_token", response.access_token)
+    auth()
+  })
+  .fail(err => {
+    console.log(err,'<<<errr')
+  })
+  .always(_ =>{
+    $("#form-signIn").trigger("reset")
+    $("#form-signUp").trigger("reset")
+  })
+}
+
 function auth() {
   if (localStorage.getItem("access_token")) {
     $("#nav-signOut").show()
@@ -6,7 +29,6 @@ function auth() {
     $("#nav-create").show()
     $("#nav-home").show()
     getTodosUser()
-    $("#todos").show()
     $("#signUp").hide()
     $("#signIn").hide()
   } else {
@@ -82,12 +104,14 @@ function getTodosUser() {
       $('#todos').show()
       if (response.length === 0) {
         $('#todo-table').hide()
-        $("h2").append(`You don't have any todo`)
+        $("#no-todo").show()
+        $("#no-todo").text(`You don't have any todo`)
       } else {
+        $('#todo-table').show()
         let html = ''
         let i = 1
         $.each(response, function (key, value) {
-          $("h2").hide()
+          $("#no-todo").hide()
           html += `<tr 
         data-id="${value.id}" 
         data-title="${value.title}" 
@@ -121,7 +145,6 @@ function getTodosUser() {
         })
         $('table tbody').html(html);
       }
-
     })
     .fail((xhr, txt) => {
       Swal.fire(xhr.responseJSON.error)
@@ -146,7 +169,7 @@ function addTodo() {
     }
   })
     .done(response => {
-      auth()
+      
     })
     .fail((xhr, text) => {
       Swal.fire(xhr.responseJSON.error[0])
@@ -154,6 +177,7 @@ function addTodo() {
     })
     .always(_ => {
       $("#form-add-todo").trigger("reset")
+      getTodosUser()
     })
 }
 
@@ -173,7 +197,7 @@ function deleteTodo(todoId) {
       // console.log(xhr, text)
     })
     .always(_ => {
-      auth()
+      getTodosUser()
     })
 }
 
@@ -331,7 +355,16 @@ $(document).ready(() => {
   $("#nav-signOut").on("click", (e) => {
     e.preventDefault()
     localStorage.clear()
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
     auth()
+  })
+
+  $('#signInGoogle').on("click", (e) => {
+    e.preventDefault()
+    onSignIn(googleUser)
   })
 
 })
