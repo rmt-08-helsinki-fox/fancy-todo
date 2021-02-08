@@ -91,6 +91,7 @@ function login(){
         }
     })
     .done(({ token }) => {
+        $("#loginError").remove();
         localStorage.setItem("token", token);
         view();
     })
@@ -117,6 +118,7 @@ function register(){
         }
     })
     .done(({ token }) => {
+        $("#register-error").remove();
         localStorage.setItem("token", token);
         view();
     })
@@ -201,6 +203,7 @@ function populateEdit(id) {
 
         showEdit();
     })
+    .fail((xhar, text) => console.log(xhar, text));
 }
 
 function submitEdit(id){
@@ -222,7 +225,10 @@ function submitEdit(id){
             due_date
         }
     })
-    .done(() => view())
+    .done(() => {
+        $("#editToDoError").remove();
+        view();
+    })
     .fail((xhr, text) => {
         $("#editToDoError").remove();
         $("#edit-to-do-form").append(`<div id="editToDoError" class="alert alert-danger" role="alert" ></div>`);
@@ -256,7 +262,10 @@ function add(){
             due_date
         }
     })
-    .done(() => view())
+    .done(() => {
+        $("#addToDoError").remove();
+        view();
+    })
     .fail((xhr, text) => {
         $("#addToDoError").remove();
         $("#add-to-do-form").append(`<div id="addToDoError" class="alert alert-danger" role="alert" ></div>`);
