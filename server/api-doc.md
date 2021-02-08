@@ -1,6 +1,6 @@
 # fancy-todo
 
-==User Register==
+## User Register
 
 Register user data to database
 
@@ -10,11 +10,11 @@ Register user data to database
 - Method
     POST
 
-- URL params
-    None
+- Request Params
+    `None`
 
-- Data params
-    None
+- Request Body
+   ` None`
 
 - Success Response
     -> Code: 201
@@ -27,7 +27,7 @@ Register user data to database
     -> Code: Custom
        Content: {error : Email has been used!}
 
-==User Login==
+## User Login
 
 Logged in to access the features
 
@@ -37,11 +37,11 @@ Logged in to access the features
 - Method
     POST
 
-- URL params
-    None
+- Request Params
+    `None`
 
-- Data params
-    None
+- Request Body
+   ` None`
 
 - Success Response
     -> Code: 200
@@ -54,7 +54,7 @@ Logged in to access the features
     -> Code: Custom
        Content: {error : Incorrect Email or Password}
 
-==Create Todo==
+## Create Todo
 
 To create a to do list
 
@@ -64,11 +64,11 @@ To create a to do list
 - Method
     POST
 
-- URL params
-    id=[integer]
+- Request Params
+    `None`
 
-- Data params
-    None
+- Request Body
+   `{title, description, status, due_date}`
 
 - Success Response
     -> Code: 201
@@ -78,7 +78,7 @@ To create a to do list
     -> Code: 500
        Content: {Internal Server Error}
 
-==readAllTodos==
+## readAllTodos
 
 Read all to do lists
 
@@ -88,11 +88,11 @@ Read all to do lists
 - Method
     GET
 
-- URL params
-    id=[integer]
+- Request Params
+    `None`
 
-- Data params
-    None
+- Request Body
+   ` None`
 
 - Success Response
     -> Code: 200
@@ -102,7 +102,7 @@ Read all to do lists
     -> Code: 500
        Content: {Internal Server Error}
 
-==todoFindById==
+## todoFindById
 
 Read users to do lists
 
@@ -112,11 +112,11 @@ Read users to do lists
 - Method
     GET
 
-- URL params
-    id=[integer]
+- Request Params
+    `id`
 
-- Data params
-    None
+- Request Body
+   ` None`
 
 - Success Response
     -> Code: 200
@@ -129,7 +129,7 @@ Read users to do lists
     -> Code: 404
        Content: {error : Invalid ID!}
 
-==updateTodo==
+## updateTodo
 
 Edit Users to do content
 
@@ -139,11 +139,11 @@ Edit Users to do content
 - Method
     PUT
 
-- URL params
-    id=[integer]
+- Request Params
+    `None`
 
-- Data params
-    None
+- Request Body
+   `{title, description, status, due_date}`
 
 - Success Response
     -> Code: 200
@@ -156,7 +156,7 @@ Edit Users to do content
     -> Code: 404
        Content: {error : Invalid ID!}
 
-==updateStatusTodo==
+## updateStatusTodo
 
 Edit Users status on to do list
 
@@ -166,11 +166,11 @@ Edit Users status on to do list
 - Method
     PATCH
 
-- URL params
-    id=[integer]
+- Request Params
+    `None`
 
-- Data params
-    None
+- Request Body
+   `{status}`
 
 - Success Response
     -> Code: 200
@@ -183,7 +183,7 @@ Edit Users status on to do list
     -> Code: 404
        Content: {error : Invalid ID!}
 
-==deleteTodo==
+## deleteTodo
 
 delete 1 of Users to do lists
 
@@ -193,11 +193,11 @@ delete 1 of Users to do lists
 - Method
     DELETE
 
-- URL params
-    id=[integer]
+- Request Params
+    `id`
 
-- Data params
-    None
+- Request Body
+   `None`
 
 - Success Response
     -> Code: 200
@@ -220,11 +220,11 @@ get weather data from 3rd party API
 - Method
     GET
 
-- URL params
-    id=[integer]
+- Request Params
+    `None`
 
-- Data params
-    None
+- Request Body
+   `None`
 
 - Success Response
     -> Code: 200
