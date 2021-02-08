@@ -25,7 +25,7 @@ $(document).ready(function () {
         let password = $('#password').val();
 
         $.ajax({
-            url: 'http://localhost:3000/auth/login',
+            url: base_url + '/auth/login',
             method: 'POST',
             data: { email, password }
         })

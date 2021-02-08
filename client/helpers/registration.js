@@ -11,7 +11,7 @@ function registration() {
     }
 
     $.ajax({
-        url: 'http://localhost:3000/auth/registration',
+        url: 'https://fancy-todo-adit-server.herokuapp.com/auth/registration',
         method: 'POST',
         data: { email, password }
     })

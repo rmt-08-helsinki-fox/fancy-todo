@@ -1,3 +1,5 @@
+const base_url = 'https://fancy-todo-adit-server.herokuapp.com';
+
 function auth() {
     if (!localStorage.getItem('token')) {
         renderLoginPage();
@@ -31,7 +33,7 @@ function renderLoginPage(invalidAuth = null) {
 
 function getQuotes() {
     $.ajax({
-        url: 'http://localhost:3000/quotes',
+        url: base_url + '/quotes',
         method: 'GET',
         headers: { token: localStorage.getItem('token') }
     })
@@ -61,7 +63,7 @@ function renderTodoPage() {
     $('#add-member').hide();
 
     $.ajax({
-        url: 'http://localhost:3000/todos',
+        url: base_url + '/todos',
         method: 'GET',
         headers: {
             token: localStorage.getItem('token')
@@ -115,7 +117,7 @@ function renderTodoPage() {
 function changeStatus(id, status) {
     status = status === 'true' ? "false" : "true";
     $.ajax({
-        url: 'http://localhost:3000/todos/' + id,
+        url: base_url + '/todos/' + id,
         method: 'PATCH',
         data: {
             status
@@ -134,7 +136,7 @@ function changeStatus(id, status) {
 
 function renderEditTodoPage(id) {
     $.ajax({
-        url: 'http://localhost:3000/todos/' + id,
+        url: base_url + '/todos/' + id,
         method: 'GET',
         headers: {
             token: localStorage.getItem('token')
@@ -199,7 +201,7 @@ function addTodo() {
     let due_date = $('#due_date').val();
 
     $.ajax({
-        url: 'http://localhost:3000/todos',
+        url: base_url + '/todos',
         method: 'POST',
         data: {
             title,
@@ -225,7 +227,7 @@ function editTodo() {
     let description = $('#description').val();
     let due_date = $('#due_date').val();
     $.ajax({
-        url: 'http://localhost:3000/todos/' + id,
+        url: base_url + '/todos/' + id,
         method: 'PUT',
         headers: {
             token: localStorage.getItem('token')
@@ -246,7 +248,7 @@ function editTodo() {
 
 function deleteTodo(id) {
     $.ajax({
-        url: 'http://localhost:3000/todos/' + id,
+        url: base_url + '/todos/' + id,
         method: 'DELETE',
         headers: {
             token: localStorage.getItem('token')
@@ -274,7 +276,7 @@ function renderAddMemberPage(id) {
     $('#idTodoForMember').val(id);
 
     $.ajax({
-        url: `http://localhost:3000/todos/${id}/members`,
+        url: `${base_url}/todos/${id}/members`,
         method: 'GET',
         headers: { token: localStorage.getItem('token') }
     })
@@ -299,7 +301,7 @@ function addMember() {
     const idTodo = $('#idTodoForMember').val();
     const email = $('#email-member').val();
     $.ajax({
-        url: `http://localhost:3000/todos/${idTodo}/members/add`,
+        url: `${base_url}/todos/${idTodo}/members/add`,
         method: 'POST',
         headers: { token: localStorage.getItem('token') },
         data: { email }
@@ -318,7 +320,7 @@ function addMember() {
 function onSignIn(googleUser) {
     let id_token = googleUser.getAuthResponse().id_token;
     $.ajax({
-        url: 'http://localhost:3000/auth/loginOauth',
+        url: base_url + '/auth/loginOauth',
         method: 'POST',
         data: {
             tokenOauth: id_token
