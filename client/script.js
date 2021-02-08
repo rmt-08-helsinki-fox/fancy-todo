@@ -6,7 +6,7 @@ $(document).ready(() => {
     // login
     $("#login-form").on("submit", (e) => {
         e.preventDefault()
-        auth()
+        login()
     })
 
     // register
@@ -173,6 +173,7 @@ const login = () => {
     })
         .done(res => {
             localStorage.setItem("access_token", res.access_token)
+            auth()
         })
         .fail((xhr, text) => {
             console.log(xhr, text);
