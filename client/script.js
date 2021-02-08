@@ -1,4 +1,4 @@
-let mainPort = "http://localhost:3000/"
+let mainPort = "https://fancy-todo-week1.herokuapp.com/"
 
 function authentic(){
   if(localStorage.getItem("token")){ //kalau login
