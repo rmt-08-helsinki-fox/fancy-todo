@@ -3,8 +3,8 @@ const {Todo, User} = require('../models')
 const authorizeTodo = function(req, res, next) {
   let id = req.params.id;
   let decodeId = req.decode.id
-  console.log(decodeId);
-  // console.log(id, 'id');
+  console.log(req.decode, 'decode');
+  console.log(id, 'id');
   Todo.findOne({
     where: {
       id: id
