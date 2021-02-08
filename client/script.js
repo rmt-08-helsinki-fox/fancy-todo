@@ -4,7 +4,7 @@ $(document).ready(() =>{
     console.log('jalan disini')
 
     auth()
-    $("#login-form").click("submit", (e) => {
+    $("#login-form").on("submit", (e) => {
         e.preventDefault()
         login()
     })
@@ -23,13 +23,13 @@ $(document).ready(() =>{
      
     })
 
-    $("#form-register").click("submit", (e => {
+    $("#form-register").on("submit", (e => {
         e.preventDefault()
         register()
         
     }))
 
-    $("#todo-form").click("submit", (e) =>{
+    $("#todo-form").on("submit", (e) =>{
         e.preventDefault()
         createTodo()
     })
@@ -37,6 +37,7 @@ $(document).ready(() =>{
         e.preventDefault()
         logout()
     })
+    $("#")
 
 
 
@@ -205,6 +206,7 @@ function createTodo() {
                         <a href="#" id="remove-todo-${res.id}" onclick="remove(${res.id})" class="btn btn-primary">Delete</a>
                     </div>
                 </div>`)
+                auth()
         })
         .fail((xhr, text) => {
             console.log(xhr,text)
@@ -224,12 +226,12 @@ function getTodo() {
         }
     })
         .done(response => {
-            console.log(response)
+            // console.log(response)
             $("#list-todo").empty()
             response.forEach(e => {
                 $("#list-todo").prepend(`
                 <div class="card" style="width: 18rem;" id="todo-list-${e.id}">
-                    <div class="card-body">
+                    <div class="card-body-${e.id}" id="card-body-${e.id}">
                         <h5 id="title-${e.id}" value="${e.title}" class="card-title">${e.title}</h5>
                         <p id="descripion-${e.id}" value="${e.description}" class="card-text">${e.description}</p>
                         <p id="due-date-${e.id}" class="card-time">${e.due_date}</p>
@@ -237,18 +239,6 @@ function getTodo() {
                         <a href="#" id="edit-todo-${e.id}" onclick="editGetTodo(${e.id})" class="btn btn-primary">Edit</a>
                         <a href="#" id="statusEdit-todo-${e.id}" onclick="statusEdit(${e.id}, ${e.status})" class="btn btn-primary">Status Change</a>
                         <a href="#" id="remove-todo-${e.id}" onclick="remove(${e.id})" class="btn btn-primary">Delete</a>
-                    </div>
-                </div>
-
-                <div class="card" style="width: 18rem;" id="todo-list-${e.id}-edit">
-                    <div class="card-body">
-                        <form id="form-edit-${e.id}">
-                        <input type="text" id="edit-title-${e.id}" value="${e.title}">
-                        <input type="text" id="edit-description-${e.id}" value="${e.description}">
-                        <input class="form-control" id="edit-date-${e.id}" type="date" value="${e.due_date}" id="form-date">
-                        <button type="submit" id="edit-todo-${e.id}" onclick="editPost(${e.id})" class="btn btn-primary">Edit</button>
-                        <button type="button" id="cancle-edit-${e.id}" onclick="auth()"class="btn btn-primary">Cancel</button> 
-                        </form>
                     </div>
                 </div>
                 `)
@@ -267,7 +257,7 @@ function editPost(id) {
     console.log(title,description,due_date)
     $.ajax({
         url: `${base_url}/todos/${id}`,
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
             token: localStorage.getItem("token")
         },
@@ -288,7 +278,6 @@ function editPost(id) {
 
 }
 
-
 function editGetTodo (id) {
 
     $.ajax({
@@ -303,8 +292,15 @@ function editGetTodo (id) {
 
             let {title, description, due_date, status} = res
             console.log(title)
-            $(`#todo-list-${res.id}-edit`).show()
-            $(`#todo-list-${res.id}`).hide()
+            $(`#card-body-${res.id}`).empty()
+            $(`#card-body-${res.id}`).append(`
+            <form id="form-edit-${res.id}">
+                <input type="text" id="edit-title-${res.id}" value="${res.title}">
+                <input type="text" id="edit-description-${res.id}" value="${res.description}">
+                <input class="form-control" id="edit-date-${res.id}" type="date" value="${res.due_date}" id="form-date">
+                <button type="submit" id="edit-todo-${res.id}" onclick="editPost(${res.id})" class="btn btn-primary">Edit</button>
+                <button type="button" id="cancle-edit-${res.id}" onclick="auth()"class="btn btn-primary">Cancel</button> 
+            </form>`)
         })
         .fail((xhr, text) => {
             console.log(xhr, text)

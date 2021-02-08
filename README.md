@@ -292,4 +292,68 @@ example :
 }
 ```
 ---
+### POST /register
+> Register your account 
+
+
+_Request Body_
+```
+{
+    "email": <string>,
+    "password" : <string>
+
+}
+```
+
+_Response (201)_
+```
+example :
+
+{
+    "message": "success register",
+    "email": "user2@mail.com"
+}
+
+```
+
+_Response (500 - Server Error)_
+```
+example :
+
+{
+  "message": "Invalid request"
+}
+```
+---
+### POST /login
+> Login your account 
+
+
+_Request Body_
+```
+{
+    "message": "success register",
+    "email": "user2@mail.com"
+}
+```
+
+_Response (200)_
+```
+example :
+
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgsImVtYWlsIjoidXNlcjJAbWFpbC5jb20iLCJpYXQiOjE2MTI3NzYyNDJ9.7419DqJwIJiCCL6WHvDVziUiPdkL-bm14Q1DOfvtMIc"
+}
+
+```
+
+_Response (500 - Server Error)_
+```
+example :
+
+{
+  "message": "Invalid request"
+}
+```
+---
 
