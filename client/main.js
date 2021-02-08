@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:3000"
+const baseUrl = "https://fancy-todo-hacktiv.herokuapp.com/"
 
 let editStatusId = 0;
 let editTodoId = 0;
