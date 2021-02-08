@@ -25,12 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     description: {
-      type: DataTypes.STRING,
-      validate: {
-        notEmpty: {
-          msg: 'Description is required'
-        }
-      }
+      type: DataTypes.STRING
     },
     status: {
       type: DataTypes.STRING,
