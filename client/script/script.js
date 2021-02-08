@@ -124,7 +124,8 @@ function getTodosUser() {
 
     })
     .fail((xhr, txt) => {
-      console.log(xhr, txt)
+      Swal.fire(xhr.responseJSON.error)
+      // console.log(xhr, txt)
     })
 }
 
@@ -148,8 +149,8 @@ function addTodo() {
       auth()
     })
     .fail((xhr, text) => {
-      Swal.fire(xhr.responseJSON.error)
-      console.log(xhr, text)
+      Swal.fire(xhr.responseJSON.error[0])
+      // console.log(xhr, text)
     })
     .always(_ => {
       $("#form-add-todo").trigger("reset")
@@ -166,11 +167,13 @@ function deleteTodo(todoId) {
   })
     .done(response => {
       Swal.fire('Your todo is successfully deleted!!!')
-      auth()
     })
     .fail((xhr, text) => {
       Swal.fire(xhr.responseJSON.error[0])
-      console.log(xhr, text)
+      // console.log(xhr, text)
+    })
+    .always(_ => {
+      auth()
     })
 }
 
@@ -186,14 +189,15 @@ function patchStatus(todoId, status) {
     }
   })
     .done(response => {
-      auth()
+      Swal.fire(`Your todo is ${status}`)
     })
     .fail((xhr, text) => {
       Swal.fire(xhr.responseJSON.error[0])
-      console.log(xhr, text)
+      // console.log(xhr, text)
     })
     .always(_ => {
       $("#form-add-todo").trigger("reset")
+      auth()
     })
 }
 
@@ -210,23 +214,23 @@ function editTodo(todoId) {
     data: {
       title,
       due_date,
-      description,
+      description
     }
   })
     .done(response => {
-      console.log('success')
+      Swal.fire('Your todo is successfully updated!!')
+      getTodosUser()
+    })
+    .fail((xhr, text) => {
+      Swal.fire(xhr.responseJSON.error[0])
+      // console.log(xhr, text)
+    })
+    .always(_ => {
+      $("#form-add-todo").trigger("reset")
       $("#form-add-todo").show()
       $("#title-todo").text("My Todo List")
       $("#todo-table").show()
       $("#add-todo").text("Add Todo")
-      auth()
-    })
-    .fail((xhr, text) => {
-      Swal.fire(xhr.responseJSON.error)
-      console.log(xhr, text)
-    })
-    .always(_ => {
-      $("#form-add-todo").trigger("reset")
     })
 }
 
@@ -276,17 +280,23 @@ $(document).ready(() => {
     }
   })
 
-  $(document).on("click", "#complete-button", function () {
+  $(document).on("click", "#complete-button", function (e) {
+    e.preventDefault()
+
     let todoId = $(this).parents('tr').attr('data-id');
     patchStatus(todoId, "completed")
   });
 
-  $(document).on("click", "#uncomplete-button", function () {
+  $(document).on("click", "#uncomplete-button", function (e) {
+    e.preventDefault()
+
     let todoId = $(this).parents('tr').attr('data-id');
     patchStatus(todoId, "uncompleted")
   });
 
-  $(document).on("click", "#delete-button", function () {
+  $(document).on("click", "#delete-button", function (e) {
+    e.preventDefault()
+
     let todoId = $(this).parents('tr').attr('data-id');
     deleteTodo(todoId)
   });
