@@ -1,6 +1,10 @@
 if(process.env.NODE_ENV === 'development') {
     require('dotenv').config()
 }
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+  }
+console.log(process.env.NODE_ENV)
 
 const cors = require('cors')
 const express = require('express')

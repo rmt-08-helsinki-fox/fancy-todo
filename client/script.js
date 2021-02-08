@@ -61,7 +61,7 @@ function auth() {
         $("#container-login").hide()
         $("#nav-login").hide()
         $("#weather-container").show()
-        // weather()
+        weather()
         getTodo()
 
         
