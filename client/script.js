@@ -58,6 +58,17 @@ const base_url = 'http://localhost:4000/'
             addTodo()
         })
 
+        $('#showAddForm').on('click', (e)=>{
+            e.preventDefault()
+            $('#editForm').hide()
+            $('#addForm').show()
+        })
+
+        $('#editForm').on('submit', (e)=>{
+            e.preventDefault()
+            edit()
+        })
+
      function logout(){
          localStorage.clear()
          auth()
@@ -230,14 +241,18 @@ const base_url = 'http://localhost:4000/'
         })
         .done(response=>{
             console.log(response,'<<<<<<<<<<<<<<<<<<<<<<<')
+            $('#idEdit').val(`${response.id}`)
             $('#titleEdit').val(`${response.title}`)
             $('#descriptionEdit').val(`${response.description}`)
             let tgl = new Date(response.due_date)
-            let moon = tgl.getMonth().length < 2 ? tgl.getMonth()=`0${tgl.getMonth()}` : tgl.getMonth()
-            let date = tgl.getDate().length < 2 ? tgl.getDate()=`0${tgl.getDate()}` : tgl.getDate()
-                tgl = `${tgl.getFullYear()}-${moon}+${1}-${date}`
+            let moon = `${tgl.getMonth()+1}`
+                moon = moon.length > 1 ? moon : `0${moon}`
+            let date = `${tgl.getDate()}`
+                date = date.length > 1 ? date : `0${date}`
+                tgl = `${tgl.getFullYear()}-${moon}-${date}`
                 // console.log(tgl,'<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>')
-                console.log(tgl, 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM')
+                console.log(tgl)
+                // console.log(moon.length, moon)
             $('#due_dateEdit').val(`${tgl}`)
 
         })
@@ -247,7 +262,53 @@ const base_url = 'http://localhost:4000/'
             console.log('xxxxxxxxxxxxxxxxxxxxx')
         })
         .always(_=>{
-            console.log('always getTodoById')
+            // console.log('always getTodoById')
+        })
+    }
+
+    function edit(){
+        const title = $('#titleEdit').val()
+        const description = $('#descriptionEdit').val()
+        const due_date = $('#due_dateEdit').val()
+        const id = $('#idEdit').val()
+
+        $.ajax({
+            url : base_url + 'todos/'+id,
+            method: 'PUT',
+            data : {
+                title,
+                description,
+                due_date
+            },
+            headers : {
+                token : localStorage.access_token
+            }
+        })
+        .done(response=>{
+            console.log(response.id)
+            $(`#tr${response.id}`).text('')
+
+            $(`#tr${response.id}`).append(`
+                <td>${response.title}</td>
+                <td>${response.description}</td>
+                <td>${response.status}</td>
+                <td>${response.due_date}</td>
+                <td>
+                <a href="#" onclick="dltTodo(${response.id})">Delete</a> || 
+                <a href="#" onclick="showEditForm(${response.id})">Edit</a>
+                </td>
+            `)
+
+            // console.log(response[1]['0'].description) PATCH
+
+
+        })
+        .fail((xhr, text)=>{
+            console.log(xhr, text)
+        })
+        .always(_=>{
+            $('#editForm').hide()
+            $('#addForm').show()
         })
     }
 
