@@ -12,9 +12,10 @@ let sequelize
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     dialect: "postgres",
+    username: "postgres",
     dialectOptions: {
-      "ssl": {
-        "rejectUnauthorized": false
+      ssl: {
+        rejectUnauthorized: false
       }
     }
   })
