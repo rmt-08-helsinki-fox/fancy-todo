@@ -16,7 +16,7 @@ function authentication (req, res, next) {
           next()
         } else {
           next({
-            name: 'User not found'
+            name: 'Data not found'
           })
         }
       })

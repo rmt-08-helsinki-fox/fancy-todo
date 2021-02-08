@@ -4,7 +4,7 @@ function yesterday() {
 
   yesterday.setDate(yesterday.getDate() - 1)
 
-  const output = yesterday.toString().substring(0, 10)
+  const output = yesterday.toISOString().substring(0, 10)
 
   return output
 }

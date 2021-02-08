@@ -53,16 +53,22 @@ function register(event) {
     }
   })
     .done(data => {
+      Swal.fire({
+        icon: 'success',
+        title: 'You are registered',
+        showConfirmButton: false,
+        timer: 1500
+      })
       authenticate()
     })
     .fail(err => {
-      const errors = err.responseJSON.message.errors
-      let outputError = []
-      errors.forEach(error => {
-        outputError.push(error.message)
+      const errors = err.responseJSON.message
+      Swal.fire({
+        icon: 'error',
+        title: errors.join('\n'),
+        showConfirmButton: false,
+        timer: 1500
       })
-      
-      Swal.fire(outputError.join('\n'))
     })
     .always(_ => {
       $('#input-email-register').val('')
@@ -88,7 +94,13 @@ function login(event) {
       authenticate()
     })
     .fail(err => {
-      Swal.fire(err.responseJSON.message)
+      const errors = err.responseJSON.message
+      Swal.fire({
+        icon: 'error',
+        title: errors,
+        showConfirmButton: false,
+        timer: 1500
+      })
     })
     .always(_ => {
       $('#input-email-login').val('')
@@ -127,10 +139,18 @@ function addTodo(event) {
     }
   })
     .done(response => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Your todos has been saved',
+        showConfirmButton: false,
+        timer: 1500
+      })
       authenticate()
     })
     .fail(err => {
-      console.log(err.responseJSON)
+      const errors = err.responseJSON.message
+
+      Swal.fire(errors.join('\n'))
     })
     .always(_ => {
       $('#title-todo').val('')
@@ -178,7 +198,8 @@ function fetchTodo() {
       })
     })
     .fail(err => {
-      console.log(err.responseJSON)
+      const errors = err.responseJSON.message
+      Swal.fire(errors)
     })
 }
 
@@ -196,11 +217,11 @@ function statusTodos(id, status) {
     }
   })
     .done(response => {
-      console.log(response)
       authenticate()
     })
     .fail(err => {
-      console.log(err.responseJSON)
+      const errors = err.responseJSON.message
+      Swal.fire(errors)
     })
 }
 
@@ -219,7 +240,8 @@ function deleteTodos(id) {
     authenticate()
   })
   .fail(err => {
-    console.log(err.responseJSON)
+    const errors = err.responseJSON.message
+    Swal.fire(errors)
   })
 }
 
