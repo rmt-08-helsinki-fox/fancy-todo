@@ -1,0 +1,124 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border-bottom: 1px solid white;
+  box-shadow: 0px 1px 10px grey;
+}
+
+ul {
+  margin: 0px;
+  padding: 0px;
+}
+
+li {
+  list-style: none;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+#name {
+  font-size: 25px;
+  margin: auto 0px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.form-card, .add-card {
+  margin-top: 40px;
+  padding: 25px;
+  border: 1px solid grey;
+  box-shadow: 3px 5px 5px grey;
+}
+
+label {
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+#login-email, #regis-email, .form-input {
+  margin-bottom: 10px;
+}
+
+.text-btn {
+  border: none;
+  background-color: transparent;
+  color: blue;
+}
+
+.regis-bottom {
+  padding: 0px 5px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.last-form-input {
+  margin-bottom: 20px;
+}
+
+#main-page {
+  margin: 20px 50px;
+  padding: 10px 0px;
+}
+
+.todo-card {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 25px;
+  margin-bottom: 15px;
+  border: 1px solid grey;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-size: 30px;
+}
+
+.todo-card:hover {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 25px;
+  margin-bottom: 15px;
+  border: 1px solid grey;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-size: 30px;
+}
+
+.status-btn {
+  padding: 0px;
+}
+
+.status-img, .delete-img, .edit-img {
+  height: 47.95px;
+}
+
+.flex-container {
+  width: 100%;
+  margin: 0px;
+  border-bottom: 5px solid black;
+  border-radius: 2.5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#toAdd-btn {
+  margin-bottom: 5px;
+}
+
+#home-btn, #user-name, #delete-btn, #toEdit-btn {
+  font-size: 30px;
+  border: none;
+  background-color: transparent;
+}
+
+.todo-desc {
+  font-size: 23px;
+}
+
+#quote-box {
+  margin-bottom: 15px;
+}
