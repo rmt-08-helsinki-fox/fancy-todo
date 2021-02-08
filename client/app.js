@@ -1,4 +1,4 @@
-const base_url = 'http://localhost:3000'
+const base_url = 'https://fancy-todo-hacktiv8-burhan.herokuapp.com'
 
 function fetchProject(){
     $.ajax({
@@ -173,7 +173,7 @@ $(document).ready(function(){
         let data = $("#registerForm").serialize()
         $.ajax({
             method : "POST",
-            url: base_url + 'register',
+            url: base_url + '/register',
             data
         }).done((response) => {
             toastr.success('Success to register , you can login now','Yeay!')
@@ -194,7 +194,7 @@ $(document).ready(function(){
         let data = $("#loginForm").serialize()
         $.ajax({
             method : "POST",
-            url: base_url + 'login',
+            url: base_url + '/login',
             data
         }).done((response) => {
             login(response.access_token);
