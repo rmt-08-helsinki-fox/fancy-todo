@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:3000"
+const baseUrl = "https://rmt008-todo-app.herokuapp.com"
 
 function onSignIn(googleUser) {
   var id_token = googleUser.getAuthResponse().id_token
