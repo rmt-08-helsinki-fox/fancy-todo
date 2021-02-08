@@ -45,10 +45,10 @@
                     <div class="mb-3">
                         <label for="inputPassword" class="form-label">Password</label>
                         <input type="password" class="form-control" id="inputPassword">
-                    </div class="justify-content-center">
+                    </div>
                         <button type="submit" class="col-12 mb-3 btn btn-primary" id="btn-sign-in">Sign In</button>
                         <p class="text-center">or</p>
-                        <div class="g-signin2" data-onsuccess="onSignIn" id="signInGoogle"></div>
+                        <div class="g-signin2" data-onsuccess="onSignIn" id="signInGoogle" data-width="col-auto" data-height="row-5"></div>
                     </form>
                     <div class="justify-content-center" >
                         <form class="form-select" id="option-sign-up">
@@ -78,13 +78,12 @@
                     </div>
                         <button type="submit" class="col-12 mb-3 btn btn-primary" id="btn-sign-up">Sign Up</button>
                         <p class="text-center">or</p>
-                        <p class="text-center"><a href="">LOGIN GOOGLE</a></p>
+                        <div class="g-signin2" data-onsuccess="onSignIn" id="signInGoogle" data-width="col-auto" data-height="row-5"></div>
                     </form>
                     <div class="justify-content-center" >
                         <form class="form-select" id="option-sign-in">
                             <p class="text-center" id="ask-acc">Have account? <a href="" id="menu-sign-in">Sign In</a></p>
                         </form>
-                        <div class="g-signin2" data-onsuccess="onSignIn" id="signInGoogle"></div>
                     </div>
             </div>
         </div>
