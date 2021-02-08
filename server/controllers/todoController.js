@@ -9,7 +9,7 @@ class TodoController {
         title,
         description,
         status: false,
-        due_date,
+        due_date: new Date(due_date),
         UserId: req.data.id,
       });
       res.status(201).json({ data: todo });
@@ -24,7 +24,7 @@ class TodoController {
         where: { UserId: req.data.id },
         order: [["id", "ASC"]],
       });
-      console.log(todos);
+
       res.status(200).json({ data: todos });
     } catch (err) {
       next(err);
@@ -40,7 +40,7 @@ class TodoController {
         {
           title,
           description,
-          due_date,
+          due_date: new Date(due_date),
         },
         { where: { id: id }, returning: true }
       );
