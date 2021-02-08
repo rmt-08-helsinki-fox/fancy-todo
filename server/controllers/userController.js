@@ -1,10 +1,7 @@
 const { User } = require('../models')
 let {comparePassword} = require('../helpers/bcript')
-const user = require('../models/user')
 const generateToken = require('../helpers/jwt')
 const {OAuth2Client} = require('google-auth-library');
-
-
 
 class userController {
     static googleLogin(req,res,next) {
@@ -65,7 +62,6 @@ class userController {
 
     }
     static login (req,res) {
-        //cek user dari req.body email
         let { email, password} = req.body
         User.findOne({
             where: {

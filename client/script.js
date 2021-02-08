@@ -63,8 +63,6 @@ function auth() {
         $("#weather-container").show()
         weather()
         getTodo()
-
-        
     }
 }
 
