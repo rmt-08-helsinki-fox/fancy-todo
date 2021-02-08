@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3000'
+const baseUrl = 'https://fancy-todo-08.herokuapp.com'
 
 $(document).ready(function () {
   auth()
@@ -100,6 +100,7 @@ function login (email, password) {
     password = $('#login-password').val()
   }
 
+  console.log(email, password)
   $.ajax({
     method: 'POST',
     url: `${baseUrl}/users/login`,
