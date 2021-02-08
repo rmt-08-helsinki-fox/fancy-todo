@@ -36,7 +36,12 @@ module.exports = (sequelize, DataTypes) => {
       is: /^[0-9a-f]{64}$/i,
       validate: {
         notEmpty: {
-          msg: 'Please enter your password'
+          args: true,
+          msg: 'Please enter your strong password'
+        },
+        len: {
+          args: [6,64],
+          msg: 'Please enter your strong password'
         }
       }
     }
@@ -46,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate: (user, option) => {
         user.password = hashPassword(user.password)
-      }
+      },
     }
   });
   return User;

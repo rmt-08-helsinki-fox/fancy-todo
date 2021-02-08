@@ -5,16 +5,18 @@ function auth() {
     $("#nav-my-todo").show()
     $("#nav-create").show()
     $("#nav-home").show()
-    $("#todos").show()
     getTodosUser()
-    $("#signUpIn").hide()
+    $("#todos").show()
+    $("#signUp").hide()
+    $("#signIn").hide()
   } else {
     $("#nav-signOut").hide()
     $("#nav-my-todo").hide()
     $("#nav-create").hide()
     $("#nav-home").hide()
     $("#todos").hide()
-    $("#signUpIn").show()
+    $("#signUp").hide()
+    $("#signIn").show()
   }
 }
 
@@ -34,17 +36,18 @@ function signIn() {
       auth()
     })
     .fail((xhr, txt) => {
-      alert(xhr.responseJSON.error)
-      console.log(xhr, txt)
+      Swal.fire(xhr.responseJSON.error)
+      // console.log(xhr, txt)
     })
     .always(_ => {
-      $("#form-signUpIn").trigger("reset")
+      $("#form-signIn").trigger("reset")
+      $("#form-signUp").trigger("reset")
     })
 }
 
 function signUp() {
-  const email = $("#inputEmail").val()
-  const password = $("#inputPassword").val()
+  const email = $("#signUpEmail").val()
+  const password = $("#signUpPassword").val()
   $.ajax({
     url: `${baseUrl}/users/signup`,
     method: "POST",
@@ -54,35 +57,18 @@ function signUp() {
     }
   })
     .done(response => {
-      alert(xhr.responseJSON.error)
-      $("#btn-sign").text("Sign In")
+      Swal.fire('Your account is succesfully created!!!')
       auth()
     })
     .fail((xhr, txt) => {
-      alert(xhr.responseJSON.error[0])
-      console.log(xhr, txt)
+      Swal.fire(xhr.responseJSON.error[0])
     })
     .always(_ => {
-      $("#form-signUpIn").trigger("reset")
+      $("#form-signIn").trigger("reset")
+      $("#form-signUp").trigger("reset")
     })
 }
 
-
-function getAllTodos() {
-  $.ajax({
-    url: `${baseUrl}/todos`,
-    method: "GET",
-    headers: {
-      token: localStorage.getItem("access_token")
-    }
-  })
-    .done(response => {
-      console.log(response)
-    })
-    .fail((xhr, txt) => {
-      console.log(xhr, txt)
-    })
-}
 
 function getTodosUser() {
   $.ajax({
@@ -94,10 +80,20 @@ function getTodosUser() {
   })
     .done(response => {
       $('#todos').show()
-      let html = ''
-      $.each(response, function(key, value){
-        html += `<tr data-id="${value.id}">
-        <td id="todoId">${value.id}</td>
+      if (response.length === 0) {
+        $('#todo-table').hide()
+        $("h2").append(`You don't have any todo`)
+      } else {
+        let html = ''
+        let i = 1
+        $.each(response, function (key, value) {
+          $("h2").hide()
+          html += `<tr 
+        data-id="${value.id}" 
+        data-title="${value.title}" 
+        data-due_date="${value.due_date}"
+        data-description="${value.description}">
+        <td id="todoId">${i++}</td>
         <td>${value.due_date} <br>
             <i style="color:red">${value.events}</i>
         </td>
@@ -122,15 +118,17 @@ function getTodosUser() {
             </div>
         </td>
     </tr>`
-      })
-      $('table tbody').html(html);
+        })
+        $('table tbody').html(html);
+      }
+
     })
     .fail((xhr, txt) => {
       console.log(xhr, txt)
     })
 }
 
-function addTodo(){
+function addTodo() {
   const title = $("#inputTitle").val()
   const due_date = $("#inputDate").val()
   const description = $("#inputDescription").val()
@@ -146,19 +144,19 @@ function addTodo(){
       description,
     }
   })
-  .done(response => {
-    getTodosUser()
-  })
-  .fail((xhr, text) => {
-    alert(xhr.responseJSON.error)
-    console.log(xhr, text)
-  })
-  .always(_ => {
-    $("#form-add-todo").trigger("reset")
-  })
+    .done(response => {
+      auth()
+    })
+    .fail((xhr, text) => {
+      Swal.fire(xhr.responseJSON.error)
+      console.log(xhr, text)
+    })
+    .always(_ => {
+      $("#form-add-todo").trigger("reset")
+    })
 }
 
-function deleteTodo(todoId){
+function deleteTodo(todoId) {
   $.ajax({
     url: `${baseUrl}/todos/${todoId}`,
     method: "DELETE",
@@ -166,16 +164,17 @@ function deleteTodo(todoId){
       token: localStorage.getItem("access_token")
     }
   })
-  .done(response => {
-    auth()
-  })
-  .fail((xhr, text) => {
-    alert(xhr.responseJSON.error[0])
-    console.log(xhr, text)
-  })
+    .done(response => {
+      Swal.fire('Your todo is successfully deleted!!!')
+      auth()
+    })
+    .fail((xhr, text) => {
+      Swal.fire(xhr.responseJSON.error[0])
+      console.log(xhr, text)
+    })
 }
 
-function patchStatus(todoId, status){
+function patchStatus(todoId, status) {
   $.ajax({
     url: `${baseUrl}/todos/${todoId}`,
     method: "PATCH",
@@ -186,19 +185,19 @@ function patchStatus(todoId, status){
       status
     }
   })
-  .done(response => {
-    auth()
-  })
-  .fail((xhr, text) => {
-    alert(xhr.responseJSON.error[0])
-    console.log(xhr, text)
-  })
-  .always(_ => {
-    $("#form-add-todo").trigger("reset")
-  })
+    .done(response => {
+      auth()
+    })
+    .fail((xhr, text) => {
+      Swal.fire(xhr.responseJSON.error[0])
+      console.log(xhr, text)
+    })
+    .always(_ => {
+      $("#form-add-todo").trigger("reset")
+    })
 }
 
-function editTodo(todoId){
+function editTodo(todoId) {
   const title = $("#inputTitle").val()
   const due_date = $("#inputDate").val()
   const description = $("#inputDescription").val()
@@ -211,84 +210,118 @@ function editTodo(todoId){
     data: {
       title,
       due_date,
-      description
+      description,
     }
   })
-  .done(response => {
-    console.log('berhasil')
-  })
-  .fail((xhr, text) => {
-    alert(xhr.responseJSON.error)
-    console.log(xhr, text)
-  })
-  .always(_ => {
-    $("#form-add-todo").trigger("reset")
-  })
+    .done(response => {
+      console.log('success')
+      $("#form-add-todo").show()
+      $("#title-todo").text("My Todo List")
+      $("#todo-table").show()
+      $("#add-todo").text("Add Todo")
+      auth()
+    })
+    .fail((xhr, text) => {
+      Swal.fire(xhr.responseJSON.error)
+      console.log(xhr, text)
+    })
+    .always(_ => {
+      $("#form-add-todo").trigger("reset")
+    })
 }
 
 $(document).ready(() => {
   auth()
-  $("#form-signUpIn").on("submit", (e) => {
+
+  $("#form-signIn").on("submit", (e) => {
     e.preventDefault()
-    if (localStorage.getItem("access_token")) {
-      
-    } else {
-      if ($("#btn-sign").html() === 'Sign In'){
-        signIn()
-      } else {
-        signUp()
-      }
-    }
+    signIn()    
   })
-  
+
   $("#menu-sign-up").on("click", (e) => {
     e.preventDefault()
     $("#nav-signOut").hide()
     $("#nav-my-todo").hide()
+    $("#nav-create").hide()
     $("#nav-home").hide()
     $("#todos").hide()
-    $("#signUpIn").show()
-    $("#btn-sign").text("Sign Up")
-    $("#menu-sign").html('<p class="text-center" >Have account ? <a href="" id="menu-sign-in">Sign In</a></p>')
+    $("#signIn").hide()
+    $("#signUp").show()
   })
 
-  $("menu-sign-in").on("click", (e) => {
+  $("#menu-sign-in").on("click", (e) => {
     e.preventDefault()
     $("#nav-signOut").hide()
     $("#nav-my-todo").hide()
+    $("#nav-create").hide()
     $("#nav-home").hide()
     $("#todos").hide()
-    $("#signUpIn").show()
+    $("#signUp").hide()
+    $("#signIn").show()
+  })
+
+  $("#form-signUp").on("submit", (e) => {
+    e.preventDefault()
+    signUp()    
   })
 
   $("#form-add-todo").on("submit", (e) => {
     e.preventDefault()
-    addTodo()
+    if ($("#title-todo").text() === "Edit My Todo") {
+      let todoId = localStorage.getItem("todoId")
+      localStorage.removeItem("todoId")
+      editTodo(todoId)
+    } else {
+      addTodo()
+    }
   })
-  
-  $(document).on("click","#complete-button",function(){
-      let todoId = $(this).parents('tr').attr('data-id');
-      patchStatus(todoId, "completed")
+
+  $(document).on("click", "#complete-button", function () {
+    let todoId = $(this).parents('tr').attr('data-id');
+    patchStatus(todoId, "completed")
   });
 
-  $(document).on("click","#uncomplete-button",function(){
+  $(document).on("click", "#uncomplete-button", function () {
     let todoId = $(this).parents('tr').attr('data-id');
     patchStatus(todoId, "uncompleted")
   });
-  
-  $(document).on("click","#delete-button",function(){
+
+  $(document).on("click", "#delete-button", function () {
     let todoId = $(this).parents('tr').attr('data-id');
     deleteTodo(todoId)
   });
 
-  $(document).on("click","#edit-button",function(){
-    let todoId = $(this).parents('tr').attr('data-id');
-    $("#form-signUpIn").hide()
-    $("#todo-tabel").hide()
-    $("#todos").hide()
-    $("##form-add-todo").show()
-    editTodo(todoId)
+  $(document).on("click", "#edit-button", function (e) {
+    e.preventDefault()
+
+    $("#form-add-todo").show()
+    $("#title-todo").text("Edit My Todo")
+    $("#todo-table").hide()
+    $("#add-todo").text("Update Todo")
+
+    localStorage.setItem("todoId", $(this).parents('tr').attr('data-id'))
+    $("#inputTitle").val($(this).parents('tr').attr('data-title'))
+    $("#inputDate").val($(this).parents('tr').attr('data-due_date'))
+    $("#inputDescription").val($(this).parents('tr').attr('data-description'))
+
   });
 
+  $("#cancel-todo").on("click", (e) => {
+    e.preventDefault()
+    if (localStorage.getItem("todoId")) {
+      localStorage.removeItem("todoId")
+    }
+    $("#title-todo").text("My Todo List")
+    $("#add-todo").text("Add Todo")
+    $("#form-add-todo").trigger("reset")
+    $("#todo-table").show()
+
+  })
+
+  $("#nav-signOut").on("click", (e) => {
+    e.preventDefault()
+    localStorage.clear()
+    auth()
+  })
 
 })
