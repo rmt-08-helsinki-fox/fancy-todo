@@ -20,5 +20,6 @@
           "require": true,
           "rejectUnauthorized": false
       }
+    }
   }
 }
