@@ -169,7 +169,7 @@ function getTodos() {
     .done(response => {
       $('#list-todo').empty()
       if (response.length !== 0) {
-        response.forEach((itm, idx) => {
+        response.forEach(itm => {
           if (itm.status === 'On Progress') {
             $('#list-todo').append(`
                 <div id="detail-todos"
