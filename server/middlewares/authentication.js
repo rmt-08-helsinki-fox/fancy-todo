@@ -15,20 +15,16 @@ function authentication (req, res, next) {
           req.user = user
           next()
         } else {
-          res.status(401).json({
-            message: 'Please login first'
+          next({
+            name: 'User not found'
           })
         }
       })
       .catch(err => {
-        res.status(500).json({
-          message: err
-        })
+        next(err)
       })
   } catch (err) {
-    res.status(400).json({
-      message: err
-    })
+    next(err)
   }
 }
 

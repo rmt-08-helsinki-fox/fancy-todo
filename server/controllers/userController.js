@@ -20,9 +20,7 @@ class UserController {
         res.status(201).json(response)
       })
       .catch(err => {
-        res.status(500).json({
-          message: err
-        })
+        next(err)
       })
   }
   
@@ -39,8 +37,8 @@ class UserController {
     })
       .then(user => {
         if (!user) {
-          res.status(401).json({
-            message: 'Invalid email or password'
+          next({
+            name: 'Username / Password wrong'
           })
         } else {
           const match = checkPassword(input.password, user.password)
@@ -57,16 +55,14 @@ class UserController {
               access_token
             })
           } else {
-            res.status(401).json({
-              message: 'Invalid email or password'
+            next({
+              name: 'Username / Password wrong'
             })
           }
         }
       })
       .catch(err => {
-        res.status(401).json({
-          message: err
-        })
+        next(err)
       })
   }
 
