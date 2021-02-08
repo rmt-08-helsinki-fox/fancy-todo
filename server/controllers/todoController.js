@@ -24,6 +24,7 @@ class TodoController {
         where: { UserId: req.data.id },
         order: [["id", "ASC"]],
       });
+      console.log(todos);
       res.status(200).json({ data: todos });
     } catch (err) {
       next(err);
