@@ -60,6 +60,7 @@ class TodoController{
 	static updateTodo(req,res,next){
 		const { title,description,status,due_date } = req.body
 		const id = +req.params.id
+		
 		Todo
 			.update({
 				title,

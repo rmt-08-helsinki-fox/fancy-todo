@@ -146,32 +146,20 @@ const getTodoById = (id) => {
     }
   })
   .done(res => {
-    $("#sign-out-navbar").show()
-    $("#sign-in-navbar").hide()
-    $("#sign-up-navbar").hide()
-    $("#sign-up-page").hide()
-    $("#sign-in-page").hide()
-    $("#addTodo-page").hide()
-    $("#todos-table").show()
-    $('#tBody').empty()
-    let btnDone
-      if (!res.status) {
-        btnDone = `<button type="button" class="btn btn-success" onClick="updateStatusTodo(${res.id,res.status})">Done</button>`
-      } else {
-        btnDone = `<button type="button" class="btn btn-success" onClick="$updateStatusTodo(${res.id,res.status})">Undone</button>`
-      }
-      $('#tBody').append(`<tr>
-      <td>${res.title}</td>
-      <td>${res.description}</td>
-      <td>${res.status}</td>
-      <td>${res.due_date}</td>
-      <td>${res.User}</td>
-      <td>
-        ${btnDone}
-        <button type="button" class="btn btn-warning" onClick="updateTodo(${res.id})">Edit</button> 
-        <button type="button" class="btn btn-danger" onClick="destroy(${res.id})">Delete</button>
-      </td>
-    </tr>`)
+    $('#inputTitle').empty()
+    $('#inputTitle').append(`
+    <input type="text" class="form-control" id="titleEdit" value="${res.title}" name="title">`)
+
+    $('#inputDescription').empty()
+    $('#inputDescription').append(`
+    <input type="" class="form-control" id="descriptionEdit" value="${res.description}" name="description">`)
+
+    $('#inputDueDate').empty()
+    $('#inputDueDate').append(`
+    <input type="date" class="form-control" id="due_dateEdit" value="${res.due_date}" name="due_date">`)
+  })
+  .fail((xhr, txt) => {
+    console.log(xhr);
   })
 }
 
@@ -210,6 +198,7 @@ const createTodo = () => {
 
 let updateTodoId
 const updateBtn = (id) => {
+  getTodoById(id)
   $("#sign-out-navbar").show()
   $("#sign-in-navbar").hide()
   $("#sign-up-navbar").hide()
