@@ -1,4 +1,4 @@
-const url = 'https://fancy-todo-app-client.web.app/';
+const url = 'https://fancy-todo-app-server.herokuapp.com/';
 
 
 function auth() {
