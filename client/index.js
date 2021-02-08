@@ -52,16 +52,17 @@ $(document).ready(() => {
     event.preventDefault();
     $("#add-todo-area").show();
     $("#error-add").empty();
-    $("#submit-add-todo").click((event) => {
-      const title = $("#add-title-todo").val();
-      const description = $("#add-description-todo").val();
-      let due_date = $("#add-due_date-todo").val();
+  });
 
-      let temp = due_date.split("-");
-      due_date = `${temp[1]}/${temp[2]}/${temp[0]}`;
+  $("#submit-add-todo").click((event) => {
+    const title = $("#add-title-todo").val();
+    const description = $("#add-description-todo").val();
+    let due_date = $("#add-due_date-todo").val();
 
-      handleAdd(title, description, due_date);
-    });
+    let temp = due_date.split("-");
+    due_date = `${temp[1]}/${temp[2]}/${temp[0]}`;
+
+    handleAdd(title, description, due_date);
   });
 
   $("#cancel-add-todo").click((event) => {
@@ -100,6 +101,7 @@ const getTodos = () => {
       $("#list-todo").empty();
       $("#homepage-message-succes").empty();
       $("#homepage-message-error").empty();
+
       response.data.forEach((el) => {
         let status;
         if (!el.status) {
@@ -107,6 +109,12 @@ const getTodos = () => {
         } else {
           status = "Done";
         }
+
+        console.log(el.due_date);
+
+        let temp = el.due_date.split("-");
+        el.due_date = `${temp[0]}-${temp[1]}-${temp[2][0] + temp[2][1]}`;
+
         $("#list-todo")
           .append(`	<div class="card col-lg-4 cardTodo mx-2 my-2" style="width: 25rem;">
         <div class="card-body">
@@ -114,7 +122,7 @@ const getTodos = () => {
             <h6 class="card-subtitle mb-2 text-muted">${status}</h6>
             <p class="card-text">${el.description}</p>
             <a href="#" class="card-link btn btn-success" id="markTodo" onclick="handleUpdate(${el.id})">Mark as done</a>
-            <a href="#" class="card-link btn btn-primary" id="updateTodo" onclick="handleEdit(${el.id})">Edit</a>
+            <a href="#" class="card-link btn btn-primary" id="updateTodo" onClick="handleEdit(${el.id}, '${el.title}', '${el.description}', '${el.due_date}')">Edit</a>
             <a href="#" class="card-link btn btn-danger" id="deleteTodo"  onclick="handleDelete(${el.id})">Delete</a>
         </div>
         
@@ -142,6 +150,7 @@ const getWeather = () => {
         data: { latitude, longitude },
       })
         .done((response) => {
+          console.log(response);
           let weatherCurrent = response.weatherCurrent;
           let weatherLoc = response.weatherLoc;
           $("#weather-area").empty();
@@ -171,6 +180,8 @@ const getWeather = () => {
           $("#homepage-message-error").append(`<p>Internal Server Error</p>`);
         });
     });
+  } else {
+    $("#weather-area").append(`<p>Sorry cannot get weather</p>`);
   }
 };
 
@@ -221,6 +232,7 @@ const handleAdd = (title, description, due_date) => {
       $("#add-todo-area").hide();
       $("#homepage-message-succes").empty();
       $("#homepage-message-succes").append("<p>Todo Created</p>");
+      auth();
     })
     .fail((err) => {
       err.responseJSON.errors.forEach((el) => {
@@ -277,9 +289,55 @@ const handleUpdate = (id) => {
     });
 };
 
-const handleEdit = (id) => {
+function handleEdit(id, title, description, due_date) {
   let todoId = id;
+
   $("#edit-todo-area").show();
+  $("#edit-todo-area").append(`<form>
+  <h1>EDIT TODO</h1>
+
+  <div class="mb-3">
+    <p id="error-edit" class="text-danger"></p>
+    <label class="form-label">Title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="edit-title-todo"
+      value="${title}"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <input
+      type="text"
+      class="form-control"
+      id="edit-description-todo"
+      value="${description}"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Due Date</label>
+    <input
+      type="date"
+      class="form-control"
+      id="edit-due_date-todo"
+      value="${due_date}"
+    />
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary"
+    id="submit-edit-todo"
+  >
+    Update
+  </button>
+  <button class="btn btn-danger" id="cancel-edit-todo">
+    Cancel
+  </button>
+</form>`);
 
   $(`#submit-edit-todo`).click((event) => {
     event.preventDefault();
@@ -308,6 +366,7 @@ const handleEdit = (id) => {
         });
       })
       .always((_) => {
+        $("#edit-todo-area").empty();
         $("#edit-title-todo").val("");
         $("#edit-description-todo").val("");
         $("#edit-due_date-todo").val("");
@@ -320,9 +379,10 @@ const handleEdit = (id) => {
   $("#cancel-edit-todo").click((event) => {
     event.preventDefault();
     $("#error-edit").empty();
+    $("#edit-todo-area").empty();
     $("#edit-todo-area").hide();
   });
-};
+}
 
 // GOOGLE
 function onSignIn(googleUser) {
