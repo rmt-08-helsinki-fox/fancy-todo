@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Todo.hasOne(models.Food);
       Todo.belongsTo(models.User);
+      Todo.belongsTo(models.Project);
 
     }
   };

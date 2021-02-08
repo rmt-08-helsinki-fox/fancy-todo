@@ -49,6 +49,15 @@ function fetchProject(){
     }).fail(err => {
         toastr.error(Array.isArray(err.responseJSON.msg) ? err.responseJSON.msg.join('<br />') : err.responseJSON.msg,"Oops");
     }) 
+};
+
+function fetchProjectTodos(){
+    $.ajax({
+        url : `${base_url}/projects/todos`,
+        method: 'GET'
+    }).done(response => {
+        console.log(response);
+    });
 }
 
 function fetchTodo(){
@@ -122,6 +131,7 @@ function mainApp(){
         });
         fetchTodo();
         fetchProject();
+        fetchProjectTodos();
     }
 }
 

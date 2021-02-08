@@ -10,5 +10,6 @@ route.put('/:id',Gate.ProjectResource,ProjectController.update);
 route.delete('/:id',Gate.ProjectResource,ProjectController.destroy);
 
 route.post('/:id/invite',ProjectController.invite);
+route.get('/todos',Gate.ProjectResource,ProjectController.readTodo);
 
 module.exports = route

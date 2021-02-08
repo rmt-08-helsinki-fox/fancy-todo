@@ -33,10 +33,25 @@ class ProjectController{
         }
     }
     static update = async(req,res,next) => {
+        try {
+            
+        } catch (error) {
+            
+        }
     }
     static detail = async(req,res,next) => {
+        try {
+            
+        } catch (error) {
+            
+        }
     }
     static destroy = async(req,res,next) => {
+        try {
+            
+        } catch (error) {
+            
+        }
     }
     static invite =async(req,res,next) => {
         let { email } = req.body
@@ -54,8 +69,29 @@ class ProjectController{
             res.status(201).json({msg : 'User invited successfully'});
         } catch (error) {
             next(error);
+        }  
+    }
+
+    static readTodo = async(req,res,next) =>{
+        console.log(req.user.id)
+        return;
+        try {
+            let projects = await Project.findAll({
+                where : 
+                    Sequelize.or(
+                        { '$ProjectUsers.UserId$' : +req.user.id },
+                        { 'UserId' : +req.user.id}
+                    )  
+                ,
+                include : [
+                    'Todos'
+                ],
+                
+            });
+            res.status(200).json(projects);
+        } catch (error) {
+            next(error);
         }
-        
     }
 
 }
