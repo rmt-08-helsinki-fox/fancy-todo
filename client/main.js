@@ -6,8 +6,7 @@ $(document).ready(() => {
 })
 
 // const base_url = "http://localhost:3000/"
-const base_url = https://hacktiv8-p2w5d1-fancy-to-do.herokuapp.com/
-
+const base_url = "https://hacktiv8-p2w5d1-fancy-to-do.herokuapp.com/"
 
 const Toast = Swal.mixin({
     toast: true,
