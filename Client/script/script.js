@@ -1,4 +1,4 @@
-let baseUrl = 'https://git.heroku.com/fancy-todo-project.git/'
+let baseUrl = 'https://fancy-todo-project.herokuapp.com/'
 
 function authenticate() {
     if(!localStorage.getItem('accessToken')){

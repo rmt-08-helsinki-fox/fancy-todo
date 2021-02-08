@@ -8,9 +8,7 @@ const app = express()
 const router = require('./routers/index')
 const PORT = process.env.PORT || 3000
 
-app.use(cors({
-	origin: 'https://fancy-303801.web.app/'
-}))
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
