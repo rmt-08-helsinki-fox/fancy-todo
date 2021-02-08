@@ -7,9 +7,9 @@ async function authenticate(req, res, next){
     let token = req.headers.access_token
     let payload = checkToken(token)
     if(!payload){
-      res.status(404).json({msg: 'Invalid Token'})
+      res.status(404).json({msg: 'Invalid Token'}) //kalo gaada maka kasih invalid token
     }
-    req.user = payload
+    req.user = payload //kalo ada, taro data si user ke req
     next()
   } catch (err) {
     console.log(err, 'ini dalem catch')
