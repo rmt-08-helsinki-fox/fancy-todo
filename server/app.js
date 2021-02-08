@@ -1,5 +1,4 @@
 if(process.env.NODE_ENV === 'development'){
-    // console.log(process.env.NODE_ENV)
     require('dotenv').config()
 }
 const errorHandler = require('./middlewares/errorHandler')
