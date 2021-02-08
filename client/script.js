@@ -1,4 +1,4 @@
-let base_url = "http://localhost:3000/"
+let base_url = "https://fancy-todo-app01.herokuapp.com/"
 // ============= authentication ===========
     function aut () {
       if(!localStorage.getItem("access_token")) {
