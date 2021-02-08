@@ -407,7 +407,7 @@ function addTodo() {
       console.log(response);
       $('#err-msg').remove()
       getTodos()
-      $('#notification-email').append(`
+      $('#notification-email').after(`
       <div class="alert-toast fixed bottom-0 right-0 m-8 w-5/6 md:w-full max-w-sm">
       <input type="checkbox" class="hidden" id="footertoast">
         <label
