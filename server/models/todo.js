@@ -45,14 +45,18 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       type: DataTypes.DATE,
       validate: {
-        function(value) {
-          if (value < new Date().toISOString()) {
-            throw new Error("Invalid date")
+        isNull(due_date) {
+          if(due_date === "Invalid date" || !due_date) {
+            throw { name: "dueDateError", message: "Please choose the due date", status: 400 }
           }
         },
-        notEmpty: {
-          args: true,
-          msg: 'Please enter the due date'
+        isBefore(due_date) {
+          if(due_date) {
+            let dateNow = new Date().toISOString().slice(0, 10);
+            if(due_date.getTime() < new Date(dateNow).getTime()) {
+              throw { name: "dueDateError", message: "Invalid date", status: 400 };
+            }
+          }
         }
       }
     },
