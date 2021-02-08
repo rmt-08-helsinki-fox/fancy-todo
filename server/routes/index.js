@@ -5,6 +5,10 @@ const authentication = require('../middlewares/authentication')
 const authorize = require('../middlewares/authorization')
 const ThirdPartyAPI = require('../controllers/3rdpartyAPI')
 
+routes.get('/', (req, res, next) => {
+  res.send('Finaly deploy server')
+})
+
 // User routing
 routes.post('/login', UserController.login)
 routes.post('/register', UserController.register)
