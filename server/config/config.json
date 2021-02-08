@@ -19,7 +19,6 @@
       "ssl": {
         "rejectUnauthorized": false
       }
-    },
-    "dialect": "postgres"
+    }
   }
 }
