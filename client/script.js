@@ -48,6 +48,7 @@ function auth() {
   if (!localStorage.getItem("access_token")) {
     $("#link-login").show(500);
     $("#link-register").show(500);
+    $("#logo-homepage").show(500);
     $("#link-logout").hide(500);
     $("#link-back").hide(500);
     $("#form-register").hide(500);
@@ -58,7 +59,9 @@ function auth() {
   } else {
     $("#img").empty();
     $("#list-todo").empty();
+    $("#list-update").empty();
     $("#empty-message").remove();
+    $("#logo-homepage").hide(500);
     $("#form-register").hide(500);
     $("#form-login").hide(500);
     $("#link-logout").show(500);
@@ -96,14 +99,27 @@ function register() {
     },
   })
     .done((response) => {
-      console.log(response);
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Account created",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       showLogin();
     })
     .fail((xhr, text) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Must be filled",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       console.log(xhr, text);
     })
     .always(() => {
-      console.log("hallo always");
+      $("#register").trigger("reset");
     });
 }
 
@@ -122,10 +138,24 @@ function login() {
     .done((response) => {
       localStorage.setItem("url_img", response.weather.url_img[0]);
       localStorage.setItem("access_token", response.access_token);
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Succes login",
+        showConfirmButton: false,
+        timer: 1000,
+      });
 
       auth();
     })
     .fail((xhr, text) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Wrong email or password",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       console.log(xhr, text);
     })
     .always(() => {
@@ -143,33 +173,36 @@ function getListTodo() {
     },
   })
     .done(({ todos }) => {
-      todos.forEach((el, i) => {
-        $("#list-todo").append(`
-              <tr class="table-info" >
-                <td>${i + 1}</td>
-                <td>${el.title}</td>
-                <td>${el.description}</td>
-                <td>${el.status}</td>
-                <td>${el.due_date}</td>
-                <td>
-                   <a class="btn btn-primary" onclick="remove(${
-                     el.id
-                   })" href="#">Delete</a>
-                   <a class="btn btn-primary" onclick="show(${
-                     el.id
-                   })" href="#">Update</a>
-                   <a class="btn btn-primary" onclick="complete(${
-                     el.id
-                   })" href="#">Complete</a>
-                </td>
-              </tr>
-              `);
-      });
+      if (todos.length > 0) {
+        todos.forEach((el, i) => {
+          $("#list-todo").append(`
+                <tr class="table-info" >
+                  <td>${i + 1}</td>
+                  <td>${el.title}</td>
+                  <td>${el.description}</td>
+                  <td>${el.status}</td>
+                  <td>${el.due_date}</td>
+                  <td>
+                     <a class="btn btn-primary" onclick="remove(${
+                       el.id
+                     })" href="#">Delete</a>
+                     <a class="btn btn-primary" onclick="show(${
+                       el.id
+                     })" href="#">Update</a>
+                     <a class="btn btn-primary" onclick="complete(${
+                       el.id
+                     })" href="#">Complete</a>
+                  </td>
+                </tr>
+                `);
+        });
+      } else {
+        $("#todo-table").append(
+          `<h4 class="text-center" id="empty-message">Todo Data is Empty</h4>`
+        );
+      }
     })
     .fail((xhr, text) => {
-      $("#todo-table").append(
-        `<h4 class="text-center" id="empty-message">Todo Data is Empty</h4>`
-      );
       console.log(xhr, text);
     });
 }
@@ -194,11 +227,25 @@ function createTodo() {
     },
   })
     .done((response) => {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Success create a ToDo",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       $("#img").empty();
       $("#list-todo").empty();
       auth();
     })
     .fail((xhr, text) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Title and Due Date must be filled",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       console.log(xhr, text);
     })
     .always(() => {
@@ -215,9 +262,23 @@ function remove(id) {
     },
   })
     .done(() => {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Todo has been deleted",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       auth();
     })
     .fail((xhr, text) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Not authorized",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       console.log(xhr, text);
     });
 }
@@ -226,6 +287,7 @@ function update(id) {
   const title = $("#updateTitle").val();
   const description = $("#updateDesc").val();
   const status = $("#updateStatus").val();
+  const todoId = id;
 
   $.ajax({
     url: base_url + "/todos/" + id,
@@ -239,14 +301,29 @@ function update(id) {
       status,
     },
   })
-    .done(() => {
+    .done((response) => {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Your todo has been updated",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       auth();
     })
     .fail((xhr, text) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Title must be filled",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      show(todoId);
       console.log(xhr, text);
     })
     .always(() => {
-      $("#updateTodo").trigger("reset");
+      $("#list-update").empty();
     });
 }
 
@@ -261,6 +338,7 @@ function show(id) {
   })
     .done((todo) => {
       $("#list-update").append(`
+        <h3 class="text-justify">Update Todo</h3>
         <form class="row g-2" id="updateTodo">
         <div class="form-floating mb-2">
         <label class="bg-secondary d-block text-center text-white">Title</label>
@@ -298,6 +376,13 @@ function show(id) {
         `);
     })
     .fail((xhr, text) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Not authorized",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       auth();
       console.log(xhr, text);
     });
@@ -314,9 +399,23 @@ function complete(id) {
     },
   })
     .done(() => {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Your ToDo finished",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       auth();
     })
     .fail((xhr, text) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Not authorized",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       console.log(xhr, text);
     });
 }
@@ -340,6 +439,13 @@ function logout() {
   var auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(function () {
     console.log("User signed out.");
+  });
+  Swal.fire({
+    position: "center",
+    icon: "success",
+    title: "Success logout",
+    showConfirmButton: false,
+    timer: 1000,
   });
   auth();
 }
@@ -367,9 +473,23 @@ function onSignIn(googleUser) {
   })
     .done((response) => {
       localStorage.setItem("access_token", response.access_token);
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Success login",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       auth();
     })
     .fail((xhr, text) => {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error login",
+        showConfirmButton: false,
+        timer: 1000,
+      });
       console.log(xhr, text);
     });
 }

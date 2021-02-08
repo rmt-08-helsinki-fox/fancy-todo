@@ -80,6 +80,7 @@ class UserController {
   static loginOAuth(req, res, next) {
     const client = new OAuth2Client(process.env.GOOGLE_KEY);
     let email;
+    let status;
     client
       .verifyIdToken({
         idToken: req.body.googleToken,
@@ -92,25 +93,38 @@ class UserController {
       })
       .then((user) => {
         if (user) {
-          const access_token = generateToken({
-            id: user.id,
-            email: user.email,
-          });
-          res.status(200).json({ access_token });
+          status = 200;
+          return user;
         } else {
+          status = 201;
           return User.create({
             email,
             password: process.env.PASS_RAND,
             location: "Jakarta",
           });
         }
+        // if (userFound) {
+        //   user = userFound;
+        //   const access_token = generateToken({
+        //     id: user.id,
+        //     email: user.email,
+        //   });
+        //   res.status(200).json({ access_token });
+        // } else {
+        //   console.log(process.env.PASS_RAND);
+        //   return User.create({
+        //     email,
+        //     password: process.env.PASS_RAND,
+        //     location: "Jakarta",
+        //   });
+        // }
       })
       .then((registered) => {
         const access_token = generateToken({
           id: registered.id,
           email: registered.email,
         });
-        res.status(201).json({ access_token });
+        res.status(status).json({ access_token });
       })
       .catch((err) => {
         next(err);

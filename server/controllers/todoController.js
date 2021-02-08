@@ -4,12 +4,12 @@ class TodoController {
   static showAllTodos(req, res, next) {
     Todo.findAll({ include: [User] })
       .then((todos) => {
-        if (todos.length <= 0)
-          throw {
-            message: "internal server error",
-            status: 500,
-            name: "Server",
-          };
+        // if (todos.length <= 0)
+        //   throw {
+        //     message: "Todo not found",
+        //     status: 404,
+        //     name: "Server",
+        //   };
 
         res.status(200).json({ todos });
       })
