@@ -1,0 +1,102 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    min-height: 100%;
+}
+
+body{
+    background-color: #f7f9fb;
+    min-height: 100%;
+
+}
+
+.login-form{
+    width: 400px;
+}
+
+.logo-wrapper{
+    margin: 40px auto 40px auto;
+    width: 256px;
+}
+
+.logo{
+    width: 256px;
+}
+
+#registerPage{
+    display: none;
+}
+
+#appPage{
+    display: none;
+}
+
+.logout-link{
+    color: #bbb;
+}
+
+.collapsible-link{
+    color: #717171;
+    text-decoration: none;
+}
+.collapsible-link:hover{
+    color: inherit;
+}
+
+.collapsible-link::before {
+    content: '';
+    width: 14px;
+    height: 2px;
+    background: #333;
+    position: absolute;
+    top: calc(50% - 1px);
+    right: 1rem;
+    display: block;
+    transition: all 0.3s;
+  }
+  
+/* Vertical line */
+.collapsible-link::after {
+    content: '';
+    width: 2px;
+    height: 14px;
+    background: #333;
+    position: absolute;
+    top: calc(50% - 7px);
+    right: calc(1rem + 6px);
+    display: block;
+    transition: all 0.3s;
+}
+
+.collapsible-link[aria-expanded='true']::after {
+    transform: rotate(90deg) translateX(-1px);
+}
+
+.collapsible-link[aria-expanded='true']::before {
+    transform: rotate(180deg);
+}
+
+.modal-content{
+    border : none;
+    
+}
+
+.separator-todo {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+.separator-todo::before, .separator-todo::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #000;
+}
+.separator-todo::before {
+    margin-right: .25em;
+}
+.separator-todo::after {
+    margin-left: .25em;
+}
