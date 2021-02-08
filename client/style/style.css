@@ -1,0 +1,62 @@
+#digital-clock {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 350px;
+  height: 143px;
+  color: #ffffff;
+  border: 5px solid #e67a7a;
+  border-radius: 20px;
+  text-align: center;
+  font: 50px/60px Helvetica;
+}
+
+html, body {
+  min-height: 100vh;
+  background-size: cover !important;
+  background: -webkit-linear-gradient(top, #e67a7a, #9ddcdc);
+}
+/* 
+.page-holder {
+  min-height: 100vh;
+}
+
+.bg-cover {
+  background-size: cover !important;
+} */
+
+.container-login-register {
+  height: 100%;
+  align-content: center;
+}
+
+.card-login-register {
+  margin-top: 19vh;
+  margin-bottom: auto;
+  width: 400px;
+  background-color: rgba(230, 230, 230, 0.5) !important;
+}
+
+.card {
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 400px;
+  background-color: rgba(230, 230, 230, 0.5) !important;
+}
+
+.colorNavbar {
+  background-color: rgba(230, 230, 230, 0.5) !important;
+}
+
+.social_icon{
+  position: absolute;
+  right: 0px;
+  top: -45px;
+}
+
+.links a{
+  margin-left: 4px;
+}
