@@ -1,7 +1,7 @@
 function errorHandling(err, req, res, next) {
     if(err) {
     
-        if(err.name === "SequelizeValidationError") {
+        if(err.name === "SequelizeValidationError"||err.name === 'SequelizeUniqueConstrainError') {
             let errors = err.errors.map(el => {
                 return {
                     message: el.message
@@ -21,7 +21,7 @@ function errorHandling(err, req, res, next) {
             console.log('Not Authorized')
             res.status(403).json({message: "No Authorization"})
         } else {
-            console.log('internal Server Error')
+            console.log(err)
             res.status(500).json({message: "Internal Server Error"})
         }
     }
