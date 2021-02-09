@@ -1,5 +1,5 @@
-const baseUser = "http://localhost:3000/users/";
-        const baseTodo = "http://localhost:3000/todos"
+const baseUser = "https://fancy-todo-suryo.herokuapp.com/users/";
+        const baseTodo = "https://fancy-todo-suryo.herokuapp.com/todos"
 
         function authenticate(){
             if (!localStorage.getItem("access_token")){
