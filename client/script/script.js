@@ -1,5 +1,5 @@
 const baseUser = "https://fancy-todo-suryo.herokuapp.com/users/";
-        const baseTodo = "https://fancy-todo-suryo.herokuapp.com/todos"
+const baseTodo = "https://fancy-todo-suryo.herokuapp.com/todos"
 
         function authenticate(){
             if (!localStorage.getItem("access_token")){
@@ -328,7 +328,8 @@ const baseUser = "https://fancy-todo-suryo.herokuapp.com/users/";
         function postWeather(){
           const location = $("#weather-location").val();
           $.ajax({
-                url: `http://localhost:3000/todos/weather/today`,
+            
+                url: `https://fancy-todo-suryo.herokuapp.com/todos/weather/today`,
                 method: "POST",
                 headers: {
                     access_token: localStorage.getItem("access_token")
