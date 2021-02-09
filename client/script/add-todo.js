@@ -107,20 +107,9 @@ $(document).ready(() => {
       res.results.forEach( (data, index) => {
         dataStringify = JSON.stringify(data)
 
-        const data1item = `
-        <div class="col">
-          <div class="card" style="width: max-content">
-            <img src="${data.poster_path}" width="220px" height="330px"  />
-            <div class="card-desc">
-              <b>${data.title}</b><br/>
-              "${data.overview.slice(0, 50) + "..."}"
-            </div>
-          </div>
-        </div>
-        `
         $("#list-movie").append(`
         <div class="col">
-          <div class="card" style="width: max-content;cursor: pointer; border-radius: 20px" onclick='localStorage.setItem("selectedMovie", JSON.stringify(${dataStringify}));$("#list-movie").empty()'>
+          <div class="card" style="width: max-content;cursor: pointer; border-radius: 20px" onclick='onClickedMovie(JSON.stringify(${dataStringify}))'>
             <img src="${data.poster_path}" width="220px" height="330px" style=" border-radius: 20px" />
             <div class="card-desc">
               <b>${data.title}</b><br/>
