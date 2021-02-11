@@ -11,6 +11,8 @@ $(document).ready(() => {
   $('#link-signin').click(event => {
     event.preventDefault()
     generateQuotes()
+    $('#error-signin').empty()
+    $('#success-signup').text('')
     $('#signin-form').fadeIn('slow')
     $('#home-page').hide()
     $('#signup-form').hide()
@@ -32,6 +34,7 @@ $(document).ready(() => {
   $('#btn-signup').click(event => {
     event.preventDefault()
     $('#home-page').hide()
+    $('#success-signup').text('')
     $('#signup-form').fadeIn('slow')
   })
 
@@ -51,6 +54,7 @@ $(document).ready(() => {
   $('#link-signout').click(event => {
     event.preventDefault()
     auth()
+    $('#success-signup').text('')
     signout()
     generateQuotes()
   })
@@ -147,6 +151,7 @@ function generateQuotes() {
 function signin() {
   const email = $('#signin-email').val()
   const password = $('#signin-password').val()
+  $('#error-signin').empty()
   $.ajax({
       url: baseUrl + 'users' + '/signin',
       method: 'POST',
@@ -256,9 +261,7 @@ function addTodo() {
     console.log(xhr, text)
   })
   .always(_ => {
-  $('#todo-title').trigger('reset')
-  $('#todo-desc').trigger('reset')
-  $('#todo-due-date').trigger('reset')
+  $('#form-task').trigger('reset')
   showTodo()
   })
 }
@@ -274,41 +277,45 @@ function showTodo() {
     }
   })
   .done(response => {
-    response.forEach(element => {
-      console.log(typeof element.status)
-      let date = element.due_date.split('T')
-      if(element.status) {
-      $('#todos-container').append(`<div class="col-sm-6 text-left" id="todo-${element.id}">
-              <div class="card border-success mb-3 bg-transparent" style="width: 13rem; height: 14rem;">
-                <div class="card-header bg-transparent border-success">${element.title} is already Done</div>
-                <div class="card-header bg-transparent border-success">Due date : ${date[0]}</div>
-                <div class="card-body text-warning" style="overflow-y: scroll; height: 100px;">
-                  <p class="card-text">${element.description}</p>
-                </div>
-                <div class="card-footer bg-transparent border-success">
-                  <button class="btn btn-lg btn-warning fw-bold text-dark button-card" type="submit" onclick="showEdit(${element.id})">Edit</button>
-                  <button class="btn btn-lg btn-danger fw-bold text-dark button-card" type="submit"
-                    onclick="deleteTodo(${element.id})">Delete</button></div>
-              </div>
-            </div>`)
-      } else {
+    if(response.length !== 0) {
+      response.forEach(element => {
+        let date = element.due_date.split('T')
+        if(element.status) {
         $('#todos-container').append(`<div class="col-sm-6 text-left" id="todo-${element.id}">
-                <div class="card border-warning mb-3 bg-transparent" style="width: 13rem; height: 14rem;">
-                  <div class="card-header bg-transparent border-warning">${element.title}</div>
-                  <div class="card-header bg-transparent border-warning">Due date : ${date[0]}</div>
+                <div class="card border-success mb-3 bg-transparent" style="width: 13rem; height: 14rem;">
+                  <div class="card-header bg-transparent border-success">${element.title} is already Done</div>
+                  <div class="card-header bg-transparent border-success">Due date : ${date[0]}</div>
                   <div class="card-body text-warning" style="overflow-y: scroll; height: 100px;">
                     <p class="card-text">${element.description}</p>
                   </div>
-                  <div class="card-footer bg-transparent border-warning">
-                  <button class="btn btn-lg btn-success fw-bold text-dark button-card" type="submit" onclick="doneTodo(${element.id})">Done</button>
-                  <button class="btn btn-lg btn-warning fw-bold text-dark button-card" type="submit" onclick="showEdit(${element.id})">Edit</button>
+                  <div class="card-footer bg-transparent border-success">
+                    <button class="btn btn-lg btn-warning fw-bold text-dark button-card" type="submit" onclick="showEdit(${element.id})">Edit</button>
                     <button class="btn btn-lg btn-danger fw-bold text-dark button-card" type="submit"
-                      onclick="deleteTodo(${element.id})">Delete</button>
-                      </div>
+                      onclick="deleteTodo(${element.id})">Delete</button></div>
                 </div>
               </div>`)
-      }
-    });
+        } else {
+          $('#todos-container').append(`<div class="col-sm-6 text-left" id="todo-${element.id}">
+                  <div class="card border-warning mb-3 bg-transparent" style="width: 13rem; height: 14rem;">
+                    <div class="card-header bg-transparent border-warning">${element.title}</div>
+                    <div class="card-header bg-transparent border-warning">Due date : ${date[0]}</div>
+                    <div class="card-body text-warning" style="overflow-y: scroll; height: 100px;">
+                      <p class="card-text">${element.description}</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-warning">
+                    <button class="btn btn-lg btn-success fw-bold text-dark button-card" type="submit" onclick="doneTodo(${element.id})">Done</button>
+                    <button class="btn btn-lg btn-warning fw-bold text-dark button-card" type="submit" onclick="showEdit(${element.id})">Edit</button>
+                      <button class="btn btn-lg btn-danger fw-bold text-dark button-card" type="submit"
+                        onclick="deleteTodo(${element.id})">Delete</button>
+                        </div>
+                  </div>
+                </div>`)
+        }
+      });
+    } else {
+      $('#todos-container').append(`<h1 style="margin-top: 200px;"> You Have no todo</h1>
+      <h6>Try to make some todo today!</h6>`)
+    }
   })
   .fail((xhr, text) => {
     console.log(xhr)
@@ -361,7 +368,7 @@ function doneTodo(id) {
 function showEdit(id) {
   const access_token = localStorage.getItem('access_token')
   $('#edit-status').empty()
-  $('#edit-todo').show()
+  $('#edit-todo').fadeIn(2500)
   $('#show-all-todo').hide()
   $('#home-page').hide()
   $.ajax({
@@ -376,6 +383,7 @@ function showEdit(id) {
     $('#edit-title').val(`${response.title}`)
     $('#edit-due-date').val(`${date[0]}`)
     $('#edit-desc').val(`${response.description}`)
+    $('#for-button').empty()
 
     if(response.status) {
       $('#edit-status').append(`

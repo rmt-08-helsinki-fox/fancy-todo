@@ -354,3 +354,97 @@ id = <INTEGER>
 
 
 
+## 7. POST /users/signup
+
+* **Request Header :**
+```json
+NONE
+```
+
+* **Request Body :**
+```json
+{
+    "email": "<string> email to create to database",
+    "password": "<string> password to create to database",
+}
+```
+
+* **Request Params :**
+```
+NONE
+```
+
+* **Response (200) :**
+```json
+{
+        "id": "<integer> id from database",
+        "email": "<string> email that you type in form"
+}
+```
+
+* **Response (400) :**
+```json
+{
+    "error": "Your email has been used" //IF YOU INPUT SAME EMAIL WITH ANOTHER EMAIL WHEN TRYING TO SIGN UP
+},
+{
+    "error": "Invalid email Format" //IF YOU TYPE SOMETHING THAT IS NOT EMAIL
+},
+{
+    "error": "Email tidak boleh kosong" //IF YOU LEFT THE EMAIL FIELD EMPTY WHEN TRYING TO SIGN UP
+},
+{
+    "error": "Password tidak boleh kosong" //IF YOU LEFT THE PASSWORD FIELD EMPTY WHEN TRYING TO SIGN UP
+}
+```
+
+* **Response (500) :**
+```json
+{
+    "error": "Internal server error"
+}
+
+```
+
+## 8. POST /users/signin
+
+* **Request Header :**
+```json
+NONE
+```
+
+* **Request Body :**
+```json
+{
+    "email": "<string> email that you use when signing up",
+    "password": "<string> password that you use when signing up",
+}
+```
+
+* **Request Params :**
+```
+NONE
+```
+
+* **Response (200) :**
+```json
+{
+    "access_token": "<your access token>"
+}
+```
+
+* **Response (400) :**
+```json
+{
+    "error": "Invalid email or password" //IF EITHER EMAIL OR PASSWORD WRONG
+}
+```
+
+* **Response (500) :**
+```json
+{
+    "error": "Internal server error"
+}
+
+```
+
