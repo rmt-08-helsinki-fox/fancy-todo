@@ -1,59 +1,66 @@
 # fancy-todo Hacktiv8
 
-CHRIST LORENZO HARLYANDI
+#### CHRIST LORENZO HARLYANDI
 
-## 1. API Documentation = POSTMAN
+-   Deployment Firebase Client
 
-> Postman Documentation Christ :
-> https://documenter.getpostman.com/view/14217230/TW6zHT1W
+    -   https://hacktiv8-p2w5d1-fancy-to-do.web.app/
 
-> server>api-doc.md
+-   Deployment Heroku Server
+    -   https://hacktiv8-p2w5d1-fancy-to-do.herokuapp.com/
 
-## 2. Routes REST API = DONE
+## 1. API Documentation = POSTMAN (DONE)
 
-> server/routes
+-   Postman Documentation Christ :
 
-## 3. CRUD To Do = DONE
+    -   https://documenter.getpostman.com/view/14217230/TW6zHT1W
 
-Data Base To Do :
+-   server
+    -   `api-doc.md`
 
-```
-1. title
-2. destiption
-3. status
-4. due_Date
-```
+## 2. Routes REST API (DONE)
 
-Relationship To Do & User:
+-   server/routes
 
-> To Do belongsTo User
+## 3. CRUD To Do (DONE)
 
-> User hasMany ToDO
+-   Data Base To Do :
 
-## 4, 5. Register & Login = DONE
+    -   title
+    -   destiption
+    -   status
+    -   due_Date
 
-1. email => validation : unique, type : email
-2. password => validation : min X char
+-   Relationship To Do & User:
+    -   To Do belongsTo User
+    -   User hasMany ToDO
 
-## 6, 7. Authentication & Authorization = DONE
+## 4, 5. Register & Login (DONE)
 
-1. CRUD : create & read list todo => Authenticate
-2. UD: update & delete to do => Authorize
+-   email => validation : unique, type : email
+-   password => validation : min X char
 
-## 8. 3rd API (Rocket) = The Cat API (DONE)
+## 6, 7. Authentication & Authorization (DONE)
 
-Progress mentioned on Section Rocket Below
+-   CRUD : create & read list todo => Authenticate
+-   UD: update & delete to do => Authorize
 
-## 9. Social Login = DONE
+## 8. 3rd API (Rocket)
 
-Using Google Oauth 2.0
+-   Progress mentioned on Section Rocket Below
 
-## 10. NO ALERT(); PLEASE! .RELOAD ....
+## 9. Social Login (DONE)
 
-#### ROCKET
+-   Using Google Oauth 2.0
 
-1. Add Members to project : ?
+## 10. RULES (DONE)
 
-2. To Do in project CRUD by Added Members : ?
+-   NO ALERT(); PLEASE! .RELOAD ....
 
-3. The Cat API : DONE
+#### Rocket (Status Work)
+
+-   (not done) Add Members to project
+
+-   (not done) To Do in project CRUD by Added Members
+
+-   (DONE) The Cat API
