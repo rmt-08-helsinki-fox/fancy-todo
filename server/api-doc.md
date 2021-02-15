@@ -264,4 +264,4 @@ Signing in with google account
 
     OR
 
-    Status `201` : `{ "accessToken": token, "msg": "Access Token granted"}`
+    Status `400` : `{ "Bad request"}`
