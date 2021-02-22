@@ -67,6 +67,8 @@ $(document).ready(() => {
   $('#link-todo').click(event => {
     event.preventDefault()
     showTodo()
+    $('#add-task-btn').show()
+    $('#form-task').hide()
     $('#edit-todo').hide()
     $('#show-all-todo').show()
     $('#signin-form').hide()
@@ -77,6 +79,8 @@ $(document).ready(() => {
   $('#btn-add').click(event => {   
     event.preventDefault()
     showTodo()
+    $('#add-task-btn').show()
+    $('#form-task').hide()
     $('#show-all-todo').show()
     $('#signin-form').hide()
     $('#home-page').hide()
@@ -90,11 +94,19 @@ $(document).ready(() => {
     $('#signin-form').hide()
     $('#home-page').hide()
     $('#signup-form').hide()
+    $('#form-task').hide()
+    $('#add-task-btn').show()
   })
 
-  $('#save-edit').click(event => {
+  $('#form-edit').on('submit', event => {
     event.preventDefault()
     showTodo()
+  })
+
+  $('#add-task-btn').click(event => {
+    event.preventDefault()
+    $('#form-task').show()
+    $('#add-task-btn').hide()
   })
 
 })
@@ -235,12 +247,6 @@ function addTodo() {
   const description = $('#todo-desc').val()
   const due_date = $('#todo-due-date').val()
   const access_token = localStorage.getItem('access_token')
-  const newTodo = {
-    title,
-    description,
-    due_date
-  }
-  console.log(newTodo)
 
   $.ajax({
     url: baseUrl + 'todos',

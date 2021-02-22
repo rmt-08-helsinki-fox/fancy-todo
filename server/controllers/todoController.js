@@ -25,7 +25,8 @@ class TodoController{
         Todo.findAll({
           where: {
             UserId
-          }
+          },
+          order: [['createdAt', 'DESC']]
         })
         .then(todo => {
             res.status(200).json(todo)
