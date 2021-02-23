@@ -7,6 +7,68 @@ Fancy Todo is an application to manage your todo list. This app has :
 
 ## RESTful endpoints
 
+### POST /register
+_Request Body_
+```
+{
+  "name": "Steve",
+  "email": "steve@google.com",
+  "password": "123456"
+}
+```
+_Success Response (201)_
+```
+{
+  "id": 11,
+  "email": "steve@google.com"
+}
+```
+_Error Response (400)_
+```
+{
+  "msg": [
+    "Name Must be Filled",
+    "Email Must be Filled",
+    "Email is not Valid",
+    "Password Must be Filled",
+    "Password Length Must be Between 6 to 12 Characters"
+  ]
+}
+```
+_Error Response (500)_
+```
+{
+  "msg": "Internal Server Error"
+}
+```
+
+### POST /login
+_Request Body_
+```
+{
+  "email": "steve@google.com",
+  "password": "123456"
+}
+```
+_Success Response (200)_
+```
+{
+  "access_token": "<access token>"
+}
+```
+_Error Response (404)_
+```
+{
+  "msg": "Make Sure Your Email/Password is Correct"
+}
+```
+_Error Response (500)_
+```
+{
+  "msg": "Internal Server Error"
+}
+```
+
 ### POST /todos
 _Request Body_
 ```
