@@ -81,6 +81,8 @@ class UserController {
     static async googleLogin(req, res, next){
         try{
             console.log('google login')
+            console.log(req.headers.token)
+            console.log(process.env.CLIENT_ID)
             const ticket = await client.verifyIdToken({
                 idToken: req.headers.token,
                 audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
