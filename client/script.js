@@ -32,6 +32,7 @@ function login() {
       password
     }
   }).done(response => {
+    console.log(response);
     localStorage.setItem("accessToken", response.accessToken)
     beforeLogin()
   }).fail((xhr, text) => {
@@ -57,8 +58,8 @@ function register() {
   }).done(response => {
     beforeLogin()
   }).fail((xhr, text) => {
-    console.log(xhr, "----");
-    console.log(text, "====");
+    console.log(xhr, "---- dari register");
+    console.log(text, "==== dari register");
   }).always(_ => {
     $("#signup-form").trigger("reset")
   })
@@ -125,6 +126,10 @@ function addTodo() {
     beforeLogin()
   }).fail((xhr, text) => {
     console.log(xhr, text);
+  }).always(_ => {
+    $("#title").val("")
+    $("#description").val("")
+    $("#due_date").val("")
   })
 }
 
@@ -140,8 +145,21 @@ function doneTodo(id) {
     data: {status: true}
     
   }).done(response => {
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Your updated todo has been saved',
+      showConfirmButton: false,
+      timer: 1500
+    })
     getTodo()
   }).fail((xhr, text) => {
+    Swal.fire({
+      title: 'Do not access!',
+      text: `${xhr.responseJSON.message}`,
+      icon: 'error',
+      confirmButtonText: 'Ok'
+    })
     console.log(xhr, text);
   })
 }
@@ -206,6 +224,7 @@ function doneTodo(id) {
 
 function updateTodo(id) {
   // login()
+  // $(".table-todos").hide()
   $.ajax({
     method: "GET",
     url: base_url + "todos/" + id,
@@ -214,32 +233,16 @@ function updateTodo(id) {
     }
     
   }).done(response => {
-    console.log(response);
+    console.log(response, "=====dari get update todo");
     $(".table-todos").hide()
     $(".update-section").show()
     $("#update-title").val(response.title)
     $("#update-description").val(response.description)
     $("#update-status").val(`${response.status}`)
     $("#update-due_date").val(response.due_date.slice(0, 10))
-
-     $.ajax({
-      method: "PUT",
-      url: base_url + "todos/" + response.id,
-      headers: {
-        token: localStorage.getItem("accessToken")
-      },
-      data: {
-        title: $("#update-title").val(),
-        description: $("#update-description").val(),
-        status: $("#update-status").val(),
-        due_date: $("#update-due_date").val()
-      }
-    })
-  }).done(_ => {
-    // beforeLogin()
-
+    localStorage.setItem('todoId', response.id)
   }).fail((xhr, text) => {
-    console.log(xhr,text);
+    console.log(xhr,text, '*********************');
   })
 }
 
@@ -254,17 +257,79 @@ function deleteTodo(id) {
     }
   }).done(_ => {
     $(".deleteTodo").remove()
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Your todo has been deleted',
+      showConfirmButton: false,
+      timer: 1500
+    })
     getTodo()
   }).fail((xhr, text) => {
+    Swal.fire({
+      title: 'Do not access!',
+      text: `${xhr.responseJSON.message}`,
+      icon: 'error',
+      confirmButtonText: 'Ok'
+    })
     console.log(xhr, text);
+  })
+}
+
+// google login
+
+function onSignIn(googleUser) {
+  // var profile = googleUser.getBasicProfile();
+  // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  // console.log('Name: ' + profile.getName());
+  // console.log('Image URL: ' + profile.getImageUrl());
+  // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  const id_token = googleUser.getAuthResponse().id_token;
+  // console.log(id_token);
+  $.ajax({
+    url: base_url + "users/googlelogin",
+    method: "POST",
+    data: {
+      googleToken: id_token
+    },
+  }).done(response => {
+    // console.log(response);
+    localStorage.setItem("accessToken", response.accessToken)
+    beforeLogin()
+  }).fail(err => {
+    console.log(err, "errr=========login");
   })
 }
 
 // logout
 function logout() {
   localStorage.removeItem("accessToken")
+  const auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
 }
 
+// 3rd party covid
+// function getCovidData() {
+//   $.ajax({
+//     method: "GET",
+//     url: base_url + "covid19",
+//     headers: {
+//       token: localStorage.getItem("accessToken")
+//     }
+//   }).done(_ => {
+//     // getTodo()
+//   }).fail((xhr, text) => {
+//     // Swal.fire({
+//     //   title: 'Do not access!',
+//     //   text: `${xhr.responseJSON.message}`,
+//     //   icon: 'error',
+//     //   confirmButtonText: 'Ok'
+//     // })
+//     console.log(xhr, text);
+//   })
+// }
 
 // signup click
 $(".signup-image-link").click(() => {
@@ -296,7 +361,8 @@ $(document).ready(() => {
   })
   $(".row").on("submit", (e) => {
     e.preventDefault()
-    login()
+    // login()
+    getTodo()
   })
   $(".navbar-brand").on("click", (e) => {
     e.preventDefault()
@@ -308,9 +374,42 @@ $(document).ready(() => {
   })
   $(".row1").on("submit", (e) => {
     e.preventDefault()
-    console.log(localStorage);
-    // login()
-    beforeLogin()
+    console.log(localStorage, "====dari row1");
+    let id = localStorage.getItem('todoId')
+    const title = $("#update-title").val()
+    const description = $("#update-description").val()
+    const status = $("#update-status").val()
+    const due_date = $("#update-due_date").val()
+    $.ajax({
+      method: "PUT",
+      url: base_url + "todos/" + id,
+      headers: {
+        token: localStorage.getItem("accessToken")
+      },
+      data: {
+        title,
+        description,
+        status,
+        due_date
+      }
+    }).done(_ => {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Your updated todo has been saved',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      beforeLogin()
+    }).fail((err, txt) => {
+      Swal.fire({
+        title: 'Do not access!',
+        text: `${err.responseJSON.message}`,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+      beforeLogin()
+    })
   })
 
 

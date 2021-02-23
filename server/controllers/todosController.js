@@ -18,8 +18,14 @@ class Controller {
     })
   }
   static viewTodo(req,res, next) {
-    Todo.findAll()
+    const UserId = req.decoded.id
+    Todo.findAll({
+      where: {
+        UserId
+      }
+    })
       .then(todos => {
+        console.log(todos);
         res.status(200).json(todos)
       }).catch(err => {
         next(err)
@@ -52,6 +58,7 @@ class Controller {
       }
       res.status(201).json(todo[1][0])
     }).catch(err => {
+      console.log(err);
       next(err)
     })
   }
@@ -69,6 +76,7 @@ class Controller {
       }
       res.status(201).json(todo[1][0])
     }).catch(err => {
+      console.log(err, "===================dari controller");
       next(err)
     })
   }

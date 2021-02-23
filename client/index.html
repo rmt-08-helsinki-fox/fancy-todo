@@ -22,6 +22,15 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- link swal -->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <!-- <script src="sweetalert2.all.min.js"></script> -->
+<!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+<script src="//cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
+
+<!-- google signin -->
+<meta name="google-signin-client_id" content="257875284265-biq2q6q4nbbmi3srbbi31dnanu3r1hfa.apps.googleusercontent.com">
   <style>
     table {
       border-collapse: collapse;
@@ -144,7 +153,8 @@
                   <div class="social-login">
                     <span class="social-label">Or login with</span>
                     <ul class="socials">
-                        <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
+                      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                        <!-- <li><a href="#"><i class="display-flex-center zmdi zmdi-google" @click.prevent="onSignIn"></i></a></li> -->
                     </ul>
                   </div>
               </div>
@@ -180,10 +190,6 @@
                   <div class="signup-form">
                       <h2 class="form-title">Sign up</h2>
                       <form method="POST" class="register-form" id="register-form">
-                          <div class="form-group">
-                              <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                              <input type="text" name="name" id="name" placeholder="Your Name"/>
-                          </div>
                           <div class="form-group">
                               <label for="email"><i class="zmdi zmdi-email"></i></label>
                               <input type="email" name="email" id="email" placeholder="Your Email"/>
@@ -349,6 +355,7 @@
   <!-- <script src="formjs/bootstrap.min.js"></script> -->
   <!-- <script src="formjs/jquery.validate.min.js"></script> -->
   <!-- <script src="formjs/main.js"></script> -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>

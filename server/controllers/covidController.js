@@ -5,7 +5,8 @@ class Controller {
     // res.send("aa")
     axios.get("https://covid-api.mmediagroup.fr/v1/cases")
       .then(response => {
-        res.json(response.data)
+        console.log(response);
+        res.status(200).json(response.data.Indonesia.All)
       }).catch(err => {
         console.log(err);
         next(err)
@@ -18,7 +19,8 @@ class Controller {
       method: "get",
       url: `https://covid-api.mmediagroup.fr/v1/history?country=${country}&status=${status}`
     }).then(response => {
-      res.json(response.data)
+      console.log(response);
+      res.status(200).json(response.data)
     }).catch(err => {
       console.log(err);
       next(err)
