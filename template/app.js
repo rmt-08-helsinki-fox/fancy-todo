@@ -55,6 +55,12 @@ function homepage(){
         e.preventDefault()
         homepage()
     })
+
+
+
+    $("#addTodoTitle").val('')
+    $("#addTodoDescription").val('')
+    $("#addTodoDuedate").val('')
     
 }
 
@@ -111,6 +117,10 @@ $("#register").click(e=>{
     .done((result)=>{
         $("#loginForm").show()
         $("#registerForm").hide()
+
+        $("#registerName").val('')
+        $("#registerEmail").val('')
+        $("#registerPassword").val('')
     })
     .fail((xhr, err)=>{
         // console.log(xhr.responseJSON.message)
@@ -433,7 +443,7 @@ function onSignIn(googleUser) {
     // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
     var id_token = googleUser.getAuthResponse().id_token;
-    // console.log(id_token)
+    console.log(id_token)
 
     $.ajax({
         url: baseUrl+'/googlelogin',
@@ -481,15 +491,18 @@ function googleSignin() {
    .signInWithPopup(provider).then(function(result) {
       var token = result.credential.accessToken;
       var user = result.user;
+      var id_token = result.credential.idToken
 		
+      console.log(result)
       console.log(token)
       console.log(user)
+      console.log(id_token)
 
       $.ajax({
         url: baseUrl+'/googlelogin',
         method: 'GET',
         headers: {
-            token: token
+            token: id_token
         }
       })
       .done((result)=>{
