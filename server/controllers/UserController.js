@@ -80,6 +80,7 @@ class UserController {
     }
     static async googleLogin(req, res, next){
         try{
+            console.log('google login')
             const ticket = await client.verifyIdToken({
                 idToken: req.headers.token,
                 audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
@@ -87,6 +88,7 @@ class UserController {
                 //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
             });
             const payload = ticket.getPayload()
+            console.log('get payload berhasil')
             
             let {given_name, email} = payload
 
