@@ -61,6 +61,8 @@ class UserController {
     static auth(req, res, next){
         let {token} = req.headers
         // console.log(token)
+        // console.log(process.env.TOKEN_KEY)
+        // console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         let tokenData = jwt.verify(token, process.env.TOKEN_KEY);
         // console.log(tokenData)
         User.findByPk(tokenData.id)
@@ -69,6 +71,7 @@ class UserController {
                 name: result.name,
                 email: result.email
             }
+            console.log(user)
             res.status(200).json(user)
         })
         .catch((err)=>{
@@ -96,7 +99,9 @@ class UserController {
                 }
             })
             if(checkUser){
+                console.log(checkUser)
                 let token = jwt.sign({ id: checkUser.id }, process.env.TOKEN_KEY);
+                console.log(token)
                 res.status(200).json({token: token, name: checkUser.name})
             }else{
                 // user does not exist
