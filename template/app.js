@@ -1,3 +1,4 @@
+// let baseUrl = 'https://fancy-todo-hacktiv8-indo.herokuapp.com'
 let baseUrl = 'http://localhost:3000'
 
 let user_name
@@ -162,7 +163,7 @@ function logout(){
 function getTodos(){
     // e.preventDefault()
     $.ajax({
-        url: "http://localhost:3000/todos",
+        url: baseUrl+"/todos",
         method: 'GET',
         headers: {
             token: localStorage.getItem("token")
@@ -423,6 +424,8 @@ $("#toBrewery").click(()=>{
 // GOOGLE OAUTH
 
 function onSignIn(googleUser) {
+    console.log('google oauth')
+
     // var profile = googleUser.getBasicProfile();
     // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
     // console.log('Name: ' + profile.getName());
@@ -441,7 +444,7 @@ function onSignIn(googleUser) {
     })
     .done((result)=>{
         // auto login
-        // console.log('login google berhasil')
+        console.log('login google berhasil')
         // console.log(result.token)
         localStorage.setItem('token',result.token)
         user_name = result.name
