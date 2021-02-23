@@ -3,6 +3,7 @@ const TodoController = require('../controllers/todoController')
 const authenticate = require('../middlewares/authenticate')
 const authorize = require('../middlewares/authorize')
 
+
 router.use(authenticate)
 router.post('/', TodoController.postTodo)
 router.get('/', TodoController.getTodo)
