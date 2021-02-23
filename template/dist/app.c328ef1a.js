@@ -118,8 +118,8 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"app.js":[function(require,module,exports) {
-// let baseUrl = 'https://fancy-todo-hacktiv8-indo.herokuapp.com'
-var baseUrl = 'http://localhost:3000';
+var baseUrl = 'https://hacktiv8-fancy-todo.herokuapp.com'; // let baseUrl = 'http://localhost:3000'
+
 var user_name;
 var email;
 $(document).ready(function () {
@@ -446,6 +446,7 @@ function onSignIn(googleUser) {
 }
 
 function signOut() {
+  console.log('google sign out');
   var auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(function () {
     console.log('User signed out.');
@@ -479,7 +480,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50352" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55415" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

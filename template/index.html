@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Google OAuth -->
-    <meta name="google-signin-client_id" content="179663459303-et3vucko26ia6250p7aluet23i4tmlnf.apps.googleusercontent.com">
-
+    <meta name="google-signin-client_id" content="179663459303-qruqi89m7sqc0mn44peui9u2sbghoc75.apps.googleusercontent.com">
+    <!-- <meta name="google-signin-client_id" content="179663459303-bkrv4qa4keoj4vr0pq8edu0kupgsgfu6.apps.googleusercontent.com"> -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <!-- <script src="semantic/dist/semantic.min.js"></script> -->
@@ -28,6 +29,7 @@
                 </div>
                 <button class="ui button primary" type="submit" id="login">Login</button>
                 <button class="ui button" id="toRegister">Register</button>
+                <button class="ui button" id="googleSignIn" >Google Sign In</button>
                 <div class="g-signin2" data-onsuccess="onSignIn" style="margin-top: 20px;"></div>
             </form>
             <div class="ui message" id="loginError">
@@ -182,7 +184,34 @@
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
         crossorigin="anonymous">
     </script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
+    
+      <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
+    <script>
+      // TODO: Replace the following with your app's Firebase project configuration
+      // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
+      var firebaseConfig = {
+        apiKey: "AIzaSyBSTzU33majExfHiwvS56HObHkQKwN6aNo",
+        authDomain: "fancy-todo-hacktiv8-f0737.firebaseapp.com",
+        databaseURL: "https://fancy-todo-hacktiv8-f0737.firebaseio.com",
+        projectId: "fancy-todo-hacktiv8-f0737",
+        storageBucket: "fancy-todo-hacktiv8-f0737.appspot.com",
+        // messagingSenderId: "SENDER_ID",
+        // appId: "APP_ID",
+        // measurementId: "G-MEASUREMENT_ID",
+      };
+  
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
     <script src="app.js"></script>
 </body>
 </html>

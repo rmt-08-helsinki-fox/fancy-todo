@@ -1,5 +1,5 @@
-// let baseUrl = 'https://fancy-todo-hacktiv8-indo.herokuapp.com'
-let baseUrl = 'http://localhost:3000'
+let baseUrl = 'https://hacktiv8-fancy-todo.herokuapp.com'
+// let baseUrl = 'http://localhost:3000'
 
 let user_name
 let email
@@ -456,8 +456,68 @@ function onSignIn(googleUser) {
 }
 
 function signOut() {
+    console.log('google sign out')
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
     });
   }
+
+
+
+
+//   Firebase Google Signin
+
+$("#googleSignIn").click((e)=>{
+    e.preventDefault()
+    googleSignin()
+})
+
+var provider = new firebase.auth.GoogleAuthProvider();
+
+function googleSignin() {
+   firebase.auth()
+   
+   .signInWithPopup(provider).then(function(result) {
+      var token = result.credential.accessToken;
+      var user = result.user;
+		
+      console.log(token)
+      console.log(user)
+
+      $.ajax({
+        url: baseUrl+'/googlelogin',
+        method: 'GET',
+        headers: {
+            token: token
+        }
+      })
+      .done((result)=>{
+        // auto login
+        console.log('login google berhasil')
+        // console.log(result.token)
+        localStorage.setItem('token',result.token)
+        user_name = result.name
+        homepage()
+      })
+      .fail((err)=>{
+        console.log(err)
+      })
+   }).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+		
+      console.log(error.code)
+      console.log(error.message)
+   });
+}
+
+function googleSignout() {
+   firebase.auth().signOut()
+	
+   .then(function() {
+      console.log('Signout Succesfull')
+   }, function(error) {
+      console.log('Signout Failed')  
+   });
+}
