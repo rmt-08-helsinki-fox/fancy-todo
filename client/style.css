@@ -1,0 +1,48 @@
+* {
+  margin: 0;
+  padding: 0
+}
+
+body {
+  background-image: url("./img/background.png");
+}
+
+#enter {
+  margin-top: 10%
+}
+
+.form-box {
+  margin-top: 5%
+}
+
+.cart {
+  border: 2px dashed black;
+  padding: 20px;
+}
+
+.finish {
+  background-color: whitesmoke
+}
+
+.unfinish {
+  background-color: orange
+}
+
+.title-todos {
+  text-align: center
+}
+
+.h1 {
+  text-align: center;
+  font-family:"Brush Script MT",
+    Verdana,
+    Geneva,
+    Tahoma,
+    sans-serif;
+  font-size: 50px
+}
+
+.success-handling {
+  color: green;
+  font-weight: bold
+}
