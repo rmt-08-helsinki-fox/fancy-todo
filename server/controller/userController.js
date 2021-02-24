@@ -1,5 +1,5 @@
 const e = require("express")
-const { reset } = require("nodemon")
+// const { reset } = require("nodemon")
 
 const { User } = require('../models')
 const { comparePass } = require('../helper/enkrip')
@@ -64,20 +64,29 @@ class Controller {
           }
         })
           .then(data => {
-            if (!data) throw data
-            const hasil = comparePass(dataGoogle.password, data.password)
-            if (hasil === false) throw hasil
-            const access_token = generateToken({
-              id: data.id,
-              email: data.email,
-              password: data.password
-            })
-            res.status(200).json({ 'access_token': access_token })
+            if (!data) {
+              User.create(dataGoogle)
+                .then(success => {
+                  res.status(200).json({ success })
+                })
+                .catch(err => {
+                  res.status(500).json(err.errors)
+                })
+            } else {
+              const hasil = comparePass(dataGoogle.password, data.password)
+              if (hasil === false) throw hasil
+              const access_token = generateToken({
+                id: data.id,
+                email: data.email,
+                password: data.password
+              })
+              res.status(200).json({ 'access_token': access_token })
+            }
           })
           .catch(err => {
-            if (err === null) {
-              res.status(404).json({ msg: 'Data not found' })
-            }
+            // if (err === null) {
+            //   // res.status(404).json({ msg: 'Data not found' })
+            // }
             if (err === false) {
               res.status(400).json({ msg: 'Email or password is wrong' })
             }
@@ -89,28 +98,28 @@ class Controller {
       })
   }
 
-  static googleSignUp(req, res) {
-    let dataGoogle = {}
-    const client = new OAuth2Client(process.env.CLIENT_ID);
-    client.verifyIdToken({
-      idToken: req.body.googleToken,
-      audience: process.env.CLIENT_ID
-    })
-      .then(ticket => {
-        const payload = ticket.getPayload()
-        dataGoogle.email = payload.email
-        dataGoogle.password = process.env.password_google
-        User.create(dataGoogle)
-          .then(success => {
-            res.status(200).json({ success })
-          })
-          .catch(err => {
-            res.status(500).json(err.errors)
-          })
-      })
-      .catch(err => {
-        res.status(500).json(err)
-      })
-  }
+  // static googleSignUp(req, res) {
+  //   let dataGoogle = {}
+  //   const client = new OAuth2Client(process.env.CLIENT_ID);
+  //   client.verifyIdToken({
+  //     idToken: req.body.googleToken,
+  //     audience: process.env.CLIENT_ID
+  //   })
+  //     .then(ticket => {
+  //       const payload = ticket.getPayload()
+  //       dataGoogle.email = payload.email
+  //       dataGoogle.password = process.env.password_google
+  //       User.create(dataGoogle)
+  //         .then(success => {
+  //           res.status(200).json({ success })
+  //         })
+  //         .catch(err => {
+  //           res.status(500).json(err.errors)
+  //         })
+  //     })
+  //     .catch(err => {
+  //       res.status(500).json(err)
+  //     })
+  // }
 }
 module.exports = Controller
