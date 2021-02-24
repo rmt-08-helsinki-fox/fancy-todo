@@ -166,7 +166,8 @@ function logout(){
     $("#loginEmail").val('')
     $("#loginPassword").val('')
 
-    signOut()
+    // signOut()
+    googleSignout()
     defaultLogout()
 }
 

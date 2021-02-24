@@ -91,7 +91,7 @@ class UserController {
             });
             const payload = ticket.getPayload()
             console.log('get payload berhasil')
-            
+            console.log(payload)
             let {given_name, email} = payload
 
             console.log(given_name, email)
