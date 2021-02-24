@@ -2,15 +2,6 @@
 
 base url : http://localhost:PORT
 
-## ENV Requirements
----
-```
-SECRET="open shazam"
-WEATHERKEY = 5563476f2b3d458e8799c311e8689447
-CLIENT_ID = 69638797025-tg3t38rp8ciafgr8r7sn6hh4me45sde8.apps.googleusercontent.com
-USER_PASS = "buka pintu"
-```
-
 ## Endpoint List
 ---
 

@@ -13,7 +13,6 @@ class Todo2 {
           next(err)
         })
     }
-
     static postTodo(req,res, next) {
       let UserId = req.decoded.id
       const { title, description, status, due_date} = req.body
@@ -32,7 +31,6 @@ class Todo2 {
           next(err)
         })
     }
-
     static getTodoId(req, res) {
       let id = +req.params.id
       Todo.findOne({where:{id:id}})
@@ -55,16 +53,18 @@ class Todo2 {
         due_date,
         UserId
       }
-      Todo.update(newTodo,
-        {where:{id:id}, returning: true})
-          .then(updatedTodo =>{
-              res.status(200).json(updatedTodo[1])
-          })
-          .catch (err => {
-            next(err)
-          })
+      Todo.findOne({where:{id:id}})
+        .then(TodoId => {
+          Todo.update(newTodo,
+            {where:{id:id}, returning: true})
+        })
+        .then(updatedTodo =>{
+          res.status(200).json(updatedTodo[1])
+        })
+        .catch (err => {
+          next(err)
+        })
     }
-
     static patchTodoId(req, res, next) {
       let id = +req.params.id
       let status = req.body.status
@@ -75,11 +75,12 @@ class Todo2 {
         .then(patchedTodo =>{
             res.status(200).json(patchedTodo[1])
         })
-        .catch (err => {
+        .catch (err=> {
+          
+        }=> {
           next(err)
         })
     }
-
     static deleteTodoId(req, res, next) {
       let id = +req.params.id
       Todo.destroy({
@@ -93,7 +94,6 @@ class Todo2 {
           })
 
     }
-
     static getWeather(req,res, next) {
       let locations = req.body.location
       let input = locations.toLowerCase()

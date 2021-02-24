@@ -21,15 +21,16 @@ const baseTodo = "https://fancy-todo-suryo.herokuapp.com/todos"
                 $("#login-form").hide()
                 $("#nav-login").hide()
                 $("#nav-register").hide()
-                $("#todo-form").show()
-                $("#todo-table-container").hide()
-                $("#todo-table").hide()
+                $("#todo-form").hide()
+                $("#todo-table").show()
+                $("#todo-table-container").show()
                 $("#nav-weather").show()
                 $("#nav-logout").show()
                 $("#nav-task").show()
                 $("#todo-form-edit").hide()
                 $("#weather-form").hide()
                 $("#row-weather2").hide()
+                getTodo();
             }
         }
 
@@ -329,7 +330,7 @@ const baseTodo = "https://fancy-todo-suryo.herokuapp.com/todos"
           const location = $("#weather-location").val();
           $.ajax({
             
-                url: `https://fancy-todo-suryo.herokuapp.com/todos/weather/today`,
+                url: baseTodo + '/weather/today',
                 method: "POST",
                 headers: {
                     access_token: localStorage.getItem("access_token")
