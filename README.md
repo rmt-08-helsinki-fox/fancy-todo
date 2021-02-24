@@ -6,11 +6,19 @@ Show all todo list
 
 **URL** : `/todos`
 
+**Headers** : 
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.tPaOrZOmxSsK6VVxL_oHRdqplpxlyizeoQBhBmjskFg"
+}
+```
+
 **Method** : `GET`
 
 **Auth required** : YES
 
-**Permissions required** : None
+**Permissions required** : Authorize
 
 ## Success Response
 
@@ -66,17 +74,60 @@ Show all todo list
 }
 ```
 
+## Error Response
+
+**Code** : `400 Bad response`
+
+**Content examples**
+
+```json
+{
+    "msg": "Invalid Key"
+}
+```
+
+**Code** : `500 Internal server Error`
+
+**Content examples**
+
+```json
+{
+    "msg": "Internal server Error"
+}
+```
+
+
 # Post Todo List
 
 Post a todo to list
 
 **URL** : `/todos`
 
+**Headers** : 
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.tPaOrZOmxSsK6VVxL_oHRdqplpxlyizeoQBhBmjskFg"
+}
+```
+
+**Data** : 
+
+```json
+{
+    "title": "newJob",
+    "description": "ahoi",
+    "status": true,
+    "due_date": "2021-03-03T17:00:00.000Z",
+    "UserId": 1
+}
+```
+
 **Method** : `POST`
 
 **Auth required** : YES
 
-**Permissions required** : None
+**Permissions required** : Authorize
 
 ## Success Response
 
@@ -93,7 +144,29 @@ Post a todo to list
     "due_date": "2021-03-03T17:00:00.000Z",
     "updatedAt": "2021-02-02T08:24:02.378Z",
     "createdAt": "2021-02-02T08:24:02.378Z",
-    "UserId": null
+    "UserId": 1
+}
+```
+
+## Error Response
+
+**Code** : `500 Internal Server Error`
+
+**Content examples**
+
+```json
+{
+    "msg": "Internal Server Error" }
+}
+```
+
+**Code** : `400 bad response`
+
+**Content examples**
+
+```json
+{
+    "msg": "Terlambat" }
 }
 ```
 
@@ -102,6 +175,22 @@ Post a todo to list
 Find a todo from list by Id
 
 **URL** : `/todos/:id`
+
+**Headers** : 
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.tPaOrZOmxSsK6VVxL_oHRdqplpxlyizeoQBhBmjskFg"
+}
+```
+
+**Data** : 
+
+```json
+{
+    "TodosId": 1
+}
+```
 
 **Method** : `GET`
 
@@ -122,9 +211,31 @@ Find a todo from list by Id
     "description": "ahoi",
     "status": true,
     "due_date": "2021-03-03T17:00:00.000Z",
-    "UserId": null,
+    "UserId": 1,
     "createdAt": "2021-02-02T08:21:08.163Z",
     "updatedAt": "2021-02-02T08:21:08.163Z"
+}
+```
+
+## Error Response
+
+**Code** : `404 bad response`
+
+**Content examples**
+
+```json
+{
+    "msg": "Data not found"
+}
+```
+
+**Code** : `500 Internal server error`
+
+**Content examples**
+
+```json
+{
+    "msg": "Internal server error"
 }
 ```
 
@@ -135,6 +246,29 @@ Edit a todo from list by Id
 **URL** : `/todos/:id`
 
 **Method** : `PUT`
+
+**Params** :
+
+id
+
+**Headers** : 
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.tPaOrZOmxSsK6VVxL_oHRdqplpxlyizeoQBhBmjskFg"
+}
+```
+
+**Data** : 
+
+```json
+{
+    "title": "edit",
+    "description": "edit",
+    "status": "false",
+    "due_date": "2021-4-1"
+}
+```
 
 **Auth required** : YES
 
@@ -155,6 +289,28 @@ Edit a todo from list by Id
 }
 ```
 
+## Error Response
+
+**Code** : `400 bad response`
+
+**Content examples**
+
+```json
+{
+    "msg": "Terlambat"
+}
+```
+
+**Code** : `500 bad response`
+
+**Content examples**
+
+```json
+{
+    "msg": "Internal server error"
+}
+```
+
 # Edit status post's Todo by Id
 
 Edit a status todo's from list by Id
@@ -162,6 +318,26 @@ Edit a status todo's from list by Id
 **URL** : `/todos/:id`
 
 **Method** : `PATCH`
+
+**Params** :
+
+id
+
+**Headers** : 
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.tPaOrZOmxSsK6VVxL_oHRdqplpxlyizeoQBhBmjskFg"
+}
+```
+
+**Data** : 
+
+```json
+{
+    "status": "false"
+}
+```
 
 **Auth required** : YES
 
@@ -179,6 +355,28 @@ Edit a status todo's from list by Id
 ]
 ```
 
+## Error Response
+
+**Code** : `400 bad response`
+
+**Content examples**
+
+```json
+{
+    "msg": "notBool"
+}
+```
+
+**Code** : `500 internal server error`
+
+**Content examples**
+
+```json
+{
+    "msg": "Internal server error"
+}
+```
+
 # Delete a post Todo by Id
 
 Delete a todo from list by Id
@@ -186,6 +384,10 @@ Delete a todo from list by Id
 **URL** : `/todos/:id`
 
 **Method** : `DELETE`
+
+**Params** : 
+
+id
 
 **Auth required** : YES
 
@@ -202,3 +404,26 @@ Delete a todo from list by Id
     "msg": "todo success to delete"
 }
 ```
+
+## Error Response
+
+**Code** : `404 bad response`
+
+**Content examples**
+
+```json
+{
+    "msg": "Data not found"
+}
+```
+
+**Code** : `500 internal server error`
+
+**Content examples**
+
+```json
+{
+    "msg": "Internal server error"
+}
+```
+

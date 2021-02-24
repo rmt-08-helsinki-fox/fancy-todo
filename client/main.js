@@ -324,7 +324,7 @@ function onSignUp(googleUser) {
         .done(response => {
             localStorage.clear()
             auth()
-            console.log(JSON.stringify(response))
+            // console.log(JSON.stringify(response))
         })
         .fail(err => {
             console.log(err)
