@@ -1,0 +1,21 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#todo-table{
+    text-align: center;
+}
+
+#main-body {
+    background: linear-gradient(to right, #2faad4 0%, #7c73ba 100%);
+}
+
+.navbar {
+    opacity: 0.85;
+}
+
+#todo-table-container {
+    background-color: rgba(245, 245, 245, 1)
+}
