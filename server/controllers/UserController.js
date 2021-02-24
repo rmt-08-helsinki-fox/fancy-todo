@@ -81,8 +81,8 @@ class UserController {
     static async googleLogin(req, res, next){
         try{
             console.log('google login')
-            console.log(req.headers.token)
-            console.log(process.env.CLIENT_ID)
+            // console.log(req.headers.token)
+            // console.log(process.env.CLIENT_ID)
             const ticket = await client.verifyIdToken({
                 idToken: req.headers.token,
                 audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
@@ -91,10 +91,13 @@ class UserController {
             });
             const payload = ticket.getPayload()
             console.log('get payload berhasil')
-            console.log(payload)
-            let {given_name, email} = payload
+            // console.log(payload)
+            
+            let {name} = req.body
+            let {email} = payload
+            // let {given_name, email} = payload
 
-            console.log(given_name, email)
+            console.log(name, email)
 
             // normal login
             let checkUser = await User.findOne({
@@ -111,9 +114,9 @@ class UserController {
                 // user does not exist
                 // create user
                 let newUser = {
-                    name: given_name,
+                    name,
                     email,
-                    password: 'googleUser'
+                    password: 'googleUser' // default password
                 }
                 let userCreated = await User.create(newUser)
                 let token2 = jwt.sign({ id: userCreated.id }, process.env.TOKEN_KEY);

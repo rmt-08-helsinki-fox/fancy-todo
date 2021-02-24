@@ -501,7 +501,10 @@ function googleSignin() {
 
       $.ajax({
         url: baseUrl+'/googlelogin',
-        method: 'GET',
+        method: 'POST',
+        data: {
+            name: user.displayName
+        },
         headers: {
             token: id_token
         }
