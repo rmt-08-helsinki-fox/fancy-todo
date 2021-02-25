@@ -79,6 +79,7 @@ const base_url = 'http://localhost:4000/'
 
      function logout(){
          localStorage.clear()
+         googleOut()
          auth()
      }
      
@@ -347,10 +348,10 @@ const base_url = 'http://localhost:4000/'
           });
       }
       
-      function signOut() {
+      function googleOut() {
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
-          // console.log("User signed out.");
+          console.log("User signed out.");
         });
       }
 
