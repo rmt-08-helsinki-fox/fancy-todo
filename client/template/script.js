@@ -1,5 +1,5 @@
-// const base_url = 'https://fancy-app-todo.herokuapp.com/'
-const base_url = 'http://localhost:3000/'
+const base_url = 'https://fancy-app-todo.herokuapp.com/'
+// const base_url = 'http://localhost:3000/'
 
 function auth() {
     if (!localStorage.getItem('access_token')) {
