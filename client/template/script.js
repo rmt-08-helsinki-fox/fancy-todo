@@ -1,3 +1,4 @@
+// const base_url = 'https://fancy-app-todo.herokuapp.com/'
 const base_url = 'http://localhost:3000/'
 
 function auth() {
@@ -5,6 +6,7 @@ function auth() {
         $('#login-form').show()
         $('#register-form').hide()
         $('#form-add').hide()
+        $('#form-edit').hide()
         $('#todo-list').hide()
         $('#nav-signin').hide()
         $('#nav-signup').show()
@@ -15,11 +17,13 @@ function auth() {
         $('#login-form').hide()
         $('#register-form').hide()
         $('#form-add').hide()
+        $('#form-edit').hide()
         $('#todo-list').show()
         $('#nav-signin').hide()
         $('#nav-signup').hide()
         $('#nav-signout').show()
         $('#btn-add').show()
+        $('#weather').show()
         getWeather()
         todoList()
     }
@@ -44,9 +48,19 @@ function register (){
         $('#nav-signin').hide()
         $('#register-form').hide()
         auth()
+        Swal.fire({
+            icon: 'success',
+            title: 'Succes Register',
+            text: 'You haved Registered',
+        })
       })
       .fail((err, text) => {
         console.log(err, text)
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something wrong!',
+        })
       })
       .always(() => {
         $('#regis-email').val('')
@@ -108,16 +122,28 @@ function onSignIn(googleUser) {
         }
     })
     .done((response) => {
+        console.log(response)
         localStorage.setItem('access_token', response.access_token)
         auth()
+        Swal.fire({
+            icon: 'success',
+            title: 'Welcome',
+            text: 'Enjoy Our Site',
+        })
     })
     .fail((err) => {
         console.log(err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something wrong!',
+        })
     })
 }
 
 
 function login() {
+    console.log('masuk login')
     const email = $('#login-email').val()
     const password = $('#login-pass').val()
     $.ajax({
@@ -129,12 +155,22 @@ function login() {
         }
     })
         .done((response) => {
-            console.log(response)
+            console.log({response})
             localStorage.setItem('access_token', response.access_token)
             auth()
+            Swal.fire({
+                icon: 'success',
+                title: 'Welcome',
+                text: 'Enjoy Our Site',
+            })
         })
-        .fail((xhr, text) => {
-            console.log(xhr, text)
+        .fail((xhr, text,err) => {
+            console.log({xhr, text,err})
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something wrong!',
+            })
         })
         .always(_ => {
             $('#card-login').trigger("reset")
@@ -150,9 +186,6 @@ function todoList() {
         }
     })
         .done((response) => {
-            let todos 
-            todos = response
-            console.log(todos)
             response.forEach(el => {
                 $('#todo-list').append(`
               <div class="card" style="width: 18rem; float: left; margin: 40px;" id="todos-${el.id}">
@@ -160,7 +193,7 @@ function todoList() {
                     <h5 class="card-title">${el.title}</h5>
                     <p class="card-text">${el.description}</p>
                     <small><p class="card-text">${el.due_date.slice(0, 10)}</p></small>
-                    <a href="#" class="btn btn-warning"  id="editForm" onClick="edited(${el.id})">Edit</a>
+                    <a href="#" class="btn btn-warning"  id="editForm" onClick="updateTodo(${el.id})">Edit</a>
                     <a href="#" class="btn btn-danger" onClick="deleted(${el.id})">Delete</a>
                 </div>
               </div>
@@ -172,32 +205,70 @@ function todoList() {
         })
 }
 
-function edited(id) {
-    $('#todo-list').empty()
-    $('#todo-list').append(
-        `<form style="background-color: rgba(245, 245, 245, .3)"> 
+function showFromEdit() {
+    $('#login-form').hide()
+    $('#register-form').hide()
+    $('#form-add').hide()
+    $('#form-edit').show()
+    $('#todo-list').hide()
+    $('#nav-signin').hide()
+    $('#nav-signup').hide()
+    $('#nav-signout').show()
+    $('#btn-add').hide()
+    $('#weather').hide()
+}
+
+function updateTodo(id){
+    $('#form-edit').empty()
+    showFromEdit()
+    $.ajax({
+        method: 'GET',
+        url: base_url + `todos/${id}`,
+        headers: {
+            token: localStorage.getItem('access_token')
+        },
+    })
+    .done((response) => {
+        console.log(response, 'ini untuk form')
+        $('#form-edit').append(`
+        <form style="background-color: rgba(245, 245, 245, .3)"> 
         <div class="form-group"> 
              <label for="exampleDescription">Title</label> 
-             <input type="text" class="form-control" id="exampleInputTitleedit"  placeholder="Enter New Title">  
+             <input type="text" class="form-control" id="exampleInputTitleedit" value="${response.title}" placeholder="Enter Title">  
         </div> 
         <div class="form-group"> 
            <label for="exampleDescription">Description</label> 
-           <input type="text" class="form-control" id="exampleDescriptionedit"  placeholder="Enter New Description">  
+           <input type="text" class="form-control" id="exampleDescriptionedit" value="${response.description}" placeholder="Enter Description">  
        </div> 
        <div class="form-group"> 
            <label for="exampleStatus">Status</label> 
-           <input type="text" class="form-control" id="exampleStatusedit" value="true" placeholder="Enter New Status">  
+           <input type="text" class="form-control" id="exampleStatusedit" value="true" placeholder="Enter Status">  
        </div> 
        <div class="form-group"> 
            <label for="exampleDuedate">Due Date</label> 
-           <input type="date" class="form-control" id="exampleDuedateedit" placeholder="Enter Due Date">  
+           <input type="date" class="form-control" id="exampleDuedateedit" value="${response.due_date.slice(0, 10)}" placeholder="Enter Due Date">  
        </div> 
-        <input type="submit" class="btn btn-primary" id="edit" onClick="editTodo(${id})" value="Edit">`
-    )
+        <input type="submit" class="btn btn-primary" id="edit" onClick="editTodo(${response.id})" value="Edit">
+        <input type="submit" class="btn btn-dark" id="back" onClick="BackToHome()" value="Back">
+        </form> 
+        `)
+    })
+    .fail(err => {
+        auth()
+        console.log(err,'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: "Can't be Edit, Not Yours",
+        })
+    })
+    .always(() => {
+        console.log("complete");
+    })
 }
 
 function editTodo(id) {
-    console.log('masuk funnction')
+    console.log(id, 'line 233')
     $.ajax({
         method: 'PUT',
         url: base_url + `todos/${id}`,
@@ -208,14 +279,17 @@ function editTodo(id) {
             title: $("#exampleInputTitleedit").val(),
             description: $("#exampleDescriptionedit").val(),
             due_date: $("#exampleDuedateedit").val(),
-            status: $("#exampleStatusedit").text()
+            status: $("#exampleStatusedit").val()
         }
     })
     .done((response) => {
-        console.log('awang dari ajax');
-        console.log(response);
-        $('#form-edit').hide()
-        todoList()
+       auth()
+       Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Your edited success',
+        showConfirmButton: false,
+      })
     })
     .fail(err => {
         console.log(err,'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
@@ -224,31 +298,6 @@ function editTodo(id) {
         console.log("complete");
     })
 }
-
-function addTodo() {
-    $('#todo-list').empty()
-    $('#todo-list').append(
-        `<form style="background-color: rgba(245, 245, 245, .3)"> 
-        <div class="form-group"> 
-             <label for="exampleDescription">Title</label> 
-             <input type="text" class="form-control" id="exampleInputTitle"  placeholder="Enter Title">  
-        </div> 
-        <div class="form-group"> 
-           <label for="exampleDescription">Description</label> 
-           <input type="text" class="form-control" id="exampleDescription"  placeholder="Enter Description">  
-       </div> 
-       <div class="form-group"> 
-           <label for="exampleStatus">Status</label> 
-           <input type="text" class="form-control" id="exampleStatus"  placeholder="Enter Status">  
-       </div> 
-       <div class="form-group"> 
-           <label for="exampleDuedate">Due Date</label> 
-           <input type="date" class="form-control" id="exampleDuedate"  placeholder="Enter Due Date">  
-       </div> 
-        <input type="submit" class="btn btn-primary" id="add" onclick="insertTodo()">`
-    )
-}
-
 
 
 function insertTodo() {
@@ -268,40 +317,94 @@ function insertTodo() {
     .done((response) => {
         console.log(response);
         $('#form-add').hide()
-        todoList()
+        auth()
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Your added success',
+            showConfirmButton: false,
+        })
     })
     .fail(err => {
         console.log(err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something wrong!',
+        })
     })
     .always(() => {
         console.log("complete");
     })
 }
 
+function BackToHome() {
+    auth()
+}
 
 function deleted(id) {
-    $.ajax({
-        url: base_url + `todos/${id}`,
-        method: 'DELETE',
-        headers: {
-            token: localStorage.getItem('access_token')
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: base_url + `todos/${id}`,
+                method: 'DELETE',
+                headers: {
+                    token: localStorage.getItem('access_token')
+                }
+            })
+                .done((response) => {
+                    $(`#todos-${id}`).remove()
+                    Swal.fire(
+                        'Deleted!',
+                        'Your todo has been deleted.',
+                        'success'
+                      )
+                })
+                .fail((xhr, text) => {
+                    console.log(xhr, text)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: "Can't be Delete, Not Yours",
+                    })
+                })
+          
         }
-    })
-        .done((response) => {
-            $(`#todos-${id}`).remove()
-        })
-        .fail((xhr, text) => {
-            console.log(xhr, text)
-        })
+      })
 }
 
 function logout() {
-    localStorage.clear()   
-    var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-          console.log('User signed out.');
-        });
-    auth()
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You wont to exit this website?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, exit !'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.clear()   
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+             });
+            auth()
+            Swal.fire(
+                'Thank You',
+                'Enjoy Your Today :)',
+                'success'
+          )
+        }
+      })
 }
 
 
@@ -320,21 +423,24 @@ $(document).ready(() => {
     $('#btn-add').on('click', (event) =>{
         event.preventDefault()
         $('#btn-add').hide()
-        $('#weather').empty()
+        $('#weather').hide()
+        $('#todo-list').hide()
         $('#form-add').show()
+    })
+
+    $('#back').on('click', (event) => {
+        event.preventDefault()
+        auth()
     })
 
     $('#editForm').on('click', (event) =>{
         event.preventDefault()
-        $('#btn-add').hide()
-        $('#btn-add').empty()
-        $('#weather').empty()
         $('#form-edit').show()
     })
 
     $('#add').on('click', (event) => {
         event.preventDefault()
-        $('#todo-list').hide()
+        insertTodo()
     })
 
     $('#edit').on('click', (event) => {
