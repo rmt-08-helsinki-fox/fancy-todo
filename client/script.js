@@ -4,7 +4,7 @@ const baseUrl = 'https://fancy-todo-jefri-server.herokuapp.com/'
 // Server Local
 // const baseUrl = 'http://localhost:3000/'
 
-$(document).ready(function() {
+$(document).ready(function () {
   authenticate()
 })
 
@@ -41,6 +41,8 @@ function registerbtn(event) {
 function loginbtn(event) {
   event.preventDefault();
   authenticate()
+  $('#form-edit-todo').hide()
+  $('#todos').show()
 }
 
 function register(event) {
@@ -122,14 +124,14 @@ function onSignIn(googleUser) {
       id_token: id_token
     }
   })
-  .done(response => {
-    localStorage.setItem('access_token', response.access_token)
-    authenticate()
-  })
-  .fail(err => {
-    console.log(err.responseJSON);
-    Swal.fire(err.responseJSON)
-  })
+    .done(response => {
+      localStorage.setItem('access_token', response.access_token)
+      authenticate()
+    })
+    .fail(err => {
+      console.log(err.responseJSON);
+      Swal.fire(err.responseJSON)
+    })
 }
 
 
@@ -201,7 +203,7 @@ function fetchTodo() {
     .done(response => {
       $('#todos').empty();
       response.forEach(todos => {
-        if(todos.status === false) {
+        if (todos.status === false) {
           $('#todos').append(`
           <div class="card-block">
             <h4 class="card-title">${todos.title}</h4>
@@ -234,7 +236,7 @@ function fetchTodo() {
 
 function statusTodos(id, status) {
   const access_token = localStorage.access_token
-  
+
   $.ajax({
     url: baseUrl + `todos/${id}`,
     method: 'PATCH',
@@ -256,7 +258,7 @@ function statusTodos(id, status) {
 
 function deleteTodos(id) {
   const access_token = localStorage.access_token
-  
+
   Swal.fire({
     icon: 'warning',
     title: 'Do you want to delete todos?',
@@ -274,14 +276,14 @@ function deleteTodos(id) {
           access_token
         }
       })
-      .done(response => {
-        Swal.fire(response.message, '', 'success')
-        authenticate()
-      })
-      .fail(err => {
-        const errors = err.responseJSON.message
-        Swal.fire(errors, '', 'error')
-      })
+        .done(response => {
+          Swal.fire(response.message, '', 'success')
+          authenticate()
+        })
+        .fail(err => {
+          const errors = err.responseJSON.message
+          Swal.fire(errors, '', 'error')
+        })
     }
   })
 }
@@ -312,31 +314,34 @@ function btnEditTodos(id) {
 }
 
 function editTodos(event) {
- event.preventDefault();
- const access_token = localStorage.access_token
- const title = $('#title-todo-edit').val()
- const description = $('#desc-todo-edit').val()
- const due_date = $('#date-todo-edit').val()
- const id = $('#id-edit').val()
+  event.preventDefault();
+  const access_token = localStorage.access_token
+  const title = $('#title-todo-edit').val()
+  const description = $('#desc-todo-edit').val()
+  const due_date = $('#date-todo-edit').val()
+  const id = $('#id-edit').val()
 
- $.ajax({
-  method: 'PUT',
-  url: baseUrl + `todos/${id}`,
-  data: {
-    title,
-    description,
-    due_date
-  },
-  headers: {
-    access_token
-  }
- })
-  .done(_ => {
-    authenticate()
-    fetchTodo()
-    Swal.fire('Success!', '', 'success')
+  $.ajax({
+    method: 'PUT',
+    url: baseUrl + `todos/${id}`,
+    data: {
+      title,
+      description,
+      due_date
+    },
+    headers: {
+      access_token
+    }
   })
-  .fail(err => {
-    Swal.fire(err, '', 'error')
-  })
+    .done(_ => {
+      Swal.fire('Success!', '', 'success')
+      authenticate()
+      $('#form-edit-todo').hide()
+      $('#todos').show()
+    })
+    .fail(err => {
+      const errors = err.responseJSON.message
+
+      Swal.fire(errors.join('\n'), '', 'error')
+    })
 }
