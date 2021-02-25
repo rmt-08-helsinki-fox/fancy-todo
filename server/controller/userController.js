@@ -33,7 +33,6 @@ class userController {
           email
         }
       })
-
       if (!user) throw { error: 'Invalid email or password' };
       const comparedPassword = comparePass(password, user.password);
       if (!comparedPassword) throw { error: 'Invalid email or password' };
@@ -41,6 +40,7 @@ class userController {
         id: user.id,
         email: user.email
       });
+      console.log(access_token)
       res.status(200).json({
         access_token
       })

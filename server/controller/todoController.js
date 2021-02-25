@@ -38,6 +38,7 @@ class todoController {
       });
       res.status(200).json(lists);
     } catch (err) {
+      console.log(err);
       err.from = 'todoController:getToDoList';
       next(err);
     }

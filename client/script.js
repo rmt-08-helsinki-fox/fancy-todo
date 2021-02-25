@@ -1,4 +1,4 @@
-const base_url = 'https://todo-app-stanly.herokuapp.com/';
+const base_url = 'http://localhost:3000/';
 
 function onSignIn(googleUser) {
   // var profile = googleUser.getBasicProfile();
@@ -40,7 +40,7 @@ function register() {
       afterRegister();
     })
     .fail((xhr, text) => {
-      $("#registerError").text(xhr.responseJSON.error);
+      $("#registerError").text(xhr.responseJSON);
     })
     .always(() => {
       $("#register-form").trigger('reset');
@@ -97,43 +97,8 @@ function getTodo() {
               <p class="card-text">${value.description}</p>
               <p class="card-text">Status: ${value.status}</p>
               <p class="card-text">Due_date: ${value.due_date}</p>
-              <button class="btn btn-outline-primary mr-2" data-toggle="modal" data-target="#todoModal-${value.id}">Update</button>
-              <a href="#" class="btn btn-outline-danger" onclick="destroy(${value.id})">Delete</a>
-          </div>
-        </div>
-
-        <div class="modal" class="todo-update" id="todoModal-${value.id}">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">${value.title}</h5>
-                <button class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div class="modal-body">
-                <form action="">
-                  <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" name="title" id="title-${value.id}" value="${value.title}" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" name="description" id="description-${value.id}" value="${value.description}" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="status">Status</label>
-                    <input type="text" name="status" id="status-${value.id}" value="${value.status}" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="due_date">Due Date</label>
-                    <input type="date" name="due_date" id="due_date-${value.id}" value="${value.due_date}" class="form-control">
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-primary" onclick="update(${value.id})">Update</button>
-                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                  </div>
-                </form>
-              </div>
-            </div>
+              <button class="btn btn-outline-primary mr-2" onclick="showUpdate(${value.id})">Update</button>
+              <a href="#" class="btn btn-outline-danger destroyItem" onclick="destroy(${value.id})">Delete</a>
           </div>
         </div>
         `)
@@ -171,46 +136,10 @@ function addTodo() {
               <p class="card-text">${value.description}</p>
               <p class="card-text">Status: ${value.status}</p>
               <p class="card-text">Due_date: ${value.due_date}</p>
-              <button class="btn btn-outline-primary mr-2" data-toggle="modal" data-target="#todoModal-${value.id}">Update</button>
-              <a href="#" class="btn btn-outline-danger" onclick="destroy(${value.id})">Delete</a>
+              <button class="btn btn-outline-primary mr-2" onclick="showUpdate(${value.id})">Update</button>
+              <a href="#" class="btn btn-outline-danger destroyItem" onclick="destroy(${value.id})">Delete</a>
           </div>
         </div>
-
-        <div class="modal" class="todo-update" id="todoModal-${value.id}">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">${value.title}</h5>
-                <button class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div class="modal-body">
-                <form action="">
-                  <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" name="title" id="title-${value.id}" value="${value.title}" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" name="description" id="description-${value.id}" value="${value.description}" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="status">Status</label>
-                    <input type="text" name="status" id="status-${value.id}" value="${value.status}" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="due_date">Due Date</label>
-                    <input type="date" name="due_date" id="due_date-${value.id}" value="${value.due_date}" class="form-control">
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-primary" onclick="update(${value.id})">Update</button>
-                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-
       `)
     })
     .fail((xhr, text) => {
@@ -237,13 +166,39 @@ function destroy(id) {
     })
 }
 
-function update(id) {
-  const title = $(`#title-${id}`).val();
-  const description = $(`#description-${id}`).val();
-  const status = $(`#status-${id}`).val();
-  const due_date = $(`#due_date-${id}`).val();
+function showUpdate(id) {
   $.ajax({
-    url: base_url + "todos/" + id,
+    url: base_url + 'todos',
+    method: "GET",
+    headers: {
+      token: localStorage.getItem('access_token')
+    }
+  })
+    .then(todo => {
+      todo.forEach(item => {
+        if (item.id == id) {
+          $("#editTodo-form").show();
+          $("#editTitle").val(item.title);
+          $("#editDescription").val(item.description);
+          $("#editStatus").val(item.status);
+          $("#editDueDate").val(item.due_date);
+          $("#todoId").text(item.id)
+        }
+      })
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}
+
+async function update() {
+  let id = $("#todoId").text();
+  let title = $("#editTitle").val();
+  let description = $("#editDescription").val();
+  let status = $("#editStatus").val();
+  let due_date = $("#editDueDate").val();
+  $.ajax({
+    url: base_url + "todos/" + +id,
     method: "PUT",
     headers: {
       token: localStorage.getItem('access_token')
@@ -298,6 +253,7 @@ function auth() {
     $("#todo").hide();
     $('#logout').hide();
     $('#addTodo').hide();
+    $('#editTodo-form').hide();
   } else {
     $("#loginNav").hide();
     $("#registerNav").hide();
@@ -306,6 +262,7 @@ function auth() {
     $("#todo").show();
     $('#logout').show();
     $('#addTodo').show();
+    $('#editTodo-form').hide();
     getTodo();
   }
 }
@@ -335,16 +292,6 @@ $(document).ready(() => {
     getDictionary();
   })
 
-  $("#update-form").on("submit", (e) => {
-    e.preventDefault();
-    update(e.id);
-  })
-
-  $(".update-todo").on('submit', (e) => {
-    e.preventDefault();
-    console.log('hey');
-  })
-
   $("#register-form").on("submit", (e) => {
     e.preventDefault();
     register();
@@ -353,6 +300,25 @@ $(document).ready(() => {
   $("#addTodo-form").on("submit", (e) => {
     e.preventDefault();
     addTodo();
+  })
+
+  $("#editTodo-form").on("submit", (e) => {
+    e.preventDefault();
+    update();
+  })
+
+  $(".im-p").on('click', (e) => {
+    e.preventDefault();
+    $('#editTodo-form').show();
+  })
+
+  $(".destroyItem").on("click", (e) => {
+    e.preventDefault();
+  })
+
+  $("#updateCancel").on('click', (e) => {
+    e.preventDefault();
+    $('#editTodo-form').hide(); 
   })
 
   $("#loginNav").on("click", (e) => {
