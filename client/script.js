@@ -46,6 +46,7 @@ let base_url = "https://fancy-todo-app01.herokuapp.com/"
       })
         .done(response => {
           localStorage.setItem("access_token", response.getToken)
+          $("#errorMessage").empty()
           aut()
         })
         .fail((xhr, text) => {
@@ -121,13 +122,14 @@ let base_url = "https://fancy-todo-app01.herokuapp.com/"
         }
       })
         .done(response => {
-          console.log('masuk response <<<<<<<<<<<<<<<')
           console.log(response)
+          $("#errorMessageAddTodo").empty()
           aut()
         })
         .fail((xhr, text) => {
-          console.log('masuk fail<<<<<<<<<<<<<')
-          console.log(xhr, text)
+          console.log(xhr.responseJSON)
+          $("#errorMessageAddTodo").empty()
+          $("#errorMessageAddTodo").append(`<p style="color:red;">${xhr.responseJSON[0]}</p>`)
         })
         .always(_ => {
           $("#isi-form-add-todo").trigger("reset")
@@ -164,10 +166,14 @@ let base_url = "https://fancy-todo-app01.herokuapp.com/"
         }
       })
         .done(response => {
+          $("#errorMessageRegister").empty()
           aut()
         })
         .fail((xhr, text) => {
-          console.log(xhr, text)
+          xhr.responseJSON.forEach(element => {
+            $("#errorMessageRegister").empty()
+            $("#errorMessageRegister").append(`<p style="color:red;">${element}</p>`)
+          });
         })
         .always(_ => {
           $("#isi-form-register").trigger("reset")
@@ -255,11 +261,6 @@ let base_url = "https://fancy-todo-app01.herokuapp.com/"
       const description = $("#todo-description-edit").val()
       const status = $("#todo-status-edit").val()
       const due_date = $("#todo-due_date-edit").val()
-      console.log(id)
-      console.log(title)
-      console.log(description)
-      console.log(status)
-      console.log(due_date);
       $.ajax({
         url: base_url + `todos/${id}`,
         method: "PUT",
@@ -274,10 +275,13 @@ let base_url = "https://fancy-todo-app01.herokuapp.com/"
         }
       })
         .done(response => {
+          $("#errorMessageEditTodo").empty()
           aut()
         })
         .fail((xhr, text) => {
-          console.log(xhr, text)
+          console.log(xhr.responseJSON)
+          $("#errorMessageEditTodo").empty()
+          $("#errorMessageEditTodo").append(`<p style="color:red;">${xhr.responseJSON[0]}</p>`)
         })
     }
     function isDone(id) {
