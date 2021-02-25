@@ -6,12 +6,13 @@ const base_url = 'http://localhost:4000/'
     function auth(email){
     
         if(!localStorage.getItem('access_token')){
-            console.log('ga ada gan')
+            // console.log('ga ada gan')
             $('.logout').hide()
             $('#content').hide()
             $('#reg-form').hide()
             $('#login-form').show()
             $('#editForm').hide()
+            $('#oaut-btn').show()
         }else{
             const token = localStorage.getItem('access_token')
             // console.log(token)
@@ -22,7 +23,7 @@ const base_url = 'http://localhost:4000/'
             $('#reg-form').hide()
             $('#hi').append(email)
             $('#editForm').hide()
-
+            $('#oauth-btn').hide()
             getTodo()
         }
     }
@@ -35,6 +36,12 @@ const base_url = 'http://localhost:4000/'
             e.preventDefault()
             $('#reg-form').show()
             $('#login-form').hide()
+        })
+
+        $('#show-login').on('click', (e)=>{
+            e.preventDefault()
+            $('#login-form').show()
+            $('#reg-form').hide()
         })
 
         $('#reg-form').on('submit', (e)=>{
@@ -51,6 +58,7 @@ const base_url = 'http://localhost:4000/'
 
         $('.logout').on('click', ()=>{
             logout()
+            $('#oauth-btn').show()
         })
 
         $('#addForm').on('submit', (e)=>{
@@ -106,8 +114,8 @@ const base_url = 'http://localhost:4000/'
             auth(email)
             // console.log(response.email)
         })
-        .fail((xhr, text)=>{
-            console.log(xhr, text)
+        .fail((err)=>{
+            console.log(err.responseJSON.message)
         })
         .always(_=>{
             console.log('always')
@@ -307,10 +315,44 @@ const base_url = 'http://localhost:4000/'
             console.log(xhr, text)
         })
         .always(_=>{
-            $('#editForm').hide()
-            $('#addForm').show()
+            $('#titleEdit').val('')
+            $('#descriptionEdit').val('')
+            $('#due_dateEdit').val('')
+            $('#idEdit').val('')
         })
+    
     }
+
+    function onSignIn(googleUser) {
+        var id_token = googleUser.getAuthResponse().id_token;
+        // console.log(id_token)
+        $.ajax({
+          url: base_url +'googleLogin',
+          method: 'POST',
+          data: {id_token},
+        })
+          .done((response) => {
+            localStorage.setItem("access_token", response.access_token);
+            // console.log(response)
+            auth();
+            
+          })
+          .fail((err) => {
+            console.log(err)
+            console.log('failllllllllllllllllllllllllllllllllllllllll')
+          })
+          .always((_) => {
+            $('#email').val('')
+            $('#password').val('')
+          });
+      }
+      
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          // console.log("User signed out.");
+        });
+      }
 
 
 
