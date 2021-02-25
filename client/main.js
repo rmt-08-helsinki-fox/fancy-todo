@@ -46,6 +46,10 @@ $(document).ready(function () {
         $('#form_login').hide()
         $('#form_register').show()
     });
+    $('#delete').click(function () {
+        console.log('asd')
+        // deleteTodo(id)
+    });
 });
 
 const base_url = "http://localhost:3000/"
@@ -129,7 +133,7 @@ function findAllTodo() {
                     <th>${i.status}</th>
                     <th>${i.due_date.slice(0, 10)}</th>
                     <th>
-                        <a href="#" onclick="deleteTodo(${i.id})" >Delete</a>
+                        <a href="#" onclick="deleteTodo(${i.id})">Delete</a>
                         <a href="#" onclick="editAll(${i.id})">EditAll</a>
                         <a href="#" onclick="editStatus(${i.id})">EditStatus</a>
                     </th>
