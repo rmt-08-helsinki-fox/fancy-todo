@@ -1,4 +1,4 @@
-let base_url = "https://fancy-todo-app01.herokuapp.com/"
+let base_url = "http://localhost:3000/"
 // ============= authentication ===========
     function aut () {
       if(!localStorage.getItem("access_token")) {
@@ -49,7 +49,8 @@ let base_url = "https://fancy-todo-app01.herokuapp.com/"
           aut()
         })
         .fail((xhr, text) => {
-          console.log(xhr, text)
+          $("#errorMessage").empty()
+          $("#errorMessage").append(`<p style="color:red;">${xhr.responseJSON.message}</p>`)
         })
         .always(_ => {
           $("#isi-form-login").trigger("reset")
@@ -62,7 +63,7 @@ let base_url = "https://fancy-todo-app01.herokuapp.com/"
       var auth2 = gapi.auth2.getAuthInstance();
       auth2.signOut().then(function () {
         console.log('User signed out.');
-    })
+      })
       aut()
     }
 

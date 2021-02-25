@@ -14,6 +14,14 @@ module.exports = (err, req, res, next) => {
     res.status(400).json({
       message: err.message
     })
+  } else if(err.name === 'jwt is required') {
+    res.status(400).json({
+      message: err.message
+    })
+  } else if(err.name === 'invalid jwt') {
+    res.status(400).json({
+      message: err.message
+    })
   } else if(err.name === 'cannot acces') {
     res.status(401).json({
       message: err.msg
