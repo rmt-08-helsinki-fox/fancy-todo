@@ -230,7 +230,7 @@ function updateTodo(id){
     })
     .done((response) => {
         console.log(response, 'ini untuk form')
-        $('#form-edit').append(`
+        $('#form-edit').html(`
         <form style="background-color: rgba(245, 245, 245, .3)"> 
         <div class="form-group"> 
              <label for="exampleDescription">Title</label> 
