@@ -56,23 +56,50 @@ function loginForm() {
 }
 
 function onSignIn(googleUser) {
+    //     var profile = googleUser.getBasicProfile();
+    //   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    //   console.log('Name: ' + profile.getName());
+    //   console.log('Image URL: ' + profile.getImageUrl());
+    //   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+
     var id_token = googleUser.getAuthResponse().id_token;
     $.ajax({
         url: baseUrl + '/googleLogIn',
         method: 'POST',
         data: {
-            id_token
-        }
+            googleToken: id_token
+        },
     })
-        .done(response => {
+        .done((response) => {
+            console.log(response);
             localStorage.setItem('accessToken', response.accessToken)
             $('#login-email').val('')
             $('#login-password').val('')
             auth()
         })
-        .fail(err => {
-            console.log(err, "ini error")
+        .fail((err) => {
+            console.log(err);
         })
+
+
+    // $.ajax({
+    //     url: baseUrl + '/googleLogIn',
+    //     method: 'POST',
+    //     data: {
+    //         id_token
+    //     }
+    // })
+    //     .done(response => {
+    //         console.log(response);
+    //         localStorage.setItem('accessToken', response.accessToken)
+    //         $('#login-email').val('')
+    //         $('#login-password').val('')
+    //         auth()
+    //     })
+    //     .fail(err => {
+    //         console.log(err, "ini error")
+    //     })
 }
 
 
@@ -204,9 +231,10 @@ function patchTodoDone(id) {
     })
         .done((response) => {
             console.log(response);
-            auth()
             $('#notDone-page').empty()
             $('#done-page').empty()
+            auth()
+            viewTodo()
         })
         .fail((xhr, text) => {
             console.log(xhr, text);
@@ -227,9 +255,10 @@ function patchNotDone(id) {
     })
         .done((response) => {
             console.log(response);
-            auth()
             $('#notDone-page').empty()
             $('#done-page').empty()
+            auth()
+            viewTodo()
         })
         .fail((xhr, text) => {
             console.log(xhr, text);
@@ -377,16 +406,16 @@ function editTodo(id) {
 
 
 
-function getWeather(){
+function getWeather() {
     $.ajax({
-      url: baseUrl+'/weather',
-      headers:{
-        token:localStorage.getItem('accessToken')
-      }
+        url: baseUrl + '/weather',
+        headers: {
+            token: localStorage.getItem('accessToken')
+        }
     })
-    .done(response => {
-      console.log(response);
-      $('#weather').html(`
+        .done(response => {
+            console.log(response);
+            $('#weather').html(`
       <div class="padding opacity:50%" >
       <div class="row justify-content-center align-items-center" style="float: right;">
           <div class="card " style="height:220px; margin-right:250px;"> 
@@ -412,10 +441,10 @@ function getWeather(){
       <br>
       <br>
       `)
-    })
-    .fail((err, text) => {
-      console.log(err);
-    })
+        })
+        .fail((err, text) => {
+            console.log(err);
+        })
 }
 
 $('#register-form').on('submit', (el) => {
@@ -447,6 +476,10 @@ $('#nav-login').click((el) => {
 $('#nav-logout').click((el) => {
     el.preventDefault()
     localStorage.clear()
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
     loginForm()
     auth()
 
@@ -462,17 +495,23 @@ $('#update-page').on('click', (el) => {
     updateTodo()
 })
 
-$('#update-status-notDone').click((el) => {
+$('#update-status-notDone').on('click',(el) => {
     el.preventDefault()
     // $('#form-add').show()
     // updateTodo()
     auth()
 })
 
-$('#update-status-done').click((el) => {
+$('#update-status-done').on('click',(el) => {
     el.preventDefault()
     // $('#form-add').show()
     // updateTodo()
     auth()
 })
 
+$('#google-signin').click((el) => {
+    el.preventDefault()
+    auth()
+    // $('#form-add').show()
+    // updateTodo()
+})
