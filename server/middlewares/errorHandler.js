@@ -12,7 +12,7 @@ function errorHandler (err, req, res, next) {
                 res.status(400).json({ message: 'Invalid Email Format'})
                 break;
             default:
-                res.status(500).json({ message: 'Internal Server Error'})
+                res.status(500).json({ message: 'Internal Server Error', err})
         }
     }
 }
