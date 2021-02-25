@@ -119,11 +119,12 @@ const getAllTodo = () => {
       } else {
         status = 'Completed'
       }
+      let theDate = e.due_date.slice(0,10)
       $('#tBody').append(`<tr>
       <td>${e.title}</td>
       <td>${e.description}</td>
       <td>${status}</td>
-      <td>${e.due_date}</td>
+      <td>${theDate}</td>
       <td>
         ${btnDone}
         <button type="button" class="btn btn-warning" onClick="updateBtn(${e.id})">Edit</button> 
@@ -146,6 +147,7 @@ const getTodoById = (id) => {
     }
   })
   .done(res => {
+    let theDate = res.due_date.slice(0,10)
     $('#inputTitle').empty()
     $('#inputTitle').append(`
     <input type="text" class="form-control" id="titleEdit" value="${res.title}" name="title">`)
@@ -156,7 +158,7 @@ const getTodoById = (id) => {
 
     $('#inputDueDate').empty()
     $('#inputDueDate').append(`
-    <input type="date" class="form-control" id="due_dateEdit" value="${res.due_date}" name="due_date">`)
+    <input type="date" class="form-control" id="due_dateEdit" value="${theDate}" name="due_date">`)
   })
   .fail((xhr, txt) => {
     console.log(xhr);

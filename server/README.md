@@ -11,6 +11,10 @@ Fancy Todo App is an application to manage your daily activities. This app has:
 
 > Create new todo
 
+Request:
+
+- headers: access_token (string)
+
 _Request Body_
 ```
 {
@@ -49,6 +53,10 @@ _Response (500 - Internal Server Error)_
 
 > GET all todos
 
+Request:
+
+- headers: access_token (string)
+
 _Request Body_
 ```
 not needed
@@ -86,6 +94,10 @@ _Response (500 - Internal Server Error)_
 ### GET /todos/:id
 
 > GET todo by ID
+
+Request:
+
+- headers: access_token (string)
 
 _Request Body_
 ```
@@ -129,6 +141,10 @@ _Response (500 - Internal Server Error)_
 ### PUT /todos/:id
 
 > PUT update todo
+
+Request:
+
+- headers: access_token (string)
 
 _Request Body_
 ```
@@ -177,6 +193,10 @@ _Response (500 - Internal Server Error)_
 
 > PATCH update status todo
 
+Request:
+
+- headers: access_token (string)
+
 _Request Body_
 ```
 {
@@ -221,6 +241,10 @@ _Response (500 - Internal Server Error)_
 ### DELETE /todos/:id
 
 > DELETE todo
+
+Request:
+
+- headers: access_token (string)
 
 _Request Body_
 ```
@@ -271,8 +295,7 @@ _Request Body_
 _Response (200)_
 ```json
 {   
-    "id" : "<integer>",
-    "email": "<string>"
+    "access_token" : "<string>"
 }
 ```
 _Response (500 - Internal Server Error)_

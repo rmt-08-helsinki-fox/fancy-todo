@@ -1,11 +1,27 @@
 const jwt = require('jsonwebtoken');
+const { User } = require('../models')
 
-const authenticate = (req,res,next) => {
+const authenticate = async (req,res,next) => {
   try{
     const access_token = req.headers.access_token
+    if (!access_token) {
+      res.status(401).json({
+        msg: 'Invalid token'
+      })
+    }
     const decoded = jwt.verify(access_token, process.env.SECRET)
+    if (!decoded) {
+      res.status(401).json({
+        msg: 'Invalid token'
+      })
+    }
+    const user = await User.findByPk(decoded.id)
+    if (!user) {
+      res.status(401).json({
+        msg: 'Invalid token'
+      })
+    }
     req.decoded = decoded
-    console.log(decoded.id);
     next()
   } catch (err){
     res.status(401).json({
