@@ -172,9 +172,6 @@ $(document).ready(function () {
     $('#form_login').hide();
     $('#form_register').show();
   });
-  $('#delete').click(function () {
-    console.log('asd'); // deleteTodo(id)
-  });
 });
 var base_url = "http://localhost:3000/";
 

@@ -46,10 +46,6 @@ $(document).ready(function () {
         $('#form_login').hide()
         $('#form_register').show()
     });
-    $('#delete').click(function () {
-        console.log('asd')
-        // deleteTodo(id)
-    });
 });
 
 const base_url = "http://localhost:3000/"
