@@ -8,11 +8,11 @@ router.get ('/', (req,res)=>{
     res.send('Hello')
 })
 
-router.use('/todos',todosRoute)
 router.use('/register',userRegRoute)
 router.use('/login',userLogRoute)
-router.use('/weather',thirdPartyApi)
 router.use('/googleLogIn',google)
+router.use('/todos',todosRoute)
+router.use('/weather',thirdPartyApi)
 
 
 

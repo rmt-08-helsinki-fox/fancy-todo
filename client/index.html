@@ -5,7 +5,7 @@
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="google-signin-client_id" content="215805103518-k6v7gmobdpc44gnr30keva5rmu7q35kt.apps.googleusercontent.com">
+	<meta name="google-signin-client_id" content="1072546362709-vsboo18fvj849i636iu5ag89psk3ackr.apps.googleusercontent.com">
 
 	<!-- Bootstrap CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -15,6 +15,7 @@
 </head>
 
 <body>
+	
 	<nav class="navbar navbar-expand-lg navbar-light bg-primary mb-3">
 		<a class="navbar-brand" href="#">Fancy To Do App</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -97,7 +98,7 @@
 						</div><br>
 						<center>
 							<button type="submit" value="Submit"  class="btn btn-primary" id="login-button">Login</button> <br><br>
-							<div class="g-signin2" data-onsuccess="onSignIn"></div>
+							<div class="g-signin2" id="google-signin" data-onsuccess="onSignIn"></div>
 
 						</center>
 					</form>
@@ -118,19 +119,18 @@
 		<br>
 		<div class="row">
 			<div class="col-6">
+				<center>
+					<h1>DONE TODO</h1>
+				</center>
 				<div id="done-page">
-					<center>
-						
-						<h1>DONE TODO</h1>
-					</center>
 				</div>	
 			</div>
 			<div class="col-6">
+				<center>
+				<h1>NOT DONE TODO</h1>
+			</center>
 				<div id="notDone-page">
-					<center>
-						<h1>NOT DONE TODO</h1>
 
-					</center>
 				</div>
 			</div>
 		</div>

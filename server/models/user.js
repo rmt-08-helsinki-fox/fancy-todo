@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'please fill the password'
         },
         len:{
-          args : [6,20],
+          args : [6,100],
           msg: "The Password Must be at Least 6 Characters"
         }
       }
@@ -45,13 +45,14 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
     hooks: {
       beforeCreate: (user, opt) => {
-        user.password = hash(user.password)
+        user.password = hash(user.password || 'abcdjkoekdoolk') 
       }
     }
   });
   return User;
 
 };
+
 
 // (async () => {
 //   await sequelize.sync({ force: true });
