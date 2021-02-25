@@ -44,7 +44,7 @@ class TodoController {
   
       })
       .catch((err) => {
-        res.status(500).json(err);
+        next(err)
       });
   }
 
@@ -71,7 +71,7 @@ class TodoController {
         }
       })
       .catch((err) => {
-        res.status(500).json(err);
+        next(err)
       });
   }
 
@@ -91,7 +91,7 @@ class TodoController {
       })
 
       .catch((err) => {
-        res.status(500).json(err);
+        next(err)
       });
   }
 
@@ -109,7 +109,7 @@ class TodoController {
       })
 
       .catch((err) => {
-        res.status(500).json(err);
+        next(err)
       });
   }
 }

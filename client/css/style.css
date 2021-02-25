@@ -8,7 +8,7 @@
 }
 
 body{
-    
+      margin: 0;
       background-image: url("../resource/background2.png");
       background-size: cover;
       background-repeat: no-repeat;
@@ -34,3 +34,4 @@ body{
 #add-todo {
     margin-top: 40px !important
 }
+

@@ -144,6 +144,7 @@ function login() {
         checkAuthentication();
       })
       .fail((err) => {
+        swal("ERROR", "wrong password/email honey💋");
         console.log(err);
       })
       .always(() => {
@@ -271,7 +272,7 @@ function AddTodo() {
       swal(
         "ERROR",
         "You have to fill the descriptition,and task name",
-        "also you cannto input yesterdays date honey 💋"
+        "also you can't input yesterdays date honey 💋"
       );
       console.log(err, "ERROR");
     })

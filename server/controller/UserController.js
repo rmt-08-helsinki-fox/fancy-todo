@@ -14,6 +14,7 @@ class UserController {
       .then((user) => {
         // console.log(user.location);
         Users = user
+        console.log(User, 'di user')
       return axios
           .get(
             `http://api.quotable.io/random?tags=love`
@@ -24,7 +25,6 @@ class UserController {
         // console.log(Users)
         res.status(201).json({
           msg: "registrasi berhasil",
-          Users,
           LoveQuotesForYou: quotes.data.content,
         });
       })
@@ -41,7 +41,15 @@ class UserController {
 
       .then((data) => {
         // console.log(data)
-        if (data && compare(password, data.password)) {
+        if(!data){
+          next({name:"invalid"})
+        }
+        let matchPassword = compare(password,data.password)
+        console.log(matchPassword)
+        if(!matchPassword) {
+          next({name: "invalid"})
+      }
+        if (data && matchPassword) {
           // console.log('ok')
           let payload = {
             id: data.id,

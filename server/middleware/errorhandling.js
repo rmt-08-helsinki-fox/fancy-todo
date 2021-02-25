@@ -13,10 +13,10 @@ function errorHandling(err, req, res, next) {
             res.status(404).json({message: "Errors not found"})
         } else if(err.name === "invalid") {
             console.log('Invalid email/password')
-            res.status(401).json({message: "Invalid email/password"})
+            res.status(400).json({message: "Invalid email/password"})
         } else if(err.name === "Not Authenticated") {
             console.log('Please login first')
-            res.status(401).json({message: "Please login first"})
+            res.status(400).json({message: "Please login first"})
         } else if(err.name === "Not Authorized") {
             console.log('Not Authorized')
             res.status(403).json({message: "No Authorization"})
