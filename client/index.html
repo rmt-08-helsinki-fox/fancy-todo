@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-signin-client_id" content="1021984575214-ng4ahqufqgq7tis6r0hhmnlia3e4c4h3.apps.googleusercontent.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
   <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -19,7 +20,7 @@
     <div>
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link disabled" id="title" aria-disabled="true">Fancy Todo</a>
+          <a class="nav-link" onclick="linkHome()" href="#" id="title" aria-disabled="true">Fancy Todo</a>
         </li>
         <!-- <li class="nav-item">
           <a onclick="registerLink()" class="nav-link" href="#" id="register-link">Register</a>
@@ -28,7 +29,7 @@
           <a onclick="loginLink()" class="nav-link" href="#" id="login-link">Login</a>
         </li> -->
         <li class="nav-item">
-          <a onclick="logout()" class="nav-link" href="" id="logout-link">Logout</a>
+          <a id="logout-link" onclick="logout()" class="nav-link" href="#">Logout</a>
         </li>
       </ul>
     </div>
@@ -41,8 +42,7 @@
   </div>
   <!-- Notification for success / error event -->
   
-  <!-- Home Page -->
-  <div class="container" id="home-page">
+  <div class="container" id="login-container">
     <div class="row">
       <div class="col-md-5 mx-auto">
         <!-- Login -->
@@ -72,27 +72,34 @@
                 </div>
               </div>
               <div class="col-md-12 mb-3">
-                <p class="text-center">
+                <!-- <p class="text-center">
                     <a href="javascript:void();" class="google btn mybtn"><i class="fa fa-google-plus">
                     </i> Signup using Google
                     </a>
-                </p>
+                </p> -->
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
               </div>
               <div class="form-group">
-                <p class="text-center">Don't have account? <a onclick="registerLink()" href="#" id="register-link">Register here</a></p>
+                <p class="text-center">Don't have account? <a id="register-link" onclick="registerLink()" href="#">Register here</a></p>
               </div>
             </form>
           </div>
         </div>
         <!-- Login -->
+      </div>
+    </div>
+  </div>
 
+  <div class="container" id="register-container">
+    <div class="row">
+      <div class="col-md-5 mx-auto">
         <!-- Register -->
         <div id="second">
           <div class="myform form ">
             <div class="logo mb-3">
-               <div class="col-md-12 text-center">
+              <div class="col-md-12 text-center">
                   <h1>Register</h1>
-               </div>
+              </div>
             </div>
             <form action="#" name="registration" id="register">
               <div class="form-group">
@@ -122,141 +129,133 @@
       </div>
     </div>
   </div>
-  <!-- Home Page -->
-
-  <!-- <div class="container">
-    <div class="row col-md-6 col-md-offset-2 custyle">
-    <table class="table table-striped custab">
-      <thead>
-        <a href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Todo</a>
-        <tr>
-          <th>No</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Due Date</th>
-          <th class="text-center">Action</th>
-        </tr>
-      </thead>
-            <tr>
-                <td>1</td>
-                <td>News</td>
-                <td>News Cate</td>
-                <td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Blogs</td>
-                <td>Parent Blogs</td>
-                <td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
-            </tr>
-      </table>
-    </div>
-  </div> -->
 
   <!-- List Todo -->
   <section id="todo-page">
-    <a onclick="linkAddTodo()" href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Todo</a>
-    <table class="table table-striped" id="todo-pages">
+    <h3 style="text-align: center;">List Todos</h3>
+    <a onclick="linkAddTodo()" href="#" id="btn-add" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Todo</a>
+    <table class="table table-striped text-center" id="todo-pages">
       <tr>
           <th>Title</th>
           <th>Description</th>
           <th>Status</th>
           <th>Due Date</th>
-          <th class="text-center">Action</th>
+          <th>Action</th>
       </tr>
     </table>
   </section>
   <!-- List Todo -->
 
+  <!-- List News -->
+  <section id="news-page">
+    <h3 style="text-align: center;">Daily News</h3>
+    <table class="table table-striped" id="news-pages">
+      <tr>
+        <th>Title</th>
+        <th>Published Date</th>
+      </tr>
+    </table>
+  </section>
+  <!-- List News
+
   <!-- Add Todo -->
-  <div id="addTodo-page" class="container">
-    <div class="row">
-      <div class="col-sm-12">
-          <!-- <legend>Mr. Sosa:</legend> -->
-      </div>
-      <!-- panel preview -->
-      <div class="col-sm-5">
-        <h4>Add Todo:</h4>
-        <div class="panel panel-default">
-          <div class="panel-body form-horizontal payment-form">
-            <div class="form-group">
-              <label for="title" class="col-sm-3 control-label">Title</label>
-              <div class="col-sm-9">
-                  <input type="text" class="form-control" id="add-title" name="title">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="description" class="col-sm-3 control-label">Description</label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" id="add-description" name="description">
-              </div>
-            </div> 
-            <div class="form-group">
-              <label for="status" class="col-sm-3 control-label">Status</label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" id="add-status" name="status">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="due_date" class="col-sm-3 control-label">Due-Date</label>
-              <div class="col-sm-9">
-                <input type="date" class="form-control" id="add-due_date" name="due_date">
-              </div>
-            </div>   
-            <div class="form-group" id="addTodo">
-              <div class="col-sm-12 text-right">
-                <button type="button" class="btn btn-default preview-add-button">
-                  <span class="glyphicon glyphicon-plus"></span> Add
-                </button>
-              </div>
-            </div>
+  <div class="containers" id="addTodo-page">
+    <div class="d-flex justify-content-center h-100">
+      <div class="cards">
+        <div class="logo mb-3">
+          <div class="col-md-12 text-center">
+            <h1 class="title">Add Todo</h1>
           </div>
-        </div>   
-      </div> 
+        </div>
+        <form id="addTodo" action="" class="form" method="post" name="login">
+          <div class="form-group">
+            <label id="test" class="title">Title</label>
+            <input id="add-title" type="text" name="title"  class="form-control" placeholder="Enter title">
+          </div>
+          <div class="form-group">
+            <label class="title">Description</label>
+            <input id="add-description" type="text" name="description" class="form-control" placeholder="Enter description">
+          </div>
+          <div class="form-group">
+            <label class="title">Status</label>
+            <input id="add-status" type="text" name="status" class="form-control" placeholder="Enter status">
+          </div>
+          <div class="form-group">
+            <label class="title">Due Date</label>
+            <input id="add-due_date" type="date" name="due_date" class="form-control" placeholder="Enter due_date">
+          </div>
+          <!-- <div class="form-group">
+            <label class="title">Category</label><br>
+            <select v-model="CategoryId" class="form-control" name="CategoryId" id="">
+              <option value="">---Select Category---</option>
+              <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+            </select>
+          </div> -->
+          <div class="col-md-12 text-center">
+            <button type="submit" class="btn btn-block btn-primary">Add Todo</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
   <!-- Add Todo -->
 
   <!-- Edit Todo -->
-  <section id="editTodo-page">
-    <form action="" id="editTodo">
-      <div>
-        <label for="">Title</label>
-        <input type="text" name="title" id="edit-title">
+  <div class="containers" id="editTodo-page">
+    <div class="d-flex justify-content-center h-100">
+      <div class="cards">
+        <div class="logo mb-3">
+          <div class="col-md-12 text-center">
+            <h1 class="title">Add Todo</h1>
+          </div>
+        </div>
+        <form id="editTodo" action="" class="form" method="post" name="login">
+          <div class="form-group">
+            <label id="test" class="title">Title</label>
+            <input id="edit-title" type="text" name="title"  class="form-control" placeholder="Enter title">
+          </div>
+          <div class="form-group">
+            <label class="title">Description</label>
+            <input id="edit-description" type="text" name="description" class="form-control" placeholder="Enter description">
+          </div>
+          <div class="form-group">
+            <label class="title">Status</label>
+            <input id="edit-status" type="text" name="status" class="form-control" placeholder="Enter status">
+          </div>
+          <div class="form-group">
+            <label class="title">Due Date</label>
+            <input id="edit-due_date" type="date" name="due_date" class="form-control" placeholder="Enter due_date">
+          </div>
+          <div class="col-md-12 text-center">
+            <button type="submit" class="btn btn-block btn-primary">Edit Todo</button>
+          </div>
+        </form>
       </div>
-      <div>
-        <label for="">Description</label>
-        <input type="text" name="description" id="edit-description">
-      </div>
-      <div>
-        <label for="">Status</label>
-        <input type="text" name="status" id="edit-status">
-      </div>
-      <div>
-        <label for="">Due Date</label>
-        <input type="date" name="due_date" id="edit-due_date">
-      </div>
-      <button type="submit">Submit</button>
-      <button id="cancel-edit">Cancel</button>
-    </form>
-  </section>
+    </div>
+  </div>
   <!-- Edit Todo -->
 
   <!-- Edit Status Todo -->
-  <section id="editStatus-page">
-    <form action="" id="edit-status-todo">
-      <div>
-        <p>Edit Status</p>
-        <div>
-          <label for="">Status</label>
-          <input type="text" id="editStatus">
+  <div class="containers" id="editStatus-page">
+    <div class="d-flex justify-content-center h-100">
+      <div class="cards">
+        <div class="logo mb-3">
+          <div class="col-md-12 text-center">
+            <h1 class="title">Edit Status Todo</h1>
+          </div>
         </div>
-        <button type="submit">Save</button>
-        <button>Cancel</button>
+        <form id="edit-status-todo" action="" class="form" method="post" name="edit">
+          <div class="form-group">
+            <label class="title">Status</label>
+            <input id="editStatus" type="text" name="status" class="form-control" placeholder="Enter status">
+          </div>
+          <div class="col-md-12 text-center">
+            <button type="submit" class="btn btn-block btn-primary">Edit Status</button>
+          </div>
+        </form>
       </div>
-    </form>
-  </section>
+    </div>
+  </div>
   <!-- Edit Status Todo -->
 
   <script src="https://apis.google.com/js/platform.js" async defer></script>

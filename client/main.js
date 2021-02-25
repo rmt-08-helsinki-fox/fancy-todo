@@ -1,4 +1,5 @@
-const baseUrl = "https://fancy-todo-hacktiv.herokuapp.com/"
+// const baseUrl = "https://fancy-todo-hacktiv.herokuapp.com/"
+const baseUrl = "http://localhost:3000"
 
 let editStatusId = 0;
 let editTodoId = 0;
@@ -7,31 +8,27 @@ function auth() {
   if(!localStorage.getItem("accessToken")) {
     $("#logout-link").hide()
     $("#alert").hide()
-    $("#first").show()
-    // $("#second").hide()
+    $("#login-container").show()
+    $("#register-container").hide()
     $("#todo-page").hide()
     $("#addTodo-page").hide()
     $("#editTodo-page").hide()
     $("#editStatus-page").hide()
+    $("#news-page").hide()
 
-    
-    
-    // $("#register-container").hide()
-    // $("#login-page").show()
 
   } else {
     $("#logout-link").show()
     $("#alert").hide()
-    $("#first").hide()
-    $("#second").hide()
+    $("#login-container").hide()
+    $("#register-container").hide()
     $("#todo-page").show()
     $("#addTodo-page").hide()
     $("#editTodo-page").hide()
     $("#editStatus-page").hide()
+    $("#news-page").show()
 
-
-    // $("#register-container").hide()
-    // $("#login-page").hide()
+    showNews()
     showTodo()
   }
 }
@@ -45,41 +42,53 @@ function notification(errors) {
   }, 2000)
 }
 
+function linkHome() {
+  $("#todo-page").show()
+  $("#news-page").show()
+  $("#addTodo-page").hide()
+  $("#editStatus-page").hide()
+  $("#editTodo-page").hide()
+}
+
 function registerLink() {
-  $("#first").hide()
-  $("second").show()
-  // $("#register-link").hide()
-  // $("#logout-link").hide()
-  // $("#login-link").show()
-  // $("#register-container").show()
+  $("#login-container").hide()
+  $("#register-container").show()
+  $("#register-link").hide()
+  $("#logout-link").hide()
+  $("#login-link").show()
+  $("#register-container").show()
 }
 
 function loginLink() {
-  $("#first").show()
-  $("#second").hide()
-  // $("#register-link").show()
-  // $("#logout-link").hide()
-  // $("#login-link").hide()
-  // $("#register-container").hide()
+  $("#login-container").show()
+  $("#register-container").hide()
+  $("#register-link").show()
+  $("#logout-link").hide()
+  $("#login-link").hide()
+  $("#register-container").hide()
 }
 
 function linkAddTodo(done) {
   if (done) {
     $("#todo-page").show()
     $("#addTodo-page").hide()
+    $("#news-page").show()
   } else {
     $("#todo-page").hide()
     $("#addTodo-page").show()
+    $("#news-page").hide()
   }
 }
 
 function linkEditStatus(done) {
   if (done) {
     $("#todo-page").show()
-    $("#editStatus-todo").hide()
+    $("#editStatus-page").hide()
+    $("#news-page").show()
   } else {
     $("#todo-page").hide()
-    $("#editStatus-todo").show()
+    $("#editStatus-page").show()
+    $("#news-page").hide()
   }
 }
 
@@ -87,18 +96,19 @@ function linkEditTodo(done) {
   if (done) {
     $("#todo-page").show()
     $("#editTodo-page").hide()
+    $("#news-page").show()
   } else {
     $("#todo-page").hide()
     $("#editTodo-page").show()
+    $("#news-page").hide()
   }
 }
 
 function login() {
   const email = $("#login-email").val()
   const password = $("#login-password").val()
-  console.log({email, password});
   $.ajax({
-    url: `${baseUrl}/users/login`,
+    url: `${baseUrl}/login`,
     method: "POST",
     data: {
       email,
@@ -106,7 +116,6 @@ function login() {
     }
   })
   .done((response) => {
-    // console.log({response});
     localStorage.setItem("accessToken", response.accessToken)
     auth()
   })
@@ -130,7 +139,7 @@ function register() {
   const email = $("#register-email").val()
   const password = $("#register-password").val()
   $.ajax({
-    url: `${baseUrl}/users/register`,
+    url: `${baseUrl}/register`,
     method: "POST",
     data: {
       name,
@@ -138,8 +147,7 @@ function register() {
       password
     }
   })
-  .done(success => {
-    localStorage.clear()
+  .done(() => {
     auth()
   })
   .fail(({responseText}, text) => {
@@ -159,230 +167,256 @@ function showTodo() {
     }
   })
   .done(response => {
-    // console.log('masuk show done');
-    // $("#todo-page").empty()
-    // console.log(response.todos);
-    response.todos.forEach((el) => {
+    response.forEach((el) => {
+      let date = convertDate(el.due_date)
       $("#todo-pages").append(`
         <tr id="all-todo-${el.id}">
           <td>${el.title}</td>
           <td>${el.description}</td>
           <td>${el.status}</td>
-          <td>${el.due_date}</td>
+          <td>${date}</td>
           <td>
-            <a href="#" onclick="readTodoById(${el.id})" class="text-center" class='btn btn-info btn-xs'><span class="glyphicon glyphicon-edit"></span> Edit Status</a>
-            <a href="#" onclick="readTodoForUpdate(${el.id})" class="text-center" class='btn btn-info btn-xs'><span class="glyphicon glyphicon-edit"></span> Edit Todo</a>
+            <a href="#" onclick="readTodoById(${el.id})" class="text-center" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span> Edit Status</a>
+            <a href="#" onclick="readTodoForUpdate(${el.id})" class="text-center" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span> Edit Todo</a>
             <a href="#" onclick="deleteTodo(${el.id})" class="text-center" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Delete</a>
           </td>
         </tr>
       `)
     })
   })
-  .fail((xhr, text) => {
-    console.log(xhr, text);
+  .fail(({responseText}, text) => {
+    notification(responseText)
   })
 }
 
-// function addTodo() {
-//   console.log('masuuk');
-//   const title = $("#add-title").val()
-//   const description = $("#add-description").val()
-//   const status = $("#add-status").val()
-//   const due_date = $("#add-due_date").val()
-//   console.log({title, description, status, due_date});
-//   $.ajax({
-//     url: `${baseUrl}/todos`,
-//     method: "POST",
-//     headers: {
-//       token: localStorage.getItem("accessToken")
-//     },
-//     data: {
-//       title,
-//       description,
-//       status,
-//       due_date
-//     }
-//   })
-//   .done(response => {
-//     $("#todo-page").append(`
-//         <tr id="all-todo-${response.id}">
-//           <td>${response.title}</td>
-//           <td>${response.description}</td>
-//           <td>${response.status}</td>
-//           <td>${response.due_date}</td>
-//           <td>
-//             <a href="#" onclick="readTodoById(${response.id})">Edit Status</a>
-//             <a href="#" onclick="readTodoForUpdate(${response.id})">Edit Todo</a>
-//             <a href="#" onclick="deleteTodo(${response.id})">Delete</a>
-//           </td>
-//         </tr>
-//       `)
-//     linkAddTodo(true)
-//   })
-//   .fail((xhr, text) => {
-//     console.log((xhr, text));
-//   })
-//   .always(() => {
-//     $("#addTodo").trigger("reset")
-//   })
-// }
+function showNews() {
+  $.ajax({
+    url: `${baseUrl}/news`,
+    method: 'GET',
+    headers: {
+      token: localStorage.getItem("accessToken")
+    }
+  })
+  .done(news => {
+    news.dataAPI.forEach((el) => {
+      let date = convertDate(el.publishedAt)
+      $("#news-pages").append(`
+        <tr id="all-news-${el.id}">
+          <td>${el.title}</td>
+          <td>${date}</td>
+        </tr>
+      `)
+    })
+  })
+  .fail(({responseText}, text) => {
+    notification(responseText)
+  })
+}
 
-// function readTodoForUpdate(id) {
-//   editTodoId = id
-//   $.ajax({
-//     url: `${baseUrl}/todos/${id}`,
-//     method: "GET",
-//     headers: {
-//       token: localStorage.getItem("accessToken")
-//     }
-//   })
-//   .done(todos => {
-//     console.log({todos, id});
-//     $("#edit-title").val(todos.title)
-//     $("#edit-description").val(todos.description)
-//     $("#edit-status").val(todos.status)
-//     $("#edit-due_date").val(todos.due_date)
-//     linkEditTodo()
-//   })
-//   .fail(err => {
-//     alert('your acoount not authorize')
-//   })
-// }
+function addTodo() {
+  const title = $("#add-title").val()
+  const description = $("#add-description").val()
+  const status = $("#add-status").val()
+  const due_date = $("#add-due_date").val()
+  $.ajax({
+    url: `${baseUrl}/todos`,
+    method: "POST",
+    headers: {
+      token: localStorage.getItem("accessToken")
+    },
+    data: {
+      title,
+      description,
+      status,
+      due_date
+    }
+  })
+  .done(response => {
+    $("#todo-page").append(`
+        <tr id="all-todo-${response.id}">
+          <td>${response.title}</td>
+          <td>${response.description}</td>
+          <td>${response.status}</td>
+          <td>${response.due_date}</td>
+          <td>
+            <a href="#" onclick="readTodoById(${response.id})">Edit Status</a>
+            <a href="#" onclick="readTodoForUpdate(${response.id})">Edit Todo</a>
+            <a href="#" onclick="deleteTodo(${response.id})">Delete</a>
+          </td>
+        </tr>
+      `)
+    linkAddTodo(true)
+  })
+  .fail(({responseText}, text) => {
+    notification(responseText)
+  })
+  .always(() => {
+    $("#addTodo").trigger("reset")
+  })
+}
 
-// function readTodoById(id) {
-//   editStatusId = id
-//   $.ajax({
-//     url: `${baseUrl}/todos/${id}`,
-//     method: "GET",
-//     headers: {
-//       token: localStorage.getItem("accessToken")
-//     }
-//   })
-//   .done(todos => {
-//     console.log({todos, id});
-//     $("#editStatus").val(todos.status)
-//     linkEditStatus()
-//   })
-//   .fail(err => {
-//     alert('your acoount not authorize')
-//   })
-// }
+function readTodoForUpdate(id) {
+  editTodoId = id
+  $.ajax({
+    url: `${baseUrl}/todos/${id}`,
+    method: "GET",
+    headers: {
+      token: localStorage.getItem("accessToken")
+    }
+  })
+  .done(todos => {
+    let date = convertDate(todos.due_date)
+    $("#edit-title").val(todos.title)
+    $("#edit-description").val(todos.description)
+    $("#edit-status").val(todos.status)
+    $("#edit-due_date").val(date)
+    linkEditTodo()
+  })
+  .fail(err => {
+    alert('your acoount not authorize')
+  })
+}
+
+function convertDate(date) {
+  if (date) {
+  date = new Date(date);
+  return [date.getFullYear(), date.getMonth()+1, date.getDate()]
+      .map(el => el < 10 ? `0${el}` : `${el}`).join('-');
+  } else {
+    return date;
+  }
+}
+
+function readTodoById(id) {
+  editStatusId = id
+  $.ajax({
+    url: `${baseUrl}/todos/${id}`,
+    method: "GET",
+    headers: {
+      token: localStorage.getItem("accessToken")
+    }
+  })
+  .done(todos => {
+    $("#editStatus").val(todos.status)
+    linkEditStatus()
+  })
+  .fail(err => {
+    alert('your acoount not authorize')
+  })
+}
 
 
-// function editTodo(id) {
-//   const title = $("#edit-title").val()
-//   const description = $("#edit-description").val()
-//   const status = $("#edit-status").val()
-//   const due_date = $("#edit-due_date").val()
-//   console.log({title, description, status, due_date});
-//   $.ajax({
-//     url: `${baseUrl}/todos/${id}`,
-//     method: "PUT",
-//     headers: {
-//       token: localStorage.getItem("accessToken")
-//     },
-//     data: {
-//       title,
-//       description,
-//       status,
-//       due_date
-//     }
-//   })
-//   .done(response => {
-//     $(`#all-todo-${id}`).remove()
-//     $("#todo-page").append(`
-//         <tr id="all-todo-${response.id}">
-//           <td>${response.title}</td>
-//           <td>${response.description}</td>
-//           <td>${response.status}</td>
-//           <td>${response.due_date}</td>
-//           <td>
-//             <a href="#" onclick="readTodoById(${response.id})">Edit Status</a>
-//             <a href="#" onclick="readTodoForUpdate(${response.id})">Edit Todo</a>
-//             <a href="#" onclick="deleteTodo(${response.id})">Delete</a>
-//           </td>
-//         </tr>
-//       `)
-//     linkEditTodo(true)
-//   })
-//   .fail((xhr, text) => {
-//     console.log((xhr, text));
-//   })
-//   .always(() => {
-//     $("#editTodo").trigger("reset")
-//   })
-// }
+function editTodo(id) {
+  const title = $("#edit-title").val()
+  const description = $("#edit-description").val()
+  const status = $("#edit-status").val()
+  const due_date = $("#edit-due_date").val()
+  $.ajax({
+    url: `${baseUrl}/todos/${id}`,
+    method: "PUT",
+    headers: {
+      token: localStorage.getItem("accessToken")
+    },
+    data: {
+      title,
+      description,
+      status,
+      due_date
+    }
+  })
+  .done(response => {
+    $(`#all-todo-${id}`).remove()
+    $("#todo-page").append(`
+        <tr id="all-todo-${response.id}">
+          <td>${response.title}</td>
+          <td>${response.description}</td>
+          <td>${response.status}</td>
+          <td>${response.due_date}</td>
+          <td>
+            <a href="#" onclick="readTodoById(${response.id})">Edit Status</a>
+            <a href="#" onclick="readTodoForUpdate(${response.id})">Edit Todo</a>
+            <a href="#" onclick="deleteTodo(${response.id})">Delete</a>
+          </td>
+        </tr>
+      `)
+    linkEditTodo(true)
+  })
+  .fail(({responseText}, text) => {
+    notification(responseText)
+  })
+  .always(() => {
+    $("#editTodo").trigger("reset")
+  })
+}
 
-// function editStatus(id) {
-//   console.log({id, addTodo: 'masuuuk'});
-//   const status = $("#editStatus").val()
-//   $.ajax({
-//     url: `${baseUrl}/todos/${id}`,
-//     method: "PATCH",
-//     headers: {
-//       token: localStorage.getItem("accessToken")
-//     },
-//     data: {
-//       status
-//     }
-//   })
-//   .done(response => {
-//     $(`#all-todo-${id}`).remove()
-//     $("#todo-page").append(`
-//         <tr id="all-todo-${response.id}">
-//           <td>${response.title}</td>
-//           <td>${response.description}</td>
-//           <td>${response.status}</td>
-//           <td>${response.due_date}</td>
-//           <td>
-//             <a href="#" onclick="readTodoById(${response.id})">Edit Status</a>
-//             <a href="#" onclick="readTodoForUpdate(${response.id})">Edit Todo</a>
-//             <a href="#" onclick="deleteTodo(${response.id})">Delete</a>
-//           </td>
-//         </tr>
-//       `)
-//     linkEditStatus(true)
-//   })
-//   .fail(err => {
-//     console.log(err);
-//   })
-// }
+function editStatus(id) {
+  const status = $("#editStatus").val()
+  $.ajax({
+    url: `${baseUrl}/todos/${id}`,
+    method: "PATCH",
+    headers: {
+      token: localStorage.getItem("accessToken")
+    },
+    data: {
+      status
+    }
+  })
+  .done(response => {
+    $(`#all-todo-${id}`).remove()
+    $("#todo-page").append(`
+        <tr id="all-todo-${response.id}">
+          <td>${response.title}</td>
+          <td>${response.description}</td>
+          <td>${response.status}</td>
+          <td>${response.due_date}</td>
+          <td>
+            <a href="#" onclick="readTodoById(${response.id})">Edit Status</a>
+            <a href="#" onclick="readTodoForUpdate(${response.id})">Edit Todo</a>
+            <a href="#" onclick="deleteTodo(${response.id})">Delete</a>
+          </td>
+        </tr>
+      `)
+    linkEditStatus(true)
+  })
+  .fail(({responseText}, text) => {
+    notification(responseText)
+  })
+}
 
-// function deleteTodo(id) {
-//   $.ajax({
-//     url: `${baseUrl}/todos/${id}`,
-//     method: 'DELETE',
-//     headers: {
-//       token: localStorage.getItem("accessToken")
-//     }
-//   })
-//   .done(succes => {
-//     $(`#all-todo-${id}`).remove()
-//     console.log('berhasil delete');
-//     // auth()
-//   })
-//   .fail(err => {
-//     alert('your acoount not authorize')
-//   })
-// }
+function deleteTodo(id) {
+  $.ajax({
+    url: `${baseUrl}/todos/${id}`,
+    method: 'DELETE',
+    headers: {
+      token: localStorage.getItem("accessToken")
+    }
+  })
+  .done(() => {
+    $(`#all-todo-${id}`).remove()
+    // auth()
+  })
+  .fail(err => {
+    alert('your acoount not authorize')
+  })
+}
 
-// function onSignIn(googleUser) {
-//   let id_token = googleUser.getAuthResponse().id_token
-//   $.ajax({
-//     url: `${baseUrl}/users/googleLogin`,
-//     method: "POST",
-//     data: {
-//       googleToken: id_token
-//     }
-//   })
-//   .done(({ accessToken }) => {
-//     localStorage.setItem("accessToken", accessToken)
-//     auth()
-//   })
-//   .fail(err => {
-//     console.error({err})
-//   })
-// }
+function onSignIn(googleUser) {
+  let id_token = googleUser.getAuthResponse().id_token
+  $.ajax({
+    url: `${baseUrl}/googleLogin`,
+    method: "POST",
+    data: {
+      googleToken: id_token
+    }
+  })
+  .done((google) => {
+    localStorage.setItem("accessToken", google.accessToken)
+    auth()
+  })
+  .fail(({responseText}, text) => {
+    notification(responseText)
+  })
+}
 
 $(document).ready(() => {
   auth()

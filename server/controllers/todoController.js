@@ -1,49 +1,45 @@
 const { Todo } = require('../models')
 const axios = require('axios')
-const APIKEY = process.env.APIKEY
 
 class TodoController {
   static addTodo(req, res, next) {
-    // console.log(req.body);
     const { title, description, status, due_date, } = req.body
     const dataTodo = { title, description, status, due_date, UserId: req.currentUser.id }
-    Todo.create(dataTodo, {
-      returning: true
-    })
+    Todo.create(dataTodo)
     .then(todo => {
-      // console.log(todo, 'masuuuk');
       res.status(201).json(todo)
     })
     .catch(err => {
-      console.log({err});
       next(err)
     })
   }
 
   static showTodo(req, res, next) {
-    let dataTodos = null
     Todo.findAll()
-    .then(todos => {
-      dataTodos = todos
-      const url = `http://newsapi.org/v2/top-headlines?country=id&apiKey=${APIKEY}`
-      return axios({
-        method: 'get',
-        url
+      .then(todos => {
+        res.status(200).json(todos)
       })
-    })
-    .then(axiosData => {
-      // console.log({axiosData, dataTodos});
-      res.status(200).json({
-        todos: dataTodos,
-        dataAPI: axiosData.data.articles.map(el => ({
-          title: el.title,
-          publishedAt: el.publishedAt
-        }))
+      .catch(err => {
+        next(err)
       })
+  }
+
+  static showNews(req, res, next) {
+    axios({
+      method: 'GET',
+      url: `http://newsapi.org/v2/top-headlines?country=id&apiKey=${process.env.APIKEY}`
     })
-    .catch(err => {
-      next(err)
-    })
+      .then(news => {
+        res.status(200).json({
+          dataAPI: news.data.articles.map(el => ({
+            title: el.title,
+            publishedAt: el.publishedAt
+          }))
+        })
+      })
+      .catch(err => {
+        next(err)
+      })
   }
   
   static showById(req, res, next) {
@@ -68,7 +64,6 @@ class TodoController {
     const todoId = +req.params.id
     const { title, description, status, due_date } = req.body
     const dataTodo = { title, description, status, due_date }
-    console.log({dataTodo});
     Todo.update(dataTodo, {
       where: {
         id: todoId
@@ -83,7 +78,6 @@ class TodoController {
     })
   }
     
-
   static updateByPatch(req, res, next) {
     const todoId = +req.params.id
     const { status } = req.body
@@ -98,9 +92,7 @@ class TodoController {
       res.status(200).json(data[1][0])
     })
     .catch(err => {
-      // res.status(500).json(err)
-      res.json(err)
-      // next(err)
+      next(err)
     })
   }
 
@@ -121,7 +113,6 @@ class TodoController {
       }
     })
     .catch(err => {
-      // res.status(500).json(err)
       res.json(err)
     })
   }
