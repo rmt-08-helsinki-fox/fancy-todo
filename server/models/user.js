@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 const {hashPass} = require('../helpers/bcrypt')
 
 module.exports = (sequelize, DataTypes) => {

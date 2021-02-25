@@ -16,10 +16,10 @@ add todo data, Dimana setelah proses add app akan menampilkan referensi artikel 
 - ## REQUEST BODY
 
 ```js
-- title = 'Membuat landing page'
-- description = 'Buat sesuai arahan PM'
-- status = true
-- due_date = '2021-02-20'
+- title = "string"
+- description = "string"
+- status = "boolean"
+- due_date = "string"
 ```
 
 - ## RESPONSE 201
@@ -28,24 +28,24 @@ add todo data, Dimana setelah proses add app akan menampilkan referensi artikel 
 {
     
     "addedTodo": {
-        "id": 10,
-        "title": "Membuat landing page",
-        "description": "Buat sesuai arahan PM",
-        "status": true,
-        "due_date": "2021-02-20T00:00:00.000Z",
-        "UserId": 2,
-        "updatedAt": "2021-02-03T00:06:45.792Z",
-        "createdAt": "2021-02-03T00:06:45.792Z"
+        "id": "integer",
+        "title": "string",
+        "description": "string",
+        "status": "boolean",
+        "due_date": "string",
+        "UserId": "integer",
+        "updatedAt": "string",
+        "createdAt": "string"
     },
     "references": [
         {
-            "ns": 0,
-            "title": "Lockheed L-1011 TriStar",
-            "pageid": 837495,
-            "size": 4318,
-            "wordcount": 371,
-            "snippet": "<span class=\"searchmatch\">landing</span> pada masanya L-1011-1, model pertama L-1011-100 L-1011-50 L-1011-150 L-1011-200 L-1011-250 L-1011-500, model terakhir, paling banyak <span class=\"searchmatch\">dibuat</span> Birtles",
-            "timestamp": "2017-11-24T13:11:35Z"
+            "ns": "integer",
+            "title": "string",
+            "pageid": "integer",
+            "size": "integer",
+            "wordcount": "integer",
+            "snippet": "string",
+            "timestamp": "string"
         }
     ]
     
@@ -57,6 +57,7 @@ add todo data, Dimana setelah proses add app akan menampilkan referensi artikel 
 
 ```
 - 400 Validation error
+- 401 Unauthorized 
 - 500 Internal Server Error
 ```
 # 2.GET /todos
@@ -80,22 +81,22 @@ tidak dibutuhkan
 
 [
     {
-        "id": 2,
-        "title": "CRUD",
-        "description": "Membuat crud to do",
-        "status": false,
-        "due_date": "2021-04-21T00:00:00.000Z",
-        "createdAt": "2021-02-01T09:44:45.414Z",
-        "updatedAt": "2021-02-01T13:55:36.894Z"
+        "id": "integer",
+        "title": "string",
+        "description": "string",
+        "status": "boolean",
+        "due_date": "string",
+        "createdAt": "string",
+        "updatedAt": "string"
     },
     {
-        "id": 3,
-        "title": "movie todo",
-        "description": "membuat app movie",
-        "status": true,
-        "due_date": "2021-03-01T00:00:00.000Z",
-        "createdAt": "2021-02-01T14:04:09.605Z",
-        "updatedAt": "2021-02-01T14:04:09.605Z"
+        "id": "integer",
+        "title": "string",
+        "description": "string",
+        "status": "boolean",
+        "due_date": "string",
+        "createdAt": "string",
+        "updatedAt": "string"
     }
 ]
 
@@ -103,6 +104,7 @@ tidak dibutuhkan
 
 - ## ERROR RESPONSE
 ```
+- 401 Unauthorized 
 - 500 Internal Server Error
 ```
 
@@ -125,19 +127,20 @@ tidak dibutuhkan
 
 ```js
 {
-    "id": 1,
-    "title": "Chelsea Fc",
-    "description": "Membuat team sepak bola",
-    "status": true,
-    "due_date": "2021-02-03T00:00:00.000Z",
-    "createdAt": "2021-02-01T09:43:15.767Z",
-    "updatedAt": "2021-02-01T15:28:19.312Z"
+    "id": "integer",
+    "title": "string",
+    "description": "string",
+    "status": "boolean",
+    "due_date": "string",
+    "createdAt": "string",
+    "updatedAt": "string"
 }
 ```
 
 - ## ERROR RESPONSE
 ```
 - 404 error not found
+- 401 Unauthorized 
 - 500 internal server error
 ```
 # 4. PUT /todos/:id
@@ -153,22 +156,22 @@ Melakukan perubahan data todo berdasarkan id yang dipilih,
 
 - ## REQUEST BODY
 ```js
-- title = 'Chelsea Fc'
-- description = 'Membuat team sepak bola'
-- status = 'true'
-- due_date = '2021-02-03'
+- title = "string"
+- description = "string"
+- status = "string"
+- due_date = "string"
 ```
 - ## RESPONSE 200
 
 ```js
 {
-    "id": 2,
-    "title": "Chelsea Fc",
-    "description": "Membuat team sepak bola",
-    "status": true,
-    "due_date": "2021-02-03T00:00:00.000Z",
-    "createdAt": "2021-02-01T09:44:45.414Z",
-    "updatedAt": "2021-02-02T00:38:22.225Z"
+    "id": "integer",
+    "title": "string",
+    "description": "string",
+    "status": "boolean",
+    "due_date": "string",
+    "createdAt": "string",
+    "updatedAt": "string"
 }
 ```
 
@@ -177,6 +180,7 @@ Melakukan perubahan data todo berdasarkan id yang dipilih,
 ```
 - 400 validation error
 - 404 error not found
+- 401 Unauthorized 
 - 500 internal server error
 ```
 
@@ -199,13 +203,13 @@ Melakukan perubahan status todo berdasarkan id yang dipilih,
 
 ```js
 {
-    "id": 2,
-    "title": "Chelsea Fc",
-    "description": "Membuat team sepak bola",
-    "status": false,
-    "due_date": "2021-02-03T00:00:00.000Z",
-    "createdAt": "2021-02-01T09:44:45.414Z",
-    "updatedAt": "2021-02-02T00:41:01.710Z"
+    "id": "integer",
+    "title": "string",
+    "description": "string",
+    "status": "boolean",
+    "due_date": "string",
+    "createdAt": "string",
+    "updatedAt": "string"
 }
 ```
 
@@ -213,6 +217,7 @@ Melakukan perubahan status todo berdasarkan id yang dipilih,
 ```
 - 400 validation error
 - 404 error not found
+- 401 Unauthorized 
 - 500 internal server error
 ```
 # 6. DELETE /todo/:id
@@ -241,6 +246,7 @@ tidak dibutuhkan
 - ## ERROR RESPONSE
 ```
 - 404 error not found
+- 401 Unauthorized 
 - 500 internal server error
 ```
 
@@ -263,9 +269,9 @@ tidak dibutuhkan
 
 ```js
 {
-    "message": "Register success",
-    "id": 7,
-    "email": "rizkicandra@ecampuz.com"
+    "message": "string",
+    "id": "integer",
+    "email": "string"
 }
 ```
 
@@ -361,6 +367,24 @@ ERROR VALIDATION :
 ```js
 { 
     'message': "validation errors"
+}
+```
+
+## 401 UNAUTHORIZED
+
+ERROR AUTHENTICATE :
+
+```js
+{ 
+    "message": "Invalid Token"
+}
+```
+
+ERROR AUTHORIZE :
+
+```js
+{ 
+    "message": "Not Authorized"
 }
 ```
 

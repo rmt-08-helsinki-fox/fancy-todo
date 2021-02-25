@@ -1,10 +1,11 @@
 
-const base_url = "http://localhost:3000"
+const base_url = "https://fancy-todo-helsinki-fox.herokuapp.com"
+// const base_url = "http://localhost:3000"
 
       function auth() {
         if(!localStorage.getItem("accessToken")){
           $("#form-login").show()
-          $("#form-register").show()
+          $("#form-register").hide()
           $("#form-add-todo").hide()
           $("#table-todos").hide()
           $("#logout-user").hide()
@@ -21,6 +22,25 @@ const base_url = "http://localhost:3000"
         
       }
 
+      function authRegister() {
+        if(!localStorage.getItem("accessToken")){
+          $("#form-login").hide()
+          $("#form-register").show()
+          $("#form-add-todo").hide()
+          $("#table-todos").hide()
+          $("#logout-user").hide()
+          $("#form-edit-todo").hide()
+        } else {
+          $("#form-login").hide()
+          $("#form-register").hide()
+          $("#form-add-todo").show()
+          $("#table-todos").show()
+          $("#logout-user").show()
+          $("#form-edit-todo").hide()
+          showTodo()
+        }
+      }
+
       function authEdit() {
         if(!localStorage.getItem("accessToken")){
           $("#form-login").show()
@@ -33,7 +53,7 @@ const base_url = "http://localhost:3000"
           $("#form-register").hide()
           $("#form-add-todo").hide()
           $("#table-todos").hide()
-          $("#logout-user").hide()
+          $("#logout-user").show()
           $("#form-edit-todo").show()
         }
 
@@ -145,7 +165,7 @@ const base_url = "http://localhost:3000"
             <td>${element.description}</td>
             <td>${element.due_date.split('T')[0]}</td>
             <td> 
-                <a href="#" onclick="showEditTodo(${element.id})"> Edit </a>
+                <a href="#" style="margin-right: 15px;" onclick="showEditTodo(${element.id})"> Edit </a>
                 <a href="#" onclick="deleteTodo(${element.id})"> Delete </a> 
             </td>
             </tr>
@@ -265,6 +285,16 @@ const base_url = "http://localhost:3000"
           login()
         })
 
+        $("#link-login").on("click", (event) => {
+          event.preventDefault()
+          auth()
+        })
+
+        $("#link-register").on("click", (event) => {
+          event.preventDefault()
+          authRegister()
+        })
+
         $("#form-register-user").on("submit", (event) => {
           event.preventDefault()
           register()
@@ -284,6 +314,5 @@ const base_url = "http://localhost:3000"
           event.preventDefault()
           processEditTodo()
         })
-
 
       })
