@@ -1,4 +1,8 @@
+// Server Deploy
 const baseUrl = 'https://fancy-todo-jefri-server.herokuapp.com/'
+
+// Server Local
+// const baseUrl = 'http://localhost:3000/'
 
 $(document).ready(function() {
   authenticate()
@@ -119,22 +123,22 @@ function onSignIn(googleUser) {
     }
   })
   .done(response => {
-    console.log(response);
     localStorage.setItem('access_token', response.access_token)
     authenticate()
   })
   .fail(err => {
-    console.log(err);
+    console.log(err.responseJSON);
+    Swal.fire(err.responseJSON)
   })
 }
 
 
 function logout() {
-  localStorage.clear();
   const auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+  localStorage.clear();
   authenticate();
 }
 
@@ -175,7 +179,7 @@ function addTodo(event) {
     .fail(err => {
       const errors = err.responseJSON.message
 
-      Swal.fire(errors.join('\n'))
+      Swal.fire(errors.join('\n'), '', 'error')
     })
     .always(_ => {
       $('#title-todo').val('')
@@ -203,7 +207,7 @@ function fetchTodo() {
             <h4 class="card-title">${todos.title}</h4>
             <p>${todos.description}</p>
             <p>${todos.due_date}</p>
-            <button type="button" class="btn btn-primary btn-sm" onclick="">Edit</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="btnEditTodos(${todos.id})">Edit</button>
             <button class="btn btn-primary btn-sm" onclick="deleteTodos(${todos.id})">Delete</button>
             <buttton class="btn btn-danger btn-sm" onclick="statusTodos(${todos.id}, true)">Not Done</buttton>
           </div>
@@ -224,7 +228,7 @@ function fetchTodo() {
     })
     .fail(err => {
       const errors = err.responseJSON.message
-      Swal.fire(errors)
+      Swal.fire(errors, '', 'error')
     })
 }
 
@@ -246,7 +250,7 @@ function statusTodos(id, status) {
     })
     .fail(err => {
       const errors = err.responseJSON.message
-      Swal.fire(errors)
+      Swal.fire(errors, '', 'error')
     })
 }
 
@@ -276,7 +280,7 @@ function deleteTodos(id) {
       })
       .fail(err => {
         const errors = err.responseJSON.message
-        Swal.fire(errors)
+        Swal.fire(errors, '', 'error')
       })
     }
   })
@@ -285,7 +289,6 @@ function deleteTodos(id) {
 function btnEditTodos(id) {
   const access_token = localStorage.access_token
 
-  console.log(id);
   $('#form-edit-todo').show()
   $('#todos').hide()
 
@@ -297,25 +300,43 @@ function btnEditTodos(id) {
     }
   })
     .done(response => {
-      console.log(response)
       $('#title-todo-edit').val(response.title)
       $('#desc-todo-edit').val(response.description)
       $('#date-todo-edit').val(response.due_date)
+      $('#id-edit').val(response.id)
     })
     .fail(err => {
       console.log(err);
+      Swal.fire(err, '', 'error')
     })
 }
 
-function editTodos(event, id) {
+function editTodos(event) {
  event.preventDefault();
+ const access_token = localStorage.access_token
  const title = $('#title-todo-edit').val()
  const description = $('#desc-todo-edit').val()
  const due_date = $('#date-todo-edit').val()
+ const id = $('#id-edit').val()
 
- console.log(id);
-//  $.ajax({
-//   method: 'PUT',
-//   url: baseUrl + `todos/${id}`
-//  })
+ $.ajax({
+  method: 'PUT',
+  url: baseUrl + `todos/${id}`,
+  data: {
+    title,
+    description,
+    due_date
+  },
+  headers: {
+    access_token
+  }
+ })
+  .done(_ => {
+    authenticate()
+    fetchTodo()
+    Swal.fire('Success!', '', 'success')
+  })
+  .fail(err => {
+    Swal.fire(err, '', 'error')
+  })
 }
