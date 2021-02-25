@@ -10,7 +10,6 @@ class Controller {
         UserId: req.decoded.id
       },
       order: [['id', 'ASC']]
-      // include: [User]
     })
       .then(data => {
         res.status(200).json({ data })

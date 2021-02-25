@@ -6,6 +6,8 @@ Show all todo list
 
 **URL** : `/todos`
 
+**Method** : `GET`
+
 **Headers** : 
 
 ```json
@@ -76,7 +78,7 @@ Show all todo list
 
 ## Error Response
 
-**Code** : `400 Bad response`
+**Code** : `401 Unauthorized`
 
 **Content examples**
 
@@ -93,6 +95,16 @@ Show all todo list
 ```json
 {
     "msg": "Internal server Error"
+}
+```
+
+**Code** : `401 Unauthorized` with no access_token
+
+**Content examples**
+
+```json
+{
+    "msg": "Please login/register first"
 }
 ```
 
@@ -166,7 +178,17 @@ Post a todo to list
 
 ```json
 {
-    "msg": "Terlambat" 
+    "msg": "Date must later than to this day" 
+}
+```
+
+**Code** : `401 Unauthorized` with no access_token
+
+**Content examples**
+
+```json
+{
+    "msg": "Please login/register first" 
 }
 ```
 
@@ -175,6 +197,8 @@ Post a todo to list
 Find a todo from list by Id
 
 **URL** : `/todos/:id`
+
+**Params** : `id`
 
 **Headers** : 
 
@@ -239,6 +263,16 @@ Find a todo from list by Id
 }
 ```
 
+**Code** : `401 Unauthorized`
+
+**Content examples**
+
+```json
+{
+    "msg": "Invalid key"
+}
+```
+
 # Edit post Todo by Id
 
 Edit a todo from list by Id
@@ -247,9 +281,7 @@ Edit a todo from list by Id
 
 **Method** : `PUT`
 
-**Params** :
-
-id
+**Params** : `id`
 
 **Headers** : 
 
@@ -297,7 +329,7 @@ id
 
 ```json
 {
-    "msg": "Terlambat"
+    "msg": "Date must later than to this day"
 }
 ```
 
@@ -311,6 +343,16 @@ id
 }
 ```
 
+**Code** : `401 Unauthorized`
+
+**Content examples**
+
+```json
+{
+    "msg": "Invalid key"
+}
+```
+
 # Edit status post's Todo by Id
 
 Edit a status todo's from list by Id
@@ -319,9 +361,7 @@ Edit a status todo's from list by Id
 
 **Method** : `PATCH`
 
-**Params** :
-
-id
+**Params** : `id`
 
 **Headers** : 
 
@@ -350,9 +390,9 @@ id
 **Content examples**
 
 ```json
-[
-    1 //success
-]
+{
+    "msg": "Success edit"
+}
 ```
 
 ## Error Response
@@ -363,7 +403,7 @@ id
 
 ```json
 {
-    "msg": "notBool"
+    "msg": "Must boolean"
 }
 ```
 
@@ -377,6 +417,16 @@ id
 }
 ```
 
+**Code** : `401 Unauthorized` with no access_token
+
+**Content examples**
+
+```json
+{
+    "msg": "Please login/register first"
+}
+```
+
 # Delete a post Todo by Id
 
 Delete a todo from list by Id
@@ -385,9 +435,7 @@ Delete a todo from list by Id
 
 **Method** : `DELETE`
 
-**Params** : 
-
-id
+**Params** : `id`
 
 **Auth required** : YES
 
@@ -424,6 +472,16 @@ id
 ```json
 {
     "msg": "Internal server error"
+}
+```
+
+**Code** : `401 Unauthorized` with no access_token
+
+**Content examples**
+
+```json
+{
+    "msg": "Please login/register first"
 }
 ```
 
