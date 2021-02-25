@@ -1,3 +1,5 @@
+const URL_REGISTER = 'https://fancy-todo-adit-server.herokuapp.com'
+
 function registration() {
     let email = $('#emailRegister').val();
     let password = $('#passwordRegister').val();
@@ -11,7 +13,7 @@ function registration() {
     }
 
     $.ajax({
-        url: 'https://fancy-todo-adit-server.herokuapp.com/auth/registration',
+        url: '/auth/registration',
         method: 'POST',
         data: { email, password }
     })
