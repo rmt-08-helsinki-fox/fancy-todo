@@ -34,8 +34,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      unique: true,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isMinimumSixChar (value) {
+          if(value.length < 6) {
+            throw new Error('Password must be minimum 6 characters')
+          }
+        }
+      }
     }
   }, {
     sequelize,
