@@ -41,7 +41,7 @@ class TodoController {
                     todos.push(e);
                 });
             }
-            if (todos.length === 0) throw 404;
+            
             const msg = {
                 message: 'Success',
                 data: todos,
