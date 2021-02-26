@@ -1,3 +1,16 @@
+<!-- _Response (400)_
+```json
+  {
+    "message": [
+      "Input an email correctly",
+      "Email is required",
+      "Email is already register",
+      "Password minimum 6 characters",
+      "Password is required"
+    ]
+}
+``` -->
+
 **fancy-todo**
 
 # Show Todo List
@@ -88,6 +101,19 @@ Show all todo list
 }
 ```
 
+**Code** : `400 Internal server Error`
+
+**Content examples**
+
+```json
+  {
+    "message": [
+      "Email cannot be empty",
+      "Email must be unique"
+    ]
+}
+```
+
 **Code** : `500 Internal server Error`
 
 **Content examples**
@@ -107,7 +133,6 @@ Show all todo list
     "msg": "Please login/register first"
 }
 ```
-
 
 # Post Todo List
 
@@ -178,7 +203,10 @@ Post a todo to list
 
 ```json
 {
-    "msg": "Date must later than to this day" 
+    "msg": [
+        "Date must later than to this day"
+        "Must boolean"
+    ]
 }
 ```
 
@@ -250,6 +278,19 @@ Find a todo from list by Id
 ```json
 {
     "msg": "Data not found"
+}
+```
+
+**Code** : `400 bad response`
+
+**Content examples**
+
+```json
+{
+    "msg": [
+        "Date must later than to this day"
+        "Must boolean"
+    ]
 }
 ```
 
