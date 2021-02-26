@@ -1,0 +1,58 @@
+#addtodo-container .col-2{
+    margin-left : auto;
+    margin-right: auto;
+   
+}
+#edittodo-container .col-2{
+    margin-left : auto;
+    margin-right: auto;
+   
+}
+
+#signin-container .col-2{
+    margin-left : auto;
+    margin-right: auto;
+   
+}
+
+#register-container .col-2{
+    margin-left : auto;
+    margin-right: auto;
+   
+}
+
+#header-container {
+    text-align: center;
+   
+}
+
+.g-signin2-container {
+    
+    padding-top: 20%;
+   
+}
+
+#news-content {
+    
+    border-style: solid;
+    border-color: whitesmoke;
+}
+#news-image-url {
+    
+    height: 20rem;
+    border-style: solid;
+    border-color: whitesmoke;
+    
+}
+
+#news-image-url img{
+    align-content: center;
+    
+}
+
+
+
+    
+
+
+
