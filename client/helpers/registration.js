@@ -13,7 +13,7 @@ function registration() {
     }
 
     $.ajax({
-        url: '/auth/registration',
+        url: `${URL_REGISTER}/auth/registration`,
         method: 'POST',
         data: { email, password }
     })
