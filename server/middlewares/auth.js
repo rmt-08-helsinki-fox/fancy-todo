@@ -1,15 +1,20 @@
 const { verifyToken } = require('../helper/jwt')
 
-function authenticate(req, res, next) {
+async function authenticate(req, res, next) {
   try {
-    const token = req.headers.token
+    const token = req.headers.access_token
     const decoded = verifyToken(token)
 
     req.decoded = decoded;
   console.log(req.decoded, '<<<<<< 3');
-
-
-    next();
+  let user = await User.findOne({ where: { email: decoded.email } })
+  if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' })
+  }
+  if (user) {
+      req.user = { id: user.id }
+      return next()
+  }
   } catch (err) {
     res.status(401).json({ message: 'invalid token' })
   }

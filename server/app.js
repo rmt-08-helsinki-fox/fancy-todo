@@ -3,14 +3,16 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express')
-const errorHandler = require('./middlewares/errorHandler')
-const router = require('./routes')
 const app = express()
-const port = 3000
+const PORT = process.env.PORT || 3000
+const router = require('./routes')
+const cors = require('cors')
+const errorHandlers = require('./middlewares/errorHandler')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(cors())
 app.use(router)
-app.use(errorHandler)
+app.use(errorHandlers)
 
-app.listen(port, () => {console.log('server on port', port)})
+app.listen(PORT, () => {console.log('server on port', PORT)})

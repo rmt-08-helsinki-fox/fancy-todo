@@ -1,12 +1,12 @@
 const Controller = require('../controllers/controller')
 const todoRouter = require('./todo')
 const userRouter = require('./user')
-const Qur_anRouter = require('./Qur_an')
+const newsRouter = require('./news')
 const router = require('express').Router()
 
 router.get('/', Controller.homePage)
 router.use('/todos', todoRouter)
-router.use('/user', userRouter)
-router.use('/Qur-an', Qur_anRouter)
+router.use('/', userRouter)
+router.use('/news', newsRouter)
 
 module.exports = router
