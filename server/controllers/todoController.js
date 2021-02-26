@@ -87,10 +87,10 @@ class ToDoController {
 
     const id = Number(req.params.id)
 
-    ToDo.destroy({ where: { id } })
+    ToDo.destroy({ where: { id },returning:true })
 
       .then(data => {
-        res.status(200).json(data)
+        res.status(200).json({message: 'Todo successfully delete'})
       })
       .catch(err => {
         res.status(500).json(err)

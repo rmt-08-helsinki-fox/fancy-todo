@@ -1,5 +1,5 @@
-const baseUrl = 'https://todo-fancy-dody2.herokuapp.com/'
-// const baseUrl = 'http://localhost:3000/'
+// const baseUrl = 'https://todo-fancy-dody2.herokuapp.com/'
+const baseUrl = 'http://localhost:3000/'
 
 $(document).ready(() => {
   auth()
