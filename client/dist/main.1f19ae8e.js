@@ -123,7 +123,7 @@ var btnRegister = $(".btn-register");
 var btnLogin = $(".btn-login");
 var btnLogout = $(".btn-logout");
 var formRegister = $("#register-form");
-var formLogin = $("#form-login");
+var formLogin = $("#login-form");
 var home = $(".home");
 var homeAfter = $("#home-after-login");
 var submitRegister = $("#register-submit");
@@ -140,16 +140,6 @@ btnLogin.click(function () {
 btnLogout.click(function () {
   logout();
 });
-
-function hideFuture() {
-  btnRegister.hide();
-  btnLogin.hide();
-  btnLogout.hide();
-  home.hide();
-  formLogin.hide();
-  formRegister.hide();
-  homeAfter.hide();
-}
 
 function pageRegister() {
   hideFuture();
@@ -273,7 +263,7 @@ function getTodo() {
       } // console.log(data)
 
 
-      $('#todo-list').append("\n                <div class=\"card\" id=\"list-task\" style=\"width: 40rem\";>\n                    <div class=\"card-body todo-list-card\" id=todoCard".concat(data.id, ">\n                        <div id=todoCardBody").concat(data.id, ">\n                            ").concat(status, "\n                            <h5 class=\"card-title\">").concat(data.title, "</h5>\n                            <h6 class=\"card-subtitle mb-2 text-muted\">").concat(data.due_date.split('T')[0], "</h6>\n                            <p class=\"card-text\">").concat(data.description, "</p>\n                            <a href=\"#\" onclick='editForm(").concat(data.id, ")' class=\"card-link btn btn-primary\" id=\"editTodo\">Edit</a>\n                            <a href=\"#\" onclick='deleteTodo(event, ").concat(data.id, ")' class=\"card-link btn btn-danger\" id=\"deleteTodo\">Hapus</a>\n                        </div>\n                    </div>\n                </div>\n            "));
+      $('#todo-list').append("\n                <div class=\"card\" id=\"list-task\" style=\"width: 40rem\";>\n                    <div class=\"card-body todo-list-card\" id=todoCard".concat(data.id, ">\n                        <div id=todoCardBody").concat(data.id, ">\n                            ").concat(status, "\n                            <h5 class=\"card-title\">").concat(data.title, "</h5>\n                            <h6 class=\"card-subtitle mb-2 text-muted\">").concat(data.due_date.split('T')[0], "</h6>\n                            <p class=\"card-text\">").concat(data.description, "</p>\n                            <a href=\"#\" onclick='editForm(").concat(data.id, ")' class=\"card-link btn btn-primary mt-4\" id=\"editTodo\">Edit</a>\n                            <a href=\"#\" onclick=\"deleteTodo(event, ").concat(data.id, ")\" class=\"card-link btn btn-danger mt-4\" id=\"deleteTodo\">Hapus</a>\n                        </div>\n                    </div>\n                </div>\n            "));
     });
   }).fail(function (xhr) {
     Swal.fire({
@@ -338,6 +328,87 @@ function deleteTodo(event, id) {
   }).always(function () {});
 }
 
+function editForm(id) {
+  var todoId = id;
+  $.ajax({
+    method: 'GET',
+    url: "".concat(baseUrl, "todos/").concat(todoId),
+    headers: {
+      access_token: localStorage.access_token
+    }
+  }).done(function (data) {
+    $("#todoCardBody".concat(todoId)).hide();
+    $("#todoCard".concat(todoId)).append("\n    <div class=\"edited-form\">\n    <h3>Edit Form </h3>\n    <form role=\"form\" id=\"form-edit-main".concat(todoId, "\">\n      <input type=\"text\" class=\"form-control\" value=\"").concat(data.title, " id=\"title-edit\">\n      <input type=\"text\" class=\"form-control\" value=\"").concat(data.due_date.split('T')[0], " id=\"due-date-edit\">\n      <input type=\"text\" class=\"form-control\" value=\"").concat(data.description, " id=\"description-edit\">\n      <button onclick=\"submitEdit(event)\" class=\"btn btn-primary-mt-3\" id=\"edit-button\">Save</button>\n      <button onclick=\"editCancel(event)\" class=\"btn btn-danger-mt-3\" id=\"edit-cancel-button\">Cancel</button>\n    </form>\n    </div>\n    "));
+  });
+}
+
+function editCancel(event) {
+  event.preventDefault();
+  $("#form-edit-main").hide();
+  $('.todo-list-card').show();
+  $("#add-todo-form").hide();
+  getTodo();
+}
+
+function submitEdit(event) {
+  event.preventDefault();
+  editSubmit();
+}
+
+function editSubmit(event) {
+  $("#form-edit-main").show();
+  $.ajax({
+    method: 'PUT',
+    url: "".concat(baseUrl, "todos/").concat(todoId),
+    headers: {
+      access_token: localStorage.access_token
+    },
+    data: {
+      title: $('#title-edit').val(),
+      description: $('#description-edit').val(),
+      due_date: $('#due-date-edit').val()
+    }
+  }).done(function (data) {
+    $("#form-edit-main").hide();
+    $('.todo-list-card').show();
+    $("#add-todo-form").show();
+    $('#add-todo-form').hide();
+    getTodo();
+  }).fail(function (err) {
+    console.log(err, 'ERROR EDIT');
+  }).always(function () {
+    $('#title-edit').val('');
+    $('#due-date-edit').val('');
+    $('#description-edit').val('');
+  });
+}
+
+function editStatus(id, status) {
+  var inputStatus;
+
+  if (status === 'true') {
+    inputStatus = false;
+  } else {
+    inputStatus = true;
+  }
+
+  $.ajax({
+    method: 'PATCH',
+    url: "".concat(baseUrl, "todos/").concat(id),
+    headers: {
+      access_token: localStorage.access_token
+    },
+    data: {
+      status: inputStatus
+    }
+  }).done(function (data) {
+    console.log('Berhasil di Edit');
+    getTodo();
+  }).fail(function (err) {
+    console.log(err, "ERROR EDIT");
+  }).always(function () {});
+}
+
 function auth() {
   if (localStorage.getItem('access_token')) {
     mainPage();
@@ -361,6 +432,19 @@ function mainPage() {
 
   btnLogout.show();
   homeAfter.show();
+  $("#page-todo").show();
+}
+
+function hideFuture() {
+  btnRegister.hide();
+  btnLogin.hide();
+  btnLogout.hide();
+  home.hide();
+  formLogin.hide();
+  formRegister.hide();
+  homeAfter.hide();
+  $("#page-todo").hide();
+  $('#add-form').hide();
 }
 },{}],"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -390,7 +474,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53240" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61997" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
