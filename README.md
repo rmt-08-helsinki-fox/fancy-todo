@@ -4,8 +4,8 @@
 <!-- --- -->
 # URL
 ```
-Client URL : http://localhost:notyet
-Server URL : http://localhost:3000
+Client URL : https://fancy-todo-hacktiv8-f0737.web.app/
+Server URL : https://hacktiv8-fancy-todo.herokuapp.com
 ```
 
 ### GET/todos
@@ -13,10 +13,10 @@ Server URL : http://localhost:3000
 >get all todos list
 
 Request Header
-
 {
     token: token
 }
+
 
 Response (200)
 
@@ -340,171 +340,55 @@ Response (400)
 
 >Google Sign IN User
 
-_Request Header_
-```
-{
-    "token":  "id_token"
-}
-```
-
-_Response(200)_
+Request header
 ```
 {
     token: token
 }
 ```
 
-_Response (500)_
-```
+Response(200)
 {
-  "message": "Internal server error"
+    token: token
 }
-```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### GET/charity
-
->Get charity List
-
-_Request Header_
-```
-not needed
-```
-
-_Request Body_
-```
-not need
-```
-
-_Response(200)_
-```
+Response(500)
 {
-    "data": {
-        "code": 200,
-        "msg": "OK, all went through!",
-        "data": [
-            {
-                "categoryId": "?",
-                "categoryDesc": "Not Provided"
-            },
-            {
-                "categoryId": "A",
-                "categoryDesc": "Arts, Culture and Humanities"
-            },
-            {
-                "categoryId": "B",
-                "categoryDesc": "Educational Institutions and Related Activities"
-            },
-            {
-                "categoryId": "C",
-                "categoryDesc": "Environmental Quality, Protection and Beautification"
-            },
-            {
-                "categoryId": "D",
-                "categoryDesc": "Animal-Related"
-            },
-            {
-                "categoryId": "E",
-                "categoryDesc": "Health - General and Rehabilitative"
-            },
-            {
-                "categoryId": "F",
-                "categoryDesc": "Mental Health, Crisis Intervention"
-            },
-            {
-                "categoryId": "G",
-                "categoryDesc": "Diseases, Disorders, Medical Disciplines"
-            },
-            {
-                "categoryId": "H",
-                "categoryDesc": "Medical Research"
-            }
-```
-
-
-
-_Response (500)_
-```
-{
-  "Error": "UNKNOWN_ERROR",
-  "message": "Error undescribable"
+    message: "Internal server error"
 }
-```
 
-### POST/simplemailsender.p.rapidapi.com/SendMails/Send
 
->Sending success notice to User's email
 
-_Request Header_
-```
+### GET/brewery/list
+
+Request header
 {
-"x-rapidapi-host":"simplemailsender.p.rapidapi.com",
-"x-rapidapi-key":<User's API key>
+    token: <string id_token>
 }
-```
 
-_Request Body_
-```
+Response(200)
 {
-	Correo_Delivery : User's email,
-  Mensjae : `You have successfully added a new todo`
+    [
+        {
+            id: 2,
+            name: "Avondale Brewing Co",
+            brewery_type: "micro",
+            street: "201 41st St S",
+            address_2: null,
+            address_3: null,
+            city: "Birmingham",
+            state: "Alabama",
+            county_province: null,
+            postal_code: "35222-1932",
+            country: "United States",
+            longitude: "-86.774322",
+            latitude: "33.524521",
+            phone: "2057775456",
+            website_url: "http://www.avondalebrewing.com",
+            updated_at: "2018-08-23T23:19:57.825Z",
+            created_at: "2018-07-24T01:32:47.255Z"
+        },
+
+        ...
+    ]
 }
-```
-
-_Response(200)_
-```
-You will receive a successfully added response/notice that sounds like: `You have successfully added a new todo`
-```
-
-_Response (500)_
-```
-{
-  "Error": "UNKNOWN_ERROR",
-  "message": "Error undescribable"
-}
-```
-
-
