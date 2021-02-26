@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 
-let tomorrow = require('../helpers/date')
+let yesterday = require('../helpers/date')
 
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
@@ -32,9 +32,9 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       type : DataTypes.DATE,
       validate : {
-        isBefore : {
-          args : tomorrow,
-          msg : 'Date must before tomorrow'       
+        isAfter : {
+          args : yesterday,
+          msg : 'Date must be at least today'       
         }
       }
     }

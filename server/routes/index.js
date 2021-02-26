@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const Controller = require('../controller/controller')
 const authenticate = require('../middlewares/authenticate')
-const authorizeByRole = require('../middlewares/authorize')
+const authorize = require('../middlewares/authorize')
 
 
 router.post('/register', Controller.register)
@@ -14,11 +14,11 @@ router.get('/todos', Controller.getTodos)
 router.get('/search', Controller.changeMyFate)
 
 //butuh authorize
-router.use(authorizeByRole)
-router.get('/todos/:id', Controller.getTodosById)
-router.put('/todos/:id', Controller.putTodosById)
-router.patch('/todos/:id', Controller.patchTodosById)
-router.delete('/delete/:id', Controller.delTodo)
+// router.use(authorize)
+router.get('/todos/:id', authorize, Controller.getTodosById)
+router.put('/todos/:id', authorize, Controller.putTodosById)
+router.patch('/todos/:id', authorize, Controller.patchTodosById)
+router.delete('/delete/:id', authorize, Controller.delTodo)
 
 
 

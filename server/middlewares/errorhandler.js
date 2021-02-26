@@ -17,9 +17,14 @@ module.exports = (err, req, res, next) => {
       statusCode = 400
       break;  
 
-      case 'DataNotFound':
+    case 'DataNotFound':
       errors[0] = err.message
       statusCode = 404
+      break;
+
+    case 'UnauthorizedUser':
+      errors[0] = err.message
+      statusCode = 401
       break;
 
     default:
