@@ -64,6 +64,7 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate: (user, opt) => {
         user.password = hashPass(user.password)
+        user.city = 'Jakarta'
       }
     }
   });
