@@ -10,7 +10,7 @@ function authorize (req,res,next) {
         .then(data =>{
             if(+req.data.id === data.UserId) {
                 next()
-            } if (!data){
+            } else if (!data){
                 res.status(400).json({msg: "No data", statusCode: 400})
                 throw {msg: "No data", statusCode: 400}
             } else {

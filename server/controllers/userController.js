@@ -75,10 +75,12 @@ class userController {
                 if(!compare) throw {mesasage: "Invalid email or password"}
                 // minta akses token
                 console.log(`masuk`)
-                const accessToken = generateToken({
+                console.log(data.id, data.email)
+                let accessToken = generateToken({
                     id: data.id,
                     email: data.email
                 })
+                console.log('test sampe sini ngga?')
                 res.status(200).json({accessToken})
             })
             .catch(err => {

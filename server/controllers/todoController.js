@@ -1,9 +1,11 @@
 const { Todo } = require('../models')
-// const axios = require('axios')
+const axios = require('axios')
 
 class TodoController {
     static createTodo(req,res, next) {
+        
         let {title, description, status, due_date} = req.body
+        console.log(due_date)
         let dataTodo = {title, description, status, due_date, UserId : +req.data.id}
         Todo.create(dataTodo)
             .then(data => {
@@ -126,24 +128,24 @@ class TodoController {
                 next(err)
             })
     }
-    // static getWeather (req,res, next) {
+    static getWeather (req,res, next) {
 
-    //     axios.get(`https://api.openweathermap.org/data/2.5/weather?q=Jakarta&appid=${process.env.API_KEY}`)
-    //         .then(response => {
-    //             console.log(`masuk inii`)
-    //             let {description, icon} =  response.data.weather[0]
-    //             let temperature = Math.floor(response.data.main.temp - 273)
-    //             let data = { description, icon, temperature}
-    //             res.status(200).json(data)
+        axios.get(`https://api.openweathermap.org/data/2.5/weather?q=Jakarta&appid=${process.env.API_KEY}`)
+            .then(response => {
+                console.log(`masuk inii`)
+                let {description, icon} =  response.data.weather[0]
+                let temperature = Math.floor(response.data.main.temp - 273)
+                let data = { description, icon, temperature}
+                res.status(200).json(data)
 
-    //         })
-    //         .catch(err => {
-    //             console.log(`gagalll`)
-    //             // console.log(err)
-    //             res.status(500).json({message: "Invalid request"})
-    //             // next(err)
-    //         })
-    // }
+            })
+            .catch(err => {
+                console.log(`gagalll`)
+                // console.log(err)
+                res.status(500).json({message: "Invalid request"})
+                // next(err)
+            })
+    }
     static findOne (req,res, next) {
         let id = +req.params.id
         Todo.findOne({

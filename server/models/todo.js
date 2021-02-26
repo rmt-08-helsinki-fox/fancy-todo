@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
           const date = new Date(value)
           const now = new Date()
           if(date < now) {
-            throw new Error("Date Must be grather than today")
+            throw new Error("Date Must be greater than today")
           }
         }
       }
