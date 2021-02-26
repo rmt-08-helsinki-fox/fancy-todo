@@ -105,7 +105,7 @@ function login() {
 function logout() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
-      console.log('User signed out.');
+        console.log('User signed out.');
     });
     localStorage.clear()
     auth()
@@ -122,11 +122,14 @@ function findAllTodo() {
         .done(data => {
             console.log(data.data)
             for (let i of data.data) {
+                let stat
+                if (i.status === true) stat = "done"
+                if (i.status === false) stat = "not done"
                 $('#todoList').append(`
                 <tr id='clearfindTodo'>
                     <th>${i.title}</th>
                     <th>${i.description}</th>
-                    <th>${i.status}</th>
+                    <th>${stat}</th>
                     <th>${i.due_date.slice(0, 10)}</th>
                     <th>
                         <a href="#" onclick="deleteTodo(${i.id})">Delete</a>
