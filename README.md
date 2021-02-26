@@ -4,6 +4,55 @@ fancy todo is an application to create the new activity that you want to do. Thi
 * JSON formatted response
 
 ##  Endpoint list fancy todo
+
+### POST /register
+
+> Create New Account 
+
+_Request Body_
+```
+{
+  "email": "<STRING>",
+  "password": "<STRING>"
+}
+```
+
+_Response (201)_
+```
+example :
+
+
+{
+  "email": "<STRING>",
+  "password": "<STRING>"
+}
+
+```
+### POST /login
+
+> Create New Activity
+
+_Request Body_
+```
+{
+  "email": "<STRING>",
+  "password": "<STRING>"
+}
+```
+
+_Response (200)_
+```
+example :
+
+
+{
+  accessToken : '<your access token>'
+}
+
+```
+
+
+
 ### POST /todos
 
 > Create New Activity
