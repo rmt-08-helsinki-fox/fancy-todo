@@ -81,11 +81,12 @@ function fetchTodo(){
                 <div class="col-md-9">
                     <div class="card" style="border: none;">
                         <div id="headingOne" class="card-header bg-white shadow-sm border-0">
-                            <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapse${todo.id}" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-uppercase collapsible-link py-2">${todo.title}</a>
+                            <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapse${todo.id}" aria-expanded="false" aria-controls="collapseOne" class="d-block position-relative text-uppercase collapsible-link py-2">${todo.title}</a>
                                 <span class="float-right mr-6">Due : ${todo.due_date}</span>
                                 <span class="float-left">${badge}</span>
                             </h6>
                         </div>
+                        
                         <div id="collapse${todo.id}" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse">
                             <div class="card-body px-4">
                                 <p class="font-weight-light m-0">
@@ -100,14 +101,14 @@ function fetchTodo(){
                                 <p class="pt-2">${todo.Food.description}</p>
                                 <p class="pt-2">Instructions : </p>
                                 <div class="pt-2 ml-4">${todo.Food.instruction}</div>
-
                             </div>
-                            <div class="card-body px-4">
-                                <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" data-id="${todo.id}" class="btn btn-sm ${ todo.status ? 'btn-warning text-white' : 'btn-success'} updateStatusTodo" title="Mark As Done"><i class="fa ${ todo.status ? 'fa-undo' : 'fa-check'}"></i></button>
-                                    <button type="button" data-id="${todo.id}" class="btn btn-sm btn-primary edit-todo"><i class="fa fa-edit"></i></button>
-                                    <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="${todo.id}"><i class="fa fa-trash"></i></button>
-                                </div>
+                        </div>
+
+                        <div class="card-body px-4">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" data-id="${todo.id}" class="btn btn-sm ${ todo.status ? 'btn-warning text-white' : 'btn-success'} updateStatusTodo" title="Mark As Done"><i class="fa ${ todo.status ? 'fa-undo' : 'fa-check'}"></i></button>
+                                <button type="button" data-id="${todo.id}" class="btn btn-sm btn-primary edit-todo"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="${todo.id}"><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
