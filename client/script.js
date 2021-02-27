@@ -13,6 +13,7 @@ $(document).ready(function(){
     $("#sign-in-page").show()
     $("#addTodo-page").hide()
     $("#editTodo-page").hide()
+    $("#noTask").hide()
     $("#todos-table").hide()
   })
 
@@ -24,6 +25,7 @@ $(document).ready(function(){
     $("#sign-in-page").hide()
     $("#addTodo-page").hide()
     $("#editTodo-page").hide()
+    $("#noTask").hide()
     $("#todos-table").hide()
   })
 
@@ -36,6 +38,8 @@ $(document).ready(function(){
     $("#sign-up-page").hide()
     $("#sign-in-page").show()
     $("#addTodo-page").hide()
+    $("#editTodo-page").hide()
+    $("#noTask").hide()
     $("#todos-table").hide()
   })
 
@@ -55,6 +59,7 @@ $(document).ready(function(){
     $("#sign-up-navbar").hide()
     $("#sign-up-page").hide()
     $("#sign-in-page").hide()
+    $("#editTodo-page").hide()
     $("#addTodo-page").show()
     $("#todos-table").hide()
   })
@@ -71,6 +76,7 @@ $(document).ready(function(){
 
   $('#fancyTodoList').click(() => {
     if (localStorage.getItem('access_token')) {
+      $("#editTodo-page").hide()
       $("#addTodo-page").hide()
       $("#todos-table").show()
     }

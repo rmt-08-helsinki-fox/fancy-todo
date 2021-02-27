@@ -1,3 +1,4 @@
+let tableData = []
 const auth = () => {
   if (!localStorage.getItem("access_token")) {
     $("#sign-out-navbar").hide()
@@ -8,6 +9,7 @@ const auth = () => {
     $("#addTodo-page").hide()
     $("#editTodo-page").hide()
     $("#todos-table").hide()
+    $("#noTask").hide()
     $("#addTodoBtn").hide()
     getWeather()
   } else {
@@ -19,9 +21,15 @@ const auth = () => {
     $("#sign-in-page").hide()
     $("#addTodo-page").hide()
     $("#editTodo-page").hide()
-    $("#todos-table").show()
     getWeather()
     getAllTodo()
+    // if (tableData.length !== 0) {
+    //   $("#todos-table").show()
+    //   $("#noTask").hide()
+    // } else {
+    //   $("#todos-table").hide()
+    //   $("#noTask").show()
+    // }
   }
 }
 
@@ -105,6 +113,7 @@ const getAllTodo = () => {
   .done(res => {
     $('#tBody').empty()
     // console.log(res,'>>>>>>>>>>>>>>>');
+    tableData = res
     res.forEach(e => {
       let btnDone
       if (!e.status) {
@@ -132,6 +141,13 @@ const getAllTodo = () => {
       </td>
     </tr>`)
     });
+    if (tableData.length !== 0) {
+      $("#todos-table").show()
+      $("#noTask").hide()
+    } else {
+      $("#todos-table").hide()
+      $("#noTask").show()
+    }
   })
   .fail((xhr,txt) => {
     console.log(xhr,txt);
