@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="336084235376-4ughab6mvokohr636aqutnvgh9aqj5mp.apps.googleusercontent.com">
+    <title>Fancy Todo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <style>
+        section, nav, footer {
+            padding: 40px 15px;
+        }
+        .container-box {
+            width: 1100px;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-cont {
+            width: 500px;
+            padding: 40px 20px;
+            margin: 20px auto;
+            border: 1px solid rgb(223, 221, 221);
+            border-radius: 2px;
+        }
+        .todo-cont {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+            row-gap: 30px;
+            column-gap: 30px;
+        }
+        .card {
+            padding: 20px 10px;
+        }
+        .card-btn {
+            margin: 0 5px 0 0;
+        }
+        .none {
+            text-decoration: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAV SECTION -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-box container container-fluid">
+            <a class="navbar-brand" href="/">Fancy Todo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" id="my-todo-a" aria-current="page" href="#">My Todo list</a>
+                </li>
+            </ul>
+            <div>
+                <button type="button" id="logout-btn" class="btn btn-light" onclick="logout()">Logout</button>
+                <button type="button" id="login-btn" class="btn btn-light">Login</button>
+                <button type="button" id="register-btn" class="btn btn-light">Register</button>
+            </div>
+        </div>
+    </nav>
+    <!-- NAV SECTION ENDS -->
+
+    <!-- ADD TODO FORM SECTION -->
+    <section id="add-todo">
+        <div class="container-box container">
+            <div class="form-cont">
+                <h3>Add todo</h3><br>
+                <form id="add-todo-form">
+                    <div class="mb-3">
+                        <label for="add-todo-title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="add-todo-title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="add-todo-description" class="form-label">Description</label>
+                        <textarea class="form-control" id="add-todo-description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="add-todo-duedate" class="form-label">Due date</label>
+                        <input type="date" class="form-control" id="add-todo-duedate">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add todo</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- ADD TODO FORM SECTION ENDS -->
+
+    <!-- EDIT TODO FORM SECTION -->
+    <section id="edit-todo">
+        <div class="container-box container">
+            <div class="form-cont">
+                <h3>Edit todo</h3><br>
+                <form id="edit-todo-form">
+                    <div class="mb-3">
+                        <label for="edit-todo-title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="edit-todo-title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-todo-description" class="form-label">Description</label>
+                        <textarea class="form-control" id="edit-todo-description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-todo-status" class="form-label">Status</label>
+                        <select id="edit-todo-status" class="form-select">
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Done">Done</option>
+                            <option value="Omit">Omit</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-todo-duedate" class="form-label">Due date</label>
+                        <input type="date" class="form-control" id="edit-todo-duedate">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Edit todo</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!--EDIT TODO FORM SECTION ENDS -->
+
+    <!-- TODO CARDS SECTION -->
+    <section id="my-todo">
+        <div class="container-box container">
+            <div class="row justify-content-between">
+                <div class="col-2">
+                    <h2>My Todo list</h2>
+                </div>
+                <div class="col-2">
+                    <button type="button" id="add-todo-btn" class="btn btn-primary">Add todo</button>
+                </div>
+            </div><br><br>
+            <div class=" container todo-cont" id="todo-cont">
+            </div>
+        </div>
+    </section>
+    <!-- TODO CARDS SECTION ENDS -->
+
+    <!-- LOGIN SECTION -->
+    <section id="login">
+        <div class="container-box container">
+            <div class="form-cont">
+                <h3>Login</h3><br>
+                <form id="login-form">
+                    <div class="mb-3">
+                        <label for="login-email-input" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="login-email-input" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</di>
+                    </div>
+                    <div class="mb-3">
+                        <label for="login-password-input" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="login-password-input">
+                    </div><br>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    <div class="g-signin2 btn" data-onsuccess="onSignIn"></div>
+                </form><br><br>
+                <p>Not sure to login? <a href="" class="none" id="register-a">Create new account</a></p>
+            </div>
+        </div>
+    </section>
+    <!-- LOGIN SECTION ENDS -->
+
+    <!-- REGISTER SECTION -->
+    <section id="register">
+        <div class="container-box container">
+            <div class="form-cont">
+                <h3>Register</h3><br>
+                <p>Already registered? <a class="none" href="" id="login-a">Login</a></p>
+                <form>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</di>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1">
+                    </div><br>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- REGISTER SECTION ENDS -->
+
+    <!-- SCRIPT -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="./script.js"></script>
+    <!-- SCRIPT ENDS -->
+</body>
+</html>
