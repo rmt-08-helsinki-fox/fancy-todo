@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="./pages/sign-in/sign-in.css" />
+<script src="./pages/sign-in/sign-in.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<div class="text-center sign-in">
+    <main class="form-signin">
+        <form id="form-signin">
+            <h1 class="h3 fw-normal">Please Sign In</h1>
+            <label for="inputEmail" class="visually-hidden">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus />
+            <label for="inputPassword" class="visually-hidden">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required />
+            <button id="sign-in-button" class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            <button id="change-to-sign-up" class="mt-2 w-100 btn btn-lg btn-success">Don't Have An Account</button>
+            <!-- GOOGLE SIGN IN OAUTH 2.0 -->
+            <div class="text-center sign-in">
+                <div id="google-sign-in-button" class="g-signin2" data-onsuccess="onSignIn"></div>
+            </div>
+            <p class="mt-2 mb-2 text-muted">&copy; Christ - Hacktiv8</p>
+        </form>
+    </main>
+</div>

@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="./pages/to-do/to-do.css" />
+<script src="./pages/to-do/to-do.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<main>
+    <div class="container">
+        <!-- BUTTON ADD TO DO -->
+        <button id="add-to-do-button" class="btn btn-success">Add To Do</button>
+        <!--  -->
+        <div id="add-to-do-form" style="width: 40rem; margin-bottom: 1rem; margin-top: 1rem">
+            <form action="createToDo">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control title" placeholder="To Do Title" id="titleAdd" required />
+                    </div>
+                    <div class="col">
+                        <input type="date" class="form-control due_date" placeholder="due date" id="dueDateAdd" required />
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <textarea class="form-control description" id="descriptionAdd" rows="3" placeholder="Description Here...."></textarea>
+                </div>
+                <p>* Date must not be in the past</p>
+                <button id="add-to-do-form-submit" type="submit" class="btn btn-primary">Add</button>
+                <button id="add-to-do-form-cancel" class="btn btn-danger">Cancel</button>
+            </form>
+        </div>
+        <!-- LISTING TO DO -->
+        <h3 class="mt-4">To Do List :</h3>
+        <!-- LOOPING STARTS HERE -->
+        <div id="to-do-list">
+            <!--  -->
+        </div>
+    </div>
+</main>
