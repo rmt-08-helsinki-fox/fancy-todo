@@ -16,3 +16,6 @@ app.use("/", routes);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Listening app at port: ${port}`));
+
+//gjkhkjnjkljk
+console.log("hallo");
